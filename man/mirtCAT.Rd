@@ -9,9 +9,13 @@ mirtCAT(mirt_object, questions, ...)
 \item{mirt_object}{single group object defined by the \code{mirt} package}
 
 \item{questions}{a named list containing lists of \code{shiny} input types for each item.
-Each element of the input should be a list of the form
-\code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
-(such as in rating and Likert-scales) then this input may either be set to NA or ommited.}
+  Each element of the input should be a list of the form
+  \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
+  (such as in rating and Likert-scales) then this input may either be set to NA or ommited.
+
+  Additinally, each \code{inputID} must be set to \code{'choice'}, and every item must include
+  the initial default as an empty character, \code{selected = ""}
+  (or the equivalent if the input type is different).}
 
 \item{...}{additional arguments to pass}
 }

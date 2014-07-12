@@ -22,27 +22,25 @@ server <- function(input, output) {
         }
         
         # run survey
-        if(input$Next > 1L && input$Next < (MCE$test$length + 2L) && !MCE$person$stop_now){
+        if(input$Next > 1L && input$Next < (MCE$test$length + 3L) && !MCE$person$stop_now){
             
             # evaluate and store results from last item input
             if(input$Next > 2L && (input$Next-2L) > sum(!is.na(MCE$person$responses))){
                 item <- MCE$person$items_answered[length(MCE$person$items_answered)]
                 response <- which(MCE$test$item_options[[item]] %in% input$choice)
-                MCE$person$responses[item] <- response
+                if(input$choice != '')
+                    MCE$person$responses[item] <- response
             } else {
-                item <- nextItem()
-                MCE$person$items_answered <- c(MCE$person$items_answered, item)
+                if(input$Next < (MCE$test$length + 2L)){
+                    item <- nextItem()
+                    MCE$person$items_answered <- c(MCE$person$items_answered, item)
+                } else return(MCE$shinyGUI$lastpage) #print last page if not stopped early
             }
             
             return(MCE$shinyGUI$questions[[item]]$item)
         }
-        
-        #cleanup very last response
-        item <- MCE$person$items_answered[length(MCE$person$items_answered)]
-        response <- which(MCE$test$item_options[[item]] %in% input$choice)
-        MCE$person$responses[item] <- response
-        
-        # last page default return
+
+        # last page default return if stopped early
         return(MCE$shinyGUI$lastpage)
         
     }) 

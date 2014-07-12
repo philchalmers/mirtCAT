@@ -3,7 +3,7 @@ ui <- function(){
     return(pageWithSidebar(
         
         #  Application title
-        headerPanel("mirtCAT v.01"),
+        headerPanel("mirtCAT v.1"),
         
         sidebarPanel(
             h4("Title:"),
