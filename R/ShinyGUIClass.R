@@ -1,6 +1,8 @@
 ShinyGUI <- setRefClass("ShinyGUI", 
                       
-                      fields = list(questions = 'list',
+                      fields = list(title = 'character',
+                                    author = 'character',
+                                    questions = 'list',
                                     firstpage = 'list',
                                     lastpage = 'list',
                                     demographic_tags = 'character'),
@@ -10,8 +12,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               questions <<- questions
                               if(is.null(firstpage)){
                                   demographic_tags <<- c('name', 'gender')
-                                  firstpage <<- list(h5("Start of test/survey'"),
-                                                     textInput(inputId = 'name', 
+                                  firstpage <<- list(textInput(inputId = 'name', 
                                                                label = 'What is your name?',
                                                                value = ''),
                                                      selectInput(inputId = 'gender',
@@ -27,6 +28,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               if(is.null(lastpage)){
                                   lastpage <<- list(h5("End of test/survey"))
                               } else lastpage <<- lastpage
+                              title <<- 'Title of survery'
+                              author <<- 'Author of survery'
                           })
                       
 )
