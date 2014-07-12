@@ -27,9 +27,13 @@ server <- function(input, output) {
             # evaluate and store results from last item input
             if(input$Next > 2L && (input$Next-2L) > sum(!is.na(MCE$person$responses))){
                 item <- MCE$person$items_answered[length(MCE$person$items_answered)]
-                response <- which(MCE$test$item_options[[item]] %in% input$choice)
-                if(input$choice != '')
-                    MCE$person$responses[item] <- response
+                if(length(MCE$test$item_options[[item]]) > 1L){
+                    response <- which(MCE$test$item_options[[item]] %in% input$choice)
+                } else {
+                    response <- as.integer(input$choice == MCE$test$item_answers[[item]])
+                    if(is.na(response)) response <- NaN
+                }
+                MCE$person$responses[item] <- response
             } else {
                 if(input$Next < (MCE$test$length + 2L)){
                     item <- nextItem()
