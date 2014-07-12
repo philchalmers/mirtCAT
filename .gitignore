@@ -1,0 +1,7 @@
+src/*.o
+src/*.so
+.Rproj.user
+src/*.dll
+src-i386/
+src-x64/
+.Rhistory
