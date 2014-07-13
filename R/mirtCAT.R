@@ -42,6 +42,7 @@ mirtCAT <- function(mirt_object, questions, ...){
     MCE$person <- person
     MCE$test <- test
     MCE$shinyGUI <- shinyGUI    
+    MCE$Next <- 0L
     
     #run interface
     runApp(list(ui = ui(), server = server))

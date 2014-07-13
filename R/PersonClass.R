@@ -11,7 +11,7 @@ Person <- setRefClass("Person",
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start = NULL){
                              responses <<- as.integer(rep(NA, nitems))
-                             items_answered <<- integer(0L)
+                             items_answered <<- as.integer(rep(NA, nitems))
                              if(is.null(thetas.start)){
                                 thetas <<- matrix(numeric(nfact))
                              } else {

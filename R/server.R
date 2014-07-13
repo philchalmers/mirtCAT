@@ -25,19 +25,20 @@ server <- function(input, output) {
         if(input$Next > 1L && input$Next < (MCE$test$length + 3L) && !MCE$person$stop_now){
             
             # evaluate and store results from last item input
-            if(input$Next > 2L && (input$Next-2L) > sum(!is.na(MCE$person$responses))){
-                item <- MCE$person$items_answered[length(MCE$person$items_answered)]
-                if(length(MCE$test$item_options[[item]]) > 1L){
-                    response <- which(MCE$test$item_options[[item]] %in% input$choice)
+            if(input$Next > 2L && is.na(MCE$person$responses[MCE$Next])){
+                pick <- MCE$person$items_answered[MCE$Next]
+                if(length(MCE$test$item_options[[pick]]) > 1L){
+                    response <- which(MCE$test$item_options[[pick]] %in% input$choice)
                 } else {
-                    response <- as.integer(input$choice == MCE$test$item_answers[[item]])
+                    response <- as.integer(input$choice == MCE$test$item_answers[[pick]])
                     if(is.na(response)) response <- NaN
                 }
-                MCE$person$responses[item] <- response
-            } else {
-                if(input$Next < (MCE$test$length + 2L)){
+                MCE$person$responses[pick] <- response
+                item <- pick
+            } else {           
+                if(any(is.na(MCE$person$responses))){
                     item <- nextItem()
-                    MCE$person$items_answered <- c(MCE$person$items_answered, item)
+                    MCE$person$items_answered[MCE$Next] <- item
                 } else return(MCE$shinyGUI$lastpage) #print last page if not stopped early
             }
             
