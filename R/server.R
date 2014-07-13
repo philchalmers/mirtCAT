@@ -27,15 +27,10 @@ server <- function(input, output) {
                 pick <- MCE$person$items_answered[input$Next-2L]
                 name <- MCE$test$itemnames[pick]
                 ip <- input[[name]]
-                if(length(MCE$test$item_options[[pick]]) > 1L){
-                    response <- which(MCE$test$item_options[[pick]] %in% ip) - 1L
-                } else {
-                    response <- as.integer(ip == MCE$test$item_answers[[pick]])
-                    if(is.na(response)) response <- NaN
-                }
-                MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- response
-                if(!is.na(MCE$test$item_answers[pick]))
-                    MCE$person$responses[pick] <- as.integer(response==MCE$test$item_answers[pick])
+                MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
+                    which(MCE$test$item_options[[pick]] %in% ip) - 1L
+                if(!is.na(MCE$test$item_answers[[pick]]))
+                    MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
                 
                 #update Thetas
                 MCE$person$Update.thetas(MCE$test)
@@ -57,15 +52,10 @@ server <- function(input, output) {
             pick <- MCE$person$items_answered[input$Next-2L]
             name <- MCE$test$itemnames[pick]
             ip <- input[[name]]
-            if(length(MCE$test$item_options[[pick]]) > 1L){
-                response <- which(MCE$test$item_options[[pick]] %in% ip)
-            } else {
-                response <- as.integer(ip == MCE$test$item_answers[[pick]])
-                if(is.na(response)) response <- NaN
-            }
-            MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- response
-            if(!is.na(MCE$test$item_answers[pick]))
-                MCE$person$responses[pick] <- as.integer(response==MCE$test$item_answers[pick])
+            MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
+                which(MCE$test$item_options[[pick]] %in% ip) - 1L
+            if(!is.na(MCE$test$item_answers[[pick]]))
+                MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
             
             #update Thetas
             MCE$person$Update.thetas(MCE$test)
