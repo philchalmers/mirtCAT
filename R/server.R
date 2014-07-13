@@ -45,16 +45,18 @@ server <- function(input, output) {
         }
         
         #cleanup last response 
-        pick <- MCE$person$items_answered[input$Next-2L]
-        name <- MCE$test$itemnames[pick]
-        ip <- input[[name]]
-        if(length(MCE$test$item_options[[pick]]) > 1L){
-            response <- which(MCE$test$item_options[[pick]] %in% ip)
-        } else {
-            response <- as.integer(ip == MCE$test$item_answers[[pick]])
-            if(is.na(response)) response <- NaN
+        if((input$Next-2L) <= MCE$test$length){
+            pick <- MCE$person$items_answered[input$Next-2L]
+            name <- MCE$test$itemnames[pick]
+            ip <- input[[name]]
+            if(length(MCE$test$item_options[[pick]]) > 1L){
+                response <- which(MCE$test$item_options[[pick]] %in% ip)
+            } else {
+                response <- as.integer(ip == MCE$test$item_answers[[pick]])
+                if(is.na(response)) response <- NaN
+            }
+            MCE$person$responses[pick] <- response
         }
-        MCE$person$responses[pick] <- response
         
         #last page
         return(MCE$shinyGUI$lastpage)
