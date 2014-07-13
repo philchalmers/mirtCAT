@@ -58,7 +58,9 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
     MCE$person <- person
     MCE$test <- test
     MCE$shinyGUI <- shinyGUI
+    MCE$STOP <- FALSE
     
     #run interface
     runApp(list(ui = ui(), server = server))
+    return(MCE$person)
 }

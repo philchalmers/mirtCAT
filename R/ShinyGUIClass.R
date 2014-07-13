@@ -34,7 +34,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                                          function(x) x[[1L]][[1L]]$attribs$`for`))
                               }
                               if(is.null(lastpage)){
-                                  lastpage <<- list(h5("End of test/survey"))
+                                  lastpage <<- list(h5("End of survey. Click \'Next\' to save
+                                                       results and close application."))
                               } else lastpage <<- lastpage
                               title <<- 'Title of survery'
                               author <<- 'Author of survery'

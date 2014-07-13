@@ -62,16 +62,26 @@ server <- function(input, output) {
         }
         
         #last page
-        return(MCE$shinyGUI$lastpage)
+        if(!MCE$STOP){
+            MCE$STOP <- TRUE
+            return(MCE$shinyGUI$lastpage)
+        } else {
+            stopApp()
+            return(NULL)
+        }
+        
+        
     }) 
     
     output$item_stem <- renderImage({
         
         outfile <- tempfile(fileext='.png')
         
-        if(input$Next > 1L && (input$Next-1L) < MCE$test$length){
-            empty <- is.na(MCE$shinyGUI$stem_locations[[
-                MCE$person$items_answered[[input$Next-1L]]]])
+        if(!MCE$STOP){
+            if(input$Next > 1L && (input$Next-1L) < MCE$test$length){
+                empty <- is.na(MCE$shinyGUI$stem_locations[[
+                    MCE$person$items_answered[[input$Next-1L]]]])
+            } else empty <- TRUE
         } else empty <- TRUE
         
         if(empty){
@@ -90,8 +100,8 @@ server <- function(input, output) {
                         alt = ""))
         }
         
-    }, deleteFile = if(input$Next > 1L && (input$Next-1L) < MCE$test$length)
+    }, deleteFile = if(!MCE$STOP){ if(input$Next > 1L && (input$Next-1L) < MCE$test$length)
             is.na(MCE$shinyGUI$stem_locations[[MCE$person$items_answered[[input$Next-1L]]]]) 
-        else TRUE)
+        else TRUE} else TRUE)
     
 }
