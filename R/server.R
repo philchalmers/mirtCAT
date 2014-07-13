@@ -1,5 +1,32 @@
 server <- function(input, output) {    
     
+    output$item_stem <- renderImage({
+        
+        outfile <- tempfile(fileext='.png')
+        
+        if(input$Next > 1L && (input$Next-1L) < MCE$test$length){
+            empty <- is.na(MCE$shinyGUI$stem_locations[[input$Next-1L]])
+        } else empty <- TRUE
+        
+        if(empty){
+            png(outfile, width=1, height=1)
+            dev.off()
+            return(list(src = outfile,
+                        contentType = 'image/png',
+                        width = 1,
+                        height = 1,
+                        alt = ""))
+        } else {
+            return(list(src = MCE$shinyGUI$stem_locations[[input$Next-1L]],
+                        contentType = 'image/png',
+                        width = 400,
+                        height = 400,
+                        alt = ""))
+        }
+        
+    }, deleteFile = if(input$Next > 1L && (input$Next-1L) < MCE$test$length)
+        is.na(MCE$shinyGUI$stem_locations[[input$Next-1L]]) else TRUE)
+    
     output$Main <- renderUI({
         dynamicUi()
     })
@@ -44,7 +71,7 @@ server <- function(input, output) {
                 item <- as.integer(input$Next - 1L)
             }
             MCE$person$items_answered[input$Next-1L] <- item
-            return(MCE$shinyGUI$questions[[item]]$item)
+            return(MCE$shinyGUI$questions[[item]])
         }
         
         #cleanup last response 

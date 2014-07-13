@@ -3,8 +3,8 @@
 \alias{mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(mirt_object, questions, method = "EAP", adaptive = FALSE,
-  criteria = "MPV", ...)
+mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
+  method = "EAP", adaptive = FALSE, criteria = "MPV", ...)
 }
 \arguments{
 \item{mirt_object}{single group object defined by the \code{mirt} package}
@@ -15,6 +15,14 @@ mirtCAT(mirt_object, questions, method = "EAP", adaptive = FALSE,
   (such as in rating and Likert-scales) then this input may either be set to NA or ommited.
   Additinally, each \code{inputID} must be identical to the column names used to define the data
   from the \code{mirt_object} input}
+
+\item{item_answers}{a character vector indicating which item should be considered 'correct'
+  when scoring individuals. Must be the length of the test, where NA's are used if the
+  item is not scored}
+
+\item{stem_locations}{a character vector of paths pointing to .png files to be used as item
+  stems. Must be the length of the test, where NA's are used if the item has no corresponding
+  .png file}
 
 \item{method}{argument passed to \code{mirt::fscores()} for compting new score}
 

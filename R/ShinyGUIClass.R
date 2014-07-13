@@ -5,11 +5,19 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     questions = 'list',
                                     firstpage = 'list',
                                     lastpage = 'list',
+                                    stem_locations = 'character',
+                                    delete_png = 'logical',
                                     demographic_tags = 'character'),
                       
                       methods = list(
-                          initialize = function(questions, firstpage=NULL, lastpage=NULL){
+                          initialize = function(questions, stem_locations_in = NULL,
+                                                firstpage=NULL, lastpage=NULL){
                               questions <<- questions
+                              if(is.null(stem_locations_in))
+                                  stem_locations_in <- as.character(rep(NA, length(questions)))
+                              stem_locations <<- stem_locations_in
+                              delete_png <<- c(TRUE, TRUE, is.na(stem_locations_in), 
+                                               rep(TRUE, 20L))
                               if(is.null(firstpage)){
                                   demographic_tags <<- c('name', 'gender')
                                   firstpage <<- list(textInput(inputId = 'name', 

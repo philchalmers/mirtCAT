@@ -15,6 +15,7 @@ ui <- function(){
         ),
         
         mainPanel(            
+            imageOutput("item_stem", width = 'auto', height = 'auto'),
             uiOutput("Main"),
             actionButton("Next", "Next")    
         )

@@ -11,7 +11,7 @@ Test <- setRefClass("Test",
                                     length = 'integer'),
                     
                       methods = list(
-                          initialize = function(mirt_object, item_answers, item_options, 
+                          initialize = function(mirt_object, item_answers_in, item_options, 
                                                 method, criteria, adaptive){
                               tmpobj <- mirt_object
                               if(is(tmpobj, 'ExploratoryClass'))
@@ -19,7 +19,9 @@ Test <- setRefClass("Test",
                               itemnames <<- colnames(tmpobj@Data$data)
                               tmpobj@Data$min <- rep(0L, length(tmpobj@Data$min))
                               mirt_object <<- tmpobj
-                              item_answers <<- item_answers
+                              if(is.null(item_answers_in))
+                                  item_answers_in <- as.character(rep(NA, length(itemnames)))
+                              item_answers <<- item_answers_in
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact
