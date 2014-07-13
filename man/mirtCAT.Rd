@@ -3,19 +3,26 @@
 \alias{mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(mirt_object, questions, ...)
+mirtCAT(mirt_object, questions, method = "EAP", adaptive = FALSE,
+  criteria = "MPV", ...)
 }
 \arguments{
 \item{mirt_object}{single group object defined by the \code{mirt} package}
 
 \item{questions}{a named list containing lists of \code{shiny} input types for each item.
-Each element of the input should be a list of the form
-\code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
-(such as in rating and Likert-scales) then this input may either be set to NA or ommited.
-Additinally, each \code{inputID} must be identical to the column names used to define the data
-from the \code{mirt_object} input}
+  Each element of the input should be a list of the form
+  \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
+  (such as in rating and Likert-scales) then this input may either be set to NA or ommited.
+  Additinally, each \code{inputID} must be identical to the column names used to define the data
+  from the \code{mirt_object} input}
 
-\item{...}{additional arguments to pass}
+\item{method}{argument passed to \code{mirt::fscores()} for compting new score}
+
+\item{criteria}{adpative criteria used, default is the minimum posterior variance (MPV).}
+
+\item{adaptive}{logical; run the test adaptively?}
+
+\item{...}{additional arguments to pass when initializing the ReferenceClass objects}
 }
 \description{
 Description

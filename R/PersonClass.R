@@ -1,15 +1,18 @@
 Person <- setRefClass("Person", 
                       
-                      fields = list(responses = 'integer',
+                      fields = list(raw_responses = 'integer',
+                                    responses = 'integer',
                                     items_answered = 'integer',
                                     thetas = 'matrix',
                                     thetas_history = 'matrix',
+                                    thetas_SE_history = 'matrix',
                                     max_change = 'numeric',
                                     stop_now = 'logical',
                                     demographics = 'data.frame'),
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start = NULL){
+                             raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              items_answered <<- as.integer(rep(NA, nitems))
                              if(is.null(thetas.start)){
@@ -18,7 +21,8 @@ Person <- setRefClass("Person",
                                  thetas <<- thetas.start
                              }
                              thetas_history <<- matrix(thetas, 1L, nfact)
-                             max_change <<- rep(.1, nfact)
+                             thetas_SE_history <<- matrix(NA, 1L, nfact)
+                             max_change <<- rep(.3, nfact)
                              stop_now <<- FALSE
                          })
                       
@@ -27,21 +31,20 @@ Person <- setRefClass("Person",
 Person$methods(
     
     # Update thetas
-    Update.thetas = function(response, item, Test){
-        newthetas <- rnorm(length(thetas)) #TODO placeholder
-        thetas <<- newthetas
-        thetas_history <<- rbind(thetas_history, newthetas)        
+    Update.thetas = function(test){
+        tmp <- try(fscores(test$mirt_object, 
+                           method = test$method, response.pattern = responses), silent=TRUE)
+        thetas <<- tmp[,paste0('F', 1L:test$nfact), drop=FALSE]
+        thetas_history <<- rbind(thetas_history, thetas)
+        thetas_SE_history <<- rbind(thetas_SE_history, 
+                                    tmp[,paste0('SE_F', 1L:test$nfact), drop=FALSE])
     },
     
     # Check whether to stop adaptive test
-    Check.stop_now = function(){
-        diff <- abs(thetas_history[nrow(thetas_history), ] - 
-                        thetas_history[nrow(thetas_history) - 1L, ])
-        if(all(diff < max_change)){
-            return(TRUE)
-        } else {
-            return(FALSE)
-        }
+    Update.stop_now = function(){
+        diff <- theta_SE_history[nrow(theta_SE_history)]
+        if(all(diff < max_change))
+            stop_now <<- TRUE
     }
     
 )

@@ -3,14 +3,23 @@
 #' Description
 #' 
 #' @param mirt_object single group object defined by the \code{mirt} package
+#' 
 #' @param questions a named list containing lists of \code{shiny} input types for each item. 
 #'   Each element of the input should be a list of the form 
 #'   \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
 #'   (such as in rating and Likert-scales) then this input may either be set to NA or ommited.    
 #'   Additinally, each \code{inputID} must be identical to the column names used to define the data 
 #'   from the \code{mirt_object} input
-#' @param ... additional arguments to pass
-mirtCAT <- function(mirt_object, questions, ...){
+#'   
+#' @param method argument passed to \code{mirt::fscores()} for compting new score
+#' 
+#' @param criteria adpative criteria used, default is the minimum posterior variance (MPV).
+#' 
+#' @param adaptive logical; run the test adaptively?
+#'   
+#' @param ... additional arguments to pass when initializing the ReferenceClass objects
+mirtCAT <- function(mirt_object, questions, method = 'EAP', adaptive = FALSE, criteria = 'MPV', 
+                    ...){
     
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
@@ -35,8 +44,8 @@ mirtCAT <- function(mirt_object, questions, ...){
     
     #setup objects
     shinyGUI <- ShinyGUI$new(questions=questions, ...)
-    test <- Test$new(mirt_object=mirt_object, item_answers=item_answers,
-                     item_options=item_options, ...)
+    test <- Test$new(mirt_object=mirt_object, item_answers=item_answers, adaptive=adaptive,
+                     item_options=item_options, method=method, criteria=criteria, ...)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), ...)
     
     #put in specific enviroment

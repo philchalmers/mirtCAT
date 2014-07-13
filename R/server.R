@@ -28,20 +28,28 @@ server <- function(input, output) {
                 name <- MCE$test$itemnames[pick]
                 ip <- input[[name]]
                 if(length(MCE$test$item_options[[pick]]) > 1L){
-                    response <- which(MCE$test$item_options[[pick]] %in% ip)
+                    response <- which(MCE$test$item_options[[pick]] %in% ip) - 1L
                 } else {
                     response <- as.integer(ip == MCE$test$item_answers[[pick]])
                     if(is.na(response)) response <- NaN
                 }
-                MCE$person$responses[pick] <- response
-            }            
-            if(MCE$test$adaptive){
+                MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- response
+                if(!is.na(MCE$test$item_answers[pick]))
+                    MCE$person$responses[pick] <- as.integer(response==MCE$test$item_answers[pick])
                 
+                #update Thetas
+                MCE$person$Update.thetas(MCE$test)
+                if(MCE$test$adaptive) 
+                    MCE$person$Update.stop_now()
+            } 
+            
+            if(MCE$test$adaptive){
+                item <- findNextCATItem(person=MCE$person, test=MCE$test)
             } else {
                 item <- as.integer(input$Next - 1L)
             }
             MCE$person$items_answered[input$Next-1L] <- item
-            return(MCE$shinyGUI$questions[[item]])
+            return(MCE$shinyGUI$questions[[item]]$item)
         }
         
         #cleanup last response 
@@ -55,7 +63,12 @@ server <- function(input, output) {
                 response <- as.integer(ip == MCE$test$item_answers[[pick]])
                 if(is.na(response)) response <- NaN
             }
-            MCE$person$responses[pick] <- response
+            MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- response
+            if(!is.na(MCE$test$item_answers[pick]))
+                MCE$person$responses[pick] <- as.integer(response==MCE$test$item_answers[pick])
+            
+            #update Thetas
+            MCE$person$Update.thetas(MCE$test)
         }
         
         #last page
