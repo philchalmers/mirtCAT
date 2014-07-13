@@ -12,7 +12,8 @@ mirtCAT(mirt_object, questions, ...)
 Each element of the input should be a list of the form
 \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
 (such as in rating and Likert-scales) then this input may either be set to NA or ommited.
-Additinally, each \code{inputID} must be set to \code{'choice'}.}
+Additinally, each \code{inputID} must be identical to the column names used to define the data
+from the \code{mirt_object} input}
 
 \item{...}{additional arguments to pass}
 }

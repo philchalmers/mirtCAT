@@ -7,7 +7,8 @@
 #'   Each element of the input should be a list of the form 
 #'   \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
 #'   (such as in rating and Likert-scales) then this input may either be set to NA or ommited.    
-#'   Additinally, each \code{inputID} must be set to \code{'choice'}.
+#'   Additinally, each \code{inputID} must be identical to the column names used to define the data 
+#'   from the \code{mirt_object} input
 #' @param ... additional arguments to pass
 mirtCAT <- function(mirt_object, questions, ...){
     
@@ -41,8 +42,7 @@ mirtCAT <- function(mirt_object, questions, ...){
     #put in specific enviroment
     MCE$person <- person
     MCE$test <- test
-    MCE$shinyGUI <- shinyGUI    
-    MCE$Next <- 0L
+    MCE$shinyGUI <- shinyGUI
     
     #run interface
     runApp(list(ui = ui(), server = server))

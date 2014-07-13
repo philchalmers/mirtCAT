@@ -22,31 +22,41 @@ server <- function(input, output) {
         }
         
         # run survey
-        if(input$Next > 1L && input$Next < (MCE$test$length + 3L) && !MCE$person$stop_now){
-            
-            # evaluate and store results from last item input
-            if(input$Next > 2L && is.na(MCE$person$responses[MCE$Next])){
-                pick <- MCE$person$items_answered[MCE$Next]
+        if(input$Next > 1L && input$Next < (MCE$test$length + 2L) && !MCE$person$stop_now){
+            if(input$Next > 2L){
+                pick <- MCE$person$items_answered[input$Next-2L]
+                name <- MCE$test$itemnames[pick]
+                ip <- input[[name]]
                 if(length(MCE$test$item_options[[pick]]) > 1L){
-                    response <- which(MCE$test$item_options[[pick]] %in% input$choice)
+                    response <- which(MCE$test$item_options[[pick]] %in% ip)
                 } else {
-                    response <- as.integer(input$choice == MCE$test$item_answers[[pick]])
+                    response <- as.integer(ip == MCE$test$item_answers[[pick]])
                     if(is.na(response)) response <- NaN
                 }
                 MCE$person$responses[pick] <- response
-                item <- pick
-            } else {           
-                if(any(is.na(MCE$person$responses))){
-                    item <- nextItem()
-                    MCE$person$items_answered[MCE$Next] <- item
-                } else return(MCE$shinyGUI$lastpage) #print last page if not stopped early
+            }            
+            if(MCE$test$adaptive){
+                
+            } else {
+                item <- as.integer(input$Next - 1L)
             }
-            
-            return(MCE$shinyGUI$questions[[item]]$item)
+            MCE$person$items_answered[input$Next-1L] <- item
+            return(MCE$shinyGUI$questions[[item]])
         }
-
-        # last page default return if stopped early
-        return(MCE$shinyGUI$lastpage)
         
+        #cleanup last response 
+        pick <- MCE$person$items_answered[input$Next-2L]
+        name <- MCE$test$itemnames[pick]
+        ip <- input[[name]]
+        if(length(MCE$test$item_options[[pick]]) > 1L){
+            response <- which(MCE$test$item_options[[pick]] %in% ip)
+        } else {
+            response <- as.integer(ip == MCE$test$item_answers[[pick]])
+            if(is.na(response)) response <- NaN
+        }
+        MCE$person$responses[pick] <- response
+        
+        #last page
+        return(MCE$shinyGUI$lastpage)
     }) 
 }
