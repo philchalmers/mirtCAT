@@ -81,9 +81,9 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
     
     if(length(local_pattern)){
         return(run_local(local_pattern))
-        
+    } else {
+        #run interface
+        runApp(list(ui = ui(), server = server))
+        return(MCE$person)
     }
-    #run interface
-    runApp(list(ui = ui(), server = server))
-    return(MCE$person)
 }
