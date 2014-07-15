@@ -18,38 +18,45 @@ findNextCATItem <- function(person, test){
     
     if(MCE$design$criteria == 'random'){
         item <- sample(which(not_answered), 1)
-        return(item)
-    } else if(MCE$design$criteria == 'KL' || MCE$design$criteria == 'KLP'){
+    } else if(MCE$design$criteria == 'KL'){
         browser()
-        item <- 1
-        return(item)
-    }
-    
-    # TODO might fail
-    acovs <- try(fscores(test$mirt_object, return.acov = TRUE, method = MCE$design$method, 
-                         response.pattern = positive_patterns), silent=TRUE)
-    
-    if(MCE$test$nfact == 1L){
-        
-        if(MCE$design$criteria == ''){}
-        
         
     } else {
         
-        if(MCE$design$criteria == 'Drule'){
-            crit <- do.call(c, lapply(avovs, det))
-            item <- row_loc[which(max(crit) == crit)]            
-        } else if(MCE$design$criteria == 'Trule'){
-            crit <- do.call(c, lapply(avovs, function(x) sum(diag(x))))
-            item <- row_loc[which(min(crit) == crit)]
-        } else if(MCE$design$criteria == 'Wrule'){
-            crit <- do.call(c, lapply(avovs, function(x, w) w %*% x %*% w, 
-                                      w=MCE$design$Trule_weights))
-            item <- row_loc[which(min(crit) == crit)]
-        } 
+        # TODO might fail
+        acovs <- try(fscores(test$mirt_object, return.acov = TRUE, method = MCE$design$method, 
+                             response.pattern = positive_patterns), silent=TRUE)
+        
+        if(MCE$test$nfact == 1L){
+            
+            if(MCE$design$criteria == 'MI'){
+                crit <- do.call(c, acovs)
+                item <- row_loc[which(min(crit) == crit)]            
+                
+            } else if(MCE$design$criteria == 'MEI'){
+                
+            }
+            
+            
+        } else {
+            
+            if(MCE$design$criteria == 'Drule' || MCE$design$criteria == 'MPV'){
+                crit <- do.call(c, lapply(avovs, det))
+                item <- row_loc[which(max(crit) == crit)]            
+            } else if(MCE$design$criteria == 'Trule'){
+                crit <- do.call(c, lapply(avovs, function(x) sum(diag(x))))
+                item <- row_loc[which(min(crit) == crit)]
+            } else if(MCE$design$criteria == 'Wrule'){
+                crit <- do.call(c, lapply(avovs, function(x, w) w %*% x %*% w, 
+                                          w=MCE$design$Trule_weights))
+                item <- row_loc[which(min(crit) == crit)]
+            } 
+        }
+    } else {
+        stop('Criteria for adaptive test not supported')
     }
     
-    return(item)
+    return(item[1L])
     
     browser()
     

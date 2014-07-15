@@ -27,7 +27,7 @@
 #'   
 #' @param ... additional arguments to pass when initializing the ReferenceClass objects
 mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = NULL,
-                    method = 'EAP', adaptive = FALSE, criteria = 'MPV', 
+                    method = 'MAP', adaptive = FALSE, criteria = 'MPV', 
                     ...){
     
     itemnames <- colnames(mirt_object@Data$data)
