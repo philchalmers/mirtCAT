@@ -33,12 +33,12 @@ server <- function(input, output) {
                     MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
                 
                 #update Thetas
-                MCE$person$Update.thetas(MCE$test)
-                if(MCE$test$adaptive) 
+                MCE$person$Update.thetas()
+                if(MCE$design$adaptive) 
                     MCE$person$Update.stop_now()
             } 
             
-            if(MCE$test$adaptive){
+            if(MCE$design$adaptive && input$Next > 2L){
                 item <- findNextCATItem(person=MCE$person, test=MCE$test)
             } else {
                 item <- as.integer(input$Next - 1L)
@@ -58,7 +58,7 @@ server <- function(input, output) {
                 MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
             
             #update Thetas
-            MCE$person$Update.thetas(MCE$test)
+            MCE$person$Update.thetas()
         }
         
         #last page

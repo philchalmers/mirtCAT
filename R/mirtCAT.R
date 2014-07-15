@@ -50,13 +50,15 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
     
     #setup objects
     shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, ...)
-    test <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, adaptive=adaptive,
-                     item_options=item_options, method=method, criteria=criteria, ...)
+    test <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
+                     item_options=item_options, ...)
+    design <- Design$new(method=method, criteria=criteria, adaptive=adaptive, ...)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), ...)
     
     #put in specific enviroment
     MCE$person <- person
     MCE$test <- test
+    MCE$design <- design
     MCE$shinyGUI <- shinyGUI
     MCE$STOP <- FALSE
     
