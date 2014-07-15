@@ -14,8 +14,10 @@ Test <- setRefClass("Test",
                               if(is(tmpobj, 'ExploratoryClass'))
                                   class(tmpobj) <- 'ConfirmatoryClass'
                               itemnames <<- colnames(tmpobj@Data$data)
-                              tmpobj@Data$min <- rep(0L, length(tmpobj@Data$min))
+                              tmpobj@Data$mins <- rep(0L, length(tmpobj@Data$min))
                               mirt_object <<- tmpobj
+                              if(is.null(item_answers_in))
+                                  item_answers_in <- as.character(rep(NA, length(itemnames)))
                               item_answers <<- item_answers_in
                               item_options <<- item_options
                               length <<- length(item_answers)

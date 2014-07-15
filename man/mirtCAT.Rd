@@ -4,7 +4,8 @@
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
-  method = "EAP", adaptive = FALSE, criteria = "MPV", ...)
+  method = "MAP", adaptive = FALSE, criteria = "MI",
+  local_pattern = character(0), ...)
 }
 \arguments{
 \item{mirt_object}{single group object defined by the \code{mirt} package}
@@ -30,9 +31,30 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
 
 \item{adaptive}{logical; run the test adaptively?}
 
+\item{local_pattern}{a character vector used to run the CAT application without the GUI
+  interface given a specific response pattern}
+
 \item{...}{additional arguments to pass when initializing the ReferenceClass objects}
 }
 \description{
 Description
 }
+\examples{
+\dontrun{
+
+
+
+
+}
+}
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}
+\seealso{
+\code{\link{generate_pattern}}
+}
+\keyword{CAT,}
+\keyword{adaptive}
+\keyword{computerized}
+\keyword{testing}
 

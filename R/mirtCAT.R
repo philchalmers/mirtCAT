@@ -24,10 +24,27 @@
 #' @param criteria adpative criteria used, default is the minimum posterior variance (MPV).
 #' 
 #' @param adaptive logical; run the test adaptively?
+#' 
+#' @param local_pattern a character vector used to run the CAT application without the GUI 
+#'   interface given a specific response pattern 
 #'   
 #' @param ... additional arguments to pass when initializing the ReferenceClass objects
+#' 
+#' @export mirtCAT
+#' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
+#' @seealso \code{\link{generate_pattern}}
+#' 
+#' @keywords CAT, computerized adaptive testing
+#' 
+#' @examples
+#' \dontrun{
+#' 
+#' 
+#' 
+#' 
+#' }
 mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = NULL,
-                    method = 'MAP', adaptive = FALSE, criteria = 'MI', 
+                    method = 'MAP', adaptive = FALSE, criteria = 'MI', local_pattern = character(0),
                     ...){
     
     itemnames <- colnames(mirt_object@Data$data)
@@ -62,6 +79,10 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
     MCE$shinyGUI <- shinyGUI
     MCE$STOP <- FALSE
     
+    if(length(local_pattern)){
+        return(run_local(local_pattern))
+        
+    }
     #run interface
     runApp(list(ui = ui(), server = server))
     return(MCE$person)

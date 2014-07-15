@@ -12,8 +12,8 @@ calcLL <- function(thetas){
     LL
 }
 
-KL <- function(){
-    
+KL <- function(positive_patterns){
+    browser()
     
     
 }
