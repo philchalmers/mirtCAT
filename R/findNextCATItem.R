@@ -34,13 +34,13 @@ findNextCATItem <- function(person, test){
                 item <- row_loc[which(min(crit) == crit)]            
                 
             } else if(MCE$design$criteria == 'MEI'){
-                
+                browser()
             }
             
             
         } else {
             
-            if(MCE$design$criteria == 'Drule' || MCE$design$criteria == 'MPV'){
+            if(MCE$design$criteria == 'Drule' || MCE$design$criteria == 'MI'){
                 crit <- do.call(c, lapply(avovs, det))
                 item <- row_loc[which(max(crit) == crit)]            
             } else if(MCE$design$criteria == 'Trule'){
@@ -52,13 +52,7 @@ findNextCATItem <- function(person, test){
                 item <- row_loc[which(min(crit) == crit)]
             } 
         }
-    } else {
-        stop('Criteria for adaptive test not supported')
     }
     
-    return(item[1L])
-    
-    browser()
-    
-    
+    return(as.integer(item[1L]))
 }
