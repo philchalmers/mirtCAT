@@ -12,8 +12,18 @@ calcLL <- function(thetas){
     LL
 }
 
-KL <- function(positive_patterns){
-    browser()
-    
-    
+getAcovs <- function(possible_patterns){
+    ret <- try(fscores(MCE$test$mirt_object, return.acov = TRUE, method = MCE$design$method, 
+                response.pattern = possible_patterns), silent = TRUE)
+    ret    
+} 
+
+weighted_mat <- function(P, mat, row_loc, which_not_answered){
+    for(i in 1L:length(P)) mat[[i]] <- mat[[i]] * P[i]
+    mat2 <- vector('list', length(unique(row_loc)))
+    for(i in 1L:length(mat2)){
+        pick <- which(row_loc == which_not_answered[i])
+        mat2[[i]] <- do.call(`+`, mat[pick])
+    }
+    mat2
 }
