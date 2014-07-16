@@ -3,13 +3,13 @@
 #' Generate a CAT pattern given various inputs. Returns a character vector with length equal to
 #' the test size.
 #' 
-#' @param mirt_object
+#' @param mirt_object something
 #'
-#' @param Theta
+#' @param Theta something
 #' 
-#' @param choices
+#' @param choices something
 #' 
-#' @param item_answers
+#' @param item_answers something
 #' 
 #' @export generate_pattern
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}

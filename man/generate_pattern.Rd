@@ -6,13 +6,13 @@
 generate_pattern(mirt_object, Theta, choices, item_answers = NULL)
 }
 \arguments{
-\item{mirt_object}{}
+\item{mirt_object}{something}
 
-\item{Theta}{}
+\item{Theta}{something}
 
-\item{choices}{}
+\item{choices}{something}
 
-\item{item_answers}{}
+\item{item_answers}{something}
 }
 \description{
 Generate a CAT pattern given various inputs. Returns a character vector with length equal to

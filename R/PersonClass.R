@@ -4,7 +4,6 @@ Person <- setRefClass("Person",
                                     responses = 'integer',
                                     items_answered = 'integer',
                                     thetas = 'matrix',
-                                    theta_acov = 'matrix',
                                     thetas_history = 'matrix',
                                     thetas_SE_history = 'matrix',
                                     max_change = 'numeric',
@@ -40,10 +39,6 @@ Person$methods(
         thetas_history <<- rbind(thetas_history, thetas)
         thetas_SE_history <<- rbind(thetas_SE_history, 
                                     tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
-        if(MCE$design$adaptive){
-            theta_acov <<- try(fscores(MCE$test$mirt_object, return.acov = TRUE,
-                            method = MCE$design$method, response.pattern = responses), silent=TRUE)[[1L]]
-        }
     },
     
     # Check whether to stop adaptive test

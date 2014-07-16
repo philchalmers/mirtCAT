@@ -9,7 +9,6 @@ Description: Provides an interfact implemented with the shiny package to
     generate adaptive and non-adaptive educational and psychological surveys
     and tests.
 Roxygen: list(wrap = FALSE)
-VignetteBuilder: knitr
 Depends:
     R (>= 2.15),
     mirt,

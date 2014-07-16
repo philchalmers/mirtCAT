@@ -2,6 +2,8 @@ Test <- setRefClass("Test",
                     
                       fields = list(mirt_object = 'ConfirmatoryClass',
                                     ThetaGrid = 'matrix',
+                                    quadpts = 'numeric',
+                                    theta_range = 'numeric',
                                     item_answers = 'character',
                                     item_options = 'list',
                                     itemnames = 'character',
@@ -22,6 +24,8 @@ Test <- setRefClass("Test",
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact
+                              quadpts <<- 49
+                              theta_range <<- c(-6, 6)
                               ThetaGrid <<- mirt:::thetaComb(seq(-6,6, length.out=49),
                                                              tmpobj@nfact)
                           })
