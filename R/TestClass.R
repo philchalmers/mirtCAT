@@ -11,7 +11,8 @@ Test <- setRefClass("Test",
                                     length = 'integer'),
                     
                       methods = list(
-                          initialize = function(mirt_object, item_answers_in, item_options){
+                          initialize = function(mirt_object, item_answers_in, item_options,
+                                                test_list){
                               tmpobj <- mirt_object
                               if(is(tmpobj, 'ExploratoryClass'))
                                   class(tmpobj) <- 'ConfirmatoryClass'
@@ -28,6 +29,11 @@ Test <- setRefClass("Test",
                               theta_range <<- c(-6, 6)
                               ThetaGrid <<- mirt:::thetaComb(seq(-6,6, length.out=49),
                                                              tmpobj@nfact)
+                              if(length(test_list)){
+                                  browser()
+                                  
+                                  
+                              }
                           })
                     
 )

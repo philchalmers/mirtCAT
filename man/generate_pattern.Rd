@@ -21,6 +21,7 @@ the test size.
 \examples{
 \dontrun{
 
+pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 
 
 

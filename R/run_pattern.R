@@ -14,8 +14,7 @@ run_local <- function(responses){
         #update Thetas
         MCE$person$Update.thetas()
         if(i == (length(responses)+1L)) break
-        if(MCE$design$adaptive) 
-            MCE$person$Update.stop_now()
+        MCE$person$Update.stop_now()
         
         if(MCE$design$adaptive){
             item <- findNextCATItem(person=MCE$person, test=MCE$test)

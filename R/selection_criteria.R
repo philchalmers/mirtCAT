@@ -16,7 +16,7 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     }
     infostmp <- lapply(which_not_answered, function(x)
         iteminfo(extract.item(test$mirt_object, x), Theta=person$thetas))
-    infos <- weighted_mat(P=P, mat=infotmp, row_loc=row_loc, which_not_answered=which_not_answered)
+    infos <- weighted_mat(P=P, mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, infos)
     crit
 }

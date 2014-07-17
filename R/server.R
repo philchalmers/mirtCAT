@@ -34,8 +34,7 @@ server <- function(input, output) {
                 
                 #update Thetas
                 MCE$person$Update.thetas()
-                if(MCE$design$adaptive) 
-                    MCE$person$Update.stop_now()
+                MCE$person$Update.stop_now()
             } 
             
             if(MCE$design$adaptive && input$Next > 2L){
