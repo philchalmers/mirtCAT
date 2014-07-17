@@ -1,6 +1,6 @@
 # each function returns a numeric vector of values, length == nrow(possible_patterns)
 
-MI <- function(which_not_answered, possible_patterns, person, test){
+MI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     infos <- lapply(which_not_answered, function(x)
         iteminfo(extract.item(test$mirt_object, x), Theta=person$thetas))
     crit <- do.call(c, infos)
@@ -14,8 +14,8 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc){
         p <- probtrace(ii, MCE$person$thetas)
         P[row_loc == i] <- p
     }
-    acovs <- getAcovs(possible_patterns)
-    infotmp <- lapply(acovs, solve)
+    infostmp <- lapply(which_not_answered, function(x)
+        iteminfo(extract.item(test$mirt_object, x), Theta=person$thetas))
     infos <- weighted_mat(P=P, mat=infotmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, infos)
     crit
@@ -35,41 +35,46 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc){
     
 }
 
-MLWI <- function(which_not_answered, possible_patterns, person, test){
+MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     browser()
     
     
 }
 
-MPWI <- function(which_not_answered, possible_patterns, person, test){
+MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     browser()
     
     
 }
 
-Drule <- function(which_not_answered, possible_patterns, person, test){
-    browser()
-    acovs <- getAcovs(possible_patterns)
-    crit <- do.call(c, lapply(acovs, det))
+Drule <- function(which_not_answered, possible_patterns, person, test, row_loc){
+    acovstmp <- getAcovs(possible_patterns)
+    infostmp <- lapply(acovstmp, solve)
+    infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
+    crit <- do.call(c, lapply(infos, det))
     crit
 }
 
-Trule <- function(which_not_answered, possible_patterns, person, test){
-    browser()
-    acovs <- getAcovs(possible_patterns)
-    crit <- do.call(c, lapply(acovs, function(x) sum(diag(x))))
+Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
+    acovstmp <- getAcovs(possible_patterns)
+    infostmp <- lapply(acovstmp, solve)
+    infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
+    crit <- do.call(c, lapply(infos, function(x) sum(diag(x))))
     crit
 }
 
-Wrule <- function(which_not_answered, possible_patterns, person, test){
+Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     browser()
-    acovs <- getAcovs(possible_patterns)
+    acovstmp <- getAcovs(possible_patterns)
+    infostmp <- lapply(acovstmp, solve)
+    infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
+    acovs <- lapply(infos, solve)
     crit <- do.call(c, lapply(acovs, function(x, w) w %*% x %*% w, 
                               w=MCE$design$Trule_weights))
     crit
 }
 
-KL <- function(which_not_answered, possible_patterns, person, test){
+KL <- function(which_not_answered, possible_patterns, person, test, row_loc){
     browser()
     
     

@@ -21,12 +21,12 @@ findNextCATItem <- function(person, test){
         item <- sample(which_not_answered, 1)
     } else if(MCE$design$criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                   person=person, test=test)
+                   person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
         browser()
     } else if(MCE$design$criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                   person=person, test=test)
+                   person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
     } else if(MCE$design$criteria == 'MEI'){
         crit <- MEI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
@@ -38,23 +38,23 @@ findNextCATItem <- function(person, test){
         item <- which_not_answered[min(crit) == crit]
     } else if(MCE$design$criteria == 'MLWI'){
         crit <- MLWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                     person=person, test=test)
+                     person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
     } else if(MCE$design$criteria == 'MPWI'){
         crit <- MPWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                     person=person, test=test)
+                     person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
     } else if(MCE$design$criteria == 'Drule'){
         crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test)
-        item <- which_not_answered[which(min(crit) == crit)]            
+                      person=person, test=test, row_loc=row_loc)
+        item <- which_not_answered[which(max(crit) == crit)]            
     } else if(MCE$design$criteria == 'Trule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test)
-        item <- which_not_answered[which(min(crit) == crit)]
+                      person=person, test=test, row_loc=row_loc)
+        item <- which_not_answered[which(max(crit) == crit)]
     } else if(MCE$design$criteria == 'Wrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test)
+                      person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[which(min(crit) == crit)]
     }
     

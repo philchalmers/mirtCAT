@@ -18,7 +18,7 @@ getAcovs <- function(possible_patterns){
     ret    
 } 
 
-weighted_mat <- function(P, mat, row_loc, which_not_answered){
+weighted_mat <- function(mat, row_loc, which_not_answered, P = rep(1, length(row_loc))){
     for(i in 1L:length(P)) mat[[i]] <- mat[[i]] * P[i]
     mat2 <- vector('list', length(unique(row_loc)))
     for(i in 1L:length(mat2)){
