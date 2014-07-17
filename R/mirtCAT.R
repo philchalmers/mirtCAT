@@ -32,28 +32,36 @@
 #' @param design_list a list of design based parameters for adaptive and non-adaptive tests. These can be
 #' 
 #' \describe{
-#'   \item{\code{\link{mirt.model}}}{   }
+#'   \item{\code{max_SEM}}{   }
+#' 
+#'   \item{\code{conjunctive}}{   }
+#'   
+#'   \item{\code{Wrule_weights}}{   }
 #'   
 #' }
 #' 
 #' @param test_list a list of test based parameters to be over-written. These can be
 #' 
 #' \describe{
-#'   \item{\code{\link{mirt.model}}}{   }
+#'   \item{\code{quadpts}}{   }
+#'   
+#'   \item{\code{theta_range}}{   }
 #'   
 #' }
 #' 
 #' @param shinyGUI_list a list of GUI based parameters to be over-written. These can be
 #' 
 #' \describe{
-#'   \item{\code{\link{mirt.model}}}{   }
+#'   \item{\code{firstpage}}{   }
+#'   
+#'   \item{\code{lastpage}}{   }
 #'   
 #' }
 #' 
 #' @param person_list a list of person based parameters to be over-written. These can be
 #' 
 #' \describe{
-#'   \item{\code{\link{mirt.model}}}{   }
+#'   \item{\code{thetas.start}}{   }
 #'   
 #' }
 #'

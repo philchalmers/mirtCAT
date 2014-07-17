@@ -22,7 +22,7 @@ server <- function(input, output) {
         }
         
         # run survey
-        if(input$Next > 1L && input$Next < (MCE$test$length + 2L) && !MCE$person$stop_now){
+        if(input$Next > 1L && input$Next < (MCE$test$length + 2L) && !MCE$design$stop_now){
             if(input$Next > 2L){
                 pick <- MCE$person$items_answered[input$Next-2L]
                 name <- MCE$test$itemnames[pick]

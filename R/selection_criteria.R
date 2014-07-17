@@ -64,13 +64,11 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
 }
 
 Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    browser()
     acovstmp <- getAcovs(possible_patterns)
     infostmp <- lapply(acovstmp, solve)
     infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
-    acovs <- lapply(infos, solve)
-    crit <- do.call(c, lapply(acovs, function(x, w) w %*% x %*% w, 
-                              w=MCE$design$Trule_weights))
+    crit <- do.call(c, lapply(infos, function(x, w) w %*% x %*% w, 
+                              w=MCE$design$Wrule_weights))
     crit
 }
 

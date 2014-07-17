@@ -27,13 +27,15 @@ Test <- setRefClass("Test",
                               nfact <<- tmpobj@nfact
                               quadpts <<- 49
                               theta_range <<- c(-6, 6)
-                              ThetaGrid <<- mirt:::thetaComb(seq(-6,6, length.out=49),
-                                                             tmpobj@nfact)
                               if(length(test_list)){
-                                  browser()
-                                  
-                                  
+                                  if(!is.null(test_list$quadpts))
+                                      quadpts <<- test_list$quadpts
+                                  if(!is.null(test_list$theta_range))
+                                      theta_range <<- test_list$theta_range
                               }
+                              ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
+                                                                 length.out=quadpts),
+                                                             tmpobj@nfact)
                           })
                     
 )

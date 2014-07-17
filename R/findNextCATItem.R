@@ -55,7 +55,7 @@ findNextCATItem <- function(person, test){
     } else if(MCE$design$criteria == 'Wrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[which(min(crit) == crit)]
+        item <- which_not_answered[which(max(crit) == crit)]
     }
     
     return(as.integer(item[1L]))

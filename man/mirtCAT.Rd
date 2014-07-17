@@ -39,28 +39,36 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
 \item{design_list}{a list of design based parameters for adaptive and non-adaptive tests. These can be
 
 \describe{
-  \item{\code{\link{mirt.model}}}{   }
+  \item{\code{max_SEM}}{   }
+
+  \item{\code{conjunctive}}{   }
+
+  \item{\code{Wrule_weights}}{   }
 
 }}
 
 \item{test_list}{a list of test based parameters to be over-written. These can be
 
 \describe{
-  \item{\code{\link{mirt.model}}}{   }
+  \item{\code{quadpts}}{   }
+
+  \item{\code{theta_range}}{   }
 
 }}
 
 \item{shinyGUI_list}{a list of GUI based parameters to be over-written. These can be
 
 \describe{
-  \item{\code{\link{mirt.model}}}{   }
+  \item{\code{firstpage}}{   }
+
+  \item{\code{lastpage}}{   }
 
 }}
 
 \item{person_list}{a list of person based parameters to be over-written. These can be
 
 \describe{
-  \item{\code{\link{mirt.model}}}{   }
+  \item{\code{thetas.start}}{   }
 
 }}
 
