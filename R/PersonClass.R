@@ -15,7 +15,7 @@ Person <- setRefClass("Person",
                              responses <<- as.integer(rep(NA, nitems))
                              items_answered <<- as.integer(rep(NA, nitems))
                              thetas <<- matrix(numeric(nfact))
-                             thetas_SE_history <<- matrix(NA, 1L, nfact)
+                             thetas_SE_history <<- matrix(1, 1L, nfact)
                              if(length(person_list)){
                                  if(!is.null(person_list$thetas.start))
                                      thetas <<- person_list$thetas.start

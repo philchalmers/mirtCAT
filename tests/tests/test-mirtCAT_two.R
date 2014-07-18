@@ -53,6 +53,10 @@ test_that('multidimensional', {
     expect_equal(as.numeric(res$thetas), c(0.5529561, 0.7744459), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[41,]), c(0.3945902, 0.4083016), tolerance = 1e-4)
     
+    oo <- personPlot(res)
+    expect_is(oo, 'trellis')
+    oo <- personPlot(res, pick_theta=1)
+    
     #adaptive
     res <- mirtCAT(mod2, shiny_questions, item_answers=answers, local_pattern=pat, adaptive=TRUE,
                    design_list = list(min_SEM = .5))

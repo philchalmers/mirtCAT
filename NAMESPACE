@@ -2,6 +2,7 @@
 
 export(generate_pattern)
 export(mirtCAT)
+export(personPlot)
 import(methods)
 import(mirt)
 import(shiny)

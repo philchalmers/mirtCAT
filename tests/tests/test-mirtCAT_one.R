@@ -47,6 +47,9 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas), 0.3588322, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[26,]), 0.3232215, tolerance = 1e-4)
     
+    oo <- personPlot(res)
+    expect_is(oo, 'trellis')
+    
     res <- mirtCAT(mod, shiny_questions, item_answers=answers, local_pattern=pat,
                    design_list = list(max_items = 5))
     expect_true(sum(!is.na(res$raw_responses)) == 5L && sum(!is.na(res$responses)) == 5L)
