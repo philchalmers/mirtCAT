@@ -16,6 +16,8 @@ Depends:
     shiny (>= 0.10.0)
 Imports:
     methods
+Suggests:
+    testthat
 ByteCompile: no
 LazyLoad: yes
 LazyData: yes

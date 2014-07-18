@@ -29,6 +29,7 @@ generate_pattern <- function(mirt_object, Theta, choices, item_answers = NULL){
     ret <- character(nitems)
     K_1 <- do.call(c, lapply(choices, length)) - 1L
     has_item_answers <- !is.null(item_answers)
+    if(!is.matrix(Theta)) Theta <- matrix(Theta, 1L)
     if(has_item_answers)
         K_1[!is.na(item_answers)] <- 1L
     for(i in 1L:nitems){

@@ -14,6 +14,8 @@ Design <- setRefClass("Design",
                         initialize = function(method, criteria, adaptive, nfact, design_list){
                             method <<- method
                             criteria <<- criteria
+                            if(criteria == 'MI' && nfact > 1L)
+                                criteria <<- 'Drule'
                             adaptive <<- adaptive
                             conjunctive <<- TRUE
                             min_SEM <<- .3

@@ -40,7 +40,8 @@
 #' @param adaptive logical; run the test adaptively? Default is \code{FALSE}
 #' 
 #' @param local_pattern a character vector used to run the CAT application without the GUI 
-#'   interface given a specific response pattern 
+#'   interface given a specific response pattern. This option requires a complete response pattern
+#'   to be supplied 
 #'   
 #' @param design_list a list of design based parameters for adaptive and non-adaptive tests. 
 #'   These can be
