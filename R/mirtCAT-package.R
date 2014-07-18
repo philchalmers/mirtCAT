@@ -1,7 +1,16 @@
 #' Computerized Adaptive Testing with Multidimensional Item Response Theory
 #'
-#' Provides an HTML interface implemented with the shiny package to generate
-#' adaptive and non-adaptive educational and psychological surveys and tests.
+#' Provides tools to generate an HTML interface for creating adaptive and 
+#' non-adaptive educational and psychological tests using the shiny package. Suitable for 
+#' applying unidimensional and multidimensional computerized adaptive tests using item 
+#' response theory methodology.
+#' 
+#' Users interested in the most recent version of this package can visit
+#' \url{https://github.com/philchalmers/mirtCAT} and follow the instructions
+#' for installing the package from source (additional details about installing from 
+#' Github can be found at \url{https://github.com/philchalmers/mirt}). 
+#' Questions regarding the package can be sent to the mirt-package Google Group, located at
+#' \url{https://groups.google.com/forum/#!forum/mirt-package}.
 #'
 #' @name mirtCAT-package
 #' @docType package

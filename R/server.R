@@ -34,7 +34,7 @@ server <- function(input, output) {
                 
                 #update Thetas
                 MCE$person$Update.thetas()
-                MCE$person$Update.stop_now()
+                MCE$design$Update.stop_now()
             } 
             
             if(MCE$design$adaptive && input$Next > 2L){
@@ -47,7 +47,7 @@ server <- function(input, output) {
         }
         
         #cleanup last response 
-        if((input$Next-2L) <= MCE$test$length){
+        if((input$Next-2L) <= MCE$test$length && !MCE$STOP){
             pick <- MCE$person$items_answered[input$Next-2L]
             name <- MCE$test$itemnames[pick]
             ip <- input[[name]]
@@ -55,8 +55,6 @@ server <- function(input, output) {
                 which(MCE$test$item_options[[pick]] %in% ip) - 1L
             if(!is.na(MCE$test$item_answers[[pick]]))
                 MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
-            
-            #update Thetas
             MCE$person$Update.thetas()
         }
         

@@ -5,14 +5,15 @@ Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
     "rphilip.chalmers@gmail.com", role = c("aut", "cre", "cph")))
-Description: Provides an interfact implemented with the shiny package to
-    generate adaptive and non-adaptive educational and psychological surveys
-    and tests.
+Description: Provides tools to generate an HTML interface for creating adaptive
+    and non-adaptive educational and psychological tests using the shiny
+    package. Suitable for applying unidimensional and multidimensional
+    computerized adaptive tests using item response theory methodology.
 Roxygen: list(wrap = FALSE)
 Depends:
     R (>= 2.15),
-    mirt,
-    shiny
+    mirt (>= 1.4.1),
+    shiny (>= 0.10.0)
 Imports:
     methods
 ByteCompile: no

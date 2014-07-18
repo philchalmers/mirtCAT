@@ -1,6 +1,13 @@
 #' Generate an adaptive or non-adaptive test HTML interface
 #' 
-#' Description
+#' Provides tools to generate an HTML interface for creating adaptive and 
+#' non-adaptive educational and psychological tests using the shiny package. Suitable for 
+#' applying unidimensional and multidimensional computerized adaptive tests using item 
+#' response theory methodology.
+#' 
+#' All tests will stop once the \code{'min_SEM'} criteria has been reached. If all questions should
+#' be answered, users should specify an extremely small \code{'min_SEM'} or equivalently 
+#' a large \code{'min_items'} criteria.
 #' 
 #' @param mirt_object single group object defined by the \code{mirt} package
 #' 
@@ -12,72 +19,139 @@
 #'   from the \code{mirt_object} input
 #'   
 #' @param item_answers a character vector indicating which item should be considered 'correct'
-#'   when scoring individuals. Must be the length of the test, where NA's are used if the 
+#'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
 #'   item is not scored
 #'   
 #' @param stem_locations a character vector of paths pointing to .png files to be used as item
-#'   stems. Must be the length of the test, where NA's are used if the item has no corresponding
-#'   .png file
+#'   stems. Must be the length of the test, where \code{NA}s are used if the item has no 
+#'   corresponding .png file
 #'   
 #' @param method argument passed to \code{mirt::fscores()} for compting new scores. Default is 'MAP'
 #' 
-#' @param criteria adpative criteria used, default is the maximum information ('MI'). 
-#'   Possible inputs include: ....
+#' @param criteria adpative criteria used, default is the maximum information (\code{'MI'}). 
 #' 
-#' @param adaptive logical; run the test adaptively?
+#'   Possible inputs for unidimensional tests include:  
+#'   
+#'   Possible inputs for multidimensional tests include: \code{'Drule'} (aliased as \code{'MI'})
+#'   for the determinant of the information matrix, \code{'Trule'} for the trace of the 
+#'   information matrix, and \code{'Wrule'} for the weighted information critiera 
+#'   (requires specified weights).
+#' 
+#' @param adaptive logical; run the test adaptively? Default is \code{FALSE}
 #' 
 #' @param local_pattern a character vector used to run the CAT application without the GUI 
 #'   interface given a specific response pattern 
 #'   
-#' @param design_list a list of design based parameters for adaptive and non-adaptive tests. These can be
+#' @param design_list a list of design based parameters for adaptive and non-adaptive tests. 
+#'   These can be
 #' 
 #' \describe{
-#'   \item{\code{max_SEM}}{   }
-#' 
-#'   \item{\code{conjunctive}}{   }
+#'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error for the latent traits 
+#'     (thetas) before the test is stopped. If the test is multidimensional, this will be 
+#'     used along wit the \code{conjunctive} criteria}
 #'   
-#'   \item{\code{Wrule_weights}}{   }
+#'   \item{\code{min_items}}{Default is \code{1}; minimum number of items that must be answered 
+#'     before the test is stopped}
 #'   
-#' }
-#' 
-#' @param test_list a list of test based parameters to be over-written. These can be
-#' 
-#' \describe{
-#'   \item{\code{quadpts}}{   }
+#'   \item{\code{max_items}}{Default is \code{1e8}; maximum number of items that 
+#'     can be answered}
 #'   
-#'   \item{\code{theta_range}}{   }
+#'   \item{\code{quadpts}}{Default is \code{49}; number of quadrature points used per dimension 
+#'     for intergration (if required).}
+#'   
+#'   \item{\code{theta_range}}{Default is \code{c(-6,6)}; upper and lower range for the theta 
+#'     integration grid. Used in conjuncting with \code{quadpts} to generate an equally spaced 
+#'     quadrature grid}
+#' 
+#'   \item{\code{conjunctive}}{Default is \code{TRUE}; logical value indicating whether a 
+#'     conjunctive or compensatory use of \code{min_SEM} should be used (applicable to 
+#'     multidimensional tests only)}
+#'   
+#'   \item{\code{Wrule_weights}}{Default is \code{rep(1/nfact), nfact)}, where \code{nfact} 
+#'     is the number of test dimensions; weights used when \code{criteria == 'Wrule'}. The default 
+#'     weights the latent dimensions equally }
 #'   
 #' }
 #' 
 #' @param shinyGUI_list a list of GUI based parameters to be over-written. These can be
 #' 
 #' \describe{
-#'   \item{\code{firstpage}}{   }
+#'   \item{\code{title}}{A character string for the test title. Default is 
+#'     \code{'Title of survery'}}
 #'   
-#'   \item{\code{lastpage}}{   }
+#'   \item{\code{authors}}{A character string for the author names. Default is 
+#'     \code{'Author of survery'}}
+#' 
+#'   \item{\code{firstpage}}{The first page used in the GUI for collecting demographic information
+#'     generated using tools from the shiny package. The default collects only the responsend's 
+#'     name and gender using the format 
+#'  
+#'     \preformatted{ 
+#'          list(textInput(inputId = 'name', 
+#'                  label = 'What is your name?',
+#'                  value = ''),
+#'              selectInput(inputId = 'gender',
+#'                   label = 'Please select your gender.',
+#'                   choices = c('', 'Male', 'Female', 'Other'),
+#'                   selected = ''))
+#'         }
+#'      }
+#'   
+#'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
+#'     (i.e., criteria has been met). Default is 
+#'   
+#'     \preformatted{ list(h5("End of survey. Click \'Next\' to save results 
+#'       and close application."))}
+#'    }    
 #'   
 #' }
 #' 
 #' @param person_list a list of person based parameters to be over-written. These can be
 #' 
 #' \describe{
-#'   \item{\code{thetas.start}}{   }
+#'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
+#'     Default is \code{rep(0, nfact)}}
 #'   
 #' }
-#'
-#'   
-#' @param ... additional arguments to pass when initializing the ReferenceClass objects
 #' 
 #' @export mirtCAT
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' @seealso \code{\link{generate_pattern}}
+#' 
+#' @return Returns a \code{\link{ReferenceClasses}} object of class \code{'Person'} containing the
+#'   following fields. 
+#'   
+#' \describe{
+#'   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the resepective
+#'     items, where NA indicates the item was not answered}
+#'     
+#'   \item{\code{responses}}{A numeric vector of scored responses if the \code{item_answers} input
+#'     was used for each respective item}
+#'   
+#'   \item{\code{items_answered}}{An integer vector indicating the order in which the items were 
+#'     answered}
+#'   
+#'   \item{\code{thetas}}{A numeric vector indicating the final theta estimates}
+#'   
+#'   \item{\code{thetas_history}}{A matrix indicating the progression of updating the theta values
+#'     during the test}
+#'     
+#'   \item{\code{thetas_SE_history}}{A matrix indicating the standard errors for theta after each
+#'     successive item was answered}
+#'   
+#'   \item{\code{thetas_acov}}{The asymtotic covarance matrix for the final theta estimates}
+#' 
+#'   \item{\code{demographics}}{A data.frame object containing the information collected on the 
+#'     first page of the shiny GUI. This is used to store the demographic information for each
+#'     participant} 
+#' }
 #' 
 #' @keywords CAT, computerized adaptive testing
 #' 
 #' @examples
 #' \dontrun{
 #' 
-# scored simulated example
+#' #unidimensional scored example with generated items
 #' 
 #' #model
 #' set.seed(1234)
@@ -124,8 +198,7 @@
 #' }
 mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = NULL,
                     method = 'MAP', adaptive = FALSE, criteria = 'MI', local_pattern = character(0),
-                    design_list = list(), test_list = list(), shinyGUI_list = list(), 
-                    person_list = list()){
+                    design_list = list(), shinyGUI_list = list(), person_list = list()){
     
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
@@ -149,7 +222,8 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
     shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, 
                              shinyGUI_list=shinyGUI_list)
     test <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
-                     item_options=item_options, test_list=test_list)
+                     item_options=item_options, quadpts_in=design_list$quadpts,
+                     theta_range_in=design_list$theta_range)
     design <- Design$new(method=method, criteria=criteria, adaptive=adaptive, 
                          nfact=test$nfact, design_list=design_list)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), 

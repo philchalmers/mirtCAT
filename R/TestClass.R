@@ -12,7 +12,7 @@ Test <- setRefClass("Test",
                     
                       methods = list(
                           initialize = function(mirt_object, item_answers_in, item_options,
-                                                test_list){
+                                                quadpts_in, theta_range_in){
                               tmpobj <- mirt_object
                               if(is(tmpobj, 'ExploratoryClass'))
                                   class(tmpobj) <- 'ConfirmatoryClass'
@@ -25,14 +25,10 @@ Test <- setRefClass("Test",
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact
-                              quadpts <<- 49
-                              theta_range <<- c(-6, 6)
-                              if(length(test_list)){
-                                  if(!is.null(test_list$quadpts))
-                                      quadpts <<- test_list$quadpts
-                                  if(!is.null(test_list$theta_range))
-                                      theta_range <<- test_list$theta_range
-                              }
+                              if(is.null(quadpts_in)) quadpts <<- 49
+                              else quadpts <<- quadpts_in
+                              if(is.null(theta_range_in)) theta_range <<- c(-6, 6)
+                              else theta_range <<- theta_range_in
                               ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
                                                                  length.out=quadpts),
                                                              tmpobj@nfact)

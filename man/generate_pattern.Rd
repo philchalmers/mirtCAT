@@ -6,13 +6,15 @@
 generate_pattern(mirt_object, Theta, choices, item_answers = NULL)
 }
 \arguments{
-\item{mirt_object}{something}
+\item{mirt_object}{single group object defined by the \code{mirt} package}
 
-\item{Theta}{something}
+\item{Theta}{a numeric vector indicating the latent theta values for a single person}
 
-\item{choices}{something}
+\item{choices}{a list of character vectors signifying the possible choices for each item}
 
-\item{item_answers}{something}
+\item{item_answers}{(optional) a character vector indicating which of the options in
+  \code{choices} should be considered the 'correct' answer. This is required for itemtypes that
+  dichotomously score items (e.g., multiple choice items scored with the 3PL model)}
 }
 \description{
 Generate a CAT pattern given various inputs. Returns a character vector with length equal to
@@ -22,8 +24,6 @@ the test size.
 \dontrun{
 
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
-
-
 
 }
 }
