@@ -37,25 +37,15 @@ server <- function(input, output) {
                 MCE$design$Update.stop_now()
             } 
             
-            if(MCE$design$adaptive && input$Next > 2L){
-                item <- findNextCATItem(person=MCE$person, test=MCE$test)
-            } else {
-                item <- as.integer(input$Next - 1L)
+            if(!MCE$design$stop_now){
+                if(MCE$design$adaptive && input$Next > 2L){
+                    item <- findNextCATItem(person=MCE$person, test=MCE$test)
+                } else {
+                    item <- as.integer(input$Next - 1L)
+                }
+                MCE$person$items_answered[input$Next-1L] <- item
+                return(MCE$shinyGUI$questions[[item]])
             }
-            MCE$person$items_answered[input$Next-1L] <- item
-            return(MCE$shinyGUI$questions[[item]])
-        }
-        
-        #cleanup last response 
-        if((input$Next-2L) <= MCE$test$length && !MCE$STOP){
-            pick <- MCE$person$items_answered[input$Next-2L]
-            name <- MCE$test$itemnames[pick]
-            ip <- input[[name]]
-            MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
-                which(MCE$test$item_options[[pick]] %in% ip) - 1L
-            if(!is.na(MCE$test$item_answers[[pick]]))
-                MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
-            MCE$person$Update.thetas()
         }
         
         #last page
@@ -66,7 +56,6 @@ server <- function(input, output) {
             stopApp()
             return(NULL)
         }
-        
         
     }) 
     

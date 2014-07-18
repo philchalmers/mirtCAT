@@ -15,6 +15,7 @@ run_local <- function(responses){
         MCE$person$Update.thetas()
         if(i == (length(responses)+1L)) break
         MCE$design$Update.stop_now()
+        if(MCE$design$stop_now) break
         
         if(MCE$design$adaptive){
             item <- findNextCATItem(person=MCE$person, test=MCE$test)
@@ -22,21 +23,6 @@ run_local <- function(responses){
             item <- as.integer(i)
         }
         MCE$person$items_answered[i] <- item
-        
-        if(MCE$design$stop_now) break
-    }
-    
-    #cleanup
-    if(i < (length(responses)+1L)){
-        i <- i + 1
-        pick <- MCE$person$items_answered[i-1]
-        name <- MCE$test$itemnames[pick]
-        ip <- responses[pick]
-        MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
-            which(MCE$test$item_options[[pick]] %in% ip) - 1L
-        if(!is.na(MCE$test$item_answers[[pick]]))
-            MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
-        MCE$person$Update.thetas()
     }
     
     return(MCE$person)

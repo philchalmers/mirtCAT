@@ -49,7 +49,12 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
 
 Drule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     acovstmp <- getAcovs(possible_patterns)
-    infostmp <- lapply(acovstmp, solve)
+    infostmp <- lapply(acovstmp, function(x){
+        ret <- try(solve(x), TRUE)
+        if(is(ret, 'try-error'))
+            ret <- matrix(0, nrow(x), ncol(x))
+        ret
+    })
     infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, lapply(infos, det))
     crit
@@ -57,7 +62,12 @@ Drule <- function(which_not_answered, possible_patterns, person, test, row_loc){
 
 Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     acovstmp <- getAcovs(possible_patterns)
-    infostmp <- lapply(acovstmp, solve)
+    infostmp <- lapply(acovstmp, function(x){
+        ret <- try(solve(x), TRUE)
+        if(is(ret, 'try-error'))
+            ret <- matrix(0, nrow(x), ncol(x))
+        ret
+    })
     infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, lapply(infos, function(x) sum(diag(x))))
     crit
@@ -65,7 +75,12 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
 
 Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     acovstmp <- getAcovs(possible_patterns)
-    infostmp <- lapply(acovstmp, solve)
+    infostmp <- lapply(acovstmp, function(x){
+        ret <- try(solve(x), TRUE)
+        if(is(ret, 'try-error'))
+            ret <- matrix(0, nrow(x), ncol(x))
+        ret
+    })
     infos <- weighted_mat(mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, lapply(infos, function(x, w) w %*% x %*% w, 
                               w=MCE$design$Wrule_weights))

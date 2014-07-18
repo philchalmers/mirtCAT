@@ -54,6 +54,6 @@ Design$methods(
             }        
             if(all(diff < min_SEM)) stop_now <<- TRUE
         }
-        if(nanswered >= max_items-1L) stop_now <<- TRUE
+        if(nanswered >= max_items) stop_now <<- TRUE
     }
 )
