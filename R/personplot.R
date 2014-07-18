@@ -48,7 +48,7 @@ personPlot <- function(person, pick_theta = NULL, ...){
     tmp <- rep(c(0,tmp[!is.na(tmp)]), nfact)
     thetaslong$item <- factor(tmp, levels = unique(tmp))
     if(nfact > 1L){
-        return(lattice::xyplot(F1 ~ item|thetas, data=thetaslong, 
+        return(xyplot(F1 ~ item|thetas, data=thetaslong, 
                                main = 'MCAT Standard Errors',
                                lower = thetasSElowlong$F1,
                                upper = thetasSEhighlong$F1,
@@ -68,7 +68,7 @@ personPlot <- function(person, pick_theta = NULL, ...){
                                xlab = 'Item', ...))
         
     } else {
-        return(lattice::xyplot(F1 ~ item, data=thetaslong, 
+        return(xyplot(F1 ~ item, data=thetaslong, 
                                main = 'CAT Standard Errors',
                                lower = thetasSElowlong$F1,
                                upper = thetasSEhighlong$F1,
