@@ -34,7 +34,7 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
   Possible inputs for unidimensional tests include:
 
-  Possible inputs for multidimensional tests include: \code{'Drule'} (aliased as \code{'MI'})
+  Possible inputs for multidimensional tests include: \code{'Drule'}
   for the determinant of the information matrix, \code{'Trule'} for the trace of the
   information matrix, and \code{'Wrule'} for the weighted information critiera
   (requires specified weights).

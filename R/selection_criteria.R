@@ -15,7 +15,8 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc){
         P[row_loc == i] <- p
     }
     infostmp <- lapply(which_not_answered, function(x)
-        iteminfo(extract.item(test$mirt_object, x), Theta=person$thetas))
+        iteminfo(extract.item(test$mirt_object, x), Theta=person$thetas, total.info = FALSE))
+    infostmp <- as.list(do.call(c, infostmp))
     infos <- weighted_mat(P=P, mat=infostmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, infos)
     crit
@@ -28,7 +29,9 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc){
         p <- probtrace(ii, MCE$person$thetas)
         P[row_loc == i] <- p
     }
-    acovstmp <- getAcovs(possible_patterns)
+    pp2 <- possible_patterns
+    pp2[ ,which(possible_patterns[1L, ] == possible_patterns[2L,])] <- NA
+    acovstmp <- getAcovs(pp2)
     acovs <- weighted_mat(P=P, mat=acovstmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, acovs)
     crit

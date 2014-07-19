@@ -17,8 +17,9 @@ Design <- setRefClass("Design",
                                               preCAT_list, nitems){
                             method <<- method
                             criteria <<- criteria
-                            if(criteria == 'MI' && nfact > 1L)
-                                criteria <<- 'Drule'
+                            if(nfact > 1L && 
+                                   !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'seq', 'random')))
+                                stop('Selected criteria not valid for multidimensional tests')
                             conjunctive <<- TRUE
                             min_SEM <<- .3
                             Wrule_weights <<- rep(1/nfact, nfact)
