@@ -38,7 +38,7 @@ server <- function(input, output) {
             } 
             
             if(!MCE$design$stop_now){
-                if(MCE$design$adaptive && input$Next > 2L){
+                if(MCE$design$adaptive && input$Next > 2L && MCE$design$criteria != 'seq'){
                     item <- findNextCATItem(person=MCE$person, test=MCE$test)
                 } else {
                     item <- as.integer(input$Next - 1L)

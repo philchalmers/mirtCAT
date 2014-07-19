@@ -10,16 +10,14 @@ Person <- setRefClass("Person",
                                     demographics = 'data.frame'),
                       
                       methods = list(
-                         initialize = function(nfact, nitems, person_list){
+                         initialize = function(nfact, nitems, thetas.start_in){
                              raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              items_answered <<- as.integer(rep(NA, nitems))
                              thetas <<- matrix(numeric(nfact))
                              thetas_SE_history <<- matrix(1, 1L, nfact)
-                             if(length(person_list)){
-                                 if(!is.null(person_list$thetas.start))
-                                     thetas <<- person_list$thetas.start
-                             }
+                             if(!is.null(thetas.start_in))
+                                thetas <<- thetas.start_in
                              thetas_history <<- matrix(thetas, 1L, nfact)
                          })
                       

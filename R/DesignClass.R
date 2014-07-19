@@ -11,7 +11,8 @@ Design <- setRefClass("Design",
                                   Wrule_weights = 'numeric'),
                     
                     methods = list(
-                        initialize = function(method, criteria, adaptive, nfact, design_list){
+                        initialize = function(method, criteria, adaptive, nfact, design_list,
+                                              preCAT_list){
                             method <<- method
                             criteria <<- criteria
                             if(criteria == 'MI' && nfact > 1L)
@@ -34,6 +35,12 @@ Design <- setRefClass("Design",
                                     min_items <<- as.integer(design_list$min_items)
                                 if(!is.null(design_list$max_items))
                                     max_items <<- as.integer(design_list$max_items)
+                            }
+                            if(!mirt:::closeEnough(sum(Wrule_weights)-1, -1e-6, 1e-6))
+                                stop('Wrule_weights does not sum to 1')
+                            if(length(preCAT_list)){
+                                
+                                
                             }
                         })
                     

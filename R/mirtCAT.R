@@ -36,6 +36,9 @@
 #'   for the determinant of the information matrix, \code{'Trule'} for the trace of the 
 #'   information matrix, and \code{'Wrule'} for the weighted information critiera 
 #'   (requires specified weights).
+#'   
+#'   Non-adaptive methods include \code{'random'} to randomly select items, and 
+#'   \code{'seq'} for selecting items sequentially.
 #' 
 #' @param adaptive logical; run the test adaptively? Default is \code{FALSE}
 #' 
@@ -50,6 +53,9 @@
 #'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error for the latent traits 
 #'     (thetas) before the test is stopped. If the test is multidimensional, this will be 
 #'     used along wit the \code{conjunctive} criteria}
+#'     
+#'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
+#'     Default is \code{rep(0, nfact)}}
 #'   
 #'   \item{\code{min_items}}{Default is \code{1}; minimum number of items that must be answered 
 #'     before the test is stopped}
@@ -101,19 +107,25 @@
 #'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
 #'     (i.e., criteria has been met). Default is 
 #'   
-#'     \preformatted{ list(h5("End of survey. Click \'Next\' to save results 
+#'     \preformatted{list(h5("End of survey. Click \'Next\' to save results 
 #'       and close application."))}
 #'    }    
 #'   
 #' }
 #' 
-#' @param person_list a list of person based parameters to be over-written. These can be
-#' 
-#' \describe{
-#'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
-#'     Default is \code{rep(0, nfact)}}
+#' @param preCAT_list a list object which can be used when \code{adaptive = TRUE}. This 
+#'   specifies a pre-CAT block in which different test properties may be applied. If the
+#'   list is empty no preCAT block will be used. Elements may be 
 #'   
-#' }
+#'   \describe{
+#'     \item{\code{nitems}}{number of items to administer before the CAT session begins}
+#'     
+#'     \item{\code{criteria}}{selection criteria (see above)}
+#'     
+#'     \item{\code{method}}{selection criteria (see above). It is generally recommended to 
+#'       select a method which can deal with all-or-none response patterns, such as 'EAP'
+#'       or 'MAP'}
+#'    }
 #' 
 #' @export mirtCAT
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
@@ -199,7 +211,7 @@
 #' }
 mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = NULL,
                     method = 'MAP', adaptive = FALSE, criteria = 'MI', local_pattern = character(0),
-                    design_list = list(), shinyGUI_list = list(), person_list = list()){
+                    design_list = list(), shinyGUI_list = list(), preCAT_list = list()){
     
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
@@ -226,9 +238,10 @@ mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = 
                      item_options=item_options, quadpts_in=design_list$quadpts,
                      theta_range_in=design_list$theta_range)
     design <- Design$new(method=method, criteria=criteria, adaptive=adaptive, 
-                         nfact=test$nfact, design_list=design_list)
+                         nfact=test$nfact, design_list=design_list,
+                         preCAT_list=preCAT_list)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), 
-                         person_list=person_list)
+                         thetas.start_in=design_list$thetas.start)
     
     #put in specific enviroment
     MCE$person <- person
