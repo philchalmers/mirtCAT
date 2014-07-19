@@ -3,19 +3,21 @@
 \alias{mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
-  method = "MAP", criteria = "seq", local_pattern = character(0),
-  design_list = list(), shinyGUI_list = list(), preCAT_list = list())
+mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
+  stem_locations = NULL, method = "MAP", criteria = "seq",
+  local_pattern = character(0), design_list = list(),
+  shinyGUI_list = list(), preCAT_list = list())
 }
 \arguments{
-\item{mirt_object}{single group object defined by the \code{mirt} package}
-
 \item{questions}{a named list containing lists of \code{shiny} input types for each item.
   Each element of the input should be a list of the form
   \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
   (such as in rating and Likert-scales) then this input may either be set to NA or ommited.
   Additinally, each \code{inputID} must be identical to the column names used to define the data
   from the \code{mirt_object} input}
+
+\item{mirt_object}{single group object defined by the \code{mirt} package. This is required
+  if the test is to be scored adaptively}
 
 \item{item_answers}{a character vector indicating which item should be considered 'correct'
   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the
@@ -160,7 +162,9 @@ Returns a \code{\link{ReferenceClasses}} object of class \code{'Person'} contain
 Provides tools to generate an HTML interface for creating adaptive and
 non-adaptive educational and psychological tests using the shiny package. Suitable for
 applying unidimensional and multidimensional computerized adaptive tests using item
-response theory methodology.
+response theory methodology. Test scoring is performed using the \code{mirt} package.
+However, if no scoring is required (i.e., a standard survey) then defining a \code{mirt}
+object may be ommited.
 }
 \details{
 All tests will stop once the \code{'min_SEM'} criteria has been reached. If all questions should
@@ -206,15 +210,16 @@ for(i in 1L:nitems){
                                          choices = choices[[i]])
 }
 
-mirtCAT(mod, shiny_questions, item_answers=answers) #sequential
-mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'random') #random
-mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'MI') #adaptive
+mirtCAT(shiny_questions) #collect response only (no scoring or estimating thetas)
+mirtCAT(shiny_questions, mod, item_answers=answers) #sequential scoring
+mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random') #random
+mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI') #adaptive
 
 #run locally, random response pattern given Theta
 set.seed(1)
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
-mirtCAT(mod, shiny_questions, item_answers=answers, local_pattern=pat)
-mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'MI', local_pattern=pat)
+mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
+mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', local_pattern=pat)
 }
 }
 \author{

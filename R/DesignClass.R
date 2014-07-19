@@ -50,8 +50,6 @@ Design <- setRefClass("Design",
                                 if(is.null(preCAT_list$criteria))
                                     preCAT_criteria <<- 'random'
                                 else preCAT_criteria <<- preCAT_list$criteria
-                                    
-                                
                             }
                         })
                     
@@ -62,17 +60,19 @@ Design$methods(
     # Check whether to stop adaptive test
     Update.stop_now = function(){
         nanswered <- sum(!is.na(MCE$person$responses))
-        if(nanswered >= min_items){
-            if(!conjunctive && MCE$test$nfact > 1L){
-                info <- try(solve(MCE$person$thetas_acov), TRUE)
-                diff <- if(is(info, 'try-error')) min_SEM + 1
-                else sqrt(1/abs(MCE$design$Wrule_weights %*% info %*% MCE$design$Wrule_weights))
-            } else {
-                diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
-            }        
-            if(all(diff < min_SEM)) stop_now <<- TRUE
+        if(MCE$person$score){
+            if(nanswered >= min_items){
+                if(!conjunctive && MCE$test$nfact > 1L){
+                    info <- try(solve(MCE$person$thetas_acov), TRUE)
+                    diff <- if(is(info, 'try-error')) min_SEM + 1
+                    else sqrt(1/abs(MCE$design$Wrule_weights %*% info %*% MCE$design$Wrule_weights))
+                } else {
+                    diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
+                }        
+                if(all(diff < min_SEM)) stop_now <<- TRUE
+            }
         }
-        if(nanswered >= max_items) stop_now <<- TRUE
+        if(nanswered == max_items) stop_now <<- TRUE
     },
     
     Next.stage = function(){

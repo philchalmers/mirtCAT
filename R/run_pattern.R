@@ -13,7 +13,6 @@ run_local <- function(responses){
         
         #update Thetas
         MCE$person$Update.thetas()
-        if(i == (length(responses)+1L)) break
         MCE$design$Update.stop_now()
         if(MCE$design$stop_now) break
         
