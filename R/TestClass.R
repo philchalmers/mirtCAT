@@ -25,7 +25,9 @@ Test <- setRefClass("Test",
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact
-                              if(is.null(quadpts_in)) quadpts <<- 49
+                              if(is.null(quadpts_in)) 
+                                  quadpts <<- switch(as.character(nfact), 
+                                                     '1'=61, '2'=31, '3'=15, '4'=9, '5'=7, 3)
                               else quadpts <<- quadpts_in
                               if(is.null(theta_range_in)) theta_range <<- c(-6, 6)
                               else theta_range <<- theta_range_in

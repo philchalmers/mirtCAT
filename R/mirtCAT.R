@@ -63,7 +63,8 @@
 #'   \item{\code{max_items}}{Default is \code{1e8}; maximum number of items that 
 #'     can be answered}
 #'   
-#'   \item{\code{quadpts}}{Default is \code{49}; number of quadrature points used per dimension 
+#'   \item{\code{quadpts}}{Default follows scheme in \code{mirt::fscores}; 
+#'     number of quadrature points used per dimension 
 #'     for intergration (if required).}
 #'   
 #'   \item{\code{theta_range}}{Default is \code{c(-6,6)}; upper and lower range for the theta 
