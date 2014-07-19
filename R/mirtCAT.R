@@ -201,14 +201,15 @@
 #'                                          choices = choices[[i]])
 #' }
 #' 
-#' mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'seq') #sequential
+#' mirtCAT(mod, shiny_questions, item_answers=answers) #sequential
+#' mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'random') #random
 #' mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'MI') #adaptive
 #' 
 #' #run locally, random response pattern given Theta
 #' set.seed(1)
 #' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 #' mirtCAT(mod, shiny_questions, item_answers=answers, local_pattern=pat)
-#' mirtCAT(mod, shiny_questions, item_answers=answers, adaptive = TRUE, local_pattern=pat)
+#' mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'MI', local_pattern=pat)
 #' }
 mirtCAT <- function(mirt_object, questions, item_answers=NULL, stem_locations = NULL,
                     method = 'MAP', criteria = 'seq', local_pattern = character(0),
