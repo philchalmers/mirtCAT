@@ -2,28 +2,30 @@ Design <- setRefClass("Design",
                     
                     fields = list(method = 'character',
                                   criteria = 'character',
-                                  adaptive = 'logical',
                                   conjunctive = 'logical',
                                   min_SEM = 'numeric',
                                   min_items = 'integer',
                                   max_items = 'integer',
                                   stop_now = 'logical',
-                                  Wrule_weights = 'numeric'),
+                                  Wrule_weights = 'numeric',
+                                  preCAT_nitems = 'integer',
+                                  preCAT_criteria = 'character',
+                                  preCAT_method = 'character'),
                     
                     methods = list(
-                        initialize = function(method, criteria, adaptive, nfact, design_list,
-                                              preCAT_list){
+                        initialize = function(method, criteria, nfact, design_list,
+                                              preCAT_list, nitems){
                             method <<- method
                             criteria <<- criteria
                             if(criteria == 'MI' && nfact > 1L)
                                 criteria <<- 'Drule'
-                            adaptive <<- adaptive
                             conjunctive <<- TRUE
                             min_SEM <<- .3
                             Wrule_weights <<- rep(1/nfact, nfact)
                             min_items <<- 1L
-                            max_items <<- as.integer(1e8)
+                            max_items <<- nitems
                             stop_now <<- FALSE
+                            preCAT_nitems <<- 0L
                             if(length(design_list)){
                                 if(!is.null(design_list$conjunctive)) 
                                     conjunctive <<- design_list$conjunctive
@@ -39,7 +41,16 @@ Design <- setRefClass("Design",
                             if(!mirt:::closeEnough(sum(Wrule_weights)-1, -1e-6, 1e-6))
                                 stop('Wrule_weights does not sum to 1')
                             if(length(preCAT_list)){
-                                
+                                if(is.null(preCAT_list$nitems))
+                                    stop('preCAT_list nitems must be specified')
+                                else preCAT_nitems <<- preCAT_list$nitems
+                                if(is.null(preCAT_list$method))
+                                    preCAT_method <<- 'MAP'
+                                else preCAT_method <<- preCAT_list$method
+                                if(is.null(preCAT_list$criteria))
+                                    preCAT_criteria <<- 'random'
+                                else preCAT_criteria <<- preCAT_list$criteria
+                                    
                                 
                             }
                         })
@@ -62,5 +73,9 @@ Design$methods(
             if(all(diff < min_SEM)) stop_now <<- TRUE
         }
         if(nanswered >= max_items) stop_now <<- TRUE
+    },
+    
+    Next.stage = function(){
+        
     }
 )

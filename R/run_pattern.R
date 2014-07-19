@@ -17,11 +17,8 @@ run_local <- function(responses){
         MCE$design$Update.stop_now()
         if(MCE$design$stop_now) break
         
-        if(MCE$design$adaptive && MCE$design$criteria != 'seq'){
-            item <- findNextCATItem(person=MCE$person, test=MCE$test)
-        } else {
-            item <- as.integer(i)
-        }
+        item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=i-1L,
+                                criteria=MCE$design$criteria)
         MCE$person$items_answered[i] <- item
     }
     

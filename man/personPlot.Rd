@@ -3,7 +3,7 @@
 \alias{personPlot}
 \title{Generate plots following test completion}
 \usage{
-personPlot(person, pick_theta = NULL, ...)
+personPlot(person, pick_theta = NULL, main = "CAT Standard Errors", ...)
 }
 \arguments{
 \item{person}{an object of class 'Person' returned from \code{\link{mirtCAT}}}
@@ -11,6 +11,8 @@ personPlot(person, pick_theta = NULL, ...)
 \item{pick_theta}{a number indicating which theta to plot (only applicable for multidimensional
   tests). The default is to facet each theta on one plot, but to plot only the first factor pass
   \code{pick_theta = 1}}
+
+\item{main}{title of the plot}
 
 \item{...}{additional arguments to be passed to \code{lattice}}
 }

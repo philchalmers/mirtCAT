@@ -4,9 +4,8 @@
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
-  method = "MAP", adaptive = FALSE, criteria = "MI",
-  local_pattern = character(0), design_list = list(),
-  shinyGUI_list = list(), preCAT_list = list())
+  method = "MAP", criteria = "seq", local_pattern = character(0),
+  design_list = list(), shinyGUI_list = list(), preCAT_list = list())
 }
 \arguments{
 \item{mirt_object}{single group object defined by the \code{mirt} package}
@@ -28,7 +27,8 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
 
 \item{method}{argument passed to \code{mirt::fscores()} for compting new scores. Default is 'MAP'}
 
-\item{criteria}{adpative criteria used, default is the maximum information (\code{'MI'}).
+\item{criteria}{adpative criteria used, default is to adiminster each item sequentially
+  (i.e., \code{criteria = 'seq'}).
 
   Possible inputs for unidimensional tests include:
 
@@ -39,8 +39,6 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
 
   Non-adaptive methods include \code{'random'} to randomly select items, and
   \code{'seq'} for selecting items sequentially.}
-
-\item{adaptive}{logical; run the test adaptively? Default is \code{FALSE}}
 
 \item{local_pattern}{a character vector used to run the CAT application without the GUI
   interface given a specific response pattern. This option requires a complete response pattern
@@ -60,7 +58,7 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
   \item{\code{min_items}}{Default is \code{1}; minimum number of items that must be answered
     before the test is stopped}
 
-  \item{\code{max_items}}{Default is \code{1e8}; maximum number of items that
+  \item{\code{max_items}}{Default is the length of the item bank; maximum number of items that
     can be answered}
 
   \item{\code{quadpts}}{Default follows scheme in \code{mirt::fscores};
@@ -114,18 +112,19 @@ mirtCAT(mirt_object, questions, item_answers = NULL, stem_locations = NULL,
 
 }}
 
-\item{preCAT_list}{a list object which can be used when \code{adaptive = TRUE}. This
+\item{preCAT_list}{a list object which can be used. This
   specifies a pre-CAT block in which different test properties may be applied. If the
-  list is empty no preCAT block will be used. Elements may be
+  list is empty no preCAT block will be used. All of the following elements are required.
 
   \describe{
-    \item{\code{nitems}}{number of items to administer before the CAT session begins}
+    \item{\code{nitems}}{number of items to administer before the CAT session begins.
+      An input greater than 0 is required}
 
-    \item{\code{criteria}}{selection criteria (see above)}
+    \item{\code{criteria}}{selection criteria (see above). Default is 'random'}
 
     \item{\code{method}}{selection criteria (see above). It is generally recommended to
       select a method which can deal with all-or-none response patterns, such as 'EAP'
-      or 'MAP'}
+      or 'MAP'. Default is 'MAP'}
    }}
 }
 \value{
@@ -207,8 +206,8 @@ for(i in 1L:nitems){
                                          choices = choices[[i]])
 }
 
-mirtCAT(mod, shiny_questions, item_answers=answers) #sequential
-mirtCAT(mod, shiny_questions, item_answers=answers, adaptive=TRUE) #adaptive
+mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'seq') #sequential
+mirtCAT(mod, shiny_questions, item_answers=answers, criteria = 'MI') #adaptive
 
 #run locally, random response pattern given Theta
 set.seed(1)

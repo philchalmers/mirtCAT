@@ -7,6 +7,8 @@
 #' @param pick_theta a number indicating which theta to plot (only applicable for multidimensional 
 #'   tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 #'   \code{pick_theta = 1}
+#'   
+#' @param main title of the plot
 #' 
 #' @param ... additional arguments to be passed to \code{lattice}
 #' 
@@ -22,7 +24,7 @@
 #' 
 #' }
 
-personPlot <- function(person, pick_theta = NULL, ...){
+personPlot <- function(person, pick_theta = NULL, main = 'CAT Standard Errors', ...){
     nfact <- ncol(person$thetas)
     thetas <- data.frame(person$thetas_history)
     thetasSEhigh <- data.frame(thetas + person$thetas_SE_history)
@@ -49,7 +51,7 @@ personPlot <- function(person, pick_theta = NULL, ...){
     thetaslong$item <- factor(tmp, levels = unique(tmp))
     if(nfact > 1L){
         return(xyplot(F1 ~ item|thetas, data=thetaslong, 
-                               main = 'MCAT Standard Errors',
+                               main = main,
                                lower = thetasSElowlong$F1,
                                upper = thetasSEhighlong$F1,
                                panel = function(x, y, lower, upper, subscripts, ...){
@@ -69,7 +71,7 @@ personPlot <- function(person, pick_theta = NULL, ...){
         
     } else {
         return(xyplot(F1 ~ item, data=thetaslong, 
-                               main = 'CAT Standard Errors',
+                               main = main,
                                lower = thetasSElowlong$F1,
                                upper = thetasSEhighlong$F1,
                                panel = function(x, y, lower, upper, subscripts, ...){

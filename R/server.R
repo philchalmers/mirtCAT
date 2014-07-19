@@ -22,7 +22,7 @@ server <- function(input, output) {
         }
         
         # run survey
-        if(input$Next > 1L && input$Next < (MCE$test$length + 2L) && !MCE$design$stop_now){
+        if(input$Next > 1L && !MCE$design$stop_now){
             if(input$Next > 2L){
                 pick <- MCE$person$items_answered[input$Next-2L]
                 name <- MCE$test$itemnames[pick]
@@ -38,11 +38,8 @@ server <- function(input, output) {
             } 
             
             if(!MCE$design$stop_now){
-                if(MCE$design$adaptive && input$Next > 2L && MCE$design$criteria != 'seq'){
-                    item <- findNextCATItem(person=MCE$person, test=MCE$test)
-                } else {
-                    item <- as.integer(input$Next - 1L)
-                }
+                item <- findNextCATItem(person=MCE$person, test=MCE$test, 
+                                        lastitem=input$Next - 2L, criteria=MCE$design$criteria)
                 MCE$person$items_answered[input$Next-1L] <- item
                 return(MCE$shinyGUI$questions[[item]])
             }

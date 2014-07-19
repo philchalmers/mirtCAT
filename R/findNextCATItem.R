@@ -1,4 +1,4 @@
-findNextCATItem <- function(person, test){
+findNextCATItem <- function(person, test, lastitem, criteria){
     
     #heavy lifty CAT stuff just to find new item
     not_answered <- is.na(person$responses)
@@ -17,45 +17,48 @@ findNextCATItem <- function(person, test){
         }
     }
     
-    if(MCE$design$criteria == 'random'){
+    if(criteria == 'seq'){
+        item <- lastitem + 1L
+    } else if(criteria == 'random'){
         item <- sample(which_not_answered, 1)
-    } else if(MCE$design$criteria == 'KL'){
+    } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
-        browser()
-    } else if(MCE$design$criteria == 'MI'){
+    } else if(criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
-    } else if(MCE$design$criteria == 'MEI'){
+    } else if(criteria == 'MEI'){
         crit <- MEI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                     person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
-    } else if(MCE$design$criteria == 'MEPV'){
+    } else if(criteria == 'MEPV'){
         crit <- MEPV(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                     person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[min(crit) == crit]
-    } else if(MCE$design$criteria == 'MLWI'){
+    } else if(criteria == 'MLWI'){
         crit <- MLWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                      person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
-    } else if(MCE$design$criteria == 'MPWI'){
+    } else if(criteria == 'MPWI'){
         crit <- MPWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                      person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[max(crit) == crit]
-    } else if(MCE$design$criteria == 'Drule'){
+    } else if(criteria == 'Drule'){
         crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[which(max(crit) == crit)]            
-    } else if(MCE$design$criteria == 'Trule'){
+    } else if(criteria == 'Trule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[which(max(crit) == crit)]
-    } else if(MCE$design$criteria == 'Wrule'){
+    } else if(criteria == 'Wrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         item <- which_not_answered[which(max(crit) == crit)]
+    } else {
+        stop('Selection criteria does not exist')
     }
     
     return(as.integer(item[1L]))

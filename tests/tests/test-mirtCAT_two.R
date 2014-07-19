@@ -58,13 +58,13 @@ test_that('multidimensional', {
     oo <- personPlot(res, pick_theta=1)
     
     #adaptive
-    res <- mirtCAT(mod2, shiny_questions, item_answers=answers, local_pattern=pat, adaptive=TRUE,
+    res <- mirtCAT(mod2, shiny_questions, item_answers=answers, local_pattern=pat, criteria='Drule',
                    design_list = list(min_SEM = .5))
     expect_equal(as.numeric(res$thetas), c(0.4399921, 0.9320727), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4991433, 0.4869806), tolerance = 1e-4)
     
-    res <- mirtCAT(mod2, shiny_questions, item_answers=answers, local_pattern=pat, adaptive=TRUE,
+    res <- mirtCAT(mod2, shiny_questions, item_answers=answers, local_pattern=pat, 
                    design_list = list(min_SEM = .5), criteria = 'Trule')
     expect_equal(as.numeric(res$thetas), c(0.7499811, 0.9594961), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
