@@ -41,9 +41,9 @@
 #'   maximum expected information.
 #'   
 #'   Possible inputs for multidimensional adaptive tests include: \code{'Drule'} 
-#'   for the determinant of the information matrix, \code{'Trule'} for the trace of the 
-#'   information matrix, and \code{'Wrule'} for the weighted information critiera 
-#'   (requires specified weights).
+#'   for the maximum determinant of the information matrix, \code{'Trule'} for the 
+#'   maximum trace of the information matrix, and \code{'Wrule'} for the weighted 
+#'   information critiera.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
 #'   \code{'KL'} and \code{'KLn'} for Kullback-Leibler divergence and Kullback-Leibler with a 
