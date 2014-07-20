@@ -40,8 +40,8 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'}
   for the maximum determinant of the information matrix, \code{'Trule'} for the
-  maximum trace of the information matrix, and \code{'Wrule'} for the weighted
-  information critiera.
+  maximum (potentially weighted) trace of the information matrix, and \code{'Wrule'} for
+  the weighted information critiera.
 
   Applicable to both unidimensional and multidimensional tests are the
   \code{'KL'} and \code{'KLn'} for Kullback-Leibler divergence and Kullback-Leibler with a

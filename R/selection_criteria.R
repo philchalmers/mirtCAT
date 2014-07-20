@@ -105,7 +105,8 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
             ret <- matrix(0, nrow(x), ncol(x))
         ret
     })
-    crit <- do.call(c, lapply(infos, function(x) sum(diag(x))))
+    crit <- do.call(c, lapply(infos, function(x, w) sum(diag(x) * w), 
+                              w=MCE$design$Wrule_weights))
     crit
 }
 
