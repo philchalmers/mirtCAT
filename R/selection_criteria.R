@@ -97,6 +97,12 @@ Drule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     crit
 }
 
+Erule <- function(which_not_answered, possible_patterns, person, test, row_loc){
+    acovs <- getAcovs(possible_patterns)
+    crit <- do.call(c, lapply(acovs, function(x) eigen(x)$values[1L]))
+    crit
+}
+
 Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     acovs <- getAcovs(possible_patterns)
     infos <- lapply(acovs, function(x){

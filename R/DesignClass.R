@@ -24,7 +24,7 @@ Design <- setRefClass("Design",
                             CAT_method <<- method
                             if(nfact > 1L && 
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
-                                                        'seq', 'random')))
+                                                        'Erule', 'seq', 'random')))
                                 stop('Selected criteria not valid for multidimensional tests')
                             conjunctive <<- TRUE
                             min_SEM <<- .3

@@ -76,6 +76,12 @@ test_that('multidimensional', {
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4979451, 0.4640038), tolerance = 1e-4)
     
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+                   design_list = list(min_SEM = .5), criteria = 'Erule')
+    expect_equal(as.numeric(res$thetas), c(0.345696, 1.001818), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4870197, 0.4992364), tolerance = 1e-4)
+    
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria = 'KL')
     expect_equal(as.numeric(res$thetas), c(0.5529561, 0.7744459), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 

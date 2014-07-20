@@ -54,7 +54,11 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     } else if(criteria == 'Drule'){
         crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- row_loc[which(min(crit) == crit)]            
+        item <- row_loc[which(min(crit) == crit)]  
+    } else if(criteria == 'Erule'){
+        crit <- Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                      person=person, test=test, row_loc=row_loc)
+        item <- row_loc[which(min(crit) == crit)]  
     } else if(criteria == 'Trule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
