@@ -54,15 +54,15 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     } else if(criteria == 'Drule'){
         crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[which(min(crit) == crit)]            
+        item <- row_loc[which(min(crit) == crit)]            
     } else if(criteria == 'Trule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[which(max(crit) == crit)]
+        item <- row_loc[which(max(crit) == crit)]
     } else if(criteria == 'Wrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[which(max(crit) == crit)]
+        item <- row_loc[which(max(crit) == crit)]
     } else {
         stop('Selection criteria does not exist')
     }
