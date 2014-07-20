@@ -34,8 +34,12 @@ server <- function(input, output) {
                 
                 #update Thetas
                 MCE$person$Update.thetas()
-                MCE$design$Update.stop_now()
+                if(input$Next > (MCE$design$preCAT_nitems + 2L))
+                    MCE$design$Update.stop_now()
             } 
+            
+            if(input$Next == (MCE$design$preCAT_nitems + 2L)) 
+                MCE$design$Next.stage()
             
             if(!MCE$design$stop_now){
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, 

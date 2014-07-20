@@ -14,7 +14,12 @@ run_local <- function(responses){
         #update Thetas
         MCE$person$Update.thetas()
         MCE$design$Update.stop_now()
-        if(MCE$design$stop_now) break
+        if(i > MCE$design$preCAT_nitems)
+            if(MCE$design$stop_now) 
+                break
+        
+        if(i == (MCE$design$preCAT_nitems + 1L)) 
+            MCE$design$Next.stage()
         
         item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=i-1L,
                                 criteria=MCE$design$criteria)

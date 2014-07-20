@@ -35,17 +35,23 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   Possible inputs for unidimensional adaptive tests include: \code{'MI'} for the maximum
   information, \code{'MEPV'} for minimum expected posterior variance,
   \code{'MLWI'} for maximum likelihood weighted information,
-  \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for
-  maximum expected information, and \code{'KL'} and \code{'KLn'} for Kullback-Leibler
-  divergence and Kullback-Leibler with a decreasing delta value (delta*sqrt(n)), respectively.
+  \code{'MPWI'} for maximum posterior weighted information, and \code{'MEI'} for
+  maximum expected information.
 
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'}
   for the determinant of the information matrix, \code{'Trule'} for the trace of the
   information matrix, and \code{'Wrule'} for the weighted information critiera
   (requires specified weights).
 
-  Non-adaptive methods include \code{'random'} to randomly select items, and
-  \code{'seq'} for selecting items sequentially.}
+  Applicable to both unidimensional and multidimensional tests are the
+  \code{'KL'} and \code{'KLn'} for Kullback-Leibler divergence and Kullback-Leibler with a
+  decreasing delta value (\code{delta*sqrt(n)}, where \code{n} is the number of items
+  previous answered), respectively. The \code{delta} criteria is defined in the
+  \code{design_list} object
+
+  Non-adaptive methods which are applicable even when no \code{mirt_object} is passed
+  include \code{'random'} to randomly select items and \code{'seq'} for selecting
+  items sequentially.}
 
 \item{local_pattern}{a character vector used to run the CAT application without the GUI
   interface given a specific response pattern. This option requires a complete response pattern

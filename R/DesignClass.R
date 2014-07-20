@@ -11,15 +11,20 @@ Design <- setRefClass("Design",
                                   KL_delta = 'numeric',
                                   preCAT_nitems = 'integer',
                                   preCAT_criteria = 'character',
-                                  preCAT_method = 'character'),
+                                  preCAT_method = 'character',
+                                  CAT_criteria = 'character',
+                                  CAT_method = 'character'),
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design_list,
                                               preCAT_list, nitems){
                             method <<- method
                             criteria <<- criteria
+                            CAT_criteria <<- criteria
+                            CAT_method <<- method
                             if(nfact > 1L && 
-                                   !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'seq', 'random')))
+                                   !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
+                                                        'seq', 'random')))
                                 stop('Selected criteria not valid for multidimensional tests')
                             conjunctive <<- TRUE
                             min_SEM <<- .3
@@ -55,6 +60,8 @@ Design <- setRefClass("Design",
                                 if(is.null(preCAT_list$criteria))
                                     preCAT_criteria <<- 'random'
                                 else preCAT_criteria <<- preCAT_list$criteria
+                                criteria <<- preCAT_criteria
+                                method <<- preCAT_method
                             }
                         })
                     
@@ -81,6 +88,7 @@ Design$methods(
     },
     
     Next.stage = function(){
-        
+        criteria <<- CAT_criteria
+        method <<- CAT_method
     }
 )
