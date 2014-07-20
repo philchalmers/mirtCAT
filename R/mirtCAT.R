@@ -34,9 +34,14 @@
 #' @param criteria adpative criteria used, default is to adiminster each item sequentially 
 #'   (i.e., \code{criteria = 'seq'}). 
 #' 
-#'   Possible inputs for unidimensional tests include:  
+#'   Possible inputs for unidimensional adaptive tests include: \code{'MI'} for the maximum
+#'   information, \code{'MEPV'} for minimum expected posterior variance, 
+#'   \code{'MLWI'} for maximum likelihood weighted information, 
+#'   \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for 
+#'   maximum expected information, and \code{'KL'} and \code{'KLn'} for Kullback-Leibler 
+#'   divergence and Kullback-Leibler with a decreasing delta value (delta*sqrt(n)), respectively.
 #'   
-#'   Possible inputs for multidimensional tests include: \code{'Drule'} 
+#'   Possible inputs for multidimensional adaptive tests include: \code{'Drule'} 
 #'   for the determinant of the information matrix, \code{'Trule'} for the trace of the 
 #'   information matrix, and \code{'Wrule'} for the weighted information critiera 
 #'   (requires specified weights).
@@ -80,6 +85,9 @@
 #'   \item{\code{Wrule_weights}}{Default is \code{rep(1/nfact), nfact)}, where \code{nfact} 
 #'     is the number of test dimensions; weights used when \code{criteria == 'Wrule'}. The default 
 #'     weights the latent dimensions equally }
+#'     
+#'   \item{\code{KL_delta}}{Default is \code{0.1}; interval range used when \code{criteria = 'KL'}
+#'     or \code{criteria = 'KLn'}}
 #'   
 #' }
 #' 

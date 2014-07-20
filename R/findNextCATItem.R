@@ -24,8 +24,13 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         else item <- sample(which_not_answered, 1)
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                   person=person, test=test, row_loc=row_loc)
+                   person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
         item <- which_not_answered[max(crit) == crit]
+    } else if(criteria == 'KLn'){
+            crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                       person=person, test=test, row_loc=row_loc, 
+                       delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+            item <- which_not_answered[max(crit) == crit]
     } else if(criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc)

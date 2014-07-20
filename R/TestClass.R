@@ -2,13 +2,15 @@ Test <- setRefClass("Test",
                     
                       fields = list(mirt_object = 'ConfirmatoryClass',
                                     ThetaGrid = 'matrix',
+                                    density = 'numeric',
                                     quadpts = 'numeric',
                                     theta_range = 'numeric',
                                     item_answers = 'character',
                                     item_options = 'list',
                                     itemnames = 'character',
                                     nfact = 'integer',
-                                    length = 'integer'),
+                                    length = 'integer',
+                                    itemloc2 = 'integer'),
                     
                       methods = list(
                           initialize = function(mirt_object, item_answers_in, item_options,
@@ -34,6 +36,9 @@ Test <- setRefClass("Test",
                               ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
                                                                  length.out=quadpts),
                                                              tmpobj@nfact)
+                              density <<- mirt:::mirt_dmvnorm(ThetaGrid)
+                              tmp <- mirt_object@itemloc
+                              itemloc2 <<- tmp[-length(tmp)]
                           })
                     
 )

@@ -95,6 +95,31 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3994549, tolerance = 1e-4)
     
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
+                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MLWI')
+    expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
+                 0.3975697, tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
+                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MPWI')
+    expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
+                 0.3975697, tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
+                   design_list = list(min_SEM = .4), method = 'EAP', criteria='KL')
+    expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
+                 0.3975697, tolerance = 1e-4)
+    
+#     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
+#                    design_list = list(min_SEM = .4), method = 'ML', criteria='KLn',
+#                    preCAT_list = list(nitems = 5L))
+#     expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
+#     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
+#                  0.3975697, tolerance = 1e-4)
+    
     
 })
 

@@ -8,6 +8,7 @@ Design <- setRefClass("Design",
                                   max_items = 'integer',
                                   stop_now = 'logical',
                                   Wrule_weights = 'numeric',
+                                  KL_delta = 'numeric',
                                   preCAT_nitems = 'integer',
                                   preCAT_criteria = 'character',
                                   preCAT_method = 'character'),
@@ -27,7 +28,10 @@ Design <- setRefClass("Design",
                             max_items <<- nitems
                             stop_now <<- FALSE
                             preCAT_nitems <<- 0L
+                            KL_delta <<- 0.1
                             if(length(design_list)){
+                                if(!is.null(design_list$KL_delta))
+                                    KL_delta <<- design_list$KL_delta
                                 if(!is.null(design_list$conjunctive)) 
                                     conjunctive <<- design_list$conjunctive
                                 if(!is.null(design_list$Wrule_weights)) 
