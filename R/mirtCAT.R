@@ -281,10 +281,23 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
     MCE$STOP <- FALSE
     
     if(length(local_pattern)){
-        return(run_local(local_pattern))
+        person <- run_local(local_pattern)
     } else {
         #run interface
         runApp(list(ui = ui(), server = server))
-        return(MCE$person)
+        person <- MCE$person
     }
+    ret <- list(raw_responses=person$raw_responses, 
+                responses=person$responses,
+                items_answered=person$items_answered,
+                thetas=person$thetas,
+                thetas_history=person$thetas_history,
+                thetas_SE_history=person$thetas_SE_history,
+                demographics=person$demographics)
+    colnames(ret$thetas) <- colnames(ret$thetas_history) <-
+        colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
+    if(!person$score)
+        ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
+    class(ret) <- 'mirtCAT'
+    ret
 }

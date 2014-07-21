@@ -44,7 +44,7 @@ test_that('unidimensional', {
     
     #no scoring, just collecting
     res <- mirtCAT(shiny_questions, local_pattern=pat)
-    expect_is(res, 'Person')
+    expect_is(res, 'mirtCAT')
     expect_true(all(res$items_answered == 1:25))
     
     res <- mirtCAT(shiny_questions, local_pattern=pat, criteria='random')
@@ -55,7 +55,7 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas), 0.3588322, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[26,]), 0.3232215, tolerance = 1e-4)
     
-    oo <- personPlot(res)
+    oo <- plot(res)
     expect_is(oo, 'trellis')
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat,
