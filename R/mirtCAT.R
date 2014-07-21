@@ -284,7 +284,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
         person <- run_local(local_pattern)
     } else {
         #run interface
-        runApp(list(ui = ui(), server = server))
+        runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     }
     ret <- list(raw_responses=person$raw_responses, 
