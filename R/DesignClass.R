@@ -2,7 +2,6 @@ Design <- setRefClass("Design",
                     
                     fields = list(method = 'character',
                                   criteria = 'character',
-                                  conjunctive = 'logical',
                                   min_SEM = 'numeric',
                                   min_items = 'integer',
                                   max_items = 'integer',
@@ -26,7 +25,6 @@ Design <- setRefClass("Design",
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
                                                         'Erule', 'seq', 'random')))
                                 stop('Selected criteria not valid for multidimensional tests')
-                            conjunctive <<- TRUE
                             min_SEM <<- .3
                             Wrule_weights <<- rep(1/nfact, nfact)
                             min_items <<- 1L
@@ -37,8 +35,6 @@ Design <- setRefClass("Design",
                             if(length(design_list)){
                                 if(!is.null(design_list$KL_delta))
                                     KL_delta <<- design_list$KL_delta
-                                if(!is.null(design_list$conjunctive)) 
-                                    conjunctive <<- design_list$conjunctive
                                 if(!is.null(design_list$Wrule_weights)) 
                                     Wrule_weights <<- design_list$Wrule_weights
                                 if(!is.null(design_list$min_SEM))
@@ -50,6 +46,8 @@ Design <- setRefClass("Design",
                             }
                             if(!mirt:::closeEnough(sum(Wrule_weights)-1, -1e-6, 1e-6))
                                 stop('Wrule_weights does not sum to 1')
+                            if(length(min_SEM) != 1L && length(min_SEM) != nfact)
+                                stop('min_SEM criteria is not a suitable length')
                             if(length(preCAT_list)){
                                 if(is.null(preCAT_list$nitems))
                                     stop('preCAT_list nitems must be specified')
@@ -74,13 +72,7 @@ Design$methods(
         nanswered <- sum(!is.na(MCE$person$responses))
         if(MCE$person$score){
             if(nanswered >= min_items){
-                if(!conjunctive && MCE$test$nfact > 1L){
-                    info <- try(solve(MCE$person$thetas_acov), TRUE)
-                    diff <- if(is(info, 'try-error')) min_SEM + 1
-                    else sqrt(1/abs(MCE$design$Wrule_weights %*% info %*% MCE$design$Wrule_weights))
-                } else {
-                    diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
-                }        
+                diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
                 if(all(diff < min_SEM)) stop_now <<- TRUE
             }
         }

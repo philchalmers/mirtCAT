@@ -37,12 +37,6 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
-            if(MCE$test$nfact > 1L && !MCE$design$conjunctive){
-                tmp2 <- try(fscores(MCE$test$mirt_object, return.acov = TRUE,
-                                    method = MCE$design$method, response.pattern = responses), 
-                            silent=TRUE)
-                thetas_acov <<- tmp2[[1L]]
-            }
         }
     }
 )

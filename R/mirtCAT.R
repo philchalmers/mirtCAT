@@ -5,7 +5,7 @@
 #' applying unidimensional and multidimensional computerized adaptive tests using item 
 #' response theory methodology. Test scoring is performed using the \code{mirt} package.
 #' However, if no scoring is required (i.e., a standard survey) then defining a \code{mirt} 
-#' object may be ommited.
+#' object may be omitted.
 #' 
 #' All tests will stop once the \code{'min_SEM'} criteria has been reached. If all questions should
 #' be answered, users should specify an extremely small \code{'min_SEM'} or equivalently 
@@ -14,8 +14,8 @@
 #' @param questions a named list containing lists of \code{shiny} input types for each item. 
 #'   Each element of the input should be a list of the form 
 #'   \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
-#'   (such as in rating and Likert-scales) then this input may either be set to NA or ommited.    
-#'   Additinally, each \code{inputID} must be identical to the column names used to define the data 
+#'   (such as in rating and Likert-scales) then this input may either be set to NA or omitted.    
+#'   Additionally, each \code{inputID} must be identical to the column names used to define the data 
 #'   from the \code{mirt_object} input
 #'   
 #' @param mirt_object single group object defined by the \code{mirt} package. This is required
@@ -29,9 +29,9 @@
 #'   stems. Must be the length of the test, where \code{NA}s are used if the item has no 
 #'   corresponding .png file
 #'   
-#' @param method argument passed to \code{mirt::fscores()} for compting new scores. Default is 'MAP'
+#' @param method argument passed to \code{mirt::fscores()} for computing new scores. Default is 'MAP'
 #' 
-#' @param criteria adpative criteria used, default is to adiminster each item sequentially 
+#' @param criteria adaptive criteria used, default is to administer each item sequentially 
 #'   (i.e., \code{criteria = 'seq'}). 
 #' 
 #'   Possible inputs for unidimensional adaptive tests include: \code{'MI'} for the maximum
@@ -44,7 +44,7 @@
 #'   for the maximum determinant of the information matrix, \code{'Trule'} for the 
 #'   maximum (potentially weighted) trace of the information matrix, \code{'Erule'} for the 
 #'   minimum value of the information matrix, and \code{'Wrule'} for 
-#'   the weighted information critiera.
+#'   the weighted information criteria.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
 #'   \code{'KL'} and \code{'KLn'} for Kullback-Leibler divergence and Kullback-Leibler with a 
@@ -65,8 +65,9 @@
 #' 
 #' \describe{
 #'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error for the latent traits 
-#'     (thetas) before the test is stopped. If the test is multidimensional, this will be 
-#'     used along wit the \code{conjunctive} criteria}
+#'     (thetas) before the test is stopped. If the test is multidimensional either a single 
+#'     value or a vector may be supplied to provide an overal minimum criteria or a SEM 
+#'     value for each dimension, respectively}
 #'     
 #'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
 #'     Default is \code{rep(0, nfact)}}
@@ -79,10 +80,10 @@
 #'   
 #'   \item{\code{quadpts}}{Default follows scheme in \code{mirt::fscores}; 
 #'     number of quadrature points used per dimension 
-#'     for intergration (if required).}
+#'     for integration (if required).}
 #'   
 #'   \item{\code{theta_range}}{Default is \code{c(-6,6)}; upper and lower range for the theta 
-#'     integration grid. Used in conjuncting with \code{quadpts} to generate an equally spaced 
+#'     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
 #'     quadrature grid}
 #' 
 #'   \item{\code{conjunctive}}{Default is \code{TRUE}; logical value indicating whether a 
@@ -102,13 +103,13 @@
 #' 
 #' \describe{
 #'   \item{\code{title}}{A character string for the test title. Default is 
-#'     \code{'Title of survery'}}
+#'     \code{'Title of survey'}}
 #'   
 #'   \item{\code{authors}}{A character string for the author names. Default is 
-#'     \code{'Author of survery'}}
+#'     \code{'Author of survey'}}
 #' 
 #'   \item{\code{firstpage}}{The first page used in the GUI for collecting demographic information
-#'     generated using tools from the shiny package. The default collects only the responsend's 
+#'     generated using tools from the shiny package. The default collects only the respondent's 
 #'     name and gender using the format 
 #'  
 #'     \preformatted{ 
@@ -154,7 +155,7 @@
 #'   following fields. 
 #'   
 #' \describe{
-#'   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the resepective
+#'   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the respective
 #'     items, where NA indicates the item was not answered}
 #'     
 #'   \item{\code{responses}}{A numeric vector of scored responses if the \code{item_answers} input
@@ -171,7 +172,7 @@
 #'   \item{\code{thetas_SE_history}}{A matrix indicating the standard errors for theta after each
 #'     successive item was answered}
 #'   
-#'   \item{\code{thetas_acov}}{The asymtotic covarance matrix for the final theta estimates}
+#'   \item{\code{thetas_acov}}{The asymptotic covariance matrix for the final theta estimates}
 #' 
 #'   \item{\code{demographics}}{A data.frame object containing the information collected on the 
 #'     first page of the shiny GUI. This is used to store the demographic information for each
