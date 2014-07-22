@@ -20,11 +20,14 @@ print.mirtCAT <- function(x, ...){
 #' @param object object of class \code{'mirtCAT'}
 #' @export
 summary.mirtCAT <- function(object, ...){
-    return(list(raw_responses=object$raw_responses,
+    ret <- list(raw_responses=object$raw_responses,
                 responses=object$responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
-                thetas_SE_history=object$thetas_SE_history))
+                thetas_SE_history=object$thetas_SE_history)
+    if(is.na(ret$thetas_history))
+        ret$thetas_history <- ret$thetas_SE_history <- NULL
+    ret
 }
 
 #' @rdname mirtCAT
@@ -36,6 +39,8 @@ summary.mirtCAT <- function(object, ...){
 #' @param ... additional arguments to be passed to \code{lattice}
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, main = 'CAT Standard Errors', ...){
+    if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))
+        stop('plot not available for non-adaptive tests')
     nfact <- ncol(x$thetas)
     thetas <- data.frame(x$thetas_history)
     thetasSEhigh <- data.frame(thetas + x$thetas_SE_history)
@@ -98,6 +103,5 @@ plot.mirtCAT <- function(x, pick_theta = NULL, main = 'CAT Standard Errors', ...
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
                       xlab = 'Item', ...))
-        
     }
 }

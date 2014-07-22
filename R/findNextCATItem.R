@@ -1,6 +1,11 @@
 findNextCATItem <- function(person, test, lastitem, criteria){
     
     #heavy lifty CAT stuff just to find new item
+    if(all(is.na(person$responses))){
+        if(MCE$design$random.start) 
+            return(as.integer(sample(1L:test$length, 1L)))
+        else return(1L)
+    }
     not_answered <- is.na(person$responses)
     which_not_answered <- which(not_answered)
     K <- test$mirt_object@Data$K

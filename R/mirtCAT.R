@@ -55,6 +55,9 @@
 #'   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed 
 #'   include \code{'random'} to randomly select items and \code{'seq'} for selecting 
 #'   items sequentially.
+#'   
+#' @param random.start logical; start the test with a random item instead of starting with
+#'   the first item?
 #' 
 #' @param local_pattern a character vector used to run the CAT application without the GUI 
 #'   interface given a specific response pattern. This option requires a complete response pattern
@@ -232,7 +235,8 @@
 #' mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', local_pattern=pat)
 #' }
 mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locations = NULL,
-                    method = 'MAP', criteria = 'seq', local_pattern = character(0),
+                    method = 'MAP', criteria = 'seq', random.start = FALSE, 
+                    local_pattern = character(0),
                     design_list = list(), shinyGUI_list = list(), preCAT_list = list())
 {    
     if(is.null(mirt_object)){
@@ -267,7 +271,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
     test <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design_list$quadpts,
                      theta_range_in=design_list$theta_range)
-    design <- Design$new(method=method, criteria=criteria, 
+    design <- Design$new(method=method, criteria=criteria, random.start=random.start,
                          nfact=test$nfact, design_list=design_list,
                          preCAT_list=preCAT_list, nitems=test$length)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), 

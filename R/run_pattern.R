@@ -1,6 +1,8 @@
 run_local <- function(responses){
     
-    MCE$person$items_answered[1L] <- 1L
+    item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=0L,
+                            criteria=MCE$design$criteria)
+    MCE$person$items_answered[1L] <- item
     
     for(i in 2L:(length(responses)+1L)){
         pick <- MCE$person$items_answered[i-1]

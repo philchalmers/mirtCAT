@@ -8,8 +8,8 @@
 \usage{
 mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   stem_locations = NULL, method = "MAP", criteria = "seq",
-  local_pattern = character(0), design_list = list(),
-  shinyGUI_list = list(), preCAT_list = list())
+  random.start = FALSE, local_pattern = character(0),
+  design_list = list(), shinyGUI_list = list(), preCAT_list = list())
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -63,6 +63,9 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed
   include \code{'random'} to randomly select items and \code{'seq'} for selecting
   items sequentially.}
+
+\item{random.start}{logical; start the test with a random item instead of starting with
+  the first item?}
 
 \item{local_pattern}{a character vector used to run the CAT application without the GUI
   interface given a specific response pattern. This option requires a complete response pattern

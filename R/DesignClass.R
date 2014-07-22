@@ -8,6 +8,7 @@ Design <- setRefClass("Design",
                                   stop_now = 'logical',
                                   Wrule_weights = 'numeric',
                                   KL_delta = 'numeric',
+                                  random.start = 'logical',
                                   preCAT_nitems = 'integer',
                                   preCAT_criteria = 'character',
                                   preCAT_method = 'character',
@@ -16,11 +17,14 @@ Design <- setRefClass("Design",
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design_list,
-                                              preCAT_list, nitems){
+                                              random.start, preCAT_list, nitems){
                             method <<- method
                             criteria <<- criteria
                             CAT_criteria <<- criteria
                             CAT_method <<- method
+                            random.start <<- random.start
+                            if(random.start && criteria == 'seq')
+                                stop('random.start with sequantially criteria is invalid')
                             if(nfact > 1L && 
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
                                                         'Erule', 'seq', 'random')))
@@ -60,6 +64,8 @@ Design <- setRefClass("Design",
                                 else preCAT_criteria <<- preCAT_list$criteria
                                 criteria <<- preCAT_criteria
                                 method <<- preCAT_method
+                                if(random.start && criteria == 'seq')
+                                    stop('random.start with sequantially criteria is invalid')
                             }
                         })
                     
