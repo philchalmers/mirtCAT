@@ -25,7 +25,7 @@ summary.mirtCAT <- function(object, ...){
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history)
-    if(is.na(ret$thetas_history))
+    if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
     ret
 }
@@ -35,16 +35,25 @@ summary.mirtCAT <- function(object, ...){
 #' @param pick_theta a number indicating which theta to plot (only applicable for multidimensional 
 #'   tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 #'   \code{pick_theta = 1}   
-#' @param main title of the plot 
+#' @param main title of the plot. Will default to 'CAT Standard Errors' or 
+#'   'CAT ##\% Confidence Intervals' depending on the SE input
+#' @param SE size of the standard errors to plot. The default is 1, and therefore plots the
+#'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
 #' @param ... additional arguments to be passed to \code{lattice}
 #' @export
-plot.mirtCAT <- function(x, pick_theta = NULL, main = 'CAT Standard Errors', ...){
+plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
     if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))
         stop('plot not available for non-adaptive tests')
+    p <- floor((1-(pnorm(-abs(SE))*2))*100)
+    if(is.null(main)){
+        if(SE == 1)
+            main <- 'CAT Standard Errors'
+        else main <- paste0('CAT ', p, '% Confidence Intervals')
+    }
     nfact <- ncol(x$thetas)
     thetas <- data.frame(x$thetas_history)
-    thetasSEhigh <- data.frame(thetas + x$thetas_SE_history)
-    thetasSElow <- data.frame(thetas - x$thetas_SE_history)
+    thetasSEhigh <- data.frame(thetas + x$thetas_SE_history*SE)
+    thetasSElow <- data.frame(thetas - x$thetas_SE_history*SE)
     labels <- paste0('Theta_', 1L:nfact)
     if(!is.null(pick_theta) && nfact > 1L){
         nfact <- 1L

@@ -6,6 +6,7 @@ Design <- setRefClass("Design",
                                   min_items = 'integer',
                                   max_items = 'integer',
                                   stop_now = 'logical',
+                                  exposure = 'integer',
                                   Wrule_weights = 'numeric',
                                   KL_delta = 'numeric',
                                   random.start = 'logical',
@@ -17,12 +18,17 @@ Design <- setRefClass("Design",
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design_list,
-                                              random.start, preCAT_list, nitems){
+                                              random.start, preCAT_list, nitems, exposure){
                             method <<- method
                             criteria <<- criteria
                             CAT_criteria <<- criteria
                             CAT_method <<- method
                             random.start <<- random.start
+                            if(length(exposure) == nitems)
+                                exposure <<- as.integer(exposure)
+                            else stop('exposure input is not the correct length')
+                            if(any(exposure[2L:(length(exposure)-1L)] > (nitems-2L):1L))
+                                stop('exposure input contains more sampling than possible options')
                             if(random.start && criteria == 'seq')
                                 stop('random.start with sequantially criteria is invalid')
                             if(nfact > 1L && 
@@ -85,8 +91,10 @@ Design$methods(
         if(nanswered == max_items) stop_now <<- TRUE
     },
     
-    Next.stage = function(){
-        criteria <<- CAT_criteria
-        method <<- CAT_method
+    Next.stage = function(item){
+        if(item == preCAT_nitems){
+            criteria <<- CAT_criteria
+            method <<- CAT_method
+        }
     }
 )

@@ -21,10 +21,12 @@ server <- function(input, output) {
             return(list(h5("Click \'Next\' to start the survey.")))
         }
         
+        itemclick <- input$Next - 2L
+        
         # run survey
         if(input$Next > 1L && !MCE$design$stop_now){
-            if(input$Next > 2L){
-                pick <- MCE$person$items_answered[input$Next-2L]
+            if(itemclick >= 1L){
+                pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test$itemnames[pick]
                 ip <- input[[name]]
                 MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
@@ -34,17 +36,16 @@ server <- function(input, output) {
                 
                 #update Thetas
                 MCE$person$Update.thetas()
-                if(input$Next > (MCE$design$preCAT_nitems + 2L))
+                if(itemclick > MCE$design$preCAT_nitems)
                     MCE$design$Update.stop_now()
             } 
             
-            if(input$Next == (MCE$design$preCAT_nitems + 2L)) 
-                MCE$design$Next.stage()
+            MCE$design$Next.stage(item=itemclick)
             
             if(!MCE$design$stop_now){
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, 
-                                        lastitem=input$Next - 2L, criteria=MCE$design$criteria)
-                MCE$person$items_answered[input$Next-1L] <- item
+                                        lastitem=itemclick, criteria=MCE$design$criteria)
+                MCE$person$items_answered[itemclick+1L] <- item
                 return(MCE$shinyGUI$questions[[item]])
             }
         }

@@ -58,6 +58,14 @@
 #'   
 #' @param random.start logical; start the test with a random item instead of starting with
 #'   the first item?
+#'   
+#' @param exposure a numeric vector specifying the amount of exposure control to apply for
+#'   each sucessive item. The default accepts the item which demonstrates the maximum CAT 
+#'   critiera, however if the item exposure is greater than 1, and \code{exposure[item] == n}, 
+#'   then the \code{n} most optimal criteria will be randomly sampled from. For intance, if 
+#'   \code{exposure[item] == 3}, and \code{critiera = 'MI'}, then the 3 items demonstrating 
+#'   the largest information criteria will be sampled from. Naturally, the first and last 
+#'   elements are ignored for the first and last items, respectively 
 #' 
 #' @param local_pattern a character vector used to run the CAT application without the GUI 
 #'   interface given a specific response pattern. This option requires a complete response pattern
@@ -232,11 +240,20 @@
 #' set.seed(1)
 #' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 #' mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
-#' mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', local_pattern=pat)
+#' 
+#' #run CAT, and save results to object called person
+#' person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', 
+#'   local_pattern=pat)
+#' print(person)
+#' summary(person)
+#' 
+#' #plot the session
+#' plot(person) #standard errors
+#' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
 mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locations = NULL,
                     method = 'MAP', criteria = 'seq', random.start = FALSE, 
-                    local_pattern = character(0),
+                    exposure = rep(1, length(questions)), local_pattern = character(0),
                     design_list = list(), shinyGUI_list = list(), preCAT_list = list())
 {    
     if(is.null(mirt_object)){
@@ -272,7 +289,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
                      item_options=item_options, quadpts_in=design_list$quadpts,
                      theta_range_in=design_list$theta_range)
     design <- Design$new(method=method, criteria=criteria, random.start=random.start,
-                         nfact=test$nfact, design_list=design_list,
+                         nfact=test$nfact, design_list=design_list, exposure=exposure,
                          preCAT_list=preCAT_list, nitems=test$length)
     person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), 
                          thetas.start_in=design_list$thetas.start, score=score)

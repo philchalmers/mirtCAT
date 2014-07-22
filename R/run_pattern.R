@@ -20,8 +20,7 @@ run_local <- function(responses){
             if(MCE$design$stop_now) 
                 break
         
-        if(i == (MCE$design$preCAT_nitems + 1L)) 
-            MCE$design$Next.stage()
+        MCE$design$Next.stage(item=i)
         
         item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=i-1L,
                                 criteria=MCE$design$criteria)

@@ -8,15 +8,15 @@
 \usage{
 mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   stem_locations = NULL, method = "MAP", criteria = "seq",
-  random.start = FALSE, local_pattern = character(0),
-  design_list = list(), shinyGUI_list = list(), preCAT_list = list())
+  random.start = FALSE, exposure = rep(1, length(questions)),
+  local_pattern = character(0), design_list = list(),
+  shinyGUI_list = list(), preCAT_list = list())
 
 \method{print}{mirtCAT}(x, ...)
 
 \method{summary}{mirtCAT}(object, ...)
 
-\method{plot}{mirtCAT}(x, pick_theta = NULL, main = "CAT Standard Errors",
-  ...)
+\method{plot}{mirtCAT}(x, pick_theta = NULL, SE = 1, main = NULL, ...)
 }
 \arguments{
 \item{questions}{a named list containing lists of \code{shiny} input types for each item.
@@ -66,6 +66,14 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
 \item{random.start}{logical; start the test with a random item instead of starting with
   the first item?}
+
+\item{exposure}{a numeric vector specifying the amount of exposure control to apply for
+  each sucessive item. The default accepts the item which demonstrates the maximum CAT
+  critiera, however if the item exposure is greater than 1, and \code{exposure[item] == n},
+  then the \code{n} most optimal criteria will be randomly sampled from. For intance, if
+  \code{exposure[item] == 3}, and \code{critiera = 'MI'}, then the 3 items demonstrating
+  the largest information criteria will be sampled from. Naturally, the first and last
+  elements are ignored for the first and last items, respectively}
 
 \item{local_pattern}{a character vector used to run the CAT application without the GUI
   interface given a specific response pattern. This option requires a complete response pattern
@@ -166,7 +174,11 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 \code{pick_theta = 1}}
 
-\item{main}{title of the plot}
+\item{main}{title of the plot. Will default to 'CAT Standard Errors' or
+'CAT ##\% Confidence Intervals' depending on the SE input}
+
+\item{SE}{size of the standard errors to plot. The default is 1, and therefore plots the
+standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)}
 
 \item{...}{additional arguments to be passed to \code{lattice}}
 }
@@ -260,7 +272,16 @@ mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI') #adaptive
 set.seed(1)
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
-mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', local_pattern=pat)
+
+#run CAT, and save results to object called person
+person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI',
+  local_pattern=pat)
+print(person)
+summary(person)
+
+#plot the session
+plot(person) #standard errors
+plot(person, SE=1.96) #95 percent confidence intervals
 }
 }
 \author{

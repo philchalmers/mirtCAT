@@ -23,58 +23,66 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     }
     
     if(criteria == 'seq'){
-        item <- lastitem + 1L
+        return(item <- lastitem + 1L)
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
-        else item <- sample(which_not_answered, 1)
+        else item <- sample(which_not_answered, 1L)
+        return(item)
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
-        item <- which_not_answered[max(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'KLn'){
             crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                        person=person, test=test, row_loc=row_loc, 
                        delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
-            item <- which_not_answered[max(crit) == crit]
+            index <- which_not_answered
     } else if(criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[max(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'MEI'){
         crit <- MEI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                     person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[max(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'MEPV'){
-        crit <- MEPV(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+        crit <- -MEPV(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                     person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[min(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'MLWI'){
         crit <- MLWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                      person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[max(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'MPWI'){
         crit <- MPWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                      person=person, test=test, row_loc=row_loc)
-        item <- which_not_answered[max(crit) == crit]
+        index <- which_not_answered
     } else if(criteria == 'Drule'){
-        crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+        crit <- -Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- row_loc[which(min(crit) == crit)]  
+        index <- row_loc
     } else if(criteria == 'Erule'){
-        crit <- Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+        crit <- -Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- row_loc[which(min(crit) == crit)]  
+        index <- row_loc
     } else if(criteria == 'Trule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- row_loc[which(max(crit) == crit)]
+        index <- row_loc
     } else if(criteria == 'Wrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
-        item <- row_loc[which(max(crit) == crit)]
+        index <- row_loc
     } else {
         stop('Selection criteria does not exist')
     }
     
-    return(as.integer(item[1L]))
+    if(MCE$design$exposure[lastitem+1L] == 1L){
+        item <- index[which(max(crit) == crit)][1L]
+    } else {
+        rnk <- rank(crit, ties.method = 'random')
+        pick <- which(rnk %in% 1L:MCE$design$exposure[lastitem+1L])
+        item <- index[sample(pick, 1L)]
+    }
+    return(as.integer(item))
 }
