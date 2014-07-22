@@ -79,19 +79,21 @@ test_that('unidimensional', {
     
     exposure <- rep(1L, length(shiny_questions))
     exposure[2:5] <- 5:2
+    set.seed(1234)
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
                    design_list = list(min_SEM = .4), method = 'EAP', exposure=exposure,
                    random.start=TRUE)
-    expect_equal(as.numeric(res$thetas), 0.5248801, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.3725264, tolerance = 1e-4)
     so <- summary(res)
     expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
-                 0.3942232, tolerance = 1e-4)
+                 0.389189, tolerance = 1e-4)
     
+    set.seed(12)
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
                    design_list = list(min_SEM = .4), method = 'EAP', criteria='random')
-    expect_equal(as.numeric(res$thetas), 0.1680276, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.02426384, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3843103, tolerance = 1e-4)
+                 0.398455, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
                    design_list = list(min_SEM = .4), method = 'EAP', criteria='MEI')
