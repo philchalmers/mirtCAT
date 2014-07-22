@@ -35,8 +35,8 @@ summary.mirtCAT <- function(object, ...){
 #' @param pick_theta a number indicating which theta to plot (only applicable for multidimensional 
 #'   tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 #'   \code{pick_theta = 1}   
-#' @param main title of the plot. Will default to 'CAT Standard Errors' or 
-#'   'CAT ##\% Confidence Intervals' depending on the SE input
+#' @param main title of the plot. Will default to \code{'CAT Standard Errors'} or 
+#'   \code{'CAT ##\% Confidence Intervals'} depending on the SE input
 #' @param SE size of the standard errors to plot. The default is 1, and therefore plots the
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
 #' @param ... additional arguments to be passed to \code{lattice}

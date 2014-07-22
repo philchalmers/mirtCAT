@@ -23,11 +23,11 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     }
     
     if(criteria == 'seq'){
-        return(item <- lastitem + 1L)
+        return(as.integer(lastitem + 1L))
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
         else item <- sample(which_not_answered, 1L)
-        return(item)
+        return(as.integer(item))
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)

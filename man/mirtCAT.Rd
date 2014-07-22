@@ -105,10 +105,6 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced
     quadrature grid}
 
-  \item{\code{conjunctive}}{Default is \code{TRUE}; logical value indicating whether a
-    conjunctive or compensatory use of \code{min_SEM} should be used (applicable to
-    multidimensional tests only)}
-
   \item{\code{Wrule_weights}}{Default is \code{rep(1/nfact), nfact)}, where \code{nfact}
     is the number of test dimensions; weights used when \code{criteria == 'Wrule'}. The default
     weights the latent dimensions equally }
@@ -174,8 +170,8 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 \code{pick_theta = 1}}
 
-\item{main}{title of the plot. Will default to 'CAT Standard Errors' or
-'CAT ##\% Confidence Intervals' depending on the SE input}
+\item{main}{title of the plot. Will default to \code{'CAT Standard Errors'} or
+\code{'CAT ##\% Confidence Intervals'} depending on the SE input}
 
 \item{SE}{size of the standard errors to plot. The default is 1, and therefore plots the
 standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)}

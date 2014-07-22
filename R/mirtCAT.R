@@ -97,10 +97,6 @@
 #'     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
 #'     quadrature grid}
 #' 
-#'   \item{\code{conjunctive}}{Default is \code{TRUE}; logical value indicating whether a 
-#'     conjunctive or compensatory use of \code{min_SEM} should be used (applicable to 
-#'     multidimensional tests only)}
-#'   
 #'   \item{\code{Wrule_weights}}{Default is \code{rep(1/nfact), nfact)}, where \code{nfact} 
 #'     is the number of test dimensions; weights used when \code{criteria == 'Wrule'}. The default 
 #'     weights the latent dimensions equally }
