@@ -10,7 +10,7 @@ run_local <- function(responses){
         ip <- responses[pick]
         MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
             which(MCE$test$item_options[[pick]] %in% ip) - 1L
-        if(!is.na(MCE$test$item_answers[[pick]]))
+        if(!is.na(MCE$test$item_answers[[pick]]) && MCE$test$item_class[pick] != 'nestlogit')
             MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
         
         #update Thetas

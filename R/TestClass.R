@@ -7,6 +7,7 @@ Test <- setRefClass("Test",
                                     theta_range = 'numeric',
                                     item_answers = 'character',
                                     item_options = 'list',
+                                    item_class = 'character',
                                     itemnames = 'character',
                                     nfact = 'integer',
                                     length = 'integer',
@@ -21,6 +22,7 @@ Test <- setRefClass("Test",
                               itemnames <<- colnames(tmpobj@Data$data)
                               tmpobj@Data$mins <- rep(0L, length(tmpobj@Data$min))
                               mirt_object <<- tmpobj
+                              item_class <<- sapply(mirt_object@pars, class)
                               if(is.null(item_answers_in))
                                   item_answers_in <- as.character(rep(NA, length(itemnames)))
                               item_answers <<- item_answers_in
