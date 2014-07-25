@@ -47,10 +47,10 @@
 #'   the weighted information criteria.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
-#'   \code{'KL'} and \code{'KLn'} for Kullback-Leibler divergence and Kullback-Leibler with a 
-#'   decreasing delta value (\code{delta*sqrt(n)}, where \code{n} is the number of items 
-#'   previous answered), respectively. The \code{delta} criteria is defined in the
-#'   \code{design_list} object
+#'   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and 
+#'   pointwise Kullback-Leibler with a decreasing delta value (\code{delta*sqrt(n)}, 
+#'   where \code{n} is the number of items previous answered), respectively. 
+#'   The \code{delta} criteria is defined in the \code{design_list} object
 #'   
 #'   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed 
 #'   include \code{'random'} to randomly select items and \code{'seq'} for selecting 
