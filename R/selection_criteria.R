@@ -153,7 +153,8 @@ KL <- function(which_not_answered, possible_patterns, person, test, row_loc, del
     return(info)
 }
 
-IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, delta){
+IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, delta,
+                den=FALSE){
     Theta <- test$ThetaGrid
     LL <- vector('list', nrow(possible_patterns))
     ll <- log(mirt:::computeItemtrace(pars = MCE$test$mirt_object@pars,
@@ -167,12 +168,13 @@ IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, de
     }
     KLcrit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                person=person, test=test, row_loc=row_loc, thetas=Theta,
-               delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+               delta=NA)
     uniq <- unique(row_loc)
     count <- 1L
+    dd <- if(den) test$density else 1
     for(i in uniq){
-        LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C)
-            return(x * C), C=KLcrit[[count]])
+        LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C, dd)
+            return(x * C * dd), C=KLcrit[[count]], dd=dd)
         count <- count + 1L
     }
     infos <- weighted_mat(mat=LL, row_loc=row_loc, which_not_answered=which_not_answered)

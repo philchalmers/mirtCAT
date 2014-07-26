@@ -45,8 +45,10 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   Possible inputs for unidimensional adaptive tests include: \code{'MI'} for the maximum
   information, \code{'MEPV'} for minimum expected posterior variance,
   \code{'MLWI'} for maximum likelihood weighted information,
-  \code{'MPWI'} for maximum posterior weighted information, and \code{'MEI'} for
-  maximum expected information.
+  \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for
+  maximum expected information, and \code{'IKLP'} as well as \code{'IKL'} for the
+  Integration based Kullback-Leibler criteria with and without the prior density weight,
+  respectively.
 
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'}
   for the maximum determinant of the information matrix, \code{'Trule'} for the

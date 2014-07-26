@@ -41,6 +41,11 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
         index <- which_not_answered
+    } else if(criteria == 'IKLP'){
+            crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                        person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta,
+                        den=TRUE)
+            index <- which_not_answered
     } else if(criteria == 'IKLn'){
         crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc, 
