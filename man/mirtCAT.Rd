@@ -48,7 +48,8 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for
   maximum expected information, and \code{'IKLP'} as well as \code{'IKL'} for the
   Integration based Kullback-Leibler criteria with and without the prior density weight,
-  respectively.
+  respectively, and their root-nitem weighted counter-parts \code{'IKLn'} and
+  \code{'IKLPn'}.
 
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'}
   for the maximum determinant of the information matrix, \code{'Trule'} for the

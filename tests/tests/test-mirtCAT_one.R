@@ -138,7 +138,7 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3974447, tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='IKLP',
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='IKLPn',
                    design_list = list(min_SEM = .4), method = 'MAP')
     expect_equal(as.numeric(res$thetas), 0.1017891, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),

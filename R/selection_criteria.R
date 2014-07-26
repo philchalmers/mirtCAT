@@ -155,7 +155,7 @@ KL <- function(which_not_answered, possible_patterns, person, test, row_loc, del
 
 IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, delta,
                 den=FALSE){
-    Theta <- test$ThetaGrid
+    Theta <- matrix(seq(person$thetas-delta, person$thetas+delta, length.out=test$quadpts))
     LL <- vector('list', nrow(possible_patterns))
     ll <- log(mirt:::computeItemtrace(pars = MCE$test$mirt_object@pars,
                                       Theta=Theta, 
@@ -171,7 +171,9 @@ IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, de
                delta=NA)
     uniq <- unique(row_loc)
     count <- 1L
-    dd <- if(den) test$density else 1
+    dd <- if(den){
+        dd <- mirt:::mirt_dmvnorm(Theta, test$gp$gmeans, test$gp$gcov) 
+    } else 1
     for(i in uniq){
         LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C, dd)
             return(x * C * dd), C=KLcrit[[count]], dd=dd)

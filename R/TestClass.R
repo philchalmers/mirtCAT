@@ -11,7 +11,8 @@ Test <- setRefClass("Test",
                                     itemnames = 'character',
                                     nfact = 'integer',
                                     length = 'integer',
-                                    itemloc2 = 'integer'),
+                                    itemloc2 = 'integer',
+                                    gp = 'list'),
                     
                       methods = list(
                           initialize = function(mirt_object, item_answers_in, item_options,
@@ -43,6 +44,7 @@ Test <- setRefClass("Test",
                               }
                               tmp <- mirt_object@itemloc
                               itemloc2 <<- tmp[-length(tmp)]
+                              gp <<- mirt:::ExtractGroupPars(mirt_object@pars[[length + 1L]])
                           })
                     
 )
