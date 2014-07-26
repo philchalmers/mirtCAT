@@ -37,6 +37,15 @@ findNextCATItem <- function(person, test, lastitem, criteria){
                        person=person, test=test, row_loc=row_loc, 
                        delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
             index <- which_not_answered
+    } else if(criteria == 'IKL'){
+        crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                   person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
+        index <- which_not_answered
+    } else if(criteria == 'IKLn'){
+        crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                   person=person, test=test, row_loc=row_loc, 
+                   delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+        index <- which_not_answered
     } else if(criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc)

@@ -35,10 +35,12 @@ Test <- setRefClass("Test",
                               else quadpts <<- quadpts_in
                               if(is.null(theta_range_in)) theta_range <<- c(-6, 6)
                               else theta_range <<- theta_range_in
-                              ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
-                                                                 length.out=quadpts),
-                                                             tmpobj@nfact)
-                              density <<- mirt:::mirt_dmvnorm(ThetaGrid)
+                              if(tmpobj@nfact == 1L){
+                                  ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
+                                                                     length.out=quadpts),
+                                                                 tmpobj@nfact)
+                                  density <<- mirt:::mirt_dmvnorm(ThetaGrid)
+                              }
                               tmp <- mirt_object@itemloc
                               itemloc2 <<- tmp[-length(tmp)]
                           })
