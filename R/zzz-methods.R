@@ -21,12 +21,14 @@ print.mirtCAT <- function(x, ...){
 #' @export
 summary.mirtCAT <- function(object, ...){
     ret <- list(raw_responses=object$raw_responses,
-                responses=object$responses,
+                scored_responses=object$responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history)
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
+    if(all(ret$raw_responses == ret$scored_responses))
+        ret$scored_responses <- NULL
     ret
 }
 
