@@ -103,7 +103,7 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
     r/2
 }
 
-extract_tags <- function(x){
+extract_choices <- function(x){
     if(is(x, 'shiny.tag.list')){
         if(!is.null(x[[1L]][[2L]]$children[[1]])){ #selectInput
             split <- strsplit(x[[1L]][[2L]]$children[[1]], "\"")[[1L]]

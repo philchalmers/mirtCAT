@@ -24,7 +24,8 @@ summary.mirtCAT <- function(object, ...){
                 scored_responses=object$responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
-                thetas_SE_history=object$thetas_SE_history)
+                thetas_SE_history=object$thetas_SE_history,
+                demographics=object$demographics)
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
     if(all(ret$raw_responses == ret$scored_responses))

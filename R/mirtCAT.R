@@ -281,7 +281,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
         stop('Item names for mirt_object and questions do not match')
-    item_options <- lapply(questions, extract_tags)
+    item_options <- lapply(questions, extract_choices)
     
     #setup objects
     shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, 

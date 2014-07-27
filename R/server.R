@@ -18,9 +18,9 @@ server <- function(input, output) {
         #store demographic results
         if(input$Next == 2L){
             tmp <- list()
-            for(tag in MCE$shinyGUI$demographic_tags)
+            for(tag in MCE$shinyGUI$demographic_inputIDs)
                 tmp[[length(tmp) + 1L]] <- input[[tag]]
-            names(tmp) <- MCE$shinyGUI$demographic_tags
+            names(tmp) <- MCE$shinyGUI$demographic_inputIDs
             MCE$person$field("demographics", as.data.frame(tmp))
             return(list(h5("Click \'Next\' to start the survey.")))
         }

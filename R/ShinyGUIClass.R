@@ -8,7 +8,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     lastpage = 'list',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
-                                    demographic_tags = 'character'),
+                                    demographic_inputIDs = 'character'),
                       
                       methods = list(
                           initialize = function(questions, stem_locations_in = NULL,
@@ -21,7 +21,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'Title of survery'
                               author <<- 'Author of survery'
-                              demographic_tags <<- c('gender')
+                              demographic_inputIDs <<- c('gender')
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
@@ -37,7 +37,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       firstpage <<- shinyGUI_list$firstpage
                                   if(!is.null(shinyGUI_list$demographics)){
                                       demographics <<- shinyGUI_list$demographics
-                                      demographic_tags <<- shinyGUI_list$demographics_tags
+                                      demographic_inputIDs <<- shinyGUI_list$demographics_inputIDs
                                   }
                                   if(!is.null(shinyGUI_list$lastpage)) 
                                       lastpage <<- shinyGUI_list$lastpage
