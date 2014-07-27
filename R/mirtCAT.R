@@ -13,9 +13,8 @@
 #' 
 #' @param questions a named list containing lists of \code{shiny} input types for each item. 
 #'   Each element of the input should be a list of the form 
-#'   \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
-#'   (such as in rating and Likert-scales) then this input may either be set to NA or omitted.    
-#'   Additionally, each \code{inputID} must be identical to the column names used to define the data 
+#'   \code{list(item1 = shinyInput(), item2 = shinyInput(), ...)}. 
+#'   Each \code{inputID} must be identical to the column names used to define the data 
 #'   from the \code{mirt_object} input
 #'   
 #' @param mirt_object single group object defined by the \code{mirt} package. This is required
@@ -59,7 +58,7 @@
 #'   the first item?
 #'   
 #' @param exposure a numeric vector specifying the amount of exposure control to apply for
-#'   each sucessive item. The default accepts the item which demonstrates the maximum CAT 
+#'   each successive item. The default accepts the item which demonstrates the maximum CAT 
 #'   critiera, however if the item exposure is greater than 1, and \code{exposure[item] == n}, 
 #'   then the \code{n} most optimal criteria will be randomly sampled from. For intance, if 
 #'   \code{exposure[item] == 3}, and \code{critiera = 'MI'}, then the 3 items demonstrating 
@@ -262,7 +261,7 @@
 #' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
 mirtCAT <- function(questions, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
-                    item_answers=NULL, random.start = FALSE, 
+                    item_answers = NULL, random.start = FALSE, 
                     exposure = rep(1, length(questions)), local_pattern = character(0),
                     design = list(), shinyGUI = list(), preCAT = list())
 {    

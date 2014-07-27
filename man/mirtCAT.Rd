@@ -20,9 +20,8 @@ mirtCAT(questions, mirt_object = NULL, method = "MAP", criteria = "seq",
 \arguments{
 \item{questions}{a named list containing lists of \code{shiny} input types for each item.
   Each element of the input should be a list of the form
-  \code{list(item = shinyInput(), answer = 'value')}. If no correct \code{answer} criteria exists
-  (such as in rating and Likert-scales) then this input may either be set to NA or omitted.
-  Additionally, each \code{inputID} must be identical to the column names used to define the data
+  \code{list(item1 = shinyInput(), item2 = shinyInput(), ...)}.
+  Each \code{inputID} must be identical to the column names used to define the data
   from the \code{mirt_object} input}
 
 \item{mirt_object}{single group object defined by the \code{mirt} package. This is required
@@ -66,7 +65,7 @@ mirtCAT(questions, mirt_object = NULL, method = "MAP", criteria = "seq",
   the first item?}
 
 \item{exposure}{a numeric vector specifying the amount of exposure control to apply for
-  each sucessive item. The default accepts the item which demonstrates the maximum CAT
+  each successive item. The default accepts the item which demonstrates the maximum CAT
   critiera, however if the item exposure is greater than 1, and \code{exposure[item] == n},
   then the \code{n} most optimal criteria will be randomly sampled from. For intance, if
   \code{exposure[item] == 3}, and \code{critiera = 'MI'}, then the 3 items demonstrating
