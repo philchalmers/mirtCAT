@@ -11,8 +11,12 @@ server <- function(input, output) {
             return(MCE$shinyGUI$firstpage)
         }
         
-        #store demographic results
         if(input$Next == 1L){
+            return(MCE$shinyGUI$demographics)
+        }
+        
+        #store demographic results
+        if(input$Next == 2L){
             tmp <- list()
             for(tag in MCE$shinyGUI$demographic_tags)
                 tmp[[length(tmp) + 1L]] <- input[[tag]]
@@ -21,10 +25,10 @@ server <- function(input, output) {
             return(list(h5("Click \'Next\' to start the survey.")))
         }
         
-        itemclick <- input$Next - 2L
+        itemclick <- input$Next - 3L
         
         # run survey
-        if(input$Next > 1L && !MCE$design$stop_now){
+        if(input$Next > 2L && !MCE$design$stop_now){
             if(itemclick >= 1L){
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test$itemnames[pick]
@@ -67,9 +71,9 @@ server <- function(input, output) {
         outfile <- tempfile(fileext='.png')
         
         if(!MCE$STOP){
-            if(input$Next > 1L && (input$Next-1L) < MCE$test$length){
+            if(input$Next > 2L && (input$Next-2L) < MCE$test$length){
                 empty <- is.na(MCE$shinyGUI$stem_locations[[
-                    MCE$person$items_answered[[input$Next-1L]]]])
+                    MCE$person$items_answered[[input$Next-2L]]]])
             } else empty <- TRUE
         } else empty <- TRUE
         
@@ -82,15 +86,15 @@ server <- function(input, output) {
                         height = 1,
                         alt = ""))
         } else {
-            return(list(src = MCE$shinyGUI$stem_locations[[input$Next-1L]],
+            return(list(src = MCE$shinyGUI$stem_locations[[input$Next-2L]],
                         contentType = 'image/png',
                         width = 400,
                         height = 400,
                         alt = ""))
         }
         
-    }, deleteFile = if(!MCE$STOP){ if(input$Next > 1L && (input$Next-1L) < MCE$test$length)
-            is.na(MCE$shinyGUI$stem_locations[[MCE$person$items_answered[[input$Next-1L]]]]) 
+    }, deleteFile = if(!MCE$STOP){ if(input$Next > 2L && (input$Next-2L) < MCE$test$length)
+            is.na(MCE$shinyGUI$stem_locations[[MCE$person$items_answered[[input$Next-2L]]]]) 
         else TRUE} else TRUE)
     
 }

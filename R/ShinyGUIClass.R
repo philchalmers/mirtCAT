@@ -4,6 +4,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     author = 'character',
                                     questions = 'list',
                                     firstpage = 'list',
+                                    demographics = 'list',
                                     lastpage = 'list',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
@@ -20,11 +21,11 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'Title of survery'
                               author <<- 'Author of survery'
-                              demographic_tags <<- c('name', 'gender')
-                              firstpage <<- list(textInput(inputId = 'name', 
-                                                           label = 'What is your name?',
-                                                           value = ''),
-                                                 selectInput(inputId = 'gender',
+                              demographic_tags <<- c('gender')
+                              firstpage <<- list(h1('Welcome to the mirtCAT interface'),
+                                                 'The following interface was created using the mirtCAT package. 
+                                                 To cite the package use citation(\'mirtCAT\') in R.')
+                              demographics <<- list(selectInput(inputId = 'gender',
                                                              label = 'Please select your gender.',
                                                              choices = c('', 'Male', 'Female', 'Other'),
                                                              selected = ''))
@@ -32,9 +33,11 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                        results and close application."))
                                                  
                               if(length(shinyGUI_list)){
-                                  if(!is.null(shinyGUI_list$firstpage)){
+                                  if(is.null(shinyGUI_list$first)) 
                                       firstpage <<- shinyGUI_list$firstpage
-                                      demographic_tags <<- do.call(c, lapply(shinyGUI_list$firstpage, 
+                                  if(!is.null(shinyGUI_list$demographics)){
+                                      demographics <<- shinyGUI_list$demographics
+                                      demographic_tags <<- do.call(c, lapply(shinyGUI_list$demographics, 
                                             function(x) x[[1L]][[1L]]$attribs$`for`))
                                   }
                                   if(is.null(shinyGUI_list$lastpage)) 

@@ -117,16 +117,23 @@
 #'   
 #'   \item{\code{authors}}{A character string for the author names. Default is 
 #'     \code{'Author of survey'}}
+#'     
+#'   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
+#'     and information message
+#'     
+#'     \preformatted{ 
+#'          list(h1('Welcome to the mirtCAT interface'),
+#'               The following interface was created using the mirtCAT package. 
+#'               To cite the package use citation(\\'mirtCATd\\') in R.')
+#'          }
+#'       }
 #' 
-#'   \item{\code{firstpage}}{The first page used in the GUI for collecting demographic information
-#'     generated using tools from the shiny package. The default collects only the respondent's 
-#'     name and gender using the format 
+#'   \item{\code{demographics}}{The person information page used in the GUI for collecting 
+#'     demographic information generated using tools from the shiny package. The default 
+#'     collects only the respondent gender using the format 
 #'  
 #'     \preformatted{ 
-#'          list(textInput(inputId = 'name', 
-#'                  label = 'What is your name?',
-#'                  value = ''),
-#'              selectInput(inputId = 'gender',
+#'          list(selectInput(inputId = 'gender',
 #'                   label = 'Please select your gender.',
 #'                   choices = c('', 'Male', 'Female', 'Other'),
 #'                   selected = ''))
@@ -257,6 +264,8 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
 {    
     if(missing(questions))
         stop('questions input must be specified')
+    if(is.null(names(questions)))
+        stop('questions list must have names')
     if(is.null(mirt_object)){
         dat <- matrix(c(0,1), 2L, length(questions))
         colnames(dat) <- names(questions)
@@ -282,6 +291,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
         }
         return(ret)
     })
+    
     
     #setup objects
     shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, 
