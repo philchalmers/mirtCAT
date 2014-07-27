@@ -59,20 +59,20 @@ test_that('unidimensional', {
     expect_is(oo, 'trellis')
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat,
-                   design_list = list(max_items = 5))
+                   design = list(max_items = 5))
     expect_true(sum(!is.na(res$raw_responses)) == 5L && sum(!is.na(res$responses)) == 5L)
     expect_true(nrow(!is.na(res$thetas_history)) == 6L && nrow(!is.na(res$thetas_SE_history)) == 6L)
     
     #adaptive
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
-                   design_list = list(min_SEM = .4))
+                   design = list(min_SEM = .4))
     expect_equal(as.numeric(res$thetas), 0.3708466, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[11L,]), 0.3930376, tolerance = 1e-4)
     expect_true(sum(!is.na(res$raw_responses)) == 10L && sum(!is.na(res$responses)) == 10L)
     expect_true(nrow(!is.na(res$thetas_history)) == 11L && nrow(!is.na(res$thetas_SE_history)) == 11L)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
-                   design_list = list(min_SEM = .4), method = 'EAP')
+                   design = list(min_SEM = .4), method = 'EAP')
     expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3975697, tolerance = 1e-4)
@@ -81,7 +81,7 @@ test_that('unidimensional', {
     exposure[2:5] <- 5:2
     set.seed(1234)
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
-                   design_list = list(min_SEM = .4), method = 'EAP', exposure=exposure,
+                   design = list(min_SEM = .4), method = 'EAP', exposure=exposure,
                    random.start=TRUE)
     expect_equal(as.numeric(res$thetas), 0.3725264, tolerance = 1e-4)
     so <- summary(res)
@@ -90,56 +90,56 @@ test_that('unidimensional', {
     
     set.seed(12)
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='random')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='random')
     expect_equal(as.numeric(res$thetas), 0.02426384, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.398455, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MEI')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='MEI')
     expect_equal(as.numeric(res$thetas), 0.1963373, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3991926, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MEPV')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='MEPV')
     expect_equal(as.numeric(res$thetas), 0.1795497, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3994549, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MLWI')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='MLWI')
     expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3975697, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='MPWI')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='MPWI')
     expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3975697, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'EAP', criteria='KL')
+                   design = list(min_SEM = .4), method = 'EAP', criteria='KL')
     expect_equal(as.numeric(res$thetas), 0.2896889, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3975697, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
-                   design_list = list(min_SEM = .4), method = 'ML', criteria='KLn',
-                   preCAT_list = list(nitems = 5L, criteria = 'seq'))
+                   design = list(min_SEM = .4), method = 'ML', criteria='KLn',
+                   preCAT = list(nitems = 5L, criteria = 'seq'))
     expect_equal(as.numeric(res$thetas), 0.188614, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3966434, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='IKL',
-                   design_list = list(min_SEM = .4), method = 'MAP')
+                   design = list(min_SEM = .4), method = 'MAP')
     expect_equal(as.numeric(res$thetas), 0.1017891, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3974447, tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='IKLPn',
-                   design_list = list(min_SEM = .4), method = 'MAP')
+                   design = list(min_SEM = .4), method = 'MAP')
     expect_equal(as.numeric(res$thetas), 0.1017891, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3974447, tolerance = 1e-4)

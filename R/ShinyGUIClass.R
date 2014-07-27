@@ -11,13 +11,12 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     demographic_inputIDs = 'character'),
                       
                       methods = list(
-                          initialize = function(questions, stem_locations_in = NULL,
-                                                shinyGUI_list){
+                          initialize = function(questions, shinyGUI){
                               questions <<- questions
-                              if(is.null(stem_locations_in))
-                                  stem_locations_in <- as.character(rep(NA, length(questions)))
-                              stem_locations <<- stem_locations_in
-                              delete_png <<- c(TRUE, TRUE, is.na(stem_locations_in), 
+                              if(is.null(shinyGUI$stem_locations)){
+                                  stem_locations <<- as.character(rep(NA, length(questions)))
+                              } else stem_locations <<- shinyGUI$stem_locationsstem_locations_in
+                              delete_png <<- c(TRUE, TRUE, TRUE, is.na(stem_locations), 
                                                rep(TRUE, 20L))
                               title <<- 'Title of survery'
                               author <<- 'Author of survery'
@@ -32,15 +31,15 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               lastpage <<- list(h5("End of survey. Click \'Next\' to save
                                                        results and close application."))
                                                  
-                              if(length(shinyGUI_list)){
-                                  if(!is.null(shinyGUI_list$firstpage)) 
-                                      firstpage <<- shinyGUI_list$firstpage
-                                  if(!is.null(shinyGUI_list$demographics)){
-                                      demographics <<- shinyGUI_list$demographics
-                                      demographic_inputIDs <<- shinyGUI_list$demographics_inputIDs
+                              if(length(shinyGUI)){
+                                  if(!is.null(shinyGUI$firstpage)) 
+                                      firstpage <<- shinyGUI$firstpage
+                                  if(!is.null(shinyGUI$demographics)){
+                                      demographics <<- shinyGUI$demographics
+                                      demographic_inputIDs <<- shinyGUI$demographics_inputIDs
                                   }
-                                  if(!is.null(shinyGUI_list$lastpage)) 
-                                      lastpage <<- shinyGUI_list$lastpage
+                                  if(!is.null(shinyGUI$lastpage)) 
+                                      lastpage <<- shinyGUI$lastpage
                               }
                           })
                       

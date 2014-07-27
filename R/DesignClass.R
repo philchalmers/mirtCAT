@@ -17,8 +17,8 @@ Design <- setRefClass("Design",
                                   CAT_method = 'character'),
                     
                     methods = list(
-                        initialize = function(method, criteria, nfact, design_list,
-                                              random.start, preCAT_list, nitems, exposure){
+                        initialize = function(method, criteria, nfact, design,
+                                              random.start, preCAT, nitems, exposure){
                             method <<- method
                             criteria <<- criteria
                             CAT_criteria <<- criteria
@@ -42,32 +42,32 @@ Design <- setRefClass("Design",
                             stop_now <<- FALSE
                             preCAT_nitems <<- 0L
                             KL_delta <<- 0.1
-                            if(length(design_list)){
-                                if(!is.null(design_list$KL_delta))
-                                    KL_delta <<- design_list$KL_delta
-                                if(!is.null(design_list$Wrule_weights)) 
-                                    Wrule_weights <<- design_list$Wrule_weights
-                                if(!is.null(design_list$min_SEM))
-                                    min_SEM <<- design_list$min_SEM
-                                if(!is.null(design_list$min_items))
-                                    min_items <<- as.integer(design_list$min_items)
-                                if(!is.null(design_list$max_items))
-                                    max_items <<- as.integer(design_list$max_items)
+                            if(length(design)){
+                                if(!is.null(design$KL_delta))
+                                    KL_delta <<- design$KL_delta
+                                if(!is.null(design$Wrule_weights)) 
+                                    Wrule_weights <<- design$Wrule_weights
+                                if(!is.null(design$min_SEM))
+                                    min_SEM <<- design$min_SEM
+                                if(!is.null(design$min_items))
+                                    min_items <<- as.integer(design$min_items)
+                                if(!is.null(design$max_items))
+                                    max_items <<- as.integer(design$max_items)
                             }
                             if(!mirt:::closeEnough(sum(Wrule_weights)-1, -1e-6, 1e-6))
                                 stop('Wrule_weights does not sum to 1')
                             if(length(min_SEM) != 1L && length(min_SEM) != nfact)
                                 stop('min_SEM criteria is not a suitable length')
-                            if(length(preCAT_list)){
-                                if(is.null(preCAT_list$nitems))
-                                    stop('preCAT_list nitems must be specified')
-                                else preCAT_nitems <<- preCAT_list$nitems
-                                if(is.null(preCAT_list$method))
+                            if(length(preCAT)){
+                                if(is.null(preCAT$nitems))
+                                    stop('preCAT nitems must be specified')
+                                else preCAT_nitems <<- preCAT$nitems
+                                if(is.null(preCAT$method))
                                     preCAT_method <<- 'MAP'
-                                else preCAT_method <<- preCAT_list$method
-                                if(is.null(preCAT_list$criteria))
+                                else preCAT_method <<- preCAT$method
+                                if(is.null(preCAT$criteria))
                                     preCAT_criteria <<- 'random'
-                                else preCAT_criteria <<- preCAT_list$criteria
+                                else preCAT_criteria <<- preCAT$criteria
                                 criteria <<- preCAT_criteria
                                 method <<- preCAT_method
                                 if(random.start && criteria == 'seq')

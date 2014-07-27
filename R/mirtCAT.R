@@ -25,10 +25,6 @@
 #'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
 #'   item is not scored
 #'   
-#' @param stem_locations a character vector of paths pointing to .png files to be used as item
-#'   stems. Must be the length of the test, where \code{NA}s are used if the item has no 
-#'   corresponding .png file
-#'   
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores. Default is 'MAP'
 #' 
 #' @param criteria adaptive criteria used, default is to administer each item sequentially 
@@ -53,7 +49,7 @@
 #'   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and 
 #'   pointwise Kullback-Leibler with a decreasing delta value (\code{delta*sqrt(n)}, 
 #'   where \code{n} is the number of items previous answered), respectively. 
-#'   The \code{delta} criteria is defined in the \code{design_list} object
+#'   The \code{delta} criteria is defined in the \code{design} object
 #'   
 #'   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed 
 #'   include \code{'random'} to randomly select items and \code{'seq'} for selecting 
@@ -74,7 +70,7 @@
 #'   interface given a specific response pattern. This option requires a complete response pattern
 #'   to be supplied 
 #'   
-#' @param design_list a list of design based parameters for adaptive and non-adaptive tests. 
+#' @param design a list of design based parameters for adaptive and non-adaptive tests. 
 #'   These can be
 #' 
 #' \describe{
@@ -109,7 +105,7 @@
 #'   
 #' }
 #' 
-#' @param shinyGUI_list a list of GUI based parameters to be over-written. These can be
+#' @param shinyGUI a list of GUI based parameters to be over-written. These can be
 #' 
 #' \describe{
 #'   \item{\code{title}}{A character string for the test title. Default is 
@@ -140,10 +136,14 @@
 #'         }
 #'      }
 #'      
-#'   \item{\code{demographics_tags}}{a character vector required if a custom demographics
-#'     input is used. Default is \code{demographics_tags = 'gender'}, corresponding to
+#'   \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics
+#'     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
 #'     the \code{demographics} default}
-#'   
+#'     
+#'   \item{\code{stem_locations}}{a character vector of paths pointing to .png files to be used as item
+#'     stems. Must be the length of the test, where \code{NA}s are used if the item has no 
+#'     corresponding .png file}
+#'     
 #'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
 #'     (i.e., criteria has been met). Default is 
 #'   
@@ -153,7 +153,7 @@
 #'   
 #' }
 #' 
-#' @param preCAT_list a list object which can be used. This 
+#' @param preCAT a list object which can be used. This 
 #'   specifies a pre-CAT block in which different test properties may be applied. If the
 #'   list is empty no preCAT block will be used. All of the following elements are required.
 #'   
@@ -261,10 +261,10 @@
 #' plot(person) #standard errors
 #' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
-mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locations = NULL,
+mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, 
                     method = 'MAP', criteria = 'seq', random.start = FALSE, 
                     exposure = rep(1, length(questions)), local_pattern = character(0),
-                    design_list = list(), shinyGUI_list = list(), preCAT_list = list())
+                    design = list(), shinyGUI = list(), preCAT = list())
 {    
     if(missing(questions))
         stop('questions input must be specified')
@@ -284,22 +284,21 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
     item_options <- lapply(questions, extract_choices)
     
     #setup objects
-    shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, 
-                             shinyGUI_list=shinyGUI_list)
-    test <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
-                     item_options=item_options, quadpts_in=design_list$quadpts,
-                     theta_range_in=design_list$theta_range)
-    design <- Design$new(method=method, criteria=criteria, random.start=random.start,
-                         nfact=test$nfact, design_list=design_list, exposure=exposure,
-                         preCAT_list=preCAT_list, nitems=test$length)
-    person <- Person$new(nfact=test$nfact, nitems=length(test$itemnames), 
-                         thetas.start_in=design_list$thetas.start, score=score)
-    
+    shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
+    test_object <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
+                     item_options=item_options, quadpts_in=design$quadpts,
+                     theta_range_in=design$theta_range)
+    design_object <- Design$new(method=method, criteria=criteria, random.start=random.start,
+                         nfact=test_object$nfact, design=design, exposure=exposure,
+                         preCAT=preCAT, nitems=test_object$length)
+    person_object <- Person$new(nfact=test_object$nfact, nitems=length(test_object$itemnames), 
+                         thetas.start_in=design$thetas.start, score=score)
+        
     #put in specific enviroment
-    MCE$person <- person
-    MCE$test <- test
-    MCE$design <- design
-    MCE$shinyGUI <- shinyGUI
+    MCE$person <- person_object
+    MCE$test <- test_object
+    MCE$design <- design_object
+    MCE$shinyGUI <- shinyGUI_object
     MCE$STOP <- FALSE
     
     if(length(local_pattern)){

@@ -7,10 +7,9 @@
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
-  stem_locations = NULL, method = "MAP", criteria = "seq",
-  random.start = FALSE, exposure = rep(1, length(questions)),
-  local_pattern = character(0), design_list = list(),
-  shinyGUI_list = list(), preCAT_list = list())
+  method = "MAP", criteria = "seq", random.start = FALSE,
+  exposure = rep(1, length(questions)), local_pattern = character(0),
+  design = list(), shinyGUI = list(), preCAT = list())
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -32,10 +31,6 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 \item{item_answers}{a character vector indicating which item should be considered 'correct'
   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the
   item is not scored}
-
-\item{stem_locations}{a character vector of paths pointing to .png files to be used as item
-  stems. Must be the length of the test, where \code{NA}s are used if the item has no
-  corresponding .png file}
 
 \item{method}{argument passed to \code{mirt::fscores()} for computing new scores. Default is 'MAP'}
 
@@ -61,7 +56,7 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and
   pointwise Kullback-Leibler with a decreasing delta value (\code{delta*sqrt(n)},
   where \code{n} is the number of items previous answered), respectively.
-  The \code{delta} criteria is defined in the \code{design_list} object
+  The \code{delta} criteria is defined in the \code{design} object
 
   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed
   include \code{'random'} to randomly select items and \code{'seq'} for selecting
@@ -82,7 +77,7 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   interface given a specific response pattern. This option requires a complete response pattern
   to be supplied}
 
-\item{design_list}{a list of design based parameters for adaptive and non-adaptive tests.
+\item{design}{a list of design based parameters for adaptive and non-adaptive tests.
   These can be
 
 \describe{
@@ -117,7 +112,7 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
 }}
 
-\item{shinyGUI_list}{a list of GUI based parameters to be over-written. These can be
+\item{shinyGUI}{a list of GUI based parameters to be over-written. These can be
 
 \describe{
   \item{\code{title}}{A character string for the test title. Default is
@@ -148,9 +143,13 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
         }
      }
 
-  \item{\code{demographics_tags}}{a character vector required if a custom demographics
-    input is used. Default is \code{demographics_tags = 'gender'}, corresponding to
+  \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics
+    input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
     the \code{demographics} default}
+
+  \item{\code{stem_locations}}{a character vector of paths pointing to .png files to be used as item
+    stems. Must be the length of the test, where \code{NA}s are used if the item has no
+    corresponding .png file}
 
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is
@@ -161,7 +160,7 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
 }}
 
-\item{preCAT_list}{a list object which can be used. This
+\item{preCAT}{a list object which can be used. This
   specifies a pre-CAT block in which different test properties may be applied. If the
   list is empty no preCAT block will be used. All of the following elements are required.
 
