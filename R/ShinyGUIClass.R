@@ -33,14 +33,13 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                        results and close application."))
                                                  
                               if(length(shinyGUI_list)){
-                                  if(is.null(shinyGUI_list$first)) 
+                                  if(!is.null(shinyGUI_list$firstpage)) 
                                       firstpage <<- shinyGUI_list$firstpage
                                   if(!is.null(shinyGUI_list$demographics)){
                                       demographics <<- shinyGUI_list$demographics
-                                      demographic_tags <<- do.call(c, lapply(shinyGUI_list$demographics, 
-                                            function(x) x[[1L]][[1L]]$attribs$`for`))
+                                      demographic_tags <<- shinyGUI_list$demographics_tags
                                   }
-                                  if(is.null(shinyGUI_list$lastpage)) 
+                                  if(!is.null(shinyGUI_list$lastpage)) 
                                       lastpage <<- shinyGUI_list$lastpage
                               }
                           })

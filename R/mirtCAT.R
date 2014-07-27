@@ -139,6 +139,10 @@
 #'                   selected = ''))
 #'         }
 #'      }
+#'      
+#'   \item{\code{demographics_tags}}{a character vector required if a custom demographics
+#'     input is used. Default is \code{demographics_tags = 'gender'}, corresponding to
+#'     the \code{demographics} default}
 #'   
 #'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
 #'     (i.e., criteria has been met). Default is 
@@ -277,21 +281,7 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
         stop('Item names for mirt_object and questions do not match')
-    item_options <- lapply(questions, function(x){
-        if(is(x, 'shiny.tag.list')){
-            if(!is.null(x[[1L]][[2L]]$children[[1]])){ #selectInput
-                split <- strsplit(x[[1L]][[2L]]$children[[1]], "\"")[[1L]]
-                ret <- split[seq(from = 2L, to = length(split), by = 2L)]
-            } else { #textInput
-                ret <- ''
-            }
-        } else if(is(x, 'shiny.tag')){ #radioInput
-            split <- lapply(x$children[[2L]], function(x) x$children[[1L]]$attribs$value)
-            ret <- do.call(c, split)
-        }
-        return(ret)
-    })
-    
+    item_options <- lapply(questions, extract_tags)
     
     #setup objects
     shinyGUI <- ShinyGUI$new(questions=questions, stem_locations_in=stem_locations, 

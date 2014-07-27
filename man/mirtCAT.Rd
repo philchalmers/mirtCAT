@@ -148,6 +148,10 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
         }
      }
 
+  \item{\code{demographics_tags}}{a character vector required if a custom demographics
+    input is used. Default is \code{demographics_tags = 'gender'}, corresponding to
+    the \code{demographics} default}
+
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is
 
