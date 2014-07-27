@@ -255,6 +255,8 @@ mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, stem_locat
                     exposure = rep(1, length(questions)), local_pattern = character(0),
                     design_list = list(), shinyGUI_list = list(), preCAT_list = list())
 {    
+    if(missing(questions))
+        stop('questions input must be specified')
     if(is.null(mirt_object)){
         dat <- matrix(c(0,1), 2L, length(questions))
         colnames(dat) <- names(questions)
