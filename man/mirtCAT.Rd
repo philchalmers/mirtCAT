@@ -6,10 +6,10 @@
 \alias{summary.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
-  method = "MAP", criteria = "seq", random.start = FALSE,
-  exposure = rep(1, length(questions)), local_pattern = character(0),
-  design = list(), shinyGUI = list(), preCAT = list())
+mirtCAT(questions, mirt_object = NULL, method = "MAP", criteria = "seq",
+  item_answers = NULL, random.start = FALSE, exposure = rep(1,
+  length(questions)), local_pattern = character(0), design = list(),
+  shinyGUI = list(), preCAT = list())
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -27,10 +27,6 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
 
 \item{mirt_object}{single group object defined by the \code{mirt} package. This is required
   if the test is to be scored adaptively}
-
-\item{item_answers}{a character vector indicating which item should be considered 'correct'
-  when scoring individuals. Must be the length of the test, where \code{NA}s are used if the
-  item is not scored}
 
 \item{method}{argument passed to \code{mirt::fscores()} for computing new scores. Default is 'MAP'}
 
@@ -61,6 +57,10 @@ mirtCAT(questions, mirt_object = NULL, item_answers = NULL,
   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed
   include \code{'random'} to randomly select items and \code{'seq'} for selecting
   items sequentially.}
+
+\item{item_answers}{a character vector indicating which item should be considered 'correct'
+  when scoring individuals. Must be the length of the test, where \code{NA}s are used if the
+  item is not scored}
 
 \item{random.start}{logical; start the test with a random item instead of starting with
   the first item?}

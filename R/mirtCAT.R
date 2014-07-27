@@ -21,10 +21,6 @@
 #' @param mirt_object single group object defined by the \code{mirt} package. This is required
 #'   if the test is to be scored adaptively
 #'   
-#' @param item_answers a character vector indicating which item should be considered 'correct'
-#'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
-#'   item is not scored
-#'   
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores. Default is 'MAP'
 #' 
 #' @param criteria adaptive criteria used, default is to administer each item sequentially 
@@ -54,6 +50,10 @@
 #'   Non-adaptive methods which are applicable even when no \code{mirt_object} is passed 
 #'   include \code{'random'} to randomly select items and \code{'seq'} for selecting 
 #'   items sequentially.
+#'   
+#' @param item_answers a character vector indicating which item should be considered 'correct'
+#'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
+#'   item is not scored
 #'   
 #' @param random.start logical; start the test with a random item instead of starting with
 #'   the first item?
@@ -261,8 +261,8 @@
 #' plot(person) #standard errors
 #' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
-mirtCAT <- function(questions, mirt_object = NULL, item_answers=NULL, 
-                    method = 'MAP', criteria = 'seq', random.start = FALSE, 
+mirtCAT <- function(questions, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
+                    item_answers=NULL, random.start = FALSE, 
                     exposure = rep(1, length(questions)), local_pattern = character(0),
                     design = list(), shinyGUI = list(), preCAT = list())
 {    
