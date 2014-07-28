@@ -3,12 +3,14 @@
 #' @param x object of class \code{'mirtCAT'}
 #' @export
 print.mirtCAT <- function(x, ...){
-    if(!is.na(x$thetas)){
-        ret <- data.frame(sum(!is.na(x$responses)),
-                          x$thetas,
-                          x$thetas_SE_history[nrow(x$thetas_SE_history)])
-        colnames(ret) <- c('n.items.answered', paste0('Theta_', length(x$thetas)),
-                           paste0('SE.Theta_', length(x$thetas)))
+    if(!all(is.na(x$thetas))){
+        person <- c(sum(!is.na(x$responses)),
+                          x$thetas[1L,],
+                          x$thetas_SE_history[nrow(x$thetas_SE_history),])        
+        names(person) <- c('n.items.answered', paste0('Theta_', 1:length(x$thetas)),
+                           paste0('SE.Theta_', 1:length(x$thetas)))
+        ret <- t(as.data.frame(person))
+        rownames(ret) <- ''
         return(ret)
     } else {
         return(data.frame('n.items.answered' = sum(!is.na(x$responses))))

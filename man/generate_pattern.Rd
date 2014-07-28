@@ -3,14 +3,16 @@
 \alias{generate_pattern}
 \title{Generate a CAT pattern}
 \usage{
-generate_pattern(mirt_object, Theta, choices, item_answers = NULL)
+generate_pattern(mirt_object, Theta, choices = NULL, item_answers = NULL)
 }
 \arguments{
 \item{mirt_object}{single group object defined by the \code{mirt} package}
 
 \item{Theta}{a numeric vector indicating the latent theta values for a single person}
 
-\item{choices}{a list of character vectors signifying the possible choices for each item}
+\item{choices}{a list of character vectors signifying the possible choices for each item.
+  If NULL, a character vector is returned indicating the selected category for each item (where
+  '0' is the lowest category)}
 
 \item{item_answers}{(optional) a character vector indicating which of the options in
   \code{choices} should be considered the 'correct' answer. This is required for itemtypes that
@@ -23,7 +25,13 @@ the test size.
 \examples{
 \dontrun{
 
+# return real response vector given choices and (optional) answers
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
+# mirtCAT(questions, mirt_object=mod, local_pattern = pat)
+
+# generate pattern where '0' is the lowest response category selected
+pat2 <- generate_pattern(mod, Theta = 0)
+# mirtCAT(mirt_object=mod, local_pattern = pat2)
 
 }
 }

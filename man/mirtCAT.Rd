@@ -6,10 +6,10 @@
 \alias{summary.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(questions, mirt_object = NULL, method = "MAP", criteria = "seq",
-  item_answers = NULL, random.start = FALSE, exposure = rep(1,
-  length(questions)), local_pattern = character(0), design = list(),
-  shinyGUI = list(), preCAT = list())
+mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
+  criteria = "seq", item_answers = NULL, random.start = FALSE,
+  exposure = rep(1, length(questions)), local_pattern = character(0),
+  design = list(), shinyGUI = list(), preCAT = list())
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -72,9 +72,10 @@ mirtCAT(questions, mirt_object = NULL, method = "MAP", criteria = "seq",
   the largest information criteria will be sampled from. Naturally, the first and last
   elements are ignored for the first and last items, respectively}
 
-\item{local_pattern}{a character vector used to run the CAT application without the GUI
-  interface given a specific response pattern. This option requires a complete response pattern
-  to be supplied}
+\item{local_pattern}{a character or numeric vector used to run the CAT application without
+  the GUI interface given a specific response pattern. This option requires a complete response
+  pattern to be supplied. This input is required to be numeric if no \code{questions} list is
+  input}
 
 \item{design}{a list of design based parameters for adaptive and non-adaptive tests.
   These can be

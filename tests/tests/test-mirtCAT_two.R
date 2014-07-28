@@ -48,6 +48,15 @@ test_that('multidimensional', {
                                           125,113,121,106,95,71,97,82,109,58,62,141,92,85,105,104,
                                           120,107,115,111,107,108,119,105))))
     
+    set.seed(1234)
+    pat2 <- generate_pattern(mod2, Theta = c(0, 1))
+    expect_true(all(pat2 == as.character(c(1,1,1,0,1,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,1,1,0,
+                                 0,0,1,1,1,1,1,1,1,1,0,1))))
+    
+    ## test numeric input
+    res <- mirtCAT(mirt_object=mod2, local_pattern=pat2)
+    expect_equal(as.numeric(res$thetas), c(0.09103849, 0.718113), tolerance = 1e-4)
+    
     #sequential
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat)
     expect_equal(as.numeric(res$thetas), c(0.5529561, 0.7744459), tolerance = 1e-4)

@@ -65,9 +65,10 @@
 #'   the largest information criteria will be sampled from. Naturally, the first and last 
 #'   elements are ignored for the first and last items, respectively 
 #' 
-#' @param local_pattern a character vector used to run the CAT application without the GUI 
-#'   interface given a specific response pattern. This option requires a complete response pattern
-#'   to be supplied 
+#' @param local_pattern a character or numeric vector used to run the CAT application without 
+#'   the GUI interface given a specific response pattern. This option requires a complete response 
+#'   pattern to be supplied. This input is required to be numeric if no \code{questions} list is
+#'   input
 #'   
 #' @param design a list of design based parameters for adaptive and non-adaptive tests. 
 #'   These can be
@@ -260,13 +261,22 @@
 #' plot(person) #standard errors
 #' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
-mirtCAT <- function(questions, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
+mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
                     item_answers = NULL, random.start = FALSE, 
                     exposure = rep(1, length(questions)), local_pattern = character(0),
                     design = list(), shinyGUI = list(), preCAT = list())
 {    
-    if(missing(questions))
-        stop('questions input must be specified')
+    if(is.null(questions)){
+        questions <- vector('list', ncol(mirt_object@Data$data))
+        Names <- colnames(mirt_object@Data$data)
+        names(questions) <- Names
+        K <- mirt_object@Data$K
+        for(i in 1L:length(K))
+            questions[[i]] <- selectInput(inputId = Names[i], label = '', 
+                                          choices = as.character(0L:(K[i]-1L)))
+        item_answers <- NULL
+    }
+        
     if(is.null(names(questions)))
         stop('questions list must have names')
     if(is.null(mirt_object)){
