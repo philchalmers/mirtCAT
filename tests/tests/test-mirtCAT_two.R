@@ -50,8 +50,8 @@ test_that('multidimensional', {
     
     set.seed(1234)
     pat2 <- generate_pattern(mod2, Theta = c(0, 1))
-    expect_true(all(pat2 == as.character(c(1,1,1,0,1,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,1,1,0,
-                                 0,0,1,1,1,1,1,1,1,1,0,1))))
+    expect_true(all(pat2 == c(1,1,1,0,1,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,1,1,0,
+                                 0,0,1,1,1,1,1,1,1,1,0,1)))
     
     ## test numeric input
     res <- mirtCAT(mirt_object=mod2, local_pattern=pat2)

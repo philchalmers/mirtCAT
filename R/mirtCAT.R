@@ -249,7 +249,14 @@
 #' #run locally, random response pattern given Theta
 #' set.seed(1)
 #' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
+#' head(pat)
 #' mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
+#' 
+#' #same as above, but using special input vector that doesn't require shiny
+#' set.seed(1)
+#' pat2 <- generate_pattern(mod, Theta = 0)
+#' head(pat2)
+#' mirtCAT(mirt_object=mod, local_pattern=pat2)
 #' 
 #' #run CAT, and save results to object called person
 #' person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', 
@@ -263,7 +270,7 @@
 #' }
 mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
                     item_answers = NULL, random.start = FALSE, 
-                    exposure = rep(1, length(questions)), local_pattern = character(0),
+                    exposure = rep(1, length(questions)), local_pattern = NULL,
                     design = list(), shinyGUI = list(), preCAT = list())
 {    
     if(is.null(questions)){
@@ -311,7 +318,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     MCE$STOP <- FALSE
     
     if(length(local_pattern)){
-        person <- run_local(local_pattern)
+        person <- run_local(as.character(local_pattern))
     } else {
         #run interface
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)

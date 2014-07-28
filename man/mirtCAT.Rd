@@ -8,7 +8,7 @@
 \usage{
 mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   criteria = "seq", item_answers = NULL, random.start = FALSE,
-  exposure = rep(1, length(questions)), local_pattern = character(0),
+  exposure = rep(1, length(questions)), local_pattern = NULL,
   design = list(), shinyGUI = list(), preCAT = list())
 
 \method{print}{mirtCAT}(x, ...)
@@ -280,7 +280,14 @@ mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI') #adaptive
 #run locally, random response pattern given Theta
 set.seed(1)
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
+head(pat)
 mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
+
+#same as above, but using special input vector that doesn't require shiny
+set.seed(1)
+pat2 <- generate_pattern(mod, Theta = 0)
+head(pat2)
+mirtCAT(mirt_object=mod, local_pattern=pat2)
 
 #run CAT, and save results to object called person
 person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI',

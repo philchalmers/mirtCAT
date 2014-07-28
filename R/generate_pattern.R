@@ -1,15 +1,15 @@
 #' Generate a CAT pattern
 #' 
-#' Generate a CAT pattern given various inputs. Returns a character vector with length equal to
-#' the test size.
+#' Generate a CAT pattern given various inputs. Returns a character or numeric vector 
+#' with length equal to the test size.
 #' 
 #' @param mirt_object single group object defined by the \code{mirt} package
 #'
 #' @param Theta a numeric vector indicating the latent theta values for a single person
 #' 
 #' @param choices a list of character vectors signifying the possible choices for each item.
-#'   If NULL, a character vector is returned indicating the selected category for each item (where
-#'   '0' is the lowest category)
+#'   If NULL, a numeric vector is returned indicating the selected category for each item (where
+#'   0 is the lowest possible category)
 #' 
 #' @param item_answers (optional) a character vector indicating which of the options in 
 #'   \code{choices} should be considered the 'correct' answer. This is required for itemtypes that 
@@ -26,7 +26,7 @@
 #' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 #' # mirtCAT(questions, mirt_object=mod, local_pattern = pat)
 #' 
-#' # generate pattern where '0' is the lowest response category selected
+#' # generate pattern where 0 is the lowest possible response category
 #' pat2 <- generate_pattern(mod, Theta = 0)
 #' # mirtCAT(mirt_object=mod, local_pattern = pat2)
 #' 
@@ -43,7 +43,7 @@ generate_pattern <- function(mirt_object, Theta, choices = NULL, item_answers = 
             uniq <- 0L:(K[i]-1)
             pattern[i] <- sample(uniq, 1L, prob = P)
         }
-        return(as.character(pattern))
+        return(as.numeric(pattern))
     }
     ret <- character(nitems)
     K_1 <- do.call(c, lapply(choices, length)) - 1L
