@@ -15,7 +15,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               questions <<- questions
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
-                              } else stem_locations <<- shinyGUI$stem_locationsstem_locations_in
+                              } else stem_locations <<- shinyGUI$stem_locations
                               delete_png <<- c(TRUE, TRUE, TRUE, is.na(stem_locations), 
                                                rep(TRUE, 20L))
                               title <<- 'Title of survery'

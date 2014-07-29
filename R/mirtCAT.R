@@ -314,6 +314,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     MCE$design <- design_object
     MCE$shinyGUI <- shinyGUI_object
     MCE$STOP <- FALSE
+    MCE$outfile <- tempfile(fileext='.png')
     
     if(length(local_pattern)){
         person <- run_local(as.character(local_pattern))

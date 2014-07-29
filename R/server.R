@@ -67,9 +67,7 @@ server <- function(input, output) {
     }) 
     
     output$item_stem <- renderImage({
-        
-        outfile <- tempfile(fileext='.png')
-        
+            
         if(!MCE$STOP){
             if(input$Next > 2L && (input$Next-2L) < MCE$test$length){
                 empty <- is.na(MCE$shinyGUI$stem_locations[[
@@ -78,6 +76,7 @@ server <- function(input, output) {
         } else empty <- TRUE
         
         if(empty){
+            outfile <- MCE$outfile
             png(outfile, width=1, height=1)
             dev.off()
             return(list(src = outfile,
@@ -86,15 +85,9 @@ server <- function(input, output) {
                         height = 1,
                         alt = ""))
         } else {
-            return(list(src = MCE$shinyGUI$stem_locations[[input$Next-2L]],
-                        contentType = 'image/png',
-                        width = 400,
-                        height = 400,
-                        alt = ""))
+            return(list(src = MCE$shinyGUI$stem_locations[[input$Next-2L]]))
         }
         
-    }, deleteFile = if(!MCE$STOP){ if(input$Next > 2L && (input$Next-2L) < MCE$test$length)
-            is.na(MCE$shinyGUI$stem_locations[[MCE$person$items_answered[[input$Next-2L]]]]) 
-        else TRUE} else TRUE)
+    }, deleteFile = FALSE)
     
 }
