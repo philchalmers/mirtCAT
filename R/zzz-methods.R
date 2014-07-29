@@ -23,15 +23,15 @@ print.mirtCAT <- function(x, ...){
 #' @export
 summary.mirtCAT <- function(object, ...){
     ret <- list(raw_responses=object$raw_responses,
-                scored_responses=object$responses,
+                responses=object$responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
-    if(all(ret$raw_responses == ret$scored_responses))
-        ret$scored_responses <- NULL
+    if(all(ret$raw_responses == ret$responses))
+        ret$raw_responses <- NULL
     if(!length(object$demographics))
         ret$demographics <- NULL
     ret
