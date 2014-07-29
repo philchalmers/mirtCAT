@@ -3,6 +3,7 @@ Design <- setRefClass("Design",
                     fields = list(method = 'character',
                                   criteria = 'character',
                                   min_SEM = 'numeric',
+                                  met_SEM = 'logical',
                                   min_items = 'integer',
                                   max_items = 'integer',
                                   stop_now = 'logical',
@@ -36,6 +37,7 @@ Design <- setRefClass("Design",
                                                         'Erule', 'seq', 'random')))
                                 stop('Selected criteria not valid for multidimensional tests')
                             min_SEM <<- .3
+                            met_SEM <<- rep(FALSE, nfact)
                             Wrule_weights <<- rep(1/nfact, nfact)
                             min_items <<- 1L
                             max_items <<- nitems
@@ -85,7 +87,8 @@ Design$methods(
         if(MCE$person$score){
             if(nanswered >= min_items){
                 diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
-                if(all(diff < min_SEM)) stop_now <<- TRUE
+                met_SEM <<- diff < min_SEM
+                if(all(met_SEM)) stop_now <<- TRUE
             }
         }
         if(nanswered == max_items) stop_now <<- TRUE

@@ -15,6 +15,11 @@ calcLL <- function(thetas){
 getAcovs <- function(possible_patterns){
     ret <- try(fscores(MCE$test$mirt_object, return.acov = TRUE, method = MCE$design$method, 
                 response.pattern = possible_patterns), silent = TRUE)
+    ret <- lapply(ret, function(x, pick){
+        if(!is(x, 'try-error')){
+            return(x[pick, pick, drop=FALSE])
+        } else return(x)
+    }, pick=!MCE$design$met_SEM)
     ret    
 } 
 

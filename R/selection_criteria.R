@@ -112,7 +112,7 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) sum(diag(x) * w), 
-                              w=MCE$design$Wrule_weights))
+                              w=MCE$design$Wrule_weights[!MCE$design$met_SEM]))
     crit
 }
 
@@ -125,7 +125,7 @@ Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc){
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) w %*% x %*% w, 
-                              w=MCE$design$Wrule_weights))
+                              w=MCE$design$Wrule_weights[!MCE$design$met_SEM]))
     crit
 }
 

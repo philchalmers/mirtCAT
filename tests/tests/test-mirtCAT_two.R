@@ -69,21 +69,21 @@ test_that('multidimensional', {
     #adaptive
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
                    design = list(min_SEM = .5))
-    expect_equal(as.numeric(res$thetas), c(0.3977027, 0.9013761), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4992815, 0.4672721), tolerance = 1e-4)
+                 c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'Trule')
-    expect_equal(as.numeric(res$thetas), c(0.3616689, 0.9435072), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4940650, 0.4417636), tolerance = 1e-4)
+                 c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'Wrule')
-    expect_equal(as.numeric(res$thetas), c(0.3773197, 0.8942343), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.3565503, 0.9837686), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4979451, 0.4640038), tolerance = 1e-4)
+                 c(0.4920396, 0.4857099), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'Erule')
