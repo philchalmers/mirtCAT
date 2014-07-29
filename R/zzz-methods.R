@@ -32,6 +32,8 @@ summary.mirtCAT <- function(object, ...){
         ret$thetas_history <- ret$thetas_SE_history <- NULL
     if(all(ret$raw_responses == ret$scored_responses))
         ret$scored_responses <- NULL
+    if(!length(object$demographics))
+        ret$demographics <- NULL
     ret
 }
 
@@ -86,14 +88,10 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       upper = thetasSEhighlong$F1,
                       panel = function(x, y, lower, upper, subscripts, ...){
                           lower <- lower[subscripts]; upper <- upper[subscripts]
+                          panel.polygon(c(x, rev(x)), c(upper, rev(lower)), 
+                                        col=grey(.9), border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
-                          for(i in 1:length(lower)){
-                              panel.arrows(x0=x[i], y0=lower[i], x1 = x[i], y1= upper[i], 
-                                           col = 'grey', angle = 90, length = .05)
-                              panel.arrows(x0=x[i], y0=upper[i], x1 = x[i], y1= lower[i], 
-                                           col = 'grey', angle = 90, length = .05)
-                          }
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
@@ -105,14 +103,10 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       lower = thetasSElowlong$F1,
                       upper = thetasSEhighlong$F1,
                       panel = function(x, y, lower, upper, subscripts, ...){
+                          panel.polygon(c(x, rev(x)), c(upper, rev(lower)), 
+                                        col=grey(.9), border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
-                          for(i in 1:length(lower)){
-                              panel.arrows(x0=x[i], y0=lower[i], x1 = x[i], y1= upper[i], 
-                                           col = 'grey', angle = 90, length = .05)
-                              panel.arrows(x0=x[i], y0=upper[i], x1 = x[i], y1= lower[i], 
-                                           col = 'grey', angle = 90, length = .05)
-                          }
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
