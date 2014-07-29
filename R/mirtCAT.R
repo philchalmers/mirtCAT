@@ -192,8 +192,6 @@
 #'     
 #'   \item{\code{thetas_SE_history}}{A matrix indicating the standard errors for theta after each
 #'     successive item was answered}
-#'   
-#'   \item{\code{thetas_acov}}{The asymptotic covariance matrix for the final theta estimates}
 #' 
 #'   \item{\code{demographics}}{A data.frame object containing the information collected on the 
 #'     first page of the shiny GUI. This is used to store the demographic information for each
