@@ -22,8 +22,9 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         }
     }
     method <- MCE$design$criteria_estimator
-    if(length(unique(na.omit(person$responses))) == 1L) 
-        method <- 'MAP'
+    #saftey features
+    if(length(unique(na.omit(person$responses))) < 2L) method <- 'MAP'
+    if(sum(!is.na(person$responses)) < 5L) method <- 'MAP'
     
     if(criteria == 'seq'){
         return(as.integer(lastitem + 1L))

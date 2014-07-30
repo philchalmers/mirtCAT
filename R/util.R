@@ -13,9 +13,9 @@ calcLL <- function(thetas){
 }
 
 getAcovs <- function(possible_patterns, method){
-    ret <- try(fscores(MCE$test$mirt_object, return.acov = TRUE, 
+    ret <- fscores(MCE$test$mirt_object, return.acov = TRUE, 
                        method = method, 
-                       response.pattern = possible_patterns), silent = TRUE)
+                       response.pattern = possible_patterns)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         if(is(x, 'try-error')) browser()
