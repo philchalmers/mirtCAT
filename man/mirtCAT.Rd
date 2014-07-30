@@ -154,9 +154,9 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
     the \code{demographics} default}
 
-  \item{\code{stem_locations}}{a character vector of paths pointing to .png files to be used as item
-    stems. Must be the length of the test, where \code{NA}s are used if the item has no
-    corresponding .png file}
+  \item{\code{stem_locations}}{a character vector of paths pointing to .png or .jpeg
+    files to be used as item stems. Must be the length of the test, where \code{NA}s are
+    used if the item has no corresponding file}
 
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is
