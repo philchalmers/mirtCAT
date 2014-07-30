@@ -2,6 +2,7 @@ Design <- setRefClass("Design",
                     
                     fields = list(method = 'character',
                                   criteria = 'character',
+                                  criteria_estimator = 'character',
                                   min_SEM = 'numeric',
                                   met_SEM = 'logical',
                                   min_items = 'integer',
@@ -22,6 +23,12 @@ Design <- setRefClass("Design",
                                               random.start, preCAT, nitems, exposure){
                             method <<- method
                             criteria <<- criteria
+                            if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule')){
+                                criteria_estimator <<- 'ML'
+                            } else if(criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule',
+                                                      'MEPV')){
+                                criteria_estimator <<- 'MAP'
+                            }
                             CAT_criteria <<- criteria
                             CAT_method <<- method
                             random.start <<- random.start
@@ -34,7 +41,8 @@ Design <- setRefClass("Design",
                                 stop('random.start with sequantially criteria is invalid')
                             if(nfact > 1L && 
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
-                                                        'Erule', 'seq', 'random')))
+                                                        'Erule', 'seq', 'random', 
+                                                        'DPrule', 'TPrule', 'EPrule', 'WPrule')))
                                 stop('Selected criteria not valid for multidimensional tests')
                             min_SEM <<- .3
                             met_SEM <<- rep(FALSE, nfact)

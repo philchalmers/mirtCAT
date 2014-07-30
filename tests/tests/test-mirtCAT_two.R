@@ -67,26 +67,26 @@ test_that('multidimensional', {
     oo <- plot(res, pick_theta=1)
     
     #adaptive
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .5))
     expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'Trule')
+                   design = list(min_SEM = .5), criteria = 'TPrule')
     expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'Wrule')
+                   design = list(min_SEM = .5), criteria = 'WPrule')
     expect_equal(as.numeric(res$thetas), c(0.3565503, 0.9837686), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4920396, 0.4857099), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'Erule')
+                   design = list(min_SEM = .5), criteria = 'EPrule')
     expect_equal(as.numeric(res$thetas), c(0.345696, 1.001818), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4870197, 0.4992364), tolerance = 1e-4)

@@ -76,19 +76,19 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         crit <- MPWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                      person=person, test=test, row_loc=row_loc)
         index <- which_not_answered
-    } else if(criteria == 'Drule'){
+    } else if(criteria == 'Drule' || criteria == 'DPrule'){
         crit <- -Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         index <- row_loc
-    } else if(criteria == 'Erule'){
+    } else if(criteria == 'Erule' || criteria == 'EPrule'){
         crit <- -Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         index <- row_loc
-    } else if(criteria == 'Trule'){
+    } else if(criteria == 'Trule' || criteria == 'TPrule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         index <- row_loc
-    } else if(criteria == 'Wrule'){
+    } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                       person=person, test=test, row_loc=row_loc)
         index <- row_loc

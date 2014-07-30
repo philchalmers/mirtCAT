@@ -38,7 +38,9 @@
 #'   for the maximum determinant of the information matrix, \code{'Trule'} for the 
 #'   maximum (potentially weighted) trace of the information matrix, \code{'Erule'} for the 
 #'   minimum value of the information matrix, and \code{'Wrule'} for 
-#'   the weighted information criteria.
+#'   the weighted information criteria. For each of these rules the posterior weight for 
+#'   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
+#'   \code{'EPrule'}, \code{'WPrule'}, respectively.   
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
 #'   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and 
