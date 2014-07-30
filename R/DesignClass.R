@@ -23,6 +23,7 @@ Design <- setRefClass("Design",
                                               random.start, preCAT, nitems, exposure){
                             method <<- method
                             criteria <<- criteria
+                            criteria_estimator <<- 'MAP'
                             if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule')){
                                 criteria_estimator <<- 'ML'
                             } else if(criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule',

@@ -47,7 +47,11 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   minimum value of the information matrix, and \code{'Wrule'} for
   the weighted information criteria. For each of these rules the posterior weight for
   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
-  \code{'EPrule'}, \code{'WPrule'}, respectively.
+  \code{'EPrule'}, \code{'WPrule'}, respectively. As a saftey precaution, if the
+  selected criteria do not weight by the posterior (and therefore do not exist for
+  extreme response styles) the method is temporarily switched to the posterior weighting
+  until a variable response pattern is observed. However, for selection purposes the
+  posterior weighting schemes are generally more stable and therefore should be prefered.
 
   Applicable to both unidimensional and multidimensional tests are the
   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and

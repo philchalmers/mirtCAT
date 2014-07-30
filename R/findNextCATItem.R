@@ -21,6 +21,9 @@ findNextCATItem <- function(person, test, lastitem, criteria){
             row <- row + 1L   
         }
     }
+    method <- MCE$design$criteria_estimator
+    if(length(unique(na.omit(person$responses))) == 1L) 
+        method <- 'MAP'
     
     if(criteria == 'seq'){
         return(as.integer(lastitem + 1L))
@@ -78,19 +81,19 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         index <- which_not_answered
     } else if(criteria == 'Drule' || criteria == 'DPrule'){
         crit <- -Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc)
+                      person=person, test=test, row_loc=row_loc, method=method)
         index <- row_loc
     } else if(criteria == 'Erule' || criteria == 'EPrule'){
         crit <- -Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc)
+                      person=person, test=test, row_loc=row_loc, method=method)
         index <- row_loc
     } else if(criteria == 'Trule' || criteria == 'TPrule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc)
+                      person=person, test=test, row_loc=row_loc, method=method)
         index <- row_loc
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc)
+                      person=person, test=test, row_loc=row_loc, method=method)
         index <- row_loc
     } else {
         stop('Selection criteria does not exist')

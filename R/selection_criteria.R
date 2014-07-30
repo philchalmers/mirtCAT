@@ -31,7 +31,7 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc){
     }
     pp2 <- possible_patterns
     pp2[ ,which(possible_patterns[1L, ] == possible_patterns[2L,])] <- NA
-    acovstmp <- getAcovs(pp2)
+    acovstmp <- getAcovs(pp2, method = 'MAP')
     acovs <- weighted_mat(P=P, mat=acovstmp, row_loc=row_loc, which_not_answered=which_not_answered)
     crit <- do.call(c, acovs)
     crit
@@ -91,20 +91,20 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     crit
 }
 
-Drule <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    acovs <- getAcovs(possible_patterns)
+Drule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    acovs <- getAcovs(possible_patterns, method)
     crit <- do.call(c, lapply(acovs, det))
     crit
 }
 
-Erule <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    acovs <- getAcovs(possible_patterns)
+Erule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    acovs <- getAcovs(possible_patterns, method)
     crit <- do.call(c, lapply(acovs, function(x) eigen(x)$values[1L]))
     crit
 }
 
-Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    acovs <- getAcovs(possible_patterns)
+Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)
         if(is(ret, 'try-error'))
@@ -116,8 +116,8 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc){
     crit
 }
 
-Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    acovs <- getAcovs(possible_patterns)
+Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)
         if(is(ret, 'try-error'))
