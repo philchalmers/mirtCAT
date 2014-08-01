@@ -15,10 +15,9 @@ calcLL <- function(thetas){
 getAcovs <- function(possible_patterns, method){
     ret <- fscores(MCE$test$mirt_object, return.acov = TRUE, 
                        method = method, 
-                       response.pattern = possible_patterns)
+                       response.pattern = possible_patterns, mirtCAT=TRUE)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
-        if(is(x, 'try-error')) browser()
         return(x)
     }, pick=!MCE$design$met_SEM)
     ret    
