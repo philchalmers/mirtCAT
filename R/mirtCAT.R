@@ -93,9 +93,8 @@
 #'   \item{\code{max_items}}{Default is the length of the item bank; maximum number of items that 
 #'     can be answered}
 #'   
-#'   \item{\code{quadpts}}{Default follows scheme in \code{mirt::fscores}; 
-#'     number of quadrature points used per dimension 
-#'     for integration (if required).}
+#'   \item{\code{quadpts}}{Number of quadrature points used per dimension 
+#'     for integration (if required). Default is 61}
 #'   
 #'   \item{\code{theta_range}}{Default is \code{c(-6,6)}; upper and lower range for the theta 
 #'     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
