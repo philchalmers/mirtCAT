@@ -11,7 +11,7 @@ Design <- setRefClass("Design",
                                   exposure = 'integer',
                                   Wrule_weights = 'numeric',
                                   KL_delta = 'numeric',
-                                  random.start = 'logical',
+                                  start_item = 'integer',
                                   preCAT_nitems = 'integer',
                                   preCAT_criteria = 'character',
                                   preCAT_method = 'character',
@@ -20,7 +20,7 @@ Design <- setRefClass("Design",
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design,
-                                              random.start, preCAT, nitems, exposure){
+                                              start_item, preCAT, nitems, exposure){
                             method <<- method
                             criteria <<- criteria
                             criteria_estimator <<- 'MAP'
@@ -32,14 +32,15 @@ Design <- setRefClass("Design",
                             }
                             CAT_criteria <<- criteria
                             CAT_method <<- method
-                            random.start <<- random.start
-                            if(length(exposure) == nitems)
-                                exposure <<- as.integer(exposure)
-                            else stop('exposure input is not the correct length')
-                            if(any(exposure[2L:(length(exposure)-1L)] > (nitems-2L):1L))
-                                stop('exposure input contains more sampling than possible options')
-                            if(random.start && criteria == 'seq')
-                                stop('random.start with sequantially criteria is invalid')
+                            start_item <<- as.integer(start_item)
+                            if(!length(exposure) == nitems)
+                                stop('exposure input is not the correct length')
+                            pick <- exposure > nitems:1L
+                            tmp <- exposure
+                            tmp[pick] <- (nitems:1L)[pick]
+                            exposure <<- as.integer(tmp)
+                            if(start_item != 1 && criteria == 'seq')
+                                stop('start_item must equal 1 with seq criteria')
                             if(nfact > 1L && 
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
                                                         'Erule', 'seq', 'random', 
@@ -81,8 +82,6 @@ Design <- setRefClass("Design",
                                 else preCAT_criteria <<- preCAT$criteria
                                 criteria <<- preCAT_criteria
                                 method <<- preCAT_method
-                                if(random.start && criteria == 'seq')
-                                    stop('random.start with sequantially criteria is invalid')
                             }
                         })
                     

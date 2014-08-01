@@ -7,7 +7,7 @@
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
-  criteria = "seq", item_answers = NULL, random.start = FALSE,
+  criteria = "seq", item_answers = NULL, start_item = 1,
   exposure = rep(1, length(questions)), local_pattern = NULL,
   design = list(), shinyGUI = list(), preCAT = list())
 
@@ -66,8 +66,8 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the
   item is not scored}
 
-\item{random.start}{logical; start the test with a random item instead of starting with
-  the first item?}
+\item{start_item}{a single number indicating which item should be used as the start item.
+  Default is 1}
 
 \item{exposure}{a numeric vector specifying the amount of exposure control to apply for
   each successive item. The default accepts the item which demonstrates the maximum CAT

@@ -59,8 +59,8 @@
 #'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
 #'   item is not scored
 #'   
-#' @param random.start logical; start the test with a random item instead of starting with
-#'   the first item?
+#' @param start_item a single number indicating which item should be used as the start item.
+#'   Default is 1
 #'   
 #' @param exposure a numeric vector specifying the amount of exposure control to apply for
 #'   each successive item. The default accepts the item which demonstrates the maximum CAT 
@@ -272,7 +272,7 @@
 #' plot(person, SE=1.96) #95 percent confidence intervals
 #' }
 mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
-                    item_answers = NULL, random.start = FALSE, 
+                    item_answers = NULL, start_item = 1, 
                     exposure = rep(1, length(questions)), local_pattern = NULL,
                     design = list(), shinyGUI = list(), preCAT = list())
 {    
@@ -307,7 +307,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     test_object <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range)
-    design_object <- Design$new(method=method, criteria=criteria, random.start=random.start,
+    design_object <- Design$new(method=method, criteria=criteria, start_item=start_item,
                          nfact=test_object$nfact, design=design, exposure=exposure,
                          preCAT=preCAT, nitems=test_object$length)
     person_object <- Person$new(nfact=test_object$nfact, nitems=length(test_object$itemnames), 
