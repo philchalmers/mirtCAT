@@ -10,8 +10,9 @@ ui <- function(){
             h5(MCE$shinyGUI$title),
             h4("Authors:"),
             h5(MCE$shinyGUI$author),
+            hr(),
             h4("\nInstructions:"),
-            h6("To progress through the survey, click the \'Next\' button.")
+            h6("To progress through the survey/test, click the \'Next\' button.")
         ),
         
         mainPanel(            

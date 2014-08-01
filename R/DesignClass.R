@@ -73,7 +73,7 @@ Design <- setRefClass("Design",
                             if(length(preCAT)){
                                 if(is.null(preCAT$nitems))
                                     stop('preCAT nitems must be specified')
-                                else preCAT_nitems <<- preCAT$nitems
+                                else preCAT_nitems <<- as.integer(preCAT$nitems)
                                 if(is.null(preCAT$method))
                                     preCAT_method <<- 'MAP'
                                 else preCAT_method <<- preCAT$method
