@@ -44,8 +44,6 @@
 #'   selected criteria do not weight by the posterior (and therefore do not exist for 
 #'   extreme response styles) the method is temporarily switched to the posterior weighting
 #'   until a variable response pattern is observed and more than 5 items have been administerd.
-#'   Note that posterior weighting schemes are generally more stable and therefore 
-#'   should be prefered.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
 #'   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and 
