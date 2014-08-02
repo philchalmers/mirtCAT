@@ -40,14 +40,14 @@
 #'   minimum value of the information matrix, and \code{'Wrule'} for 
 #'   the weighted information criteria. For each of these rules the posterior weight for 
 #'   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
-#'   \code{'EPrule'}, \code{'WPrule'}, respectively. As a saftey precaution, if the 
+#'   \code{'EPrule'}, \code{'WPrule'}, respectively. As a safety precaution, if the 
 #'   selected criteria do not weight by the posterior (and therefore do not exist for 
 #'   extreme response styles) the method is temporarily switched to the posterior weighting
-#'   until a variable response pattern is observed and more than 5 items have been administerd.
+#'   until a variable response pattern is observed and more than 5 items have been administered.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
-#'   \code{'KL'} and \code{'KLn'} for pointwise Kullback-Leibler divergence and 
-#'   pointwise Kullback-Leibler with a decreasing delta value (\code{delta*sqrt(n)}, 
+#'   \code{'KL'} and \code{'KLn'} for point-wise Kullback-Leibler divergence and 
+#'   point-wise Kullback-Leibler with a decreasing delta value (\code{delta*sqrt(n)}, 
 #'   where \code{n} is the number of items previous answered), respectively. 
 #'   The \code{delta} criteria is defined in the \code{design} object
 #'   
@@ -65,7 +65,7 @@
 #' @param exposure a numeric vector specifying the amount of exposure control to apply for
 #'   each successive item. The default accepts the item which demonstrates the maximum CAT 
 #'   critiera, however if the item exposure is greater than 1, and \code{exposure[item] == n}, 
-#'   then the \code{n} most optimal criteria will be randomly sampled from. For intance, if 
+#'   then the \code{n} most optimal criteria will be randomly sampled from. For instance, if 
 #'   \code{exposure[item] == 3}, and \code{critiera = 'MI'}, then the 3 items demonstrating 
 #'   the largest information criteria will be sampled from. Naturally, the first and last 
 #'   elements are ignored for the first and last items, respectively 
@@ -81,7 +81,7 @@
 #' \describe{
 #'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error for the latent traits 
 #'     (thetas) before the test is stopped. If the test is multidimensional either a single 
-#'     value or a vector may be supplied to provide an overal minimum criteria or a SEM 
+#'     value or a vector may be supplied to provide an overall minimum criteria or a SEM 
 #'     value for each dimension, respectively}
 #'     
 #'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.

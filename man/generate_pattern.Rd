@@ -15,7 +15,7 @@ generate_pattern(mirt_object, Theta, choices = NULL, item_answers = NULL)
   0 is the lowest possible category)}
 
 \item{item_answers}{(optional) a character vector indicating which of the options in
-  \code{choices} should be considered the 'correct' answer. This is required for itemtypes that
+  \code{choices} should be considered the 'correct' answer. This is required for item types that
   dichotomously score items (e.g., multiple choice items scored with the 3PL model)}
 }
 \description{
