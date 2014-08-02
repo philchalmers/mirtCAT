@@ -2,6 +2,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                       
                       fields = list(title = 'character',
                                     author = 'character',
+                                    header = 'character',
                                     questions = 'list',
                                     firstpage = 'list',
                                     demographics = 'list',
@@ -20,6 +21,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'Title of survey'
                               author <<- 'Authors of survey'
+                              header <<- 'mirtCAT'
                               demographic_inputIDs <<- c('gender')
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
@@ -34,6 +36,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               if(length(shinyGUI)){
                                   if(!is.null(shinyGUI$title))
                                       title <<- shinyGUI$title
+                                  if(!is.null(shinyGUI$header))
+                                      header <<- shinyGUI$header
                                   if(!is.null(shinyGUI$authors))
                                       author <<- shinyGUI$authors
                                   if(!is.null(shinyGUI$firstpage)) 
