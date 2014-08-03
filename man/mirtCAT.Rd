@@ -120,13 +120,10 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
 
 \describe{
   \item{\code{title}}{A character string for the test title. Default is
-    \code{'Title of survey'}}
+    \code{'mirtCAT'}}
 
   \item{\code{authors}}{A character string for the author names. Default is
     \code{'Author of survey'}}
-
-  \item{\code{header}}{A character string for the running header of the GUI. Default is
-    \code{'mirtCAT'}}
 
   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
     and information message

@@ -3,11 +3,9 @@ ui <- function(){
     return(pageWithSidebar(
         
         #  Application title
-        headerPanel(MCE$shinyGUI$header),
+        headerPanel(MCE$shinyGUI$title),
         
         sidebarPanel(
-            h4("Title:"),
-            h5(MCE$shinyGUI$title),
             h4("Authors:"),
             h5(MCE$shinyGUI$author),
             hr(),
