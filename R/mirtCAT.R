@@ -338,6 +338,8 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
     if(!person$score)
         ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
+    MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- 
+        MCE$STOP <- MCE$outfile <- NULL
     class(ret) <- 'mirtCAT'
     ret
 }
