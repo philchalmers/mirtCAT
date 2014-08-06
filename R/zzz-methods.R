@@ -20,10 +20,18 @@ print.mirtCAT <- function(x, ...){
 #' @rdname mirtCAT
 #' @method summary mirtCAT
 #' @param object object of class \code{'mirtCAT'}
+#' @param sort logical; sort the response patterns based on the order they 
+#'   were administered? If FALSE, the raw response patterns containing NAs will be returned
+#'   for items that were not administered
 #' @export
-summary.mirtCAT <- function(object, ...){
-    ret <- list(raw_responses=object$raw_responses,
-                responses=object$responses,
+summary.mirtCAT <- function(object, sort = TRUE, ...){
+    pick <- if(sort){
+        object$items_answered
+    } else 1L:length(object$raw_responses)
+    raw_responses <- object$raw_responses[pick]
+    responses <- object$responses[pick]
+    ret <- list(raw_responses=raw_responses,
+                responses=responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,

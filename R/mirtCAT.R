@@ -327,6 +327,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     }
+    person$items_answered <- person$items_answered[!is.na(person$items_answered)]
     ret <- list(raw_responses=person$raw_responses, 
                 responses=person$responses,
                 items_answered=person$items_answered,

@@ -13,7 +13,7 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
 
 \method{print}{mirtCAT}(x, ...)
 
-\method{summary}{mirtCAT}(object, ...)
+\method{summary}{mirtCAT}(object, sort = TRUE, ...)
 
 \method{plot}{mirtCAT}(x, pick_theta = NULL, SE = 1, main = NULL, ...)
 }
@@ -182,6 +182,10 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
 \item{x}{object of class \code{'mirtCAT'}}
 
 \item{object}{object of class \code{'mirtCAT'}}
+
+\item{sort}{logical; sort the response patterns based on the order they
+were administered? If FALSE, the raw response patterns containing NAs will be returned
+for items that were not administered}
 
 \item{pick_theta}{a number indicating which theta to plot (only applicable for multidimensional
 tests). The default is to facet each theta on one plot, but to plot only the first factor pass
