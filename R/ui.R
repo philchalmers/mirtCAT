@@ -13,7 +13,7 @@ ui <- function(){
             h6("To progress through the survey/test, click the \'Next\' button.")
         ),
         
-        mainPanel(            
+        mainPanel(
             imageOutput("item_stem", width = 'auto', height = 'auto'),
             uiOutput("Main"),
             actionButton("Next", "Next")    

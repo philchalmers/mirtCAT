@@ -36,9 +36,11 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
+    if(length(object$item_time))
+        ret$item_time <- object$item_time[pick]
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
-    if(all(ret$raw_responses == ret$responses))
+    if(all(ret$raw_responses == ret$responses, na.rm = TRUE))
         ret$raw_responses <- NULL
     if(!length(object$demographics))
         ret$demographics <- NULL

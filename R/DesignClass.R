@@ -16,7 +16,8 @@ Design <- setRefClass("Design",
                                   preCAT_criteria = 'character',
                                   preCAT_method = 'character',
                                   CAT_criteria = 'character',
-                                  CAT_method = 'character'),
+                                  CAT_method = 'character',
+                                  max_time = 'numeric'),
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design,
@@ -54,7 +55,10 @@ Design <- setRefClass("Design",
                             stop_now <<- FALSE
                             preCAT_nitems <<- 0L
                             KL_delta <<- 0.1
+                            max_time <<- Inf
                             if(length(design)){
+                                if(!is.null(design$max_time))
+                                    max_time <<- design$max_time
                                 if(!is.null(design$KL_delta))
                                     KL_delta <<- design$KL_delta
                                 if(!is.null(design$Wrule_weights)) 
@@ -100,6 +104,7 @@ Design$methods(
             }
         }
         if(nanswered == max_items) stop_now <<- TRUE
+        if(max_time <= sum(MCE$person$item_time)) stop_now <<- TRUE
     },
     
     Next.stage = function(item){

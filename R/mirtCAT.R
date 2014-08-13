@@ -106,6 +106,10 @@
 #'     
 #'   \item{\code{KL_delta}}{Default is \code{0.1}; interval range used when \code{criteria = 'KL'}
 #'     or \code{criteria = 'KLn'}}
+#'     
+#'   \item{\code{max_time}}{Default is \code{Inf}; maximum time allowed for the generated GUI, measured
+#'     in seconds. For instance, if the test should stop after 10 minutes then the number 
+#'     600 should be passed (10 * 60)}
 #'   
 #' }
 #' 
@@ -196,6 +200,9 @@
 #'     
 #'   \item{\code{thetas_SE_history}}{A matrix indicating the standard errors for theta after each
 #'     successive item was answered}
+#'     
+#'   \item{\code{item_time}}{A numeric vector indicating how long the respondent took to answer
+#'     each question (in seconds)}
 #' 
 #'   \item{\code{demographics}}{A data.frame object containing the information collected on the 
 #'     first page of the shiny GUI. This is used to store the demographic information for each
@@ -322,6 +329,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     
     if(length(local_pattern)){
         person <- run_local(as.character(local_pattern))
+        person$item_time <- numeric(0)
     } else {
         #run interface
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
@@ -334,6 +342,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
                 thetas=person$thetas,
                 thetas_history=person$thetas_history,
                 thetas_SE_history=person$thetas_SE_history,
+                item_time=person$item_time,
                 demographics=person$demographics)
     colnames(ret$thetas) <- colnames(ret$thetas_history) <-
         colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)

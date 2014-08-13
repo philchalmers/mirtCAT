@@ -114,6 +114,10 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   \item{\code{KL_delta}}{Default is \code{0.1}; interval range used when \code{criteria = 'KL'}
     or \code{criteria = 'KLn'}}
 
+  \item{\code{max_time}}{Default is \code{Inf}; maximum time allowed for the generated GUI, measured
+    in seconds. For instance, if the test should stop after 10 minutes then the number
+    600 should be passed (10 * 60)}
+
 }}
 
 \item{shinyGUI}{a list of GUI based parameters to be over-written. These can be
@@ -220,6 +224,9 @@ Returns a \code{\link{ReferenceClasses}} object of class \code{'Person'} contain
 
   \item{\code{thetas_SE_history}}{A matrix indicating the standard errors for theta after each
     successive item was answered}
+
+  \item{\code{item_time}}{A numeric vector indicating how long the respondent took to answer
+    each question (in seconds)}
 
   \item{\code{demographics}}{A data.frame object containing the information collected on the
     first page of the shiny GUI. This is used to store the demographic information for each

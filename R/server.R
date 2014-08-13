@@ -25,6 +25,8 @@ server <- function(input, output) {
             return(list(h5("Click \'Next\' to start the survey.")))
         }
         
+        if(input$Next == 3L) MCE$start_time <- proc.time()[3L]
+        
         itemclick <- input$Next - 3L
         
         # run survey
@@ -38,6 +40,9 @@ server <- function(input, output) {
                 if(!is.na(MCE$test$item_answers[[pick]]) && 
                        MCE$test$item_class[pick] != 'nestlogit')
                     MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
+                
+                MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
+                    max(MCE$person$item_time)
                 
                 #update Thetas
                 MCE$person$Update.thetas()
@@ -65,7 +70,7 @@ server <- function(input, output) {
         }
         
     }) 
-    
+        
     output$item_stem <- renderImage({
             
         if(!MCE$STOP){
