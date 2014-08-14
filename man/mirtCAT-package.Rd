@@ -10,7 +10,8 @@ Computerized Adaptive Testing with Multidimensional Item Response Theory
 Provides tools to generate an HTML interface for creating adaptive and
 non-adaptive educational and psychological tests using the shiny package. Suitable for
 applying unidimensional and multidimensional computerized adaptive tests using item
-response theory methodology.
+response theory methodology and for creating simple questionnaires forms to collect
+response data directly in R.
 
 Users interested in the most recent version of this package can visit
 \url{https://github.com/philchalmers/mirtCAT} and follow the instructions
