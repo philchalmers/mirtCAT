@@ -42,7 +42,7 @@ server <- function(input, output) {
                     MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
                 
                 MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
-                    max(MCE$person$item_time)
+                    sum(MCE$person$item_time)
                 
                 #update Thetas
                 MCE$person$Update.thetas()
