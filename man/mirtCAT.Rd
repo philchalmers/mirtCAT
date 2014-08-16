@@ -204,8 +204,7 @@ standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-dis
 \item{...}{additional arguments to be passed to \code{lattice}}
 }
 \value{
-Returns a \code{\link{ReferenceClasses}} object of class \code{'Person'} containing the
-  following fields.
+Returns a list object of class \code{'Person'} containing the following elements:
 
 \describe{
   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the respective
@@ -320,6 +319,7 @@ Phil Chalmers \email{rphilip.chalmers@gmail.com}
 \code{\link{generate_pattern}}
 }
 \keyword{CAT,}
+\keyword{MCAT,}
 \keyword{adaptive}
 \keyword{computerized}
 \keyword{testing}

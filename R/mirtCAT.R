@@ -180,8 +180,7 @@
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' @seealso \code{\link{generate_pattern}}
 #' 
-#' @return Returns a \code{\link{ReferenceClasses}} object of class \code{'Person'} containing the
-#'   following fields. 
+#' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   
 #' \describe{
 #'   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the respective
@@ -209,7 +208,7 @@
 #'     participant} 
 #' }
 #' 
-#' @keywords CAT, computerized adaptive testing
+#' @keywords CAT, MCAT, computerized adaptive testing
 #' 
 #' @examples
 #' \dontrun{
@@ -305,6 +304,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         if(!(criteria %in% c('seq', 'random')))
             stop('Only random and seq criteria are available if no mirt_object was defined')
     } else score <- TRUE
+    mirt_mins <- mirt_object@Data$mins
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
         stop('Item names for mirt_object and questions do not match')
@@ -338,8 +338,8 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person <- MCE$person
     }
     person$items_answered <- person$items_answered[!is.na(person$items_answered)]
-    ret <- list(raw_responses=person$raw_responses, 
-                responses=person$responses,
+    ret <- list(raw_responses=person$raw_responses + mirt_mins, 
+                responses=person$responses + mirt_mins,
                 items_answered=person$items_answered,
                 thetas=person$thetas,
                 thetas_history=person$thetas_history,
