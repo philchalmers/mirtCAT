@@ -284,22 +284,23 @@ for(i in 1L:nitems){
                                          choices = choices[[i]])
 }
 
-mirtCAT(shiny_questions) #collect response only (no scoring or estimating thetas)
-mirtCAT(shiny_questions, mod, item_answers=answers) #sequential scoring
-mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random') #random
-mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI') #adaptive
+(res <- mirtCAT(shiny_questions)) #collect response only (no scoring or estimating thetas)
+(res <- mirtCAT(shiny_questions, mod, item_answers=answers)) #sequential scoring
+(res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random')) #random
+(res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI')) #adaptive
 
 #run locally, random response pattern given Theta
 set.seed(1)
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 head(pat)
-mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
+res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat) #seq
+summary(res)
 
 #same as above, but using special input vector that doesn't require shiny
 set.seed(1)
 pat2 <- generate_pattern(mod, Theta = 0)
 head(pat2)
-mirtCAT(mirt_object=mod, local_pattern=pat2)
+print(mirtCAT(mirt_object=mod, local_pattern=pat2))
 
 #run CAT, and save results to object called person
 person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI',

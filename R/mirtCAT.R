@@ -249,22 +249,23 @@
 #'                                          choices = choices[[i]])
 #' }
 #' 
-#' mirtCAT(shiny_questions) #collect response only (no scoring or estimating thetas)
-#' mirtCAT(shiny_questions, mod, item_answers=answers) #sequential scoring 
-#' mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random') #random
-#' mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI') #adaptive
+#' (res <- mirtCAT(shiny_questions)) #collect response only (no scoring or estimating thetas)
+#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers)) #sequential scoring 
+#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random')) #random
+#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI')) #adaptive
 #' 
 #' #run locally, random response pattern given Theta
 #' set.seed(1)
 #' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 #' head(pat)
-#' mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat)
+#' res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat) #seq
+#' summary(res)
 #' 
 #' #same as above, but using special input vector that doesn't require shiny
 #' set.seed(1)
 #' pat2 <- generate_pattern(mod, Theta = 0)
 #' head(pat2)
-#' mirtCAT(mirt_object=mod, local_pattern=pat2)
+#' print(mirtCAT(mirt_object=mod, local_pattern=pat2))
 #' 
 #' #run CAT, and save results to object called person
 #' person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', 
@@ -303,8 +304,14 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         score <- FALSE
         if(!(criteria %in% c('seq', 'random')))
             stop('Only random and seq criteria are available if no mirt_object was defined')
-    } else score <- TRUE
-    mirt_mins <- mirt_object@Data$mins
+        mirt_mins <- rep(1L, ncol(dat))
+    } else {
+        score <- TRUE
+        mirt_mins <- mirt_object@Data$mins
+    }
+    if(!is.null(local_pattern))
+        if(is.numeric(local_pattern))
+            local_pattern <- local_pattern - mirt_mins
     itemnames <- colnames(mirt_object@Data$data)
     if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
         stop('Item names for mirt_object and questions do not match')
