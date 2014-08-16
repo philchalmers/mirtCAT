@@ -43,7 +43,7 @@ generate_pattern <- function(mirt_object, Theta, choices = NULL, item_answers = 
             uniq <- 0L:(K[i]-1)
             pattern[i] <- sample(uniq, 1L, prob = P)
         }
-        return(as.numeric(pattern))
+        return(as.numeric(pattern + mirt_object@Data$mins))
     }
     ret <- character(nitems)
     K_1 <- do.call(c, lapply(choices, length)) - 1L

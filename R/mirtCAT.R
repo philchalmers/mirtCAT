@@ -333,7 +333,6 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person <- run_local(as.character(local_pattern))
         person$item_time <- numeric(0)
     } else {
-        #run interface
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     }
