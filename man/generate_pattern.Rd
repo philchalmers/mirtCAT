@@ -20,7 +20,7 @@ generate_pattern(mirt_object, Theta, choices = NULL, item_answers = NULL)
 }
 \description{
 Generate a CAT pattern given various inputs. Returns a character or numeric vector
-with length equal to the test size.
+with length equal to the test size, depending on whether a \code{choices} input was supplied.
 }
 \examples{
 \dontrun{
@@ -29,7 +29,7 @@ with length equal to the test size.
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 # mirtCAT(questions, mirt_object=mod, local_pattern = pat)
 
-# generate pattern where 0 is the lowest possible response category
+# generate numeric pattern observed in dataset used to define mod
 pat2 <- generate_pattern(mod, Theta = 0)
 # mirtCAT(mirt_object=mod, local_pattern = pat2)
 
