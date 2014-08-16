@@ -351,7 +351,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person <- MCE$person
     }
     person$items_answered <- person$items_answered[!is.na(person$items_answered)]
-    ret <- list(raw_responses=person$raw_responses + mirt_mins, 
+    ret <- list(raw_responses=person$raw_responses + 1L, 
                 responses=person$responses + mirt_mins,
                 items_answered=person$items_answered,
                 thetas=person$thetas,
