@@ -22,12 +22,26 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     #saftey features
     if(length(unique(na.omit(person$responses))) < 2L) method <- 'MAP'
     if(sum(!is.na(person$responses)) < 5L) method <- 'MAP'
+    if(MCE$design$use_content){
+        tmp <- table(MCE$design$content[!is.na(person$responses)])
+        MCE$design$content_prop_empirical <- as.numeric(tmp/sum(tmp))
+    }
     
     if(criteria == 'seq'){
         return(as.integer(lastitem + 1L))
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
         else item <- sample(which_not_answered, 1L)
+        if(MCE$design$use_content){
+            dif <- abs(MCE$design$content_prop_empirical - MCE$design$content_prop)
+            tmp <- names(dif)[max(dif) == dif]
+            cpick <- MCE$design$content[which_not_answered]
+            if(sum(cpick == tmp) > 1L)
+                item <- sample(which_not_answered[cpick == tmp], 1L)
+            if(sum(cpick == tmp) == 1L)
+                item <- which_not_answered[cpick == tmp]
+            #otherwise 0, item does not change
+        }
         return(as.integer(item))
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
@@ -97,11 +111,23 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         stop('Selection criteria does not exist')
     }
     
-    if(MCE$design$exposure[lastitem+1L] == 1L){
+    exposure <- MCE$design$exposure[lastitem+1L]    
+    if(MCE$design$use_content){
+        dif <- abs(MCE$design$content_prop_empirical - MCE$design$content_prop)
+        tmp <- names(dif)[max(dif) == dif][1L]
+        cpick <- MCE$design$content[which_not_answered]
+        pick <- cpick == tmp
+        if(sum(pick) > 0L){            
+            index <- index[pick]
+            crit <- crit[pick]
+            exposure <- min(MCE$design$exposure[lastitem+1L], sum(pick))
+        }
+    }
+    if(exposure == 1L){
         item <- index[which(max(crit) == crit)][1L]
     } else {
         rnk <- rank(crit, ties.method = 'random')
-        pick <- which(rnk %in% 1L:MCE$design$exposure[lastitem+1L])
+        pick <- which(rnk %in% 1L:exposure)
         item <- index[sample(pick, 1L)]
     }
     return(as.integer(item))

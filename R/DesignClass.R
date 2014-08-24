@@ -19,7 +19,7 @@ Design <- setRefClass("Design",
                                   CAT_method = 'character',
                                   max_time = 'numeric',
                                   use_content = 'logical',
-                                  content = 'character',
+                                  content = 'factor',
                                   content_prop = 'numeric',
                                   content_prop_empirical = 'numeric'),
                     
@@ -61,11 +61,15 @@ Design <- setRefClass("Design",
                             KL_delta <<- 0.1
                             max_time <<- Inf
                             use_content <<- FALSE
+                            content_prop_empirical <<- 1
                             if(length(design)){
                                 if(!is.null(design$content)){
                                     use_content <<- TRUE
-                                    content <<- design$content
+                                    content <<- factor(design$content)
+                                    if(!mirt:::closeEnough(sum(design$content_prop)-1, -1e-6, 1e-6))
+                                        stop('content_prop does not sum to 1')
                                     tmp <- design$content_prop
+                                    tmp <- tmp[match(names(table(content)), names(tmp))]
                                     content_prop <<- tmp
                                     tmp[1L:length(tmp)] <- 0
                                     content_prop_empirical <<- tmp
