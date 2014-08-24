@@ -17,7 +17,11 @@ Design <- setRefClass("Design",
                                   preCAT_method = 'character',
                                   CAT_criteria = 'character',
                                   CAT_method = 'character',
-                                  max_time = 'numeric'),
+                                  max_time = 'numeric',
+                                  use_content = 'logical',
+                                  content = 'character',
+                                  content_prop = 'numeric',
+                                  content_prop_empirical = 'numeric'),
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design,
@@ -56,7 +60,16 @@ Design <- setRefClass("Design",
                             preCAT_nitems <<- 0L
                             KL_delta <<- 0.1
                             max_time <<- Inf
+                            use_content <<- FALSE
                             if(length(design)){
+                                if(!is.null(design$content)){
+                                    use_content <<- TRUE
+                                    content <<- design$content
+                                    tmp <- design$content_prop
+                                    content_prop <<- tmp
+                                    tmp[1L:length(tmp)] <- 0
+                                    content_prop_empirical <<- tmp
+                                }
                                 if(!is.null(design$max_time))
                                     max_time <<- design$max_time
                                 if(!is.null(design$KL_delta))
@@ -70,6 +83,8 @@ Design <- setRefClass("Design",
                                 if(!is.null(design$max_items))
                                     max_items <<- as.integer(design$max_items)
                             }
+                            if(use_content && criteria == 'seq')
+                                stop('content designs are not supported for seq criteria')
                             if(!mirt:::closeEnough(sum(Wrule_weights)-1, -1e-6, 1e-6))
                                 stop('Wrule_weights does not sum to 1')
                             if(length(min_SEM) != 1L && length(min_SEM) != nfact)

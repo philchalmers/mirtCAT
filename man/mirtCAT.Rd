@@ -124,6 +124,22 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     in seconds. For instance, if the test should stop after 10 minutes then the number
     600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}
 
+  \item{\code{content}}{an optional character vector indicating the type of content measured
+    by an item. Must be supplied in conjunction with \code{content_prop}}
+
+  \item{\code{content_prop}}{an optional named numeric numeric vector indicating the
+    distribution of item content proportions. A \code{content} vector must also be supplied
+    to indicate the item content membership. For instance, if \code{content} contains three
+    possible item content domains 'Addition', 'Subtraction', and 'Multiplication', and the
+    test should contain approximatly half multiplication and a quarter of both
+    addition and subtraction, then a suitable input would be
+
+    \code{content_prop = c('Addition'=0.25, 'Subtraction'=0.25, 'Multiplication'=.5)}
+
+    Note that \code{content_prop} must sum to 1 in order to represent valid population
+    proportions.
+    }
+
 }}
 
 \item{shinyGUI}{a list of GUI based parameters to be over-written. These can be

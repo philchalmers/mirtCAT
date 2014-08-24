@@ -142,5 +142,17 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas), 0.1017891, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3974447, tolerance = 1e-4)
+    
+    # content balancing
+    content <- c(rep('C1', 10), rep('C2', 10), rep('C3', 5))
+    content_prop <- c('C1'=.45, 'C2'=.35, 'C3'=.2)
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='random',
+                   design = list(min_SEM = .4, content_prop=content_prop, content=content), 
+                   method = 'MAP') #should crash with 'seq'
+    
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
+                   design = list(min_SEM = .4, content_prop=content_prop, content=content), 
+                   method = 'MAP') 
+    
 })
 
