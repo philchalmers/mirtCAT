@@ -33,8 +33,9 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         if(length(which_not_answered) == 1L) item <- which_not_answered
         else item <- sample(which_not_answered, 1L)
         if(MCE$design$use_content){
-            dif <- abs(MCE$design$content_prop_empirical - MCE$design$content_prop)
+            dif <- MCE$design$content_prop - MCE$design$content_prop_empirical
             tmp <- names(dif)[max(dif) == dif]
+            if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
             cpick <- MCE$design$content[which_not_answered]
             if(sum(cpick == tmp) > 1L)
                 item <- sample(which_not_answered[cpick == tmp], 1L)
@@ -113,8 +114,9 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     
     exposure <- MCE$design$exposure[lastitem+1L]    
     if(MCE$design$use_content){
-        dif <- abs(MCE$design$content_prop_empirical - MCE$design$content_prop)
-        tmp <- names(dif)[max(dif) == dif][1L]
+        dif <- MCE$design$content_prop - MCE$design$content_prop_empirical
+        tmp <- names(dif)[max(dif) == dif]
+        if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
         cpick <- MCE$design$content[which_not_answered]
         pick <- cpick == tmp
         if(sum(pick) > 0L){            

@@ -151,13 +151,13 @@ test_that('unidimensional', {
                    design = list(min_SEM = .4, content_prop=content_prop, content=content), 
                    method = 'MAP') #should crash with 'seq'
     so <- summary(res)
-    expect_equal(so$items_answered[1:5], c(1,5,10,9,6))
+    expect_equal(so$items_answered[1:5], c(1,14,25,10,17))
     
     content_prop <- c('C1'=.8, 'C2'=.1, 'C3'=.1)
     res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4, content_prop=content_prop, content=content), 
                    method = 'MAP') 
     so <- summary(res)
-    expect_equal(so$items_answered[1:5], c(1,2,3,5,8))
+    expect_equal(so$items_answered[1:5], c(1,20,2,3,24))
 })
 
