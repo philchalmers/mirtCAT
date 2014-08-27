@@ -1,4 +1,5 @@
 MCE <- new.env()
+MCE$complete <- TRUE
 
 calcLL <- function(thetas){
     LL <- 0

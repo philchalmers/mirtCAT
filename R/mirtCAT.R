@@ -305,7 +305,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
                     exposure = rep(1, length(questions)), local_pattern = NULL,
                     design = list(), shinyGUI = list(), preCAT = list())
 {    
-    on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
+    on.exit({MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- NULL})
     if(is.null(questions)){
         questions <- vector('list', ncol(mirt_object@Data$data))
@@ -363,7 +363,9 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person <- run_local(as.character(local_pattern))
         person$item_time <- numeric(0)
     } else {
+        MCE$complete <- FALSE
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
+        MCE$complete <- TRUE
         person <- MCE$person
     }
     person$items_answered <- person$items_answered[!is.na(person$items_answered)]

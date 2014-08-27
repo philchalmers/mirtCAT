@@ -37,4 +37,6 @@ test_that('ordered', {
     so <- summary(res)
     expect_equal(as.numeric(so$responses), c(3,2,3,2))
     
+    expect_true(suppressMessages(is(partial_result(), 'NULL')))
+    
 })
