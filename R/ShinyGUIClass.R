@@ -8,7 +8,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     lastpage = 'list',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
-                                    demographic_inputIDs = 'character'),
+                                    demographic_inputIDs = 'character',
+                                    temp_file = 'character'),
                       
                       methods = list(
                           initialize = function(questions, shinyGUI){
@@ -30,6 +31,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                              selected = ''))
                               lastpage <<- list(h5("End of survey/test. Click \'Next\' to save
                                                        results and close application."))
+                              temp_file <<- ''
                                                  
                               if(length(shinyGUI)){
                                   if(!is.null(shinyGUI$title))
@@ -44,6 +46,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   }
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage
+                                  if(!is.null(shinyGUI$temp_file))
+                                      temp_file <<- shinyGUI$temp_file
                               }
                           })
                       

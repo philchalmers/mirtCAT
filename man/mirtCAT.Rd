@@ -132,7 +132,7 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     distribution of item content proportions. A \code{content} vector must also be supplied
     to indicate the item content membership. For instance, if \code{content} contains three
     possible item content domains 'Addition', 'Subtraction', and 'Multiplication', and the
-    test should contain approximatly half multiplication and a quarter of both
+    test should contain approximately half multiplication and a quarter of both
     addition and subtraction, then a suitable input would be
 
     \code{content_prop = c('Addition'=0.25, 'Subtraction'=0.25, 'Multiplication'=.5)}
@@ -181,6 +181,15 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   \item{\code{stem_locations}}{a character vector of paths pointing to .png or .jpeg
     files to be used as item stems. Must be the length of the test, where \code{NA}s are
     used if the item has no corresponding file}
+
+  \item{\code{temp_file}}{a character vector indicating where a temporary .rds file
+    containing the response information should be saved while the GUI is running.
+    The object will be saved after each item is successfully completed. This is used to
+    save response information to the hard drive in case there are power outages or
+    unexpected computer restarts.
+
+    If \code{NULL}, no temp file will be created. Upon completion of the test, the
+    temp file will be deleted}
 
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is

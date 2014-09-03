@@ -22,6 +22,8 @@ server <- function(input, output) {
                 tmp[[length(tmp) + 1L]] <- input[[tag]]
             names(tmp) <- MCE$shinyGUI$demographic_inputIDs
             MCE$person$field("demographics", as.data.frame(tmp))
+            if(MCE$shinyGUI$temp_file != '')
+                saveRDS(MCE$person, MCE$shinyGUI$temp_file)
             return(list(h5("Click \'Next\' to start the survey.")))
         }
         
@@ -46,6 +48,8 @@ server <- function(input, output) {
                 
                 #update Thetas
                 MCE$person$Update.thetas()
+                if(MCE$shinyGUI$temp_file != '')
+                    saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                 if(itemclick > MCE$design$preCAT_nitems)
                     MCE$design$Update.stop_now()
             } 
@@ -63,6 +67,8 @@ server <- function(input, output) {
         #last page
         if(!MCE$STOP){
             MCE$STOP <- TRUE
+            if(MCE$shinyGUI$temp_file != '')
+                saveRDS(MCE$person, MCE$shinyGUI$temp_file)
             return(MCE$shinyGUI$lastpage)
         } else {
             stopApp()
