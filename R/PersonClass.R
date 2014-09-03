@@ -31,8 +31,10 @@ Person$methods(
     # Update thetas
     Update.thetas = function(){
         if(score){
-            tmp <- try(fscores(MCE$test$mirt_object, 
-                                method = MCE$design$method, response.pattern = responses), 
+            tmp <- try(fscores(MCE$test$mirt_object, method=MCE$design$method, response.pattern=responses,
+                               rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
+                               MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
+                               mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
                        silent=TRUE)
             thetas <<- tmp[,paste0('F', 1L:MCE$test$nfact), drop=FALSE]
             thetas_history <<- rbind(thetas_history, thetas)

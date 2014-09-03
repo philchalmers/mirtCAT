@@ -12,11 +12,12 @@ Test <- setRefClass("Test",
                                     nfact = 'integer',
                                     length = 'integer',
                                     itemloc2 = 'integer',
-                                    gp = 'list'),
+                                    gp = 'list',
+                                    fscores_args = 'list'),
                     
                       methods = list(
                           initialize = function(mirt_object, item_answers_in, item_options,
-                                                quadpts_in, theta_range_in){
+                                                quadpts_in, theta_range_in, dots){
                               tmpobj <- mirt_object
                               if(is(tmpobj, 'ExploratoryClass'))
                                   class(tmpobj) <- 'ConfirmatoryClass'
@@ -30,7 +31,9 @@ Test <- setRefClass("Test",
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact
-                              if(is.null(quadpts_in)) quadpts <<- 61
+                              if(is.null(quadpts_in)) 
+                                  quadpts <<- switch(as.character(tmpobj@nfact), 
+                                                    '1'=61, '2'=31, '3'=15, '4'=9, '5'=7, 3)
                               else quadpts <<- quadpts_in
                               if(is.null(theta_range_in)) theta_range <<- c(-6, 6)
                               else theta_range <<- theta_range_in
@@ -43,6 +46,21 @@ Test <- setRefClass("Test",
                               tmp <- mirt_object@itemloc
                               itemloc2 <<- tmp[-length(tmp)]
                               gp <<- mirt:::ExtractGroupPars(mirt_object@pars[[length + 1L]])
+                              tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
+                                                    cov=gp$gcov, MI = 0)
+                              if(length(dots)){
+                                  if(!is.null(dots$rotate))
+                                      tmp$rotate <- dots$rotate
+                                  if(!is.null(dots$theta_lim))
+                                      tmp$theta_lim <- dots$theta_lim
+                                  if(!is.null(dots$mean))
+                                      tmp$mean <- dots$mean
+                                  if(!is.null(dots$cov))
+                                      tmp$cov <- dots$cov
+                                  if(!is.null(dots$MI))
+                                      tmp$MI <- dots$MI
+                              } 
+                              fscores_args <<- tmp
                           })
                     
 )

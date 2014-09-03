@@ -83,6 +83,8 @@
 #'   
 #' @param design a list of design based parameters for adaptive and non-adaptive tests. 
 #'   These can be
+#'   
+# @param ... additional arguments to be passed to \code{\link{fscores}}
 #' 
 #' \describe{
 #'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error or measurement
@@ -100,7 +102,7 @@
 #'     can be answered. Default is the length of the item bank}
 #'   
 #'   \item{\code{quadpts}}{Number of quadrature points used per dimension 
-#'     for integration (if required). Default is 61}
+#'     for integration (if required). Default is identical to scheme in \code{\link{fscores}}}
 #'   
 #'   \item{\code{theta_range}}{upper and lower range for the theta 
 #'     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
@@ -303,7 +305,7 @@
 mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
                     item_answers = NULL, start_item = 1, 
                     exposure = rep(1, length(questions)), local_pattern = NULL,
-                    design = list(), shinyGUI = list(), preCAT = list())
+                    design = list(), shinyGUI = list(), preCAT = list(), ...)
 {    
     on.exit({MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- NULL})
@@ -344,7 +346,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
     test_object <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
-                     theta_range_in=design$theta_range)
+                     theta_range_in=design$theta_range, dots=list(...))
     design_object <- Design$new(method=method, criteria=criteria, start_item=start_item,
                          nfact=test_object$nfact, design=design, exposure=exposure,
                          preCAT=preCAT, nitems=test_object$length)

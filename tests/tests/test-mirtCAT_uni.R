@@ -159,5 +159,12 @@ test_that('unidimensional', {
                    method = 'MAP') 
     so <- summary(res)
     expect_equal(so$items_answered[1:5], c(1,20,2,3,24))
+    
+    #pass other args through ...
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, 
+                   design = list(min_SEM = .4), method = 'EAP', criteria='KL', theta_lim = c(-1,1))
+    expect_equal(as.numeric(res$thetas), 0.4432854, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
+                 0.3612738, tolerance = 1e-4)
 })
 
