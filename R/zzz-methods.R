@@ -57,7 +57,7 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #'   \code{'CAT ##\% Confidence Intervals'} depending on the SE input
 #' @param SE size of the standard errors to plot. The default is 1, and therefore plots the
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
-#' @param ... additional arguments to be passed to \code{lattice}
+#' @param ... additional arguments to be passed to \code{lattice} or \code{fscores}
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
     if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))

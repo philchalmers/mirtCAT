@@ -22,6 +22,8 @@ server <- function(input, output) {
                 tmp[[length(tmp) + 1L]] <- input[[tag]]
             names(tmp) <- MCE$shinyGUI$demographic_inputIDs
             MCE$person$field("demographics", as.data.frame(tmp))
+            if(!is.null(MCE$last_demographics))
+                MCE$person$demographics <- MCE$last_demographics
             if(MCE$shinyGUI$temp_file != '')
                 saveRDS(MCE$person, MCE$shinyGUI$temp_file)
             return(list(h5("Click \'Next\' to start the survey.")))
@@ -29,7 +31,7 @@ server <- function(input, output) {
         
         if(input$Next == 3L) MCE$start_time <- proc.time()[3L]
         
-        itemclick <- input$Next - 3L
+        itemclick <- sum(!is.na(MCE$person$items_answered))
         
         # run survey
         if(input$Next > 2L && !MCE$design$stop_now){
@@ -37,21 +39,23 @@ server <- function(input, output) {
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test$itemnames[pick]
                 ip <- input[[name]]
-                MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
-                    which(MCE$test$item_options[[pick]] %in% ip) - 1L
-                if(!is.na(MCE$test$item_answers[[pick]]) && 
-                       MCE$test$item_class[pick] != 'nestlogit')
-                    MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
-                
-                MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
-                    sum(MCE$person$item_time)
-                
-                #update Thetas
-                MCE$person$Update.thetas()
-                if(MCE$shinyGUI$temp_file != '')
-                    saveRDS(MCE$person, MCE$shinyGUI$temp_file)
-                if(itemclick > MCE$design$preCAT_nitems)
-                    MCE$design$Update.stop_now()
+                if(!is.null(ip)){
+                    MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
+                        which(MCE$test$item_options[[pick]] %in% ip) - 1L
+                    if(!is.na(MCE$test$item_answers[[pick]]) && 
+                           MCE$test$item_class[pick] != 'nestlogit')
+                        MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
+                    
+                    MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
+                        sum(MCE$person$item_time)
+                    
+                    #update Thetas
+                    MCE$person$Update.thetas()
+                    if(MCE$shinyGUI$temp_file != '')
+                        saveRDS(MCE$person, MCE$shinyGUI$temp_file)
+                    if(itemclick > MCE$design$preCAT_nitems)
+                        MCE$design$Update.stop_now()
+                }
             } 
             
             MCE$design$Next.stage(item=itemclick)

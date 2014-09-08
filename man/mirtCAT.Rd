@@ -91,7 +91,6 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
 \item{design}{a list of design based parameters for adaptive and non-adaptive tests.
   These can be
 
-
 \describe{
   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error or measurement
     to be reached for the latent traits (thetas) before the test is stopped. If the test is
@@ -191,6 +190,12 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     If \code{NULL}, no temp file will be created. Upon completion of the test, the
     temp file will be deleted}
 
+  \item{\code{resume_file}}{a character vector indicating where a temporary .rds file
+    containing the response information was saved (see \code{temp_file}). Allows the GUI
+    session to be continued using the previously stored demographic and response pattern
+    information. Note that the demographics GUI page will appear again, but this information
+    will not be used and can be skipped.}
+
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is
 
@@ -216,7 +221,7 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
       or 'MAP', or in the multidimensional case 'DPrule' or 'TPrule'. Default is 'MAP'}
    }}
 
-\item{...}{additional arguments to be passed to \code{lattice}}
+\item{...}{additional arguments to be passed to \code{lattice} or \code{fscores}}
 
 \item{x}{object of class \code{'mirtCAT'}}
 
@@ -281,9 +286,9 @@ a large \code{'min_items'} criteria.
 \examples{
 \dontrun{
 
-#unidimensional scored example with generated items
+# unidimensional scored example with generated items
 
-#model
+# model
 set.seed(1234)
 nitems <- 50
 itemnames <- paste0('Item.', 1:nitems)
@@ -293,7 +298,7 @@ dat <- simdata(a, d, 1000, itemtype = 'dich')
 colnames(dat) <- itemnames
 mod <- mirt(dat, 1)
 
-#simple math items
+# simple math items
 shiny_questions <- questions <- vector('list', nitems)
 names(shiny_questions) <- names(questions) <- itemnames
 answers <- character(nitems)
@@ -322,28 +327,41 @@ for(i in 1L:nitems){
 (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random')) #random
 (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI')) #adaptive
 
-#run locally, random response pattern given Theta
+#-----------------------------------------
+
+# run locally, random response pattern given Theta
 set.seed(1)
 pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
 head(pat)
 res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat) #seq
 summary(res)
 
-#same as above, but using special input vector that doesn't require shiny
+# same as above, but using special input vector that doesn't require shiny
 set.seed(1)
 pat2 <- generate_pattern(mod, Theta = 0)
 head(pat2)
 print(mirtCAT(mirt_object=mod, local_pattern=pat2))
 
-#run CAT, and save results to object called person
+# run CAT, and save results to object called person
 person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI',
   local_pattern=pat)
 print(person)
 summary(person)
 
-#plot the session
+# plot the session
 plot(person) #standard errors
 plot(person, SE=1.96) #95 percent confidence intervals
+
+#-----------------------------------------
+
+### save response object to temp directory in case session ends early
+wdf <- paste0(getwd(), '/temp_file.rds')
+res <- mirtCAT(shiny_questions, mod, item_answers=answers, shinyGUI=list(temp_file=wdf))
+
+# resume test this way if test was stopped early (and temp files were saved)
+res <- mirtCAT(shiny_questions, mod, item_answers=answers, shinyGUI=list(resume_file=wdf))
+print(res)
+
 }
 }
 \author{
