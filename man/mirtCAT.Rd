@@ -177,7 +177,7 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
     the \code{demographics} default}
 
-  \item{\code{stem_locations}}{a character vector of paths pointing to .png or .jpeg
+  \item{\code{stem_locations}}{a character vector of paths pointing to .png, .jpeg, or .gif
     files to be used as item stems. Must be the length of the test, where \code{NA}s are
     used if the item has no corresponding file}
 
