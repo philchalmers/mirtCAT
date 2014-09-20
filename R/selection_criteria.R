@@ -10,8 +10,8 @@ MI <- function(which_not_answered, possible_patterns, person, test, row_loc){
 MEI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     P <- numeric(nrow(possible_patterns))
     for(i in which_not_answered){
-        ii <- extract.item(MCE$test$mirt_object, i)
-        p <- probtrace(ii, MCE$person$thetas)
+        ii <- extract.item(test$mirt_object, i)
+        p <- probtrace(ii, person$thetas)
         P[row_loc == i] <- p
     }
     infostmp <- lapply(which_not_answered, function(x)
@@ -25,8 +25,8 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc){
 MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc){
     P <- numeric(nrow(possible_patterns))
     for(i in which_not_answered){
-        ii <- extract.item(MCE$test$mirt_object, i)
-        p <- probtrace(ii, MCE$person$thetas)
+        ii <- extract.item(test$mirt_object, i)
+        p <- probtrace(ii, person$thetas)
         P[row_loc == i] <- p
     }
     pp2 <- possible_patterns
@@ -38,16 +38,16 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc){
 }
 
 MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    Theta <- MCE$test$ThetaGrid
-    density <- MCE$test$density
+    Theta <- test$ThetaGrid
+    density <- test$density
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = MCE$test$mirt_object@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test$mirt_object@pars,
                                  Theta=Theta, 
-                                 itemloc = MCE$test$mirt_object@itemloc,
+                                 itemloc = test$mirt_object@itemloc,
                                  CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
-        tmp <- MCE$test$itemloc2[pick] + possible_patterns[i, pick]
+        tmp <- test$itemloc2[pick] + possible_patterns[i, pick]
         LL[[i]] <- exp(rowSums(ll[,tmp]))
     }
     infostmp <- lapply(which_not_answered, function(x)
@@ -65,16 +65,16 @@ MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
 }
 
 MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
-    Theta <- MCE$test$ThetaGrid
-    density <- MCE$test$density
+    Theta <- test$ThetaGrid
+    density <- test$density
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = MCE$test$mirt_object@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test$mirt_object@pars,
                                       Theta=Theta, 
-                                      itemloc = MCE$test$mirt_object@itemloc,
+                                      itemloc = test$mirt_object@itemloc,
                                       CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
-        tmp <- MCE$test$itemloc2[pick] + possible_patterns[i, pick]
+        tmp <- test$itemloc2[pick] + possible_patterns[i, pick]
         LL[[i]] <- exp(rowSums(ll[,tmp]))
     }
     infostmp <- lapply(which_not_answered, function(x)
@@ -83,7 +83,7 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     count <- 1L
     for(i in uniq){
         LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C, dd)
-            return(x * C * dd), C=infostmp[[count]], dd=MCE$test$density)
+            return(x * C * dd), C=infostmp[[count]], dd=test$density)
         count <- count + 1L
     }
     infos <- weighted_mat(mat=LL, row_loc=row_loc, which_not_answered=which_not_answered)
@@ -103,7 +103,7 @@ Erule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
     crit
 }
 
-Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
     acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)
@@ -112,11 +112,11 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) sum(diag(x) * w), 
-                              w=MCE$design$Wrule_weights[!MCE$design$met_SEM]))
+                              w=design$Wrule_weights[!design$met_SEM]))
     crit
 }
 
-Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
     acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)
@@ -125,7 +125,7 @@ Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) w %*% x %*% w, 
-                              w=MCE$design$Wrule_weights[!MCE$design$met_SEM]))
+                              w=design$Wrule_weights[!design$met_SEM]))
     crit
 }
 
@@ -133,9 +133,9 @@ KL <- function(which_not_answered, possible_patterns, person, test, row_loc, del
                thetas = NULL){
     info <- numeric(length(which_not_answered))
     if(is.null(thetas)){
-        thetas <- MCE$person$thetas
+        thetas <- person$thetas
         for(i in 1L:length(which_not_answered)){
-            ii <- extract.item(MCE$test$mirt_object, which_not_answered[i])
+            ii <- extract.item(test$mirt_object, which_not_answered[i])
             p0 <- probtrace(ii, thetas - delta)
             p1 <- probtrace(ii, thetas + delta)
             info[i] <- sum(p1 * (log(p1) - log(p0)))
@@ -143,7 +143,7 @@ KL <- function(which_not_answered, possible_patterns, person, test, row_loc, del
     } else {
         info <- matrix(0, nrow(thetas), length(which_not_answered))
         for(i in 1L:length(which_not_answered)){
-            ii <- extract.item(MCE$test$mirt_object, which_not_answered[i])
+            ii <- extract.item(test$mirt_object, which_not_answered[i])
             p0 <- probtrace(ii, thetas)
             p1 <- probtrace(ii, person$thetas)
             info[,i] <- rowSums(t(p1[1L,] * t(matrix(log(p1), nrow(thetas), length(p1), byrow=TRUE)
@@ -157,13 +157,13 @@ IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, de
                 den=FALSE){
     Theta <- matrix(seq(person$thetas-delta, person$thetas+delta, length.out=test$quadpts))
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = MCE$test$mirt_object@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test$mirt_object@pars,
                                       Theta=Theta, 
-                                      itemloc = MCE$test$mirt_object@itemloc,
+                                      itemloc = test$mirt_object@itemloc,
                                       CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
-        tmp <- MCE$test$itemloc2[pick] + possible_patterns[i, pick]
+        tmp <- test$itemloc2[pick] + possible_patterns[i, pick]
         LL[[i]] <- exp(rowSums(ll[,tmp]))
     }
     KLcrit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,

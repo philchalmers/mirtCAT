@@ -1,8 +1,9 @@
-findNextCATItem <- function(person, test, lastitem, criteria){
+findNextCATItem <- function(person, test, design, lastitem){
     
     #heavy lifty CAT stuff just to find new item
+    criteria <- design$criteria
     if(all(is.na(person$responses)))
-        return(MCE$design$start_item)
+        return(design$start_item)
     not_answered <- is.na(person$responses)
     which_not_answered <- which(not_answered)
     K <- test$mirt_object@Data$K
@@ -18,13 +19,13 @@ findNextCATItem <- function(person, test, lastitem, criteria){
             row <- row + 1L   
         }
     }
-    method <- MCE$design$criteria_estimator
+    method <- design$criteria_estimator
     #saftey features
     if(length(unique(na.omit(person$responses))) < 2L) method <- 'MAP'
     if(sum(!is.na(person$responses)) < 5L) method <- 'MAP'
-    if(MCE$design$use_content){
-        tmp <- table(MCE$design$content[!is.na(person$responses)])
-        MCE$design$content_prop_empirical <- as.numeric(tmp/sum(tmp))
+    if(design$use_content){
+        tmp <- table(design$content[!is.na(person$responses)])
+        design$content_prop_empirical <- as.numeric(tmp/sum(tmp))
     }
     
     if(criteria == 'seq'){
@@ -32,11 +33,11 @@ findNextCATItem <- function(person, test, lastitem, criteria){
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
         else item <- sample(which_not_answered, 1L)
-        if(MCE$design$use_content){
-            dif <- MCE$design$content_prop - MCE$design$content_prop_empirical
+        if(design$use_content){
+            dif <- design$content_prop - design$content_prop_empirical
             tmp <- names(dif)[max(dif) == dif]
             if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
-            cpick <- MCE$design$content[which_not_answered]
+            cpick <- design$content[which_not_answered]
             if(sum(cpick == tmp) > 1L)
                 item <- sample(which_not_answered[cpick == tmp], 1L)
             if(sum(cpick == tmp) == 1L)
@@ -46,31 +47,31 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         return(as.integer(item))
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                   person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
+                   person=person, test=test, row_loc=row_loc, delta=design$KL_delta)
         index <- which_not_answered
     } else if(criteria == 'KLn'){
             crit <- KL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                        person=person, test=test, row_loc=row_loc, 
-                       delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+                       delta=design$KL_delta*sqrt(sum(!is.na(person$responses))))
             index <- which_not_answered
     } else if(criteria == 'IKL'){
         crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                   person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta)
+                   person=person, test=test, row_loc=row_loc, delta=design$KL_delta)
         index <- which_not_answered
     } else if(criteria == 'IKLP'){
             crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                        person=person, test=test, row_loc=row_loc, delta=MCE$design$KL_delta,
+                        person=person, test=test, row_loc=row_loc, delta=design$KL_delta,
                         den=TRUE)
             index <- which_not_answered
     } else if(criteria == 'IKLn'){
         crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                    person=person, test=test, row_loc=row_loc, 
-                   delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+                   delta=design$KL_delta*sqrt(sum(!is.na(person$responses))))
         index <- which_not_answered
     } else if(criteria == 'IKLPn'){
         crit <- IKL(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                     person=person, test=test, row_loc=row_loc, 
-                    delta=MCE$design$KL_delta*sqrt(sum(!is.na(person$responses))))
+                    delta=design$KL_delta*sqrt(sum(!is.na(person$responses))))
         index <- which_not_answered
     } else if(criteria == 'MI'){
         crit <- MI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
@@ -102,27 +103,27 @@ findNextCATItem <- function(person, test, lastitem, criteria){
         index <- row_loc
     } else if(criteria == 'Trule' || criteria == 'TPrule'){
         crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method)
+                      person=person, test=test, row_loc=row_loc, method=method, design=design)
         index <- row_loc
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method)
+                      person=person, test=test, row_loc=row_loc, method=method, design=design)
         index <- row_loc
     } else {
         stop('Selection criteria does not exist')
     }
     
-    exposure <- MCE$design$exposure[lastitem+1L]    
-    if(MCE$design$use_content){
-        dif <- MCE$design$content_prop - MCE$design$content_prop_empirical
+    exposure <- design$exposure[lastitem+1L]    
+    if(design$use_content){
+        dif <- design$content_prop - design$content_prop_empirical
         tmp <- names(dif)[max(dif) == dif]
         if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
-        cpick <- MCE$design$content[which_not_answered]
+        cpick <- design$content[which_not_answered]
         pick <- cpick == tmp
         if(sum(pick) > 0L){            
             index <- index[pick]
             crit <- crit[pick]
-            exposure <- min(MCE$design$exposure[lastitem+1L], sum(pick))
+            exposure <- min(design$exposure[lastitem+1L], sum(pick))
         }
     }
     if(exposure == 1L){

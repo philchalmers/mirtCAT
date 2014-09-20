@@ -1,7 +1,7 @@
 run_local <- function(responses){
     
     item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=0L,
-                            criteria=MCE$design$criteria)
+                            design=MCE$design)
     MCE$person$items_answered[1L] <- item
     
     for(i in 2L:(length(responses)+1L)){
@@ -23,7 +23,7 @@ run_local <- function(responses){
         MCE$design$Next.stage(item=i)
         
         item <- findNextCATItem(person=MCE$person, test=MCE$test, lastitem=i-1L,
-                                criteria=MCE$design$criteria)
+                                design=MCE$design)
         MCE$person$items_answered[i] <- item
     }
     
