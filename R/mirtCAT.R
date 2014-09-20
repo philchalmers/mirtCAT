@@ -81,6 +81,9 @@
 #'   is required to be numeric if no \code{questions} list is input, otherwise it must be a 
 #'   character vector of plausible responses
 #'   
+#' @param design_elements logical; return an object containing the test, person, and design 
+#'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
+#'   
 #' @param design a list of design based parameters for adaptive and non-adaptive tests. 
 #'   These can be
 #' 
@@ -329,8 +332,8 @@
 #' 
 #' }
 mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
-                    item_answers = NULL, start_item = 1, 
-                    exposure = rep(1, length(questions)), local_pattern = NULL,
+                    item_answers = NULL, start_item = 1, exposure = rep(1, length(questions)), 
+                    local_pattern = NULL, design_elements=FALSE,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {    
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
@@ -382,7 +385,12 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person_object <- readRDS(shinyGUI$resume_file)
         MCE$last_demographics <- person_object$demographics
     }
-        
+    if(design_elements){
+        ret <- list(person=person_object, test=test_object, design=design_object)
+        class(ret) <- "mirtCAT_design"
+        return(ret)
+    }
+    
     #put in specific enviroment
     MCE$person <- person_object
     MCE$test <- test_object

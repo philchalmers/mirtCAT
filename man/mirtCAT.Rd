@@ -9,7 +9,8 @@
 mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   criteria = "seq", item_answers = NULL, start_item = 1,
   exposure = rep(1, length(questions)), local_pattern = NULL,
-  design = list(), shinyGUI = list(), preCAT = list(), ...)
+  design_elements = FALSE, design = list(), shinyGUI = list(),
+  preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -87,6 +88,9 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
   This option requires a complete response pattern to be supplied. \code{local_pattern}
   is required to be numeric if no \code{questions} list is input, otherwise it must be a
   character vector of plausible responses}
+
+\item{design_elements}{logical; return an object containing the test, person, and design
+  elements? Primarily this is to be used with the \code{\link{findNextItem}} function}
 
 \item{design}{a list of design based parameters for adaptive and non-adaptive tests.
   These can be

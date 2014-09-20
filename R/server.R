@@ -61,8 +61,7 @@ server <- function(input, output) {
             MCE$design$Next.stage(item=itemclick)
             
             if(!MCE$design$stop_now){
-                item <- findNextCATItem(person=MCE$person, test=MCE$test, 
-                                        lastitem=itemclick, design=MCE$design)
+                item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)
                 MCE$person$items_answered[itemclick+1L] <- item
                 return(MCE$shinyGUI$questions[[item]])
             }

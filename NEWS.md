@@ -12,3 +12,9 @@
 - add content balancing option
 
 - various bug fixes, and update documentation
+
+- new findNextItem() input for users to locate the next item to administer (likely for custom
+  CAT interfaces that do not use the Shiny package)
+  
+- moved 'Next' button in the web interface to the left panel box so that it will always remain in 
+  the same location

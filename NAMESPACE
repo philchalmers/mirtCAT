@@ -3,6 +3,7 @@
 S3method(plot,mirtCAT)
 S3method(print,mirtCAT)
 S3method(summary,mirtCAT)
+export(findNextItem)
 export(generate_pattern)
 export(mirtCAT)
 import(lattice)
