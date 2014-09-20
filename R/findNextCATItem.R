@@ -4,6 +4,8 @@
 #' 
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 #'   when passing \code{design_elements = TRUE}
+#'   
+#' @param ... additional arguments to pass
 #' 
 #' @seealso \code{\link{mirtCAT}}
 #' @export findNextItem
@@ -28,6 +30,12 @@ findNextItem <- function(x){
     if(class(x) != 'mirtCAT_design')
         stop('input is not the correct class')
     return(findNextCATItem(person=x$person, test=x$test, design=x$design))
+}
+
+#' @rdname findNextItem
+#' @export
+print.mirtCAT_design <- function(x, ...){ 
+   cat('Object of class \'mirtCAT_design\'\n')
 }
 
 findNextCATItem <- function(person, test, design){
