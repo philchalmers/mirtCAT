@@ -7,7 +7,7 @@
 #'   
 #' @param ... additional arguments to pass
 #' 
-#' @seealso \code{\link{mirtCAT}}
+#' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}
 #' @export findNextItem
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
 #' @return returns a numeric value indicating the index of the next item to be selected
@@ -21,9 +21,7 @@
 #' findNextItem(CATdesign) 
 #' 
 #' # detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
-#' CATdesign$person$responses[c(1,10)] <- 1L
-#' CATdesign$person$items_answered[c(1,2)] <- c(1L, 10L)
-#' CATdesign$person$thetas <- matrix(0.5)
+#' CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 #' findNextItem(CATdesign) 
 #' }
 findNextItem <- function(x){

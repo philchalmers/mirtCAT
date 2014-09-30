@@ -1,7 +1,7 @@
 context('ordered')
 
 test_that('ordered', {
-    mod <- mirt(Science, 1, TOL = 1, verbose=FALSE) 
+    mod <- mirt(Science, 1, TOL = NaN, verbose=FALSE) 
     itemnames <- colnames(Science)
     nitems <- ncol(Science)
     
@@ -11,7 +11,7 @@ test_that('ordered', {
     res <- mirtCAT(mirt_object = mod, local_pattern = pat)
     so <- summary(res)
     expect_equal(as.numeric(so$responses), c(3,2,3,2))
-    expect_equal(print(res)[2], -0.6676493, tolerance=1e-4)
+    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
     
     shiny_questions <- questions <- vector('list', nitems)
     names(shiny_questions) <- names(questions) <- itemnames
@@ -31,7 +31,7 @@ test_that('ordered', {
     res <- mirtCAT(shiny_questions, mod, local_pattern = pat)
     so <- summary(res)
     expect_equal(as.numeric(so$responses), c(3,2,3,2))
-    expect_equal(print(res)[2], -0.6676493, tolerance=1e-4)
+    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
     
     res <- mirtCAT(shiny_questions, local_pattern = pat)
     so <- summary(res)
