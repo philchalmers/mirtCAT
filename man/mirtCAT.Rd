@@ -287,6 +287,12 @@ All tests will stop once the \code{'min_SEM'} criteria has been reached. If all 
 be answered, users should specify an extremely small \code{'min_SEM'} or equivalently
 a large \code{'min_items'} criteria.
 }
+\section{HTML help files, exercises, and examples}{
+
+
+To access examples, vignettes, and exercise files that have been generated with knitr please
+visit \url{http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html}.
+}
 \examples{
 \dontrun{
 

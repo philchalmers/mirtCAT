@@ -4,6 +4,10 @@
 #' 
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 #'   when passing \code{design_elements = TRUE}
+#' @param items a numeric vector indicating which items to select
+#' @param responses a numeric vector indiciating the responses the the selected items
+#' @param Theta (optional) vector indicating the value of Theta/latent traits to be set
+#' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{findNextItem}}
 #' @export updateDesign
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     

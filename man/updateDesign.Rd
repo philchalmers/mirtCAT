@@ -8,6 +8,12 @@ updateDesign(x, items, responses, Theta = NULL)
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 when passing \code{design_elements = TRUE}}
+
+\item{items}{a numeric vector indicating which items to select}
+
+\item{responses}{a numeric vector indiciating the responses the the selected items}
+
+\item{Theta}{(optional) vector indicating the value of Theta/latent traits to be set}
 }
 \value{
 returns returns an object of class 'mirtCAT_design' with updated elements

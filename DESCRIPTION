@@ -19,10 +19,12 @@ Depends:
 Imports:
     methods
 Suggests:
+    knitr,
     testthat
 ByteCompile: no
 LazyLoad: yes
 LazyData: yes
+VignetteBuilder: knitr
 License: GPL (>= 3)
 Repository: CRAN
 Maintainer: Phil Chalmers <rphilip.chalmers@gmail.com>
