@@ -1,0 +1,30 @@
+Simple sequentially scored survey
+======================================
+
+The following defines three Likert scale questions, and stores the GUI answers to a `results` 
+object.
+
+```{r, eval=FALSE}
+library('mirtCAT')
+
+## Define empty list of questions
+questions <- list()
+
+## Potential choices for each item (can be unique for each item)
+choices <- c('Strongly Disagree', 'Disagree', 'Neutral',
+             'Agree', 'Strongly Agree')
+
+## Define question inputs and variable lables
+questions$Q1 <- radioButtons(inputId = 'Q1',
+                             label = 'Building tests with mirtCAT is difficult.',
+                             choices = choices)
+questions$Q2 <- radioButtons(inputId = 'Q2',
+                             label = 'Building tests with mirtCAT requires a lot of coding.',
+                             choices = choices)
+questions$Q3 <- radioButtons(inputId = 'Q3',
+                             label = 'Building tests with mirtCAT is fantastic.',
+                             choices = choices)
+
+## Run the mirtCAT web interface and store results
+results <- mirtCAT(questions)
+```

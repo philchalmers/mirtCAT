@@ -1,0 +1,16 @@
+{
+    "contents" : "Package: mirtCAT\nVersion: 0.1-5\nDate: 2014-07-10\nType: Package\nTitle: Computerized Adaptive Testing with Multidimensional Item Response Theory\nAuthors@R: c( person(\"Phil\", family=\"Chalmers\", email =\n    \"rphilip.chalmers@gmail.com\", role = c(\"aut\", \"cre\", \"cph\")))\nDescription: Provides tools to generate an HTML interface for creating adaptive\n    and non-adaptive educational and psychological tests using the shiny\n    package. Suitable for applying unidimensional and multidimensional\n    computerized adaptive tests using item response theory methodology and for\n    creating simple questionnaires forms to collect response data directly in R.\nRoxygen: list(wrap = FALSE)\nDepends:\n    R (>= 2.15),\n    mirt (>= 1.5.5),\n    shiny (>= 0.10.0),\n    lattice\nImports:\n    methods\nSuggests:\n    testthat\nByteCompile: no\nLazyLoad: yes\nLazyData: yes\nLicense: GPL (>= 3)\nRepository: CRAN\nMaintainer: Phil Chalmers <rphilip.chalmers@gmail.com>\nURL: https://github.com/philchalmers/mirtCAT\nBugReports: https://github.com/philchalmers/mirtCAT/issues?state=open\n",
+    "created" : 1412094308399.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2856091645",
+    "id" : "15D9DE32",
+    "lastKnownWriteTime" : 1412094311,
+    "path" : "~/Desktop/Git/mirtCAT/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "dcf"
+}

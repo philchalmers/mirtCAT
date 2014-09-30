@@ -1,0 +1,16 @@
+{
+    "contents" : "ui <- function(){\n    \n    return(pageWithSidebar(\n        \n        #  Application title\n        headerPanel(MCE$shinyGUI$title),\n        \n        sidebarPanel(\n            h4(\"Authors:\"),\n            h5(MCE$shinyGUI$author),\n            hr(),\n            h4(\"\\nInstructions:\"),\n            h6(\"To progress through the survey/test, click the \\'Next\\' button.\")\n        ),\n        \n        mainPanel(\n            imageOutput(\"item_stem\", width = 'auto', height = 'auto'),\n            uiOutput(\"Main\"),\n            actionButton(\"Next\", \"Next\")    \n        )\n        \n    )) #end bootstrapPage\n    \n}",
+    "created" : 1407964811719.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "687014404",
+    "id" : "D6B7E868",
+    "lastKnownWriteTime" : 1407967714,
+    "path" : "~/Desktop/Dropbox/Research-projects/mirtCAT/R/ui.R",
+    "project_path" : "R/ui.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -1,0 +1,15 @@
+mirt Vignette Files
+=====================
+
+The following contains a list of links to various HTML vignettes with the `mirtCAT` package, 
+generated using R markdown via the `knitr` package and hosted on Github.  
+
+## Examples
+
+- [Simple Survey](http://philchalmers.github.io/mirtCAT/html/simple_survey.html)
+
+### User contributions
+
+If you would like to contribute your own to the collection then feel free to send along your 
+source file (`.Rmd`) to `rphilip.chalmers@gmail.com` and I'll add it to the appropriate package 
+locations on Github. 

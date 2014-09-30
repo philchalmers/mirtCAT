@@ -1,0 +1,16 @@
+{
+    "contents" : "run_local <- function(responses){\n    \n    item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)\n    MCE$person$items_answered[1L] <- item\n    \n    for(i in 2L:(length(responses)+1L)){\n        pick <- MCE$person$items_answered[i-1]\n        name <- MCE$test$itemnames[pick]\n        ip <- responses[pick]\n        MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- \n            which(MCE$test$item_options[[pick]] %in% ip) - 1L\n        if(!is.na(MCE$test$item_answers[[pick]]) && MCE$test$item_class[pick] != 'nestlogit')\n            MCE$person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])\n        \n        #update Thetas\n        MCE$person$Update.thetas()\n        MCE$design$Update.stop_now()\n        if(i > MCE$design$preCAT_nitems)\n            if(MCE$design$stop_now) \n                break\n        \n        MCE$design$Next.stage(item=i)\n        \n        item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)\n        MCE$person$items_answered[i] <- item\n    }\n    \n    return(MCE$person)\n}",
+    "created" : 1411246723438.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2852395294",
+    "id" : "5E59004B",
+    "lastKnownWriteTime" : 1411247376,
+    "path" : "~/Desktop/Git/mirtCAT/R/run_pattern.R",
+    "project_path" : "R/run_pattern.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

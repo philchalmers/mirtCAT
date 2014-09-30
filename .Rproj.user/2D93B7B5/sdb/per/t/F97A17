@@ -1,0 +1,16 @@
+{
+    "contents" : "context('ordered')\n\ntest_that('ordered', {\n    mod <- mirt(Science, 1, TOL = NaN, verbose=FALSE) \n    itemnames <- colnames(Science)\n    nitems <- ncol(Science)\n    \n    set.seed(1234)\n    pat <- generate_pattern(mod, Theta = 0)\n    expect_equal(c(3,2,3,2), pat)\n    res <- mirtCAT(mirt_object = mod, local_pattern = pat)\n    so <- summary(res)\n    expect_equal(as.numeric(so$responses), c(3,2,3,2))\n    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)\n    \n    shiny_questions <- questions <- vector('list', nitems)\n    names(shiny_questions) <- names(questions) <- itemnames\n    choices <- c('SD', 'D', 'A', 'SA')\n    choices <- list(choices, choices, choices, choices)\n    \n    for(i in 1L:nitems){\n        shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],\n                                             label = 'Dummy',\n                                             choices = choices[[i]])\n    }\n    \n    set.seed(1234)\n    pat <- generate_pattern(mod, Theta = 0, choices = choices)\n    expect_equal(c('A', 'D', 'A', 'D'), pat)\n    \n    res <- mirtCAT(shiny_questions, mod, local_pattern = pat)\n    so <- summary(res)\n    expect_equal(as.numeric(so$responses), c(3,2,3,2))\n    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)\n    \n    res <- mirtCAT(shiny_questions, local_pattern = pat)\n    so <- summary(res)\n    expect_equal(as.numeric(so$responses), c(3,2,3,2))\n    \n    CATdesign <- mirtCAT(shiny_questions, design_elements = TRUE)\n    expect_equal(findNextItem(CATdesign), 1L) \n    CATdesign$person$responses[c(1,2)] <- c(4L, 4L)\n    CATdesign$person$items_answered[c(1,2)] <- c(1L, 2L)\n    CATdesign$person$thetas <- matrix(1.5)\n    expect_equal(findNextItem(CATdesign), 3L) \n})",
+    "created" : 1411248775811.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2335105182",
+    "id" : "F97A17",
+    "lastKnownWriteTime" : 1412094226,
+    "path" : "~/Desktop/Git/mirtCAT/tests/tests/test-mirtCAT_ordered.R",
+    "project_path" : "tests/tests/test-mirtCAT_ordered.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
