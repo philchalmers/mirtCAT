@@ -1,0 +1,10 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Online Vignettes}
+-->
+
+`mirtCAT` Vignette Files
+========================
+
+To access examples, vignettes, and exercise files that have been generated with `knitr` please
+visit [this link](http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html).
