@@ -9,6 +9,13 @@ and non-adaptive educational and psychological tests using the shiny
 package. Suitable for applying unidimensional and multidimensional
 computerized adaptive tests using item response theory methodology.
 
+## Examples and Evaluated Help Files
+
+Various examples and worked help files have been compiled using the `knitr` package to generate
+HTML output, and are available [here](http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html). 
+User contributions are also welcome, where the source code examples are demonstrated on the 
+`gh-pages` branch of this repository in the `source` directory.
+
 # Installing from Github
 
 To install the developement version of this package, use the following code.
