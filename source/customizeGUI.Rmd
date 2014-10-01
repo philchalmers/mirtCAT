@@ -1,0 +1,133 @@
+Customize GUI
+======================================
+
+This demonstrates how to modify various elements in the shiny GUI.
+
+```{r, eval=FALSE}
+library('mirtCAT')
+
+# define population IRT parameters
+set.seed(1234)
+nitems <- 120
+itemnames <- paste0('Item.', 1:nitems)
+a <- matrix(c(rlnorm(nitems/2, .2, .3), rnorm(nitems/4, 0, .3),
+              numeric(nitems/2), rnorm(nitems/4, 0, .3),
+              rlnorm(nitems/2, .2, .3)), nitems)
+d <- matrix(rnorm(nitems))
+
+# create dummy dataset
+dat <- simdata(a, d, 100, itemtype = 'dich',
+               sigma = matrix(c(1,.5,.5,1),2))
+colnames(dat) <- itemnames
+
+# use population values for model
+sv <- mirt(dat, 2, pars = 'values')
+sv$value[sv$name == 'a1'] <- a[,1]
+sv$value[sv$name == 'a2'] <- a[,2]
+sv$value[sv$name == 'd'] <- d[,1]
+sv$value[sv$name == 'g'] <- 0.2
+sv$value[sv$name == 'COV_21'] <- 0.5
+mod <- mirt(dat, 2, pars = sv, TOL = NaN)
+
+# math items definitions
+# addition for one factor and multiplication for the other
+shiny_questions <- questions <- vector('list', nitems)
+names(shiny_questions) <- names(questions) <- itemnames
+answers <- character(nitems)
+choices <- vector('list', nitems)
+spacing <- floor(d - min(d)) + 1 #easier items have more variation
+
+for(i in 1:nitems){
+    if(i < 31){ #addition
+        n1 <- sample(1:100, 1)
+        n2 <- sample(101:200, 1)
+        ans <- n1 + n2
+        questions[[i]] <- paste0(n1, ' + ', n2, ' = ?')
+    } else if(i < 61){ #addition and multiplication
+        n1 <- sample(1:50, 1)
+        n2 <- sample(51:100, 1)
+        m1 <- sample(1:10, 1)
+        m2 <- sample(1:10, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(n1, ' + ', n2, ' + ', m1, ' * ', m2, ' = ?')
+    } else if(i < 91){ #multiplication and addition
+        n1 <- sample(1:10, 1)
+        n2 <- sample(1:10, 1)
+        m1 <- sample(1:25, 1)
+        m2 <- sample(1:25, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(m1, ' * ', m2, ' + ', n1, ' + ', n2, ' = ?')
+    } else { #multiplication
+        m1 <- sample(1:50, 1)
+        m2 <- sample(1:50, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(m1, ' * ', m2, ' = ?')
+    }
+    answers[i] <- as.character(ans)
+    ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+    ch[sample(1:5, 1)] <- ans
+    choices[[i]] <- as.character(ch)
+}
+
+# load list of items and their answers
+for(i in 1L:nitems){
+    shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],
+                                         label = questions[[i]],
+                                         choices = choices[[i]])
+}
+```
+
+The following adds two .png files to the GUI as item stems for more customized item stimuli.
+
+```{r eval=FALSE}
+shiny_questions[[1]] <- radioButtons(inputId = itemnames[1L],
+                            label = '',
+                            choices = c('1236', '1238', '1240', '1242', '1244'),
+                            inline=TRUE)
+shiny_questions[[2]] <- selectInput(inputId = itemnames[2L],
+                            label = 'Which equation in the above table is INCORRECT?',
+                            choices = c('A)', 'B)', 'C)', 'D)', 'E)'))
+answers[1:2] <- c('1236', 'D)')
+stem_locations <- rep(NA, length(shiny_questions))
+stem_locations[1:2] <- c('/path/to/Math-stem.png', '/path/to/Table-stem.png')
+results <- mirtCAT(questions=shiny_questions, mirt_object=mod, item_answers=answers,
+                   shinyGUI=list(stem_locations=stem_locations))
+```
+
+Finally, the following modifies various elements, such as the minimum and maximum number of items
+to administer, the amount of item exposure to sample from, and performs a Pre-CAT stage to 
+collect response data prior to the CAT session. 
+
+As well, several GUI elements are modified, such as the title, author names, the first page,
+and the last page.
+
+```{r eval=FALSE}
+# exposure control by sampling from 3 of the most optimal criteria
+exposure <- rep(3, 120)
+
+# maximum and minimum number of items to administer
+max_items <- 15
+min_items <- 5
+design_list <- list(max_items=max_items, min_items=min_items)
+
+# in pre-CAT stage select 5 items at in sequence and use EAP estimates
+preCAT_list <- list(nitems = 5, criteria = 'seq', method = 'EAP')
+
+# change aesthetics of GUI, including title, authors, header, and initial message
+title <- 'Example Test'
+authors <- 'I. M. D. Author'
+firstpage <- list(h2('Example Test'),
+                  h5('Please answer each item to the best of your ability.
+                     The results of this test will remain completely anonymous
+                     and are only used for research purposes.'))
+lastpage <- list(h3('Thank you for completing the test. Please click \'Next\' to
+                    save your results.'))
+shinyGUI_list <- list(title=title, authors=authors,
+                      firstpage=firstpage, lastpage=lastpage,
+                      stem_locations=stem_locations)
+
+# run the customized GUI interface
+results <- mirtCAT(questions=shiny_questions, mirt_object=mod, item_answers=answers,
+                   exposure=exposure, shinyGUI=shinyGUI_list, design=design_list,
+                   preCAT=preCAT_list)
+```

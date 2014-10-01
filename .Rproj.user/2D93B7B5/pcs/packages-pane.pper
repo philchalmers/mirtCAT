@@ -1,7 +1,0 @@
-{
-    "installOptions" : {
-        "installDependencies" : true,
-        "installFromRepository" : true,
-        "libraryPath" : "/home/phil/R/x86_64-pc-linux-gnu-library/3.1"
-    }
-}

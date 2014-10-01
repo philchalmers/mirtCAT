@@ -1,0 +1,111 @@
+Multidimensional Example
+======================================
+
+This example demonstrates how a multidimensional IRT test can be scored and modified for offline 
+and online use. As well, it compares the effect of scoring the entire test given all possible 
+responses to the use of a CAT scheme. The final section demonstrates how various elements in the
+GUI can be modified for more customized presentations.
+
+The following codeblock defines 100 items for a two factor math test measuring 
+addition and multiplication.
+
+```{r}
+library('mirtCAT')
+
+# define population IRT parameters
+set.seed(1234)
+nitems <- 120
+itemnames <- paste0('Item.', 1:nitems)
+a <- matrix(c(rlnorm(nitems/2, .2, .3), rnorm(nitems/4, 0, .3),
+              numeric(nitems/2), rnorm(nitems/4, 0, .3),
+              rlnorm(nitems/2, .2, .3)), nitems)
+d <- matrix(rnorm(nitems))
+
+# create dummy dataset
+dat <- simdata(a, d, 100, itemtype = 'dich',
+               sigma = matrix(c(1,.5,.5,1),2))
+colnames(dat) <- itemnames
+
+# use population values for model
+sv <- mirt(dat, 2, pars = 'values')
+sv$value[sv$name == 'a1'] <- a[,1]
+sv$value[sv$name == 'a2'] <- a[,2]
+sv$value[sv$name == 'd'] <- d[,1]
+sv$value[sv$name == 'g'] <- 0.2
+sv$value[sv$name == 'COV_21'] <- 0.5
+mod <- mirt(dat, 2, pars = sv, TOL = NaN)
+
+# math items definitions
+# addition for one factor and multiplication for the other
+shiny_questions <- questions <- vector('list', nitems)
+names(shiny_questions) <- names(questions) <- itemnames
+answers <- character(nitems)
+choices <- vector('list', nitems)
+spacing <- floor(d - min(d)) + 1 #easier items have more variation
+
+for(i in 1:nitems){
+    if(i < 31){ #addition
+        n1 <- sample(1:100, 1)
+        n2 <- sample(101:200, 1)
+        ans <- n1 + n2
+        questions[[i]] <- paste0(n1, ' + ', n2, ' = ?')
+    } else if(i < 61){ #addition and multiplication
+        n1 <- sample(1:50, 1)
+        n2 <- sample(51:100, 1)
+        m1 <- sample(1:10, 1)
+        m2 <- sample(1:10, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(n1, ' + ', n2, ' + ', m1, ' * ', m2, ' = ?')
+    } else if(i < 91){ #multiplication and addition
+        n1 <- sample(1:10, 1)
+        n2 <- sample(1:10, 1)
+        m1 <- sample(1:25, 1)
+        m2 <- sample(1:25, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(m1, ' * ', m2, ' + ', n1, ' + ', n2, ' = ?')
+    } else { #multiplication
+        m1 <- sample(1:50, 1)
+        m2 <- sample(1:50, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[[i]] <- paste0(m1, ' * ', m2, ' = ?')
+    }
+    answers[i] <- as.character(ans)
+    ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+    ch[sample(1:5, 1)] <- ans
+    choices[[i]] <- as.character(ch)
+}
+
+# load list of items and their answers
+for(i in 1L:nitems){
+    shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],
+                                         label = questions[[i]],
+                                         choices = choices[[i]])
+}
+```
+
+Next, we generate a possible response pattern and pass it to the `mirtCAT()` fuction. The first
+run ensures that all items are used by choosing a very small standard error criteria.
+
+```{r}
+set.seed(1)
+pat <- generate_pattern(mirt_object=mod, Theta=c(-0.5, 0.5), choices=choices,
+                        item_answers=answers)
+head(pat)
+
+# Set min_SEM to be very small so every item is administered
+result <- mirtCAT(questions=shiny_questions, mirt_object=mod,
+                  item_answers=answers, local_pattern=pat,
+                  design = list(min_SEM=0.01))
+print(result)
+# summary(result)
+plot(result, scales=list(x=list(at=NULL)))
+
+set.seed(1234)
+MCATresult <- mirtCAT(questions=shiny_questions, mirt_object=mod,
+                      criteria='Drule', item_answers=answers,
+                      local_pattern=pat, start_item=sample(1:length(pat), 1),
+                      design = list(min_SEM=0.4))
+print(MCATresult)
+summary(MCATresult)
+plot(MCATresult)
+```

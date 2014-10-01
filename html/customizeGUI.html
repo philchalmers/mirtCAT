@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Simple sequentially scored survey</title>
+<title>Customize GUI</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -201,48 +201,134 @@ hr {
 </head>
 
 <body>
-<h1>Simple sequentially scored survey</h1>
+<h1>Customize GUI</h1>
 
-<p>The following defines three Likert scale questions, and stores the GUI answers to a <code>results</code> 
-object.</p>
+<p>This demonstrates how to modify various elements in the shiny GUI.</p>
 
 <pre><code class="r">library(&#39;mirtCAT&#39;)
 
-## Define empty list of questions
-questions &lt;- list()
+# define population IRT parameters
+set.seed(1234)
+nitems &lt;- 120
+itemnames &lt;- paste0(&#39;Item.&#39;, 1:nitems)
+a &lt;- matrix(c(rlnorm(nitems/2, .2, .3), rnorm(nitems/4, 0, .3),
+              numeric(nitems/2), rnorm(nitems/4, 0, .3),
+              rlnorm(nitems/2, .2, .3)), nitems)
+d &lt;- matrix(rnorm(nitems))
 
-## Potential choices for each item (can be unique for each item)
-choices &lt;- c(&#39;Strongly Disagree&#39;, &#39;Disagree&#39;, &#39;Neutral&#39;,
-             &#39;Agree&#39;, &#39;Strongly Agree&#39;)
+# create dummy dataset
+dat &lt;- simdata(a, d, 100, itemtype = &#39;dich&#39;,
+               sigma = matrix(c(1,.5,.5,1),2))
+colnames(dat) &lt;- itemnames
 
-## Define question inputs and variable lables
-questions$Q1 &lt;- radioButtons(inputId = &#39;Q1&#39;,
-                             label = &#39;Building tests with mirtCAT is difficult.&#39;,
-                             choices = choices)
-questions$Q2 &lt;- radioButtons(inputId = &#39;Q2&#39;,
-                             label = &#39;Building tests with mirtCAT requires a lot of coding.&#39;,
-                             choices = choices)
-questions$Q3 &lt;- radioButtons(inputId = &#39;Q3&#39;,
-                             label = &#39;Building tests with mirtCAT is fantastic.&#39;,
-                             choices = choices)
+# use population values for model
+sv &lt;- mirt(dat, 2, pars = &#39;values&#39;)
+sv$value[sv$name == &#39;a1&#39;] &lt;- a[,1]
+sv$value[sv$name == &#39;a2&#39;] &lt;- a[,2]
+sv$value[sv$name == &#39;d&#39;] &lt;- d[,1]
+sv$value[sv$name == &#39;g&#39;] &lt;- 0.2
+sv$value[sv$name == &#39;COV_21&#39;] &lt;- 0.5
+mod &lt;- mirt(dat, 2, pars = sv, TOL = NaN)
 
-## Run the mirtCAT web interface and store results
-results &lt;- mirtCAT(questions)
+# math items definitions
+# addition for one factor and multiplication for the other
+shiny_questions &lt;- questions &lt;- vector(&#39;list&#39;, nitems)
+names(shiny_questions) &lt;- names(questions) &lt;- itemnames
+answers &lt;- character(nitems)
+choices &lt;- vector(&#39;list&#39;, nitems)
+spacing &lt;- floor(d - min(d)) + 1 #easier items have more variation
+
+for(i in 1:nitems){
+    if(i &lt; 31){ #addition
+        n1 &lt;- sample(1:100, 1)
+        n2 &lt;- sample(101:200, 1)
+        ans &lt;- n1 + n2
+        questions[[i]] &lt;- paste0(n1, &#39; + &#39;, n2, &#39; = ?&#39;)
+    } else if(i &lt; 61){ #addition and multiplication
+        n1 &lt;- sample(1:50, 1)
+        n2 &lt;- sample(51:100, 1)
+        m1 &lt;- sample(1:10, 1)
+        m2 &lt;- sample(1:10, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(n1, &#39; + &#39;, n2, &#39; + &#39;, m1, &#39; * &#39;, m2, &#39; = ?&#39;)
+    } else if(i &lt; 91){ #multiplication and addition
+        n1 &lt;- sample(1:10, 1)
+        n2 &lt;- sample(1:10, 1)
+        m1 &lt;- sample(1:25, 1)
+        m2 &lt;- sample(1:25, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(m1, &#39; * &#39;, m2, &#39; + &#39;, n1, &#39; + &#39;, n2, &#39; = ?&#39;)
+    } else { #multiplication
+        m1 &lt;- sample(1:50, 1)
+        m2 &lt;- sample(1:50, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(m1, &#39; * &#39;, m2, &#39; = ?&#39;)
+    }
+    answers[i] &lt;- as.character(ans)
+    ch &lt;- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+    ch[sample(1:5, 1)] &lt;- ans
+    choices[[i]] &lt;- as.character(ch)
+}
+
+# load list of items and their answers
+for(i in 1L:nitems){
+    shiny_questions[[i]] &lt;- radioButtons(inputId = itemnames[i],
+                                         label = questions[[i]],
+                                         choices = choices[[i]])
+}
 </code></pre>
 
-<p>If we wish to modify the <code>demographics</code> page to collect information about a 
-participants gender and occupation, we could use the following.</p>
+<p>The following adds two .png files to the GUI as item stems for more customized item stimuli.</p>
 
-<pre><code class="r">### Modify demographics page to collect occupation and gender variables ###
-demographics &lt;- list(textInput(inputId = &#39;occupation&#39;,
-                               label = &#39;What is your occupation?&#39;,
-                               value = &#39;&#39;),
-                     selectInput(inputId = &#39;gender&#39;,
-                                 label = &#39;Please select your gender.&#39;,
-                                 choices = c(&#39;&#39;, &#39;Male&#39;, &#39;Female&#39;, &#39;Other&#39;),
-                                 selected = &#39;&#39;))
-results &lt;- mirtCAT(questions, shinyGUI = list(demographics = demographics,
-                                              demographics_inputIDs = c(&#39;occupation&#39;, &#39;gender&#39;)))
+<pre><code class="r">shiny_questions[[1]] &lt;- radioButtons(inputId = itemnames[1L],
+                            label = &#39;&#39;,
+                            choices = c(&#39;1236&#39;, &#39;1238&#39;, &#39;1240&#39;, &#39;1242&#39;, &#39;1244&#39;),
+                            inline=TRUE)
+shiny_questions[[2]] &lt;- selectInput(inputId = itemnames[2L],
+                            label = &#39;Which equation in the above table is INCORRECT?&#39;,
+                            choices = c(&#39;A)&#39;, &#39;B)&#39;, &#39;C)&#39;, &#39;D)&#39;, &#39;E)&#39;))
+answers[1:2] &lt;- c(&#39;1236&#39;, &#39;D)&#39;)
+stem_locations &lt;- rep(NA, length(shiny_questions))
+stem_locations[1:2] &lt;- c(&#39;/path/to/Math-stem.png&#39;, &#39;/path/to/Table-stem.png&#39;)
+results &lt;- mirtCAT(questions=shiny_questions, mirt_object=mod, item_answers=answers,
+                   shinyGUI=list(stem_locations=stem_locations))
+</code></pre>
+
+<p>Finally, the following modifies various elements, such as the minimum and maximum number of items
+to administer, the amount of item exposure to sample from, and performs a Pre-CAT stage to 
+collect response data prior to the CAT session. </p>
+
+<p>As well, several GUI elements are modified, such as the title, author names, the first page,
+and the last page.</p>
+
+<pre><code class="r"># exposure control by sampling from 3 of the most optimal criteria
+exposure &lt;- rep(3, 120)
+
+# maximum and minimum number of items to administer
+max_items &lt;- 15
+min_items &lt;- 5
+design_list &lt;- list(max_items=max_items, min_items=min_items)
+
+# in pre-CAT stage select 5 items at in sequence and use EAP estimates
+preCAT_list &lt;- list(nitems = 5, criteria = &#39;seq&#39;, method = &#39;EAP&#39;)
+
+# change aesthetics of GUI, including title, authors, header, and initial message
+title &lt;- &#39;Example Test&#39;
+authors &lt;- &#39;I. M. D. Author&#39;
+firstpage &lt;- list(h2(&#39;Example Test&#39;),
+                  h5(&#39;Please answer each item to the best of your ability.
+                     The results of this test will remain completely anonymous
+                     and are only used for research purposes.&#39;))
+lastpage &lt;- list(h3(&#39;Thank you for completing the test. Please click \&#39;Next\&#39; to
+                    save your results.&#39;))
+shinyGUI_list &lt;- list(title=title, authors=authors,
+                      firstpage=firstpage, lastpage=lastpage,
+                      stem_locations=stem_locations)
+
+# run the customized GUI interface
+results &lt;- mirtCAT(questions=shiny_questions, mirt_object=mod, item_answers=answers,
+                   exposure=exposure, shinyGUI=shinyGUI_list, design=design_list,
+                   preCAT=preCAT_list)
 </code></pre>
 
 </body>

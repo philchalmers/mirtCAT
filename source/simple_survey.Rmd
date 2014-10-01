@@ -28,3 +28,19 @@ questions$Q3 <- radioButtons(inputId = 'Q3',
 ## Run the mirtCAT web interface and store results
 results <- mirtCAT(questions)
 ```
+
+If we wish to modify the `demographics` page to collect information about a 
+participants gender and occupation, we could use the following.
+
+```{r, eval=FALSE}
+### Modify demographics page to collect occupation and gender variables ###
+demographics <- list(textInput(inputId = 'occupation',
+                               label = 'What is your occupation?',
+                               value = ''),
+                     selectInput(inputId = 'gender',
+                                 label = 'Please select your gender.',
+                                 choices = c('', 'Male', 'Female', 'Other'),
+                                 selected = ''))
+results <- mirtCAT(questions, shinyGUI = list(demographics = demographics,
+                                              demographics_inputIDs = c('occupation', 'gender')))
+```
