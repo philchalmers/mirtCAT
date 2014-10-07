@@ -1,4 +1,4 @@
-mirt Vignette Files
+mirtCAT Vignette Files
 =====================
 
 The following contains a list of links to various HTML vignettes with the `mirtCAT` package, 
