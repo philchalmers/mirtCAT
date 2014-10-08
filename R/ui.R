@@ -1,6 +1,10 @@
 ui <- function(){
     
-    return(pageWithSidebar(
+    return(fluidPage(
+        
+        tags$head(
+            tags$style(HTML(MCE$shinyGUI$css))
+        ),
         
         #  Application title
         headerPanel(MCE$shinyGUI$title),

@@ -203,6 +203,12 @@
 #'     \preformatted{list(h5("End of survey. Click \'Next\' to save results 
 #'       and close application."))}
 #'    }    
+#'    
+#'    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation 
+#'      elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
+#'      prior to constructing the user interface
+#'    
+#'    }
 #'   
 #' }
 #' 

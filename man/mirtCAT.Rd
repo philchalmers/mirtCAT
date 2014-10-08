@@ -207,6 +207,12 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
       and close application."))}
    }
 
+   \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation
+     elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
+     prior to constructing the user interface
+
+   }
+
 }}
 
 \item{preCAT}{a list object which can be used to specify a pre-CAT block in which
