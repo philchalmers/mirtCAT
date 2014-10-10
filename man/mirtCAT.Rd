@@ -175,6 +175,9 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
                   choices = c('', 'Male', 'Female', 'Other'),
                   selected = ''))
         }
+
+     To skip the demographics page, supply an empty list as the argument.
+
      }
 
   \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics

@@ -172,6 +172,9 @@
 #'                   choices = c('', 'Male', 'Female', 'Other'),
 #'                   selected = ''))
 #'         }
+#'         
+#'      To skip the demographics page, supply an empty list as the argument. 
+#'         
 #'      }
 #'      
 #'   \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics
@@ -395,6 +398,8 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     if(!is.null(shinyGUI$resume_file)){
         person_object <- readRDS(shinyGUI$resume_file)
         MCE$last_demographics <- person_object$demographics
+        shinyGUI_object$demographics <- list()
+        shinyGUI_object$demographic_inputIDs <- character(0)
     }
     if(design_elements){
         ret <- list(person=person_object, test=test_object, design=design_object)

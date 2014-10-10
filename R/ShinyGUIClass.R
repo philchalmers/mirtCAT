@@ -44,7 +44,11 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       firstpage <<- shinyGUI$firstpage
                                   if(!is.null(shinyGUI$demographics)){
                                       demographics <<- shinyGUI$demographics
-                                      demographic_inputIDs <<- shinyGUI$demographics_inputIDs
+                                      if(length(shinyGUI$demographics)){
+                                          demographic_inputIDs <<- shinyGUI$demographics_inputIDs 
+                                      } else {
+                                          demographic_inputIDs <<- character(0)
+                                      }
                                   }
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage
