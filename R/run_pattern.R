@@ -1,4 +1,4 @@
-run_local <- function(responses, verbose=FALSE){
+run_local <- function(responses, verbose=FALSE, ...){
     
     item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)
     MCE$person$items_answered[1L] <- item
