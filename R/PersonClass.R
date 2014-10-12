@@ -42,8 +42,10 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
+            set <- c('Drule', 'Trule', 'Erule', 'Wrule', 
+                     'DPrule', 'TPrule', 'EPrule', 'WPrule')
             if(!MCE$design$numerical_info && MCE$test$nfact > 1L && 
-                   !(MCE$design$criteria %in% c('random', 'seq'))){
+                   MCE$design$criteria %in% set){
                 pick <- which(!is.na(responses))
                 infos <- lapply(pick, function(x, thetas)
                     FI(extract.item(MCE$test$mirt_object, x), Theta=thetas), thetas=thetas)
