@@ -51,7 +51,7 @@ Person$methods(
                 for(i in 1L:length(infos))
                     tmp <- tmp + infos[[i]]
                 if(MCE$design$criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule'))
-                    tmp <- tmp + MCE$test$gp$gcov
+                    tmp <- tmp + solve(MCE$test$gp$gcov)
                 info_thetas <<- tmp
             }
         }
