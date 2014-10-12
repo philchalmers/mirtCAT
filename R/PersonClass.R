@@ -42,10 +42,18 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
-            if(!MCE$test$numerical_info && MCE$test$nfact > 1L){
-                browser()
+            if(!MCE$design$numerical_info && MCE$test$nfact > 1L && 
+                   !(MCE$design$criteria %in% c('random', 'seq'))){
+                pick <- which(!is.na(responses))
+                infos <- lapply(pick, function(x, thetas)
+                    FI(extract.item(MCE$test$mirt_object, x), Theta=thetas), thetas=thetas)
+                tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
+                for(i in 1L:length(infos))
+                    tmp <- tmp + infos[[i]]
+                if(MCE$design$criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule'))
+                    tmp <- tmp + MCE$test$gp$gcov
+                info_thetas <<- tmp
             }
-                
         }
     }
 )

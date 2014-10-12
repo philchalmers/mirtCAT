@@ -91,20 +91,42 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
     crit
 }
 
-Drule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
-    
+Drule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, 
+                  prior = FALSE){
+    infos <- lapply(which_not_answered, function(x)
+        FI(extract.item(test$mirt_object, x), Theta=person$thetas))
+    crit <- lapply(infos, function(x, person) det(x + person$info_thetas), person=person)
+    crit <- do.call(c, crit)
+    crit
 }
 
 Erule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
-    
+    infos <- lapply(which_not_answered, function(x)
+        FI(extract.item(test$mirt_object, x), Theta=person$thetas))
+    crit <- lapply(infos, function(x, person){
+        ev <- eigen(x + person$info_thetas)$values
+        return(min(ev))
+        }, person=person)
+    crit <- do.call(c, crit)
+    crit
 }
 
 Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
-    
+    infos <- lapply(which_not_answered, function(x)
+        FI(extract.item(test$mirt_object, x), Theta=person$thetas))
+    crit <- lapply(infos, function(x, person, w) sum(diag(x + person$info_thetas) * w),
+        person=person, w=design$Wrule_weights)
+    crit <- do.call(c, crit)
+    crit
 }
 
 Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
-    
+    infos <- lapply(which_not_answered, function(x)
+        FI(extract.item(test$mirt_object, x), Theta=person$thetas))
+    crit <- lapply(infos, function(x, person, w) w %*% (x + person$info_thetas) %*% w,
+                   person=person, w=design$Wrule_weights)
+    crit <- do.call(c, crit)
+    crit
 }
 
 Drule2 <- function(which_not_answered, possible_patterns, person, test, row_loc, method){

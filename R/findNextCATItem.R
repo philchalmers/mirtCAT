@@ -133,39 +133,43 @@ findNextCATItem <- function(person, test, design){
                      person=person, test=test, row_loc=row_loc)
         index <- which_not_answered
     } else if(criteria == 'Drule' || criteria == 'DPrule'){
-        if(test$numerical_info){
+        if(design$numerical_info){
             crit <- -Drule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                           person=person, test=test, row_loc=row_loc, method=method)
             index <- row_loc
         } else {
-            
-            
+            crit <- Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                   person=person, test=test, row_loc=row_loc, method=method)
+            index <- which_not_answered
         }
     } else if(criteria == 'Erule' || criteria == 'EPrule'){
-        if(test$numerical_info){
+        if(design$numerical_info){
             crit <- -Erule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                           person=person, test=test, row_loc=row_loc, method=method)
             index <- row_loc
         } else {
-            
+            crit <- Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method)
             index <- which_not_answered
         }
     } else if(criteria == 'Trule' || criteria == 'TPrule'){
-        if(test$numerical_info){
+        if(design$numerical_info){
             crit <- Trule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                           person=person, test=test, row_loc=row_loc, method=method, design=design)
             index <- row_loc
         } else {
-            
+            crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method, design=design)
             index <- which_not_answered
         }
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
-        if(test$numerical_info){
+        if(design$numerical_info){
             crit <- Wrule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
                           person=person, test=test, row_loc=row_loc, method=method, design=design)
             index <- row_loc
         } else {
-            
+            crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method, design=design)
             index <- which_not_answered
         }
     } else {

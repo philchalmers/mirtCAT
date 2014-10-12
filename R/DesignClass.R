@@ -27,7 +27,7 @@ Design <- setRefClass("Design",
                     methods = list(
                         initialize = function(method, criteria, nfact, design,
                                               start_item, preCAT, nitems, exposure){
-                            numerical_info <<- TRUE #TODO work on FALSE option
+                            numerical_info <<- FALSE
                             method <<- method
                             criteria <<- criteria
                             criteria_estimator <<- 'MAP'
@@ -88,6 +88,8 @@ Design <- setRefClass("Design",
                                     min_items <<- as.integer(design$min_items)
                                 if(!is.null(design$max_items))
                                     max_items <<- as.integer(design$max_items)
+                                if(!is.null(design$numerical_info))
+                                    numerical_info <<- design$numerical_info
                             }
                             if(use_content && criteria == 'seq')
                                 stop('content designs are not supported for seq criteria')

@@ -19,3 +19,9 @@
   
 - moved 'Next' button in the web interface to the left panel box so that it will always remain in 
   the same location
+  
+- support CSS customization
+
+- switch multidimensional selection criteria to use analytical expressions rather than numerical.
+  Several multivariate Fisher information matrix computation currently not supported analytically,
+  but will be steadily added.

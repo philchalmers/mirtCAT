@@ -66,33 +66,33 @@ test_that('multidimensional', {
     expect_is(oo, 'trellis')
     oo <- plot(res, pick_theta=1)
     
-    #adaptive
+    #adaptive (numerical)
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='DPrule',
-                   design = list(min_SEM = .5))
+                   design = list(min_SEM = .5, numerical_info=TRUE))
     expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
-                   design = list(min_SEM = .5))
+                   design = list(min_SEM = .5, numerical_info=TRUE))
     expect_equal(as.numeric(res$thetas), c(0.2470195, 0.9285525), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4969313, 0.4976671), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'TPrule')
+                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'TPrule')
     expect_equal(as.numeric(res$thetas), c(0.3748623, 0.8975062), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.49504,  0.4959223), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'WPrule')
+                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'WPrule')
     expect_equal(as.numeric(res$thetas), c(0.3565503, 0.9837686), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4920396, 0.4857099), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
-                   design = list(min_SEM = .5), criteria = 'EPrule')
+                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'EPrule')
     expect_equal(as.numeric(res$thetas), c(0.3449841, 0.9562076), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4867828, 0.4995883), tolerance = 1e-4)
@@ -106,6 +106,39 @@ test_that('multidimensional', {
     expect_equal(as.numeric(res$thetas), c(0.5529561, 0.7744459), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.3945902, 0.4083016), tolerance = 1e-4)
+    
+    # non-numerical infos
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='DPrule',
+                   design = list(min_SEM = .4))
+    expect_equal(res$items_answered, c(1,20,21,37,3,5,35,30,16,36,24,39,14,11,29,7,13,23,15,32,18,
+                                       17,28,22,19,12,10,26,27,38,6,25,31,9,8,34,4,33,2,40))
+    expect_equal(as.numeric(res$thetas), c(0.5529561, 0.7744459), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.3945902, 0.4083016), tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
+                   design = list(min_SEM = .5))
+    expect_equal(as.numeric(res$thetas), c(0.3766401, 0.7896696), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4941144, 0.4996416), tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+                   design = list(min_SEM = .5), criteria = 'TPrule')
+    expect_equal(as.numeric(res$thetas), c(0.4276577, 0.9373399), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4407793, 0.4973139), tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+                   design = list(min_SEM = .5), criteria = 'WPrule')
+    expect_equal(as.numeric(res$thetas), c(0.5707969, 0.9740341), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4535264, 0.4993350), tolerance = 1e-4)
+    
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+                   design = list(min_SEM = .5), criteria = 'EPrule')
+    expect_equal(as.numeric(res$thetas), c(0.1520604, 0.7463376), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4904406, 0.4930718), tolerance = 1e-4)
     
 })
 
