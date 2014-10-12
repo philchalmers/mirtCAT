@@ -416,7 +416,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     MCE$outfile <- tempfile(fileext='.png')
     
     if(length(local_pattern)){
-        person <- run_local(as.character(local_pattern))
+        person <- run_local(as.character(local_pattern), ...)
         person$item_time <- numeric(0)
     } else {
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
