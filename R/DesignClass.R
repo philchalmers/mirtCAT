@@ -21,11 +21,13 @@ Design <- setRefClass("Design",
                                   use_content = 'logical',
                                   content = 'factor',
                                   content_prop = 'numeric',
-                                  content_prop_empirical = 'numeric'),
+                                  content_prop_empirical = 'numeric',
+                                  numerical_info = 'logical'),
                     
                     methods = list(
                         initialize = function(method, criteria, nfact, design,
                                               start_item, preCAT, nitems, exposure){
+                            numerical_info <<- TRUE #TODO work on FALSE option
                             method <<- method
                             criteria <<- criteria
                             criteria_estimator <<- 'MAP'

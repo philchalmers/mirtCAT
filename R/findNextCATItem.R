@@ -133,21 +133,41 @@ findNextCATItem <- function(person, test, design){
                      person=person, test=test, row_loc=row_loc)
         index <- which_not_answered
     } else if(criteria == 'Drule' || criteria == 'DPrule'){
-        crit <- -Drule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method)
-        index <- row_loc
+        if(test$numerical_info){
+            crit <- -Drule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method)
+            index <- row_loc
+        } else {
+            
+            
+        }
     } else if(criteria == 'Erule' || criteria == 'EPrule'){
-        crit <- -Erule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method)
-        index <- row_loc
+        if(test$numerical_info){
+            crit <- -Erule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method)
+            index <- row_loc
+        } else {
+            
+            index <- which_not_answered
+        }
     } else if(criteria == 'Trule' || criteria == 'TPrule'){
-        crit <- Trule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method, design=design)
-        index <- row_loc
+        if(test$numerical_info){
+            crit <- Trule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method, design=design)
+            index <- row_loc
+        } else {
+            
+            index <- which_not_answered
+        }
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
-        crit <- Wrule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                      person=person, test=test, row_loc=row_loc, method=method, design=design)
-        index <- row_loc
+        if(test$numerical_info){
+            crit <- Wrule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                          person=person, test=test, row_loc=row_loc, method=method, design=design)
+            index <- row_loc
+        } else {
+            
+            index <- which_not_answered
+        }
     } else {
         stop('Selection criteria does not exist')
     }

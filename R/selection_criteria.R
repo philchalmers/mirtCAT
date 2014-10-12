@@ -92,18 +92,34 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc){
 }
 
 Drule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    
+}
+
+Erule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+    
+}
+
+Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
+    
+}
+
+Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
+    
+}
+
+Drule2 <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
     acovs <- getAcovs(possible_patterns, method)
     crit <- do.call(c, lapply(acovs, det))
     crit
 }
 
-Erule <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
+Erule2 <- function(which_not_answered, possible_patterns, person, test, row_loc, method){
     acovs <- getAcovs(possible_patterns, method)
     crit <- do.call(c, lapply(acovs, function(x) eigen(x)$values[1L]))
     crit
 }
 
-Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
+Trule2 <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
     acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)
@@ -116,7 +132,7 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
     crit
 }
 
-Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
+Wrule2 <- function(which_not_answered, possible_patterns, person, test, row_loc, method, design){
     acovs <- getAcovs(possible_patterns, method)
     infos <- lapply(acovs, function(x){
         ret <- try(solve(x), TRUE)

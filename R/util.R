@@ -131,3 +131,11 @@ slowTheHeckDown <- function(x = .1){
     Sys.sleep(x)
     proc.time() - p1
 }
+
+infoMatrix <- function(){
+    
+}
+
+testInfoMatrix <- function(){
+    
+}

@@ -6,6 +6,7 @@ Person <- setRefClass("Person",
                                     thetas = 'matrix',
                                     thetas_history = 'matrix',
                                     thetas_SE_history = 'matrix',
+                                    info_thetas = 'matrix',
                                     demographics = 'data.frame',
                                     item_time = 'numeric',
                                     score = 'logical'),
@@ -22,6 +23,7 @@ Person <- setRefClass("Person",
                              if(!is.null(thetas.start_in))
                                 thetas <<- thetas.start_in
                              thetas_history <<- matrix(thetas, 1L, nfact)
+                             info_thetas <<- matrix(0, nfact, nfact)
                          })
                       
 )
@@ -40,6 +42,10 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
+            if(!MCE$test$numerical_info && MCE$test$nfact > 1L){
+                browser()
+            }
+                
         }
     }
 )
