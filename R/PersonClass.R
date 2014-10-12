@@ -33,7 +33,12 @@ Person$methods(
     # Update thetas
     Update.thetas = function(){
         if(score){
-            tmp <- try(fscores(MCE$test$mirt_object, method=MCE$design$method, response.pattern=responses,
+            method <- MCE$design$method
+            if(method == 'ML'){
+                if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
+                if(sum(!is.na(responses)) < 5L) method <- 'MAP'
+            }
+            tmp <- try(fscores(MCE$test$mirt_object, method=method, response.pattern=responses,
                                rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
                                MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
                                mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
