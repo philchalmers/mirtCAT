@@ -9,6 +9,7 @@ generated using R markdown via the `knitr` package and hosted on Github.
 - [Simple Survey](http://philchalmers.github.io/mirtCAT/html/simple_survey.html)
 - [Define IRT parameters, and run-offline](http://philchalmers.github.io/mirtCAT/html/run-offline.html)
 - [MCAT example, run-offline](http://philchalmers.github.io/mirtCAT/html/multidim-example.html)
+- [MCAT example with graded response model](http://philchalmers.github.io/mirtCAT/html/run-offline-graded.html). Run with Kullback-Leiber information and ML estimation. Run-offline
 - [Customizing a small number of GUI elements](http://philchalmers.github.io/mirtCAT/html/customizeGUI.html)
 
 ### User contributions
