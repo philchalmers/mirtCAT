@@ -36,14 +36,14 @@ Person$methods(
             method <- MCE$design$method
             if(method == 'ML'){
                 if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
-                if(sum(!is.na(responses)) < 5L) method <- 'MAP'
             }
             tmp <- try(fscores(MCE$test$mirt_object, method=method, response.pattern=responses,
                                rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
                                MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
                                mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
                        silent=TRUE)
-            thetas <<- tmp[,paste0('F', 1L:MCE$test$nfact), drop=FALSE]
+            if(!is(tmp, 'try-error'))
+                thetas <<- tmp[,paste0('F', 1L:MCE$test$nfact), drop=FALSE]
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])

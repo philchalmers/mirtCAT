@@ -37,6 +37,10 @@ test_that('ordered', {
     so <- summary(res)
     expect_equal(as.numeric(so$responses), c(3,2,3,2))
     
+    res <- mirtCAT(shiny_questions, mod, local_pattern = pat, criteria = 'MI', method = 'ML')
+    so <- summary(res)
+    expect_equal(as.numeric(so$responses), c(3,2,2,3))
+    
     CATdesign <- mirtCAT(shiny_questions, design_elements = TRUE)
     expect_equal(findNextItem(CATdesign), 1L) 
     CATdesign$person$responses[c(1,2)] <- c(4L, 4L)
