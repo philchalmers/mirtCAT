@@ -25,3 +25,5 @@
 - switch multidimensional selection criteria to use analytical expressions rather than numerical.
   Several multivariate Fisher information matrix computation currently not supported analytically,
   but will be steadily added.
+  
+- add classification capabilities to `design` list input

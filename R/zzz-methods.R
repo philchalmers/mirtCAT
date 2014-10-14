@@ -45,6 +45,10 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
         ret$raw_responses <- NULL
     if(!length(object$demographics))
         ret$demographics <- NULL
+    if(!is.null(object$classification)){
+        ret$classification <- as.character(object$classification)
+        names(ret$classification) <- colnames(ret$thetas_history)
+    }
     ret
 }
 

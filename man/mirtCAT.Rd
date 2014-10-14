@@ -144,6 +144,13 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     proportions.
     }
 
+  \item{\code{classify}}{a numeric vector indicating cut-off values for classification
+    above or below some prior threshold. Default does not use the classication scheme}
+
+  \item{\code{classify_CI}}{a numeric vector indicating the confident intervals used to
+    classify individuals being above or below values in \code{classify}. Values must
+    be between 0 and 1 (e.g., 0.95 gives 95\% confidence interval)}
+
 }}
 
 \item{shinyGUI}{a list of GUI based parameters to be over-written. These can be

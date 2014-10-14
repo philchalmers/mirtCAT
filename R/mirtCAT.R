@@ -140,6 +140,13 @@
 #'     Note that \code{content_prop} must sum to 1 in order to represent valid population 
 #'     proportions.
 #'     }
+#'     
+#'   \item{\code{classify}}{a numeric vector indicating cut-off values for classification
+#'     above or below some prior threshold. Default does not use the classication scheme}
+#'   
+#'   \item{\code{classify_CI}}{a numeric vector indicating the confident intervals used to 
+#'     classify individuals being above or below values in \code{classify}. Values must 
+#'     be between 0 and 1 (e.g., 0.95 gives 95\% confidence interval)}
 #'   
 #' }
 #' 
@@ -431,6 +438,14 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
                 thetas_SE_history=person$thetas_SE_history,
                 item_time=person$item_time,
                 demographics=person$demographics)
+    if(!is.null(design$classify)){
+        z <- -abs(ret$thetas - design$classify) / 
+            ret$thetas_SE_history[nrow(ret$thetas_SE_history),]
+        sig <- z < qnorm((1-design$classify_CI)/2)
+        direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff') 
+        direction[!sig] <- 'no decision'
+        ret$classification <- direction
+    }
     colnames(ret$thetas) <- colnames(ret$thetas_history) <-
         colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
     if(!person$score)

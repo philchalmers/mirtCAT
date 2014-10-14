@@ -3,6 +3,8 @@ Design <- setRefClass("Design",
                     fields = list(method = 'character',
                                   criteria = 'character',
                                   criteria_estimator = 'character',
+                                  classify = 'numeric',
+                                  classify_alpha = 'numeric',
                                   min_SEM = 'numeric',
                                   met_SEM = 'logical',
                                   min_items = 'integer',
@@ -64,6 +66,8 @@ Design <- setRefClass("Design",
                             max_time <<- Inf
                             use_content <<- FALSE
                             content_prop_empirical <<- 1
+                            classify <<- NaN
+                            classify_alpha <<- .05
                             if(length(design)){
                                 if(!is.null(design$content)){
                                     use_content <<- TRUE
@@ -90,6 +94,13 @@ Design <- setRefClass("Design",
                                     max_items <<- as.integer(design$max_items)
                                 if(!is.null(design$numerical_info))
                                     numerical_info <<- design$numerical_info
+                                if(!is.null(design$classify))
+                                    classify <<- design$classify
+                                if(!is.null(design$classify_CI)){
+                                    if(design$classify_CI > 1 || design$classify_CI < 0)
+                                        stop('classify_CI criteria must be between 0 and 1')
+                                    classify_alpha <<- (1 - design$classify_CI)/2
+                                }
                             }
                             if(use_content && criteria == 'seq')
                                 stop('content designs are not supported for seq criteria')
@@ -122,8 +133,13 @@ Design$methods(
         if(MCE$person$score){
             if(nanswered >= min_items){
                 diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
-                met_SEM <<- diff < min_SEM
-                if(all(met_SEM)) stop_now <<- TRUE
+                if(!is.nan(classify[1L])){
+                    z <- -abs(MCE$person$thetas - classify) / diff
+                    if(all(z < qnorm(classify_alpha))) stop_now <<- TRUE
+                } else {
+                    met_SEM <<- diff < min_SEM
+                    if(all(met_SEM)) stop_now <<- TRUE
+                }
             }
         }
         if(nanswered == max_items) stop_now <<- TRUE

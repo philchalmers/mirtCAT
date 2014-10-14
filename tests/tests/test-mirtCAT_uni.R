@@ -166,5 +166,14 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas), 0.4432854, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3612738, tolerance = 1e-4)
+    
+    ## classification
+    res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat, criteria='MI',
+                   design = list(classify = -0.5, classify_CI=.95))
+    so <- summary(res)
+    expect_true(so$classification == 'above cutoff')
+    expect_equal(as.numeric(res$thetas), 0.5866167, tolerance = 1e-4)
+    
+    
 })
 
