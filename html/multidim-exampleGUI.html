@@ -52,30 +52,90 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 
-<div id="mirtcat-vignette-files" class="section level1">
-<h1>mirtCAT Vignette Files</h1>
-<p>The following contains a list of links to various HTML vignettes with the <code>mirtCAT</code> package, generated using R markdown via the <code>knitr</code> package and hosted on Github.</p>
-<div id="generating-gui-examples" class="section level2">
-<h2>Generating GUI Examples</h2>
-<ul>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/simple_survey.html">Simple Survey</a>. Define a survey with only 3 Likert-type items, without any scoring/CAT definitions</li>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/unidim-exampleGUI.html">Unidimensional CAT</a>. A unidimensional CAT session using Maximum Information as the selction criteria<br /></li>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/customizeGUI.html">Customizing a small number of GUI elements</a>. Customize elements such as the title page, authors list, last page, include graphical item stems, etc, and include a pre-CAT section to collect information prior to beginning the CAT</li>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/multidim-exampleGUI.html">MCAT example</a>. Define two factor MCAT using Drule selection and terminating when <span class="math">\(SE(\hat{\theta}) &lt; .3\)</span> OR 50 items have been administered</li>
-</ul>
-</div>
-<div id="offline-examples-no-gui" class="section level2">
-<h2>Offline Examples (no GUI)</h2>
-<ul>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/run-offline.html">Define population IRT parameters</a>. Run a simple offline unidimensional CAT using predefined CAT parameters</li>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/multidim-example.html">MCAT example</a>. Run a multidimensional CAT using predefined CAT parameters with dichotomous data</li>
-<li><a href="http://philchalmers.github.io/mirtCAT/html/run-offline-graded.html">MCAT example with graded response model</a>. Run with Kullback-Leiber information and ML estimation</li>
-</ul>
-<div id="user-contributions" class="section level3">
-<h3>User contributions</h3>
-<p>If you would like to contribute your own to the collection then feel free to send along your source file (<code>.Rmd</code>) to <code>rphilip.chalmers@gmail.com</code> and I’ll add it to the appropriate package locations on Github.</p>
-</div>
-</div>
+<div id="multidimensional-example" class="section level1">
+<h1>Multidimensional Example</h1>
+<p>This example demonstrates how a multidimensional IRT test can be scored and modified for offline and online use. As well, it compares the effect of scoring the entire test given all possible responses to the use of a CAT scheme. The final section demonstrates how various elements in the GUI can be modified for more customized presentations.</p>
+<p>The following codeblock defines 100 items for a two factor math test measuring addition and multiplication.</p>
+<pre class="r"><code>library('mirtCAT')</code></pre>
+<pre><code>## Loading required package: mirt
+## Loading required package: stats4
+## Loading required package: lattice
+## Loading required package: shiny</code></pre>
+<pre class="r"><code># define population IRT parameters
+set.seed(1234)
+nitems &lt;- 120
+itemnames &lt;- paste0('Item.', 1:nitems)
+a &lt;- matrix(c(rlnorm(nitems/2, .2, .3), rnorm(nitems/4, 0, .3),
+              numeric(nitems/2), rnorm(nitems/4, 0, .3),
+              rlnorm(nitems/2, .2, .3)), nitems)
+d &lt;- matrix(rnorm(nitems))
+
+# create dummy dataset
+dat &lt;- simdata(a, d, 100, itemtype = 'dich',
+               sigma = matrix(c(1,.5,.5,1),2))
+colnames(dat) &lt;- itemnames
+
+# use population values for model
+sv &lt;- mirt(dat, 2, pars = 'values')
+sv$value[sv$name == 'a1'] &lt;- a[,1]
+sv$value[sv$name == 'a2'] &lt;- a[,2]
+sv$value[sv$name == 'd'] &lt;- d[,1]
+sv$value[sv$name == 'g'] &lt;- 0.2
+sv$value[sv$name == 'COV_21'] &lt;- 0.5
+mod &lt;- mirt(dat, 2, pars = sv, TOL = NaN)
+
+# math items definitions
+# addition for one factor and multiplication for the other
+shiny_questions &lt;- questions &lt;- vector('list', nitems)
+names(shiny_questions) &lt;- names(questions) &lt;- itemnames
+answers &lt;- character(nitems)
+choices &lt;- vector('list', nitems)
+spacing &lt;- floor(d - min(d)) + 1 #easier items have more variation
+
+for(i in 1:nitems){
+    if(i &lt; 31){ #addition
+        n1 &lt;- sample(1:100, 1)
+        n2 &lt;- sample(101:200, 1)
+        ans &lt;- n1 + n2
+        questions[[i]] &lt;- paste0(n1, ' + ', n2, ' = ?')
+    } else if(i &lt; 61){ #addition and multiplication
+        n1 &lt;- sample(1:50, 1)
+        n2 &lt;- sample(51:100, 1)
+        m1 &lt;- sample(1:10, 1)
+        m2 &lt;- sample(1:10, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(n1, ' + ', n2, ' + ', m1, ' * ', m2, ' = ?')
+    } else if(i &lt; 91){ #multiplication and addition
+        n1 &lt;- sample(1:10, 1)
+        n2 &lt;- sample(1:10, 1)
+        m1 &lt;- sample(1:25, 1)
+        m2 &lt;- sample(1:25, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(m1, ' * ', m2, ' + ', n1, ' + ', n2, ' = ?')
+    } else { #multiplication
+        m1 &lt;- sample(1:50, 1)
+        m2 &lt;- sample(1:50, 1)
+        ans &lt;- n1 + n2 + m1 * m2
+        questions[[i]] &lt;- paste0(m1, ' * ', m2, ' = ?')
+    }
+    answers[i] &lt;- as.character(ans)
+    ch &lt;- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+    ch[sample(1:5, 1)] &lt;- ans
+    choices[[i]] &lt;- as.character(ch)
+}
+
+# load list of items and their answers
+for(i in 1L:nitems){
+    shiny_questions[[i]] &lt;- radioButtons(inputId = itemnames[i],
+                                         label = questions[[i]],
+                                         choices = choices[[i]])
+}</code></pre>
+<p>Run the GUI using Drule selection, MAP estimation, and stopping when <span class="math">\(SE(\hat{\theta}) &lt; 0.4\)</span> OR 50 items have been administered. Also, omit the demographics page by passing an empty list.</p>
+<pre class="r"><code>result &lt;- mirtCAT(shiny_questions, mod, criteria = 'Drule', item_answers = answers,
+                  design = list(min_SEM = 0.4, max_items = 50),
+                  shinyGUI = list(demographics = list()))
+print(result)
+plot(result)</code></pre>
 </div>
 
 
