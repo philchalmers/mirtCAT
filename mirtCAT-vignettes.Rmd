@@ -9,7 +9,7 @@ generated using R markdown via the `knitr` package and hosted on Github.
 - [Simple Survey](http://philchalmers.github.io/mirtCAT/html/simple_survey.html). Define a survey
   with only 3 Likert-type items, without any scoring/CAT definitions
 - [Unidimensional CAT](http://philchalmers.github.io/mirtCAT/html/unidim-exampleGUI.html). A unidimensional CAT session using Maximum Information as the selction
-  criteria  
+  criteria with EAP estimation 
 - [Customizing a small number of GUI elements](http://philchalmers.github.io/mirtCAT/html/customizeGUI.html). Customize elements such as the title page, authors list, last page, include graphical
   item stems, etc, and include a pre-CAT section to collect information prior to beginning the CAT 
 - [MCAT example](http://philchalmers.github.io/mirtCAT/html/multidim-exampleGUI.html). Define two factor

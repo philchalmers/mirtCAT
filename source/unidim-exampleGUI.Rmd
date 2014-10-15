@@ -54,12 +54,21 @@ for(i in 1L:nitems){
 }
 ```
 
-Run the GUI using maximum-information selection, ML estimation, 
-and stopping when $SE(\hat{\theta}) < 0.3$.
+Check how test is expected to behave given its overall information criteria.
+
+```{r}
+plot(mod)
+
+#test appears to measure theta with SE < .4 within -2 to 2 range
+plot(mod, type = 'infoSE', theta_lim=c(-3,3))
+```
+
+Run the GUI using maximum-information selection, EAP estimation, 
+and stopping when $SE(\hat{\theta}) < 0.5$.
 
 ```{r, eval=FALSE}
-result <- mirtCAT(shiny_questions, mod, item_answers = answers, method = 'ML', criteria = 'MI', 
-                  design = list(min_SEM = 0.3))
+result <- mirtCAT(shiny_questions, mod, item_answers = answers, method = 'EAP', criteria = 'MI', 
+                  design = list(min_SEM = 0.5))
 print(result)
 plot(result)
 ```
