@@ -1,3 +1,7 @@
+# Changes in mirtCAT 0.3
+
+- graded response model Fisher information matrix added
+
 # Changes in mirtCAT 0.2
 
 - temporary files can now be saved while the GUI is running, and restored at a later time

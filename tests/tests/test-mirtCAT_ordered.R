@@ -47,4 +47,9 @@ test_that('ordered', {
     CATdesign$person$items_answered[c(1,2)] <- c(1L, 2L)
     CATdesign$person$thetas <- matrix(1.5)
     expect_equal(findNextItem(CATdesign), 3L) 
+    
+    mod2 <- mirt(Science, 2, TOL=NaN)
+    res <- mirtCAT(shiny_questions, mod2, local_pattern = pat, criteria = 'Drule')
+    so <- summary(res)
+    expect_equal(as.numeric(so$responses), c(3,2,2,3))
 })
