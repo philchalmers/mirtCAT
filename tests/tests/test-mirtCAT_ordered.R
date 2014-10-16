@@ -52,4 +52,24 @@ test_that('ordered', {
     res <- mirtCAT(shiny_questions, mod2, local_pattern = pat, criteria = 'Drule')
     so <- summary(res)
     expect_equal(as.numeric(so$responses), c(3,2,2,3))
+    
+    # MD
+    set.seed(1)
+    a <- matrix(c(rlnorm(50, .2, .3), numeric(100), rlnorm(50, .2, .3)), 100)
+    d <- matrix(seq(1.5, -1.5, length.out = 4), 100, 4, byrow=TRUE) + rnorm(100)
+    dat <- simdata(a, d, 100, itemtype = 'graded')
+    model <- mirt.model('F1 = 1-50
+                        F2 = 51-100')
+    sv <- mirt(dat, model, pars='values')
+    sv$value[sv$name == 'a1'] <- a[,1]
+    sv$value[sv$name == 'a2'] <- a[,2]
+    sv$value[sv$name %in% c('d1', 'd2', 'd3', 'd4')] <- as.numeric(t(d))
+    mod <- mirt(dat, model, pars = sv, TOL=NaN)
+    
+    pat <- generate_pattern(mod, Theta = c(-0.5, 0.5))
+    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule')
+    so <- summary(res)
+    expect_equal(nrow(so$thetas_history), 22)
+    expect_equal((so$items_answered), c(1,61,4,56,11,70,31,15,95,19,68,39,55,18,92,21,93,48,83,40,8))
+    
 })
