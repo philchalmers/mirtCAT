@@ -33,10 +33,10 @@ Design <- setRefClass("Design",
                             method <<- method
                             criteria <<- criteria
                             criteria_estimator <<- 'MAP'
-                            if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule')){
+                            if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule')){
                                 criteria_estimator <<- 'ML'
                             } else if(criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule',
-                                                      'MEPV')){
+                                                      'MEPV', 'APrule')){
                                 criteria_estimator <<- 'MAP'
                             }
                             CAT_criteria <<- criteria
@@ -52,7 +52,7 @@ Design <- setRefClass("Design",
                                 stop('start_item must equal 1 with seq criteria')
                             if(nfact > 1L && 
                                    !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
-                                                        'Erule', 'seq', 'random', 
+                                                        'Erule', 'seq', 'random', 'Arule', 'APrule',
                                                         'DPrule', 'TPrule', 'EPrule', 'WPrule')))
                                 stop('Selected criteria not valid for multidimensional tests')
                             min_SEM <<- .3

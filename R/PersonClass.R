@@ -47,7 +47,7 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             thetas_SE_history <<- rbind(thetas_SE_history, 
                                         tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
-            set <- c('Drule', 'Trule', 'Erule', 'Wrule', 
+            set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
                      'DPrule', 'TPrule', 'EPrule', 'WPrule')
             if(!MCE$design$numerical_info && MCE$test$nfact > 1L && 
                    MCE$design$criteria %in% set){

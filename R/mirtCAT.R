@@ -43,11 +43,13 @@
 #'   
 #'   Possible inputs for multidimensional adaptive tests include: \code{'Drule'} 
 #'   for the maximum determinant of the information matrix, \code{'Trule'} for the 
-#'   maximum (potentially weighted) trace of the information matrix, \code{'Erule'} for the 
-#'   minimum value of the information matrix, and \code{'Wrule'} for 
+#'   maximum (potentially weighted) trace of the information matrix, 
+#'   \code{'Arule'} for the minimum (potentially weighted) trace of the asymtotic covariance matrix,
+#'   \code{'Erule'} for the  minimum value of the information matrix, and \code{'Wrule'} for 
 #'   the weighted information criteria. For each of these rules, the posterior weight for 
 #'   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
-#'   \code{'EPrule'}, \code{'WPrule'}, respectively. As a safety precaution, if the 
+#'   \code{'APrule'}, \code{'EPrule'}, and \code{'WPrule'}, respectively. 
+#'   As a safety precaution, if the 
 #'   selected criteria do not weight by the posterior (and therefore do not exist for 
 #'   extreme response styles) and less than 5 items have been administered then 
 #'   the method is temporarily switched to the posterior weighting

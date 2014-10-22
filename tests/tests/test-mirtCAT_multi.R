@@ -140,5 +140,11 @@ test_that('multidimensional', {
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4904406, 0.4930718), tolerance = 1e-4)
     
+    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+                   design = list(min_SEM = .5), criteria = 'APrule')
+    expect_equal(as.numeric(res$thetas), c(0.3766401, 0.7896696), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
+                 c(0.4941144, 0.4996416), tolerance = 1e-4)
+    
 })
 

@@ -2,6 +2,8 @@
 
 - graded response model Fisher information matrix added
 
+- add 'Arule' and 'APrule' for minimum trace criteria of asymtotic covariance matrix
+
 # Changes in mirtCAT 0.2
 
 - temporary files can now be saved while the GUI is running, and restored at a later time

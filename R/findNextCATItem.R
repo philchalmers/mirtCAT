@@ -162,6 +162,10 @@ findNextCATItem <- function(person, test, design){
                           person=person, test=test, row_loc=row_loc, method=method, design=design)
             index <- which_not_answered
         }
+    } else if(criteria == 'Arule' || criteria == 'APrule'){
+        crit <- -Arule(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
+                      person=person, test=test, row_loc=row_loc, method=method, design=design)
+        index <- which_not_answered
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         if(design$numerical_info){
             crit <- Wrule2(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
