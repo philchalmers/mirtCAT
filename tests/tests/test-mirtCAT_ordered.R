@@ -72,4 +72,11 @@ test_that('ordered', {
     expect_equal(nrow(so$thetas_history), 22)
     expect_equal((so$items_answered), c(1,61,4,56,11,70,31,15,95,19,68,39,55,18,92,21,93,48,83,40,8))
     
+    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule', start_item = 10,
+                   preCAT = list(method = 'fixed', nitems = 5, criteria = 'KL'), 
+                   design = list(thetas.start = c(-0.5, 0.5)))
+    so <- summary(res)
+    expect_equal((so$items_answered), c(10,61,70,56,1,4,31,11,95,15,68,19,39,55,18,92,21,93,48,83,40))
+    expect_equal(head(so$thetas_history[,1]), c(-0.5,-0.5,-0.5,-0.5,-0.5,-0.2594008),
+                 tolerance = 1e-4)
 })

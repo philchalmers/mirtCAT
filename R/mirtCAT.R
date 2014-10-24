@@ -27,7 +27,8 @@
 #'   questionnaires
 #'   
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores in the CAT 
-#'   stage. Default is 'MAP'
+#'   stage, with the addition of a \code{'fixed'} input to keep the latent trait estimates
+#'   fixed at the previous values. Default is 'MAP'
 #' 
 #' @param criteria adaptive criteria used, default is to administer each item sequentially 
 #'   using \code{criteria = 'seq'}. 
@@ -235,7 +236,7 @@
 #'     
 #'     \item{\code{criteria}}{selection criteria (see above). Default is 'random'}
 #'     
-#'     \item{\code{method}}{selection criteria (see above). It is generally recommended to 
+#'     \item{\code{method}}{estimation criteria (see above). It is generally recommended to 
 #'       select a method which can deal with all-or-none response patterns, such as 'EAP'
 #'       or 'MAP', or in the multidimensional case 'DPrule' or 'TPrule'. Default is 'MAP'}
 #'    }

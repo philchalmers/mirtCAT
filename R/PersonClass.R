@@ -16,12 +16,12 @@ Person <- setRefClass("Person",
                              raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              items_answered <<- as.integer(rep(NA, nitems))
-                             thetas <<- matrix(numeric(nfact))
+                             thetas <<- matrix(numeric(nfact), nrow=1L)
                              thetas_SE_history <<- matrix(1, 1L, nfact)
                              score <<- score
                              item_time <<- numeric(nitems)
                              if(!is.null(thetas.start_in))
-                                thetas <<- thetas.start_in
+                                thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
                              info_thetas <<- matrix(0, nfact, nfact)
                          })
@@ -37,16 +37,21 @@ Person$methods(
             if(method == 'ML'){
                 if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
             }
-            tmp <- try(fscores(MCE$test$mirt_object, method=method, response.pattern=responses,
-                               rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
-                               MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
-                               mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
-                       silent=TRUE)
-            if(!is(tmp, 'try-error'))
-                thetas <<- tmp[,paste0('F', 1L:MCE$test$nfact), drop=FALSE]
+            if(method != 'fixed'){
+                tmp <- try(fscores(MCE$test$mirt_object, method=method, response.pattern=responses,
+                                   rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
+                                   MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
+                                   mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
+                           silent=TRUE)
+                if(!is(tmp, 'try-error'))
+                    thetas <<- tmp[,paste0('F', 1L:MCE$test$nfact), drop=FALSE]
+                thetas_SE_history <<- rbind(thetas_SE_history, 
+                                            tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
+            } else {
+                thetas_SE_history <<- rbind(thetas_SE_history, 
+                                            thetas_SE_history[nrow(thetas_SE_history),])
+            }
             thetas_history <<- rbind(thetas_history, thetas)
-            thetas_SE_history <<- rbind(thetas_SE_history, 
-                                        tmp[,paste0('SE_F', 1L:MCE$test$nfact), drop=FALSE])
             set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
                      'DPrule', 'TPrule', 'EPrule', 'WPrule')
             if(!MCE$design$numerical_info && MCE$test$nfact > 1L && 

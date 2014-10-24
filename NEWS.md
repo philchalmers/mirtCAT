@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.3
 
+- added 'fixed' method to keep latent trait estimates at fixed values (useful for preCAT)
+
 - graded response model Fisher information matrix added
 
 - add 'Arule' and 'APrule' for minimum trace criteria of asymtotic covariance matrix
