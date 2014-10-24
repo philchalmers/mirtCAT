@@ -163,7 +163,7 @@
 #'     \code{'Author of survey'}}
 #'
 #'   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
-#'     and information message
+#'     and information message. 
 #'     
 #'     \preformatted{ 
 #'          list(h1('Welcome to the mirtCAT interface'),
@@ -171,6 +171,8 @@
 #'               To cite the package use citation(\\'mirtCATd\\') in R.')
 #'          }
 #'       }
+#'       
+#'    If an empty list is passed, this page will be skipped.
 #' 
 #'   \item{\code{demographics}}{The person information page used in the GUI for collecting 
 #'     demographic information generated using tools from the shiny package. The default 
@@ -409,6 +411,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         person_object <- readRDS(shinyGUI$resume_file)
         MCE$last_demographics <- person_object$demographics
         shinyGUI_object$demographics <- list()
+        shinyGUI_object$firstpage <- list()
         shinyGUI_object$demographic_inputIDs <- character(0)
     }
     if(design_elements){

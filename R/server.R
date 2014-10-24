@@ -8,6 +8,9 @@ server <- function(input, output) {
         
         click <- input$Next
         
+        #skip first page?
+        if(!length(MCE$shinyGUI$firstpage)) click <- click + 1L
+        
         #first page, ask for demographics, etc
         if(click == 0L){
             return(MCE$shinyGUI$firstpage)

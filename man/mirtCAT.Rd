@@ -166,7 +166,7 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
     \code{'Author of survey'}}
 
   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
-    and information message
+    and information message.
 
     \preformatted{
          list(h1('Welcome to the mirtCAT interface'),
@@ -174,6 +174,8 @@ mirtCAT(questions = NULL, mirt_object = NULL, method = "MAP",
               To cite the package use citation(\\'mirtCATd\\') in R.')
          }
       }
+
+   If an empty list is passed, this page will be skipped.
 
   \item{\code{demographics}}{The person information page used in the GUI for collecting
     demographic information generated using tools from the shiny package. The default
