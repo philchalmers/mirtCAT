@@ -136,9 +136,9 @@ test_that('multidimensional', {
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'EPrule')
-    expect_equal(as.numeric(res$thetas), c(0.1520604, 0.7463376), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.2100018, 0.8188689), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4904406, 0.4930718), tolerance = 1e-4)
+                 c(0.4747903, 0.4865849), tolerance = 1e-4)
     
     res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'APrule')

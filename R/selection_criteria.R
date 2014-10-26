@@ -125,7 +125,7 @@ Arule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
         FI(extract.item(test$mirt_object, x), Theta=person$thetas))
     acovs <- lapply(infos, function(x, person){
         ret <- try(solve(x + person$info_thetas), TRUE)
-        if(is(ret, 'try-error')) ret <- diag(ncol(x)) * 10
+        if(is(ret, 'try-error')) ret <- diag(ncol(x)) * 1e10
         ret
     }, person=person)
     crit <- lapply(acovs, function(x, w) sum(diag(x) * w), w=design$Wrule_weights)

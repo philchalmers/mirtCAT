@@ -79,4 +79,20 @@ test_that('ordered', {
     expect_equal((so$items_answered), c(10,61,70,56,1,4,31,11,95,15,68,19,39,55,18,92,21,93,48,83,40))
     expect_equal(head(so$thetas_history[,1]), c(-0.5,-0.5,-0.5,-0.5,-0.5,-0.2594008),
                  tolerance = 1e-4)
+
+    sv <- mirt(dat, model, itemtype = 'gpcm', pars='values')
+    sv$value[sv$name == 'a1'] <- a[,1]
+    sv$value[sv$name == 'a2'] <- a[,2]
+    sv$value[sv$name %in% c('d1', 'd2', 'd3', 'd4')] <- as.numeric(t(d))
+    mod <- mirt(dat, model, itemtype = 'gpcm', pars = sv, TOL=NaN)
+    
+    set.seed(1234)
+    pat <- generate_pattern(mod, Theta = c(0,0))
+    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule', 
+                   design = list(min_SEM=0.2))
+    so <- summary(res)
+    expect_equal((so$items_answered), c(1,61,11,70,4,31,56,39,83,15,92,95,50,68,21,55,18,93,
+                                        43,40,48,19,96,44,59,25,87,20,8,89,73))
+    expect_equal(as.numeric(so$thetas_history[nrow(so$thetas_history), ]), 
+                 c(-0.08138413, -0.29611701), tolerance = 1e-4)
 })

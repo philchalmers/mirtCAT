@@ -4,7 +4,8 @@
 
 - added 'fixed' method to keep latent trait estimates at fixed values (useful for preCAT)
 
-- graded response model Fisher information matrix added
+- Fisher information matrix added for remaining multidimensional models supported by `mirt`,
+  including custom item types
 
 - add 'Arule' and 'APrule' for minimum trace criteria of asymtotic covariance matrix
 
