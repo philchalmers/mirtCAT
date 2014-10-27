@@ -5,7 +5,7 @@ Test <- setRefClass("Test",
                                     density = 'numeric',
                                     quadpts = 'numeric',
                                     theta_range = 'numeric',
-                                    item_answers = 'character',
+                                    item_answers = 'list',
                                     item_options = 'list',
                                     item_class = 'character',
                                     itemnames = 'character',
@@ -27,7 +27,7 @@ Test <- setRefClass("Test",
                               item_class <<- sapply(mirt_object@pars, class)
                               if(is.null(item_answers_in))
                                   item_answers_in <- as.character(rep(NA, length(itemnames)))
-                              item_answers <<- item_answers_in
+                              item_answers <<- as.list(item_answers_in)
                               item_options <<- item_options
                               length <<- length(item_answers)
                               nfact <<- tmpobj@nfact

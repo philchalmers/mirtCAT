@@ -66,9 +66,11 @@
 #'   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting 
 #'   items sequentially.
 #'   
-#' @param item_answers a character vector indicating which item should be considered 'correct'
-#'   when scoring individuals. Must be the length of the test, where \code{NA}s are used if the 
-#'   item is not to be scored
+#' @param item_answers a character or list vector indicating which categories should be considered 
+#'   'correct' when scoring individuals. Must be the length of the test, where \code{NA}s are used 
+#'   if the item is not to be scored. A character vector input indicates that there is only
+#'   one correct respones per item, while a list of character vectors indicates that 
+#'   multiple correct answers are possible.
 #'   
 #' @param start_item a single number indicating which item should be used as the start item.
 #'   Default is 1

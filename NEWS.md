@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.3
 
+- `item_answers` can now be a list input, indicating that more than one correct answer is
+  possible for a given item
+
 - allow the first page and demographics page to be skipped by passing empty list arguments 
 
 - added 'fixed' method to keep latent trait estimates at fixed values (useful for preCAT)
