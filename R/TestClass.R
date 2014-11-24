@@ -37,15 +37,16 @@ Test <- setRefClass("Test",
                               else quadpts <<- quadpts_in
                               if(is.null(theta_range_in)) theta_range <<- c(-6, 6)
                               else theta_range <<- theta_range_in
+                              gp <<- mirt:::ExtractGroupPars(mirt_object@pars[[length + 1L]])
                               if(tmpobj@nfact == 1L){
                                   ThetaGrid <<- mirt:::thetaComb(seq(theta_range[1L],theta_range[2L], 
                                                                      length.out=quadpts),
                                                                  tmpobj@nfact)
-                                  density <<- mirt:::mirt_dmvnorm(ThetaGrid)
+                                  density <<- mirt:::mirt_dmvnorm(ThetaGrid, mean=gp$gmeans, 
+                                                                  sigma=gp$gcov)
                               }
                               tmp <- mirt_object@itemloc
                               itemloc2 <<- tmp[-length(tmp)]
-                              gp <<- mirt:::ExtractGroupPars(mirt_object@pars[[length + 1L]])
                               tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
                                                     cov=gp$gcov, MI = 0)
                               if(length(dots)){
