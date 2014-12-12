@@ -39,7 +39,7 @@ Person$methods(
             }
             if(method != 'fixed'){
                 tmp <- try(fscores(MCE$test$mirt_object, method=method, response.pattern=responses,
-                                   rotate=MCE$test$fscores_args$rotate, theta_lim=MCE$test$fscores_args$theta_lim,
+                                   theta_lim=MCE$test$fscores_args$theta_lim,
                                    MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts, 
                                    mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov), 
                            silent=TRUE)

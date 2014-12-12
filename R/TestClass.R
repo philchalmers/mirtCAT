@@ -1,6 +1,6 @@
 Test <- setRefClass("Test", 
                     
-                      fields = list(mirt_object = 'ConfirmatoryClass',
+                      fields = list(mirt_object = 'SingleGroupClass',
                                     ThetaGrid = 'matrix',
                                     density = 'numeric',
                                     quadpts = 'numeric',
@@ -19,8 +19,7 @@ Test <- setRefClass("Test",
                           initialize = function(mirt_object, item_answers_in, item_options,
                                                 quadpts_in, theta_range_in, dots){
                               tmpobj <- mirt_object
-                              if(is(tmpobj, 'ExploratoryClass'))
-                                  class(tmpobj) <- 'ConfirmatoryClass'
+                              tmpobj@exploratory <- FALSE
                               itemnames <<- colnames(tmpobj@Data$data)
                               tmpobj@Data$mins <- rep(0L, length(tmpobj@Data$min))
                               mirt_object <<- tmpobj
@@ -51,7 +50,8 @@ Test <- setRefClass("Test",
                                                     cov=gp$gcov, MI = 0)
                               if(length(dots)){
                                   if(!is.null(dots$rotate))
-                                      tmp$rotate <- dots$rotate
+                                      warning('rotation not supported in mirtCAT. Using fixed
+                                           slope coefficients')
                                   if(!is.null(dots$theta_lim))
                                       tmp$theta_lim <- dots$theta_lim
                                   if(!is.null(dots$mean))
