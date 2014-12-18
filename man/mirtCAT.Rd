@@ -19,13 +19,14 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
 \method{plot}{mirtCAT}(x, pick_theta = NULL, SE = 1, main = NULL, ...)
 }
 \arguments{
-\item{df}{a data.frame object containing the inputs required to generate
-  GUI questions throught shiny. Each row in the data.frame corresponds to a unique
-  item. The data.frame object supports the follow column name combinations as inputs:
+\item{df}{a \code{data.frame} object containing the character vector inputs required to generate
+  GUI questions through shiny. Each row in the object corresponds to a unique
+  item. The object supports the follow column name combinations as inputs to specify the
+  type of response format, questions, options, answers, and stems:
 
   \describe{
 
-  \item{\code{Type}}{A character vector indicating the type of response input
+  \item{\code{Type}}{Indicates the type of response input
     to use from the shiny package. The supported types are: 'radio' for radio buttons,
     'radio_inline' for radio buttons that are organized horizontally,
     'select' for a pull-down box for selecting inputs, or 'text' for requiring
@@ -35,15 +36,15 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
       or stems to be generated.}
 
     \item{\code{Option.#}}{Column names pertaining to the possible response
-      options for each item, where the # corresponds to the specific cagtegory. For
+      options for each item, where the # corresponds to the specific category. For
       instance, a test with 4 unique response options for each item would contain
       the columns (\code{Option.1}, \code{Option.2}, \code{Option.3}, \code{Option.4}).
-      If however some items have less categories than NA's can be used for response
+      If, however, some items have less categories then \code{NA}'s can be used for response
       options that do not apply.}
 
     \item{\code{Answer} or \code{Answer.#}}{(Optional) A character vector (or multiple character)
       vectors indicating a scoring key for items that have correct answer(s). If there
-      is no correct answer for a question then a value of NA must be declared.}
+      is no correct answer for a question then a value of \code{NA} must be declared.}
 
     \item{\code{Stem}}{(Optional) a character vector of paths pointing to .png, .jpeg, or .gif
     files to be used as item stems. \code{NA}s are used if the item has no corresponding file.}
@@ -73,7 +74,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'}
   for the maximum determinant of the information matrix, \code{'Trule'} for the
   maximum (potentially weighted) trace of the information matrix,
-  \code{'Arule'} for the minimum (potentially weighted) trace of the asymtotic covariance matrix,
+  \code{'Arule'} for the minimum (potentially weighted) trace of the asymptotic covariance matrix,
   \code{'Erule'} for the  minimum value of the information matrix, and \code{'Wrule'} for
   the weighted information criteria. For each of these rules, the posterior weight for
   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
@@ -169,7 +170,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
     }
 
   \item{\code{classify}}{a numeric vector indicating cut-off values for classification
-    above or below some prior threshold. Default does not use the classication scheme}
+    above or below some prior threshold. Default does not use the classification scheme}
 
   \item{\code{classify_CI}}{a numeric vector indicating the confident intervals used to
     classify individuals being above or below values in \code{classify}. Values must
@@ -321,7 +322,8 @@ However, if no scoring is required (i.e., a standard survey) then defining a \co
 object may be omitted.
 }
 \details{
-All tests will stop once the \code{'min_SEM'} criteria has been reached. If all questions should
+All tests will stop once the \code{'min_SEM'} criteria has been reached or classification
+above or below a cutoff can be made. If all questions should
 be answered, users should specify an extremely small \code{'min_SEM'} or equivalently
 a large \code{'min_items'} criteria.
 }

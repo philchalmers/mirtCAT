@@ -18,8 +18,8 @@ generate_pattern(mirt_object, Theta, df = NULL)
 Generate a CAT pattern given various inputs. Returns a character vector or numeric matrix
 (depending on whether a \code{df} input was supplied) with columns equal to the test size and
 rows equal to the number of rows in \code{Theta}. For simulation studies, supplying a
-\code{Theta} input with more than 1 row will run independent CAT session when passed to
-\code{mirtCAT()}.
+\code{Theta} input with more than 1 row will generate a matrix of responses for
+running independent CAT session when passed to \code{mirtCAT(..., local_pattern)}.
 }
 \examples{
 \dontrun{
