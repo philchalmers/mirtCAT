@@ -428,7 +428,8 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
     design_object <- Design$new(method=method, criteria=criteria, 
-                                start_item=if(is.na(start_item)) sample(1L:test_object$length, 1L),
+                                start_item=if(is.na(start_item)) sample(1L:test_object$length, 1L)
+                                else start_item,
                          nfact=test_object$nfact, design=design, exposure=exposure,
                          preCAT=preCAT, nitems=test_object$length)
     person_object <- Person$new(nfact=test_object$nfact, nitems=length(test_object$itemnames), 
