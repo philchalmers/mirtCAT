@@ -132,10 +132,44 @@ slowTheHeckDown <- function(x = .1){
     proc.time() - p1
 }
 
-infoMatrix <- function(){
-    
-}
-
-testInfoMatrix <- function(){
-    
+buildShinyElements <- function(questions, itemnames){
+    if(!is.data.frame(questions))
+        stop('questions input must be a data.frame')
+    if(!all(sapply(questions, class) == 'character')) 
+        stop('Only character classes are supported in questions input')
+    if(is.null(itemnames)) itemnames <- paste0('Item.', 1:nrow(questions))
+    names <- colnames(questions)
+    Qs_char <- questions$Question
+    Type <- questions$Type
+    if(is.null(Qs_char)) stop('Question column not specified')
+    if(is.null(Type)) stop('Type column not specified')
+    if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text')))
+        stop('Type input in shiny_questions contains invalid arguments')
+    Qs <- vector('list', nrow(questions))
+    choices <- as.matrix(questions[,grepl('Option', names)])
+    colnames(choices) <- NULL
+    for(i in 1L:length(Qs)){
+        if(Type[i] %in% c('radio', 'radio_inline')){
+            cs <- na.omit(choices[i, ])
+            Qs[[i]] <- radioButtons(inputId = itemnames[i], label=Qs_char[i],
+                                    inline = Type[i] == 'radio_inline',
+                                    choices = cs)
+        } else if(Type[i] == 'select'){
+            cs <- na.omit(choices[i,])
+            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i], 
+                                    inline = Type[i] == 'radio_inline',
+                                    choices = na.omit(as.character(choices[i,])))
+        } else if(Type[i] == 'text'){
+            Qs[[i]] <- textInput(inputId = itemnames[i], label=Qs_char[i], value = '')
+        }
+    }
+    pick <- questions[,grepl('Answer', names),drop=FALSE]
+    if(length(pick)){
+        item_answers <- split(pick, 1:nrow(pick))
+        item_answers <- lapply(item_answers, na.omit)
+    } else item_answers <- NULL
+    choices2 <- split(choices, 1:nrow(choices))
+    choices2 <- lapply(choices2, na.omit)
+    ret <- list(questions=Qs, item_answers=item_answers, item_options=choices2)
+    return(ret)
 }

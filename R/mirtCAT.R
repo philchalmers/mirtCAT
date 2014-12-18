@@ -1,9 +1,9 @@
 #' Generate an adaptive or non-adaptive test HTML interface
 #' 
 #' Provides tools to generate an HTML interface for creating adaptive and 
-#' non-adaptive educational and psychological tests using the shiny package. Suitable for 
-#' applying unidimensional and multidimensional computerized adaptive tests using item 
-#' response theory methodology. Test scoring is performed using the \code{mirt} package.
+#' non-adaptive educational and psychological tests using the \code{shiny} package. 
+#' Suitable for applying unidimensional and multidimensional computerized adaptive tests 
+#' using item response theory methodology. Test scoring is performed using the \code{mirt} package.
 #' However, if no scoring is required (i.e., a standard survey) then defining a \code{mirt} 
 #' object may be omitted.
 #' 
@@ -16,11 +16,36 @@
 #' To access examples, vignettes, and exercise files that have been generated with knitr please
 #' visit \url{http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html}.
 #' 
-#' @param questions a named list containing \code{shiny} input definitions for each item. 
-#'   Each element of the input should be a list of the form 
-#'   \code{list(item1 = shinyInput(), item2 = shinyInput(), ...)}. 
-#'   Each \code{inputID} must be \bold{identical} to the column names used to define the data 
-#'   from the \code{mirt_object} input (if applicable)
+#' @param df a data.frame object containing the inputs required to generate 
+#'   GUI questions throught shiny. Each row in the data.frame corresponds to a unique
+#'   item. The data.frame object supports the follow column name combinations as inputs:
+#'   
+#'   \describe{
+#'   
+#'   \item{\code{Type}}{A character vector indicating the type of response input 
+#'     to use from the shiny package. The supported types are: 'radio' for radio buttons,
+#'     'radio_inline' for radio buttons that are organized horizontally,
+#'     'select' for a pull-down box for selecting inputs, or 'text' for requiring 
+#'     typed user input.} 
+#'     
+#'     \item{\code{Question}}{A character vector containing all the questions
+#'       or stems to be generated.} 
+#'       
+#'     \item{\code{Option.#}}{Column names pertaining to the possible response
+#'       options for each item, where the # corresponds to the specific cagtegory. For
+#'       instance, a test with 4 unique response options for each item would contain
+#'       the columns (\code{Option.1}, \code{Option.2}, \code{Option.3}, \code{Option.4}).
+#'       If however some items have less categories than NA's can be used for response
+#'       options that do not apply.}
+#'       
+#'     \item{\code{Answer} or \code{Answer.#}}{(Optional) A character vector (or multiple character)
+#'       vectors indicating a scoring key for items that have correct answer(s). If there
+#'       is no correct answer for a question then a value of NA must be declared.}
+#'       
+#'     \item{\code{Stem}}{(Optional) a character vector of paths pointing to .png, .jpeg, or .gif
+#'     files to be used as item stems. \code{NA}s are used if the item has no corresponding file.} 
+#'       
+#'   }
 #'   
 #' @param mirt_object single group object defined by the \code{mirt} package. This is required
 #'   if the test is to be scored adaptively or non-adaptively, but not required for general 
@@ -66,12 +91,6 @@
 #'   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting 
 #'   items sequentially.
 #'   
-#' @param item_answers a character or list vector indicating which categories should be considered 
-#'   'correct' when scoring individuals. Must be the length of the test, where \code{NA}s are used 
-#'   if the item is not to be scored. A character vector input indicates that there is only
-#'   one correct respones per item, while a list of character vectors indicates that 
-#'   multiple correct answers are possible.
-#'   
 #' @param start_item a single number indicating which item should be used as the start item.
 #'   Default is 1
 #'   
@@ -85,11 +104,11 @@
 #'   the largest information criteria will be sampled from. Naturally, the first and last 
 #'   elements of \code{exposure} are ignored since exposure control will be meaningless
 #' 
-#' @param local_pattern a character or numeric vector of response patterns 
+#' @param local_pattern a character/numeric vector or matrix of response patterns 
 #'   used to run the CAT application without generating the GUI interface. 
-#'   This option requires a complete response pattern to be supplied. \code{local_pattern} 
-#'   is required to be numeric if no \code{questions} list is input, otherwise it must be a 
-#'   character vector of plausible responses
+#'   This option requires complete response pattern(s) to be supplied. \code{local_pattern} 
+#'   is required to be numeric if no \code{questions} are supplied, otherwise it must contain 
+#'   character values of plausible responses
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
@@ -195,10 +214,6 @@
 #'     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
 #'     the \code{demographics} default}
 #'     
-#'   \item{\code{stem_locations}}{a character vector of paths pointing to .png, .jpeg, or .gif
-#'     files to be used as item stems. Must be the length of the test, where \code{NA}s are 
-#'     used if the item has no corresponding file}
-#'     
 #'   \item{\code{temp_file}}{a character vector indicating where a temporary .rds file 
 #'     containing the response information should be saved while the GUI is running. 
 #'     The object will be saved after each item is successfully completed. This is used to 
@@ -291,55 +306,58 @@
 #' a <- matrix(rlnorm(nitems, .2, .3))
 #' d <- matrix(rnorm(nitems))
 #' dat <- simdata(a, d, 1000, itemtype = 'dich')
-#' colnames(dat) <- itemnames
 #' mod <- mirt(dat, 1)
 #' 
 #' # simple math items
-#' shiny_questions <- questions <- vector('list', nitems)
-#' names(shiny_questions) <- names(questions) <- itemnames
-#' answers <- character(nitems)
-#' choices <- vector('list', nitems)
+#' questions <- answers <- character(nitems)
+#' choices <- matrix(NA, nitems, 5)
 #' spacing <- floor(d - min(d)) + 1 #easier items have more variation in the options
 #' 
 #' for(i in 1:nitems){
 #'     n1 <- sample(1:50, 1)
 #'     n2 <- sample(51:100, 1)
 #'     ans <- n1 + n2
-#'     questions[[i]] <- paste0(n1, ' + ', n2, ' = ?')
+#'     questions[i] <- paste0(n1, ' + ', n2, ' = ?')
 #'     answers[i] <- as.character(ans)
 #'     ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
 #'     ch[sample(1:5, 1)] <- ans
-#'     choices[[i]] <- as.character(ch)
+#'     choices[i, ] <- as.character(ch)
 #' }
 #' 
-#' for(i in 1L:nitems){
-#'     shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],
-#'                                          label = questions[[i]],
-#'                                          choices = choices[[i]])
-#' }
+#' df <- data.frame(Question=questions, Option=choices, 
+#'                               Type = 'radio', stringsAsFactors = FALSE)
+#' head(df)
 #' 
-#' (res <- mirtCAT(shiny_questions)) #collect response only (no scoring or estimating thetas)
-#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers)) #sequential scoring 
-#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'random')) #random
-#' (res <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI')) #adaptive
+#' (res <- mirtCAT(df)) #collect response only (no scoring or estimating thetas)
+#' summary(res)
+#' 
+#' # include scoring by providing Answer key
+#' df$Answer <- answers
+#' (res_seq <- mirtCAT(df, mod)) #sequential scoring 
+#' (res_random <- mirtCAT(df, mod, criteria = 'random')) #random
+#' (res_MI <- mirtCAT(df, mod, criteria = 'MI')) #adaptive
+#' 
+#' summary(res_seq)
+#' summary(res_random)
+#' summary(res_MI)
 #' 
 #' #-----------------------------------------
 #' 
 #' # run locally, random response pattern given Theta
 #' set.seed(1)
-#' pat <- generate_pattern(mod, Theta = 0, choices = choices, item_answers=answers)
+#' pat <- generate_pattern(mod, Theta = 0, df=df)
 #' head(pat)
-#' res <- mirtCAT(shiny_questions, mod, item_answers=answers, local_pattern=pat) #seq
+#' res <- mirtCAT(df, mod, local_pattern=pat) #seq scoring with character pattern
 #' summary(res)
 #' 
-#' # same as above, but using special input vector that doesn't require shiny
+#' # same as above, but using special input vector that doesn't require df input
 #' set.seed(1)
 #' pat2 <- generate_pattern(mod, Theta = 0)
 #' head(pat2)
 #' print(mirtCAT(mirt_object=mod, local_pattern=pat2))
 #' 
 #' # run CAT, and save results to object called person
-#' person <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', 
+#' person <- mirtCAT(df, mod, item_answers=answers, criteria = 'MI', 
 #'   local_pattern=pat)
 #' print(person)
 #' summary(person)
@@ -352,33 +370,40 @@
 #'
 #' ### save response object to temp directory in case session ends early
 #' wdf <- paste0(getwd(), '/temp_file.rds')
-#' res <- mirtCAT(shiny_questions, mod, item_answers=answers, shinyGUI=list(temp_file=wdf))
+#' res <- mirtCAT(df, mod, shinyGUI=list(temp_file=wdf))
 #' 
 #' # resume test this way if test was stopped early (and temp files were saved)
-#' res <- mirtCAT(shiny_questions, mod, item_answers=answers, shinyGUI=list(resume_file=wdf))
+#' res <- mirtCAT(df, mod, shinyGUI=list(resume_file=wdf))
 #' print(res)
 #' 
 #' }
-mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
-                    item_answers = NULL, start_item = 1, exposure = rep(1, length(questions)), 
+mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
+                    start_item = 1, exposure = rep(1, length(questions)), 
                     local_pattern = NULL, design_elements=FALSE,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {    
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- MCE$last_demographics <- NULL})
-    if(is.null(questions)){
+    Names <- if(!is.null(mirt_object)) colnames(mirt_object@Data$data) else NULL
+    if(is.null(df)){
+        if(is.null(mirt_object)) stop('No df or mirt_object supplied')
         questions <- vector('list', ncol(mirt_object@Data$data))
-        Names <- colnames(mirt_object@Data$data)
         names(questions) <- Names
         K <- mirt_object@Data$K
-        for(i in 1L:length(K))
+        item_options <- vector('list', length(K))
+        for(i in 1L:length(K)){
+            item_options[[i]] <- as.character(0L:(K[i]-1L))
             questions[[i]] <- selectInput(inputId = Names[i], label = '', 
-                                          choices = as.character(0L:(K[i]-1L)))
+                                          choices = item_options[[i]])
+        }
         item_answers <- NULL
+    } else {
+        obj <- buildShinyElements(df, itemnames = Names)
+        questions <- obj$questions
+        item_answers <- obj$item_answers
+        item_options <- obj$item_options
+        shinyGUI$stem_locations <- df$Stem
     }
-        
-    if(is.null(names(questions)))
-        stop('questions list must have names')
     if(is.null(mirt_object)){
         dat <- matrix(c(0,1), 2L, length(questions))
         colnames(dat) <- names(questions)
@@ -386,7 +411,7 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
         score <- FALSE
         if(!(criteria %in% c('seq', 'random')))
             stop('Only random and seq criteria are available if no mirt_object was defined')
-        mirt_mins <- rep(1L, ncol(dat))
+        mirt_mins <- rep(0L, ncol(dat))
     } else {
         score <- TRUE
         mirt_mins <- mirt_object@Data$mins
@@ -394,10 +419,6 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     if(!is.null(local_pattern))
         if(is.numeric(local_pattern))
             local_pattern <- local_pattern - mirt_mins
-    itemnames <- colnames(mirt_object@Data$data)
-    if(length(itemnames) != length(questions) || !all(itemnames %in% names(questions)))
-        stop('Item names for mirt_object and questions do not match')
-    item_options <- lapply(questions, extract_choices)
     
     #setup objects
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
@@ -439,7 +460,8 @@ mirtCAT <- function(questions = NULL, mirt_object = NULL, method = 'MAP', criter
     }
     person$items_answered <- person$items_answered[!is.na(person$items_answered)]
     ret <- list(raw_responses=person$raw_responses + 1L, 
-                responses=as.numeric(person$responses + mirt_mins),
+                responses=if(!is.null(item_answers)) as.numeric(person$responses + mirt_mins) 
+                    else as.numeric(rep(NA, length(mirt_mins))),
                 items_answered=person$items_answered,
                 thetas=person$thetas,
                 thetas_history=person$thetas_history,

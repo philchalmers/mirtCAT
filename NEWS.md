@@ -1,3 +1,9 @@
+# Changes in mirtCAT 0.4
+
+- major re-write of shiny inputs. Now the questions, answers, and options are all supplied through
+  a `data.frame` object for better clarity, and all shiny inputs regarding the questions, image 
+  locations, etc, are specified in this object
+
 # Changes in mirtCAT 0.3
 
 - `item_answers` can now be a list input, indicating that more than one correct answer is

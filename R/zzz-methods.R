@@ -31,18 +31,16 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
     raw_responses <- object$raw_responses[pick]
     responses <- object$responses[pick]
     ret <- list(raw_responses=raw_responses,
-                responses=responses,
+                scored_responses=responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
+    if(all(is.na(responses))) ret$scored_responses <- NULL
     if(length(object$item_time))
         ret$item_time <- object$item_time[pick]
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))
         ret$thetas_history <- ret$thetas_SE_history <- NULL
-    if(all(ret$raw_responses == ret$responses, na.rm = TRUE) || 
-           all((ret$raw_responses-1L) == ret$responses, na.rm = TRUE))
-        ret$raw_responses <- NULL
     if(!length(object$demographics))
         ret$demographics <- NULL
     if(!is.null(object$classification)){

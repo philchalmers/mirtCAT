@@ -15,8 +15,7 @@
 #' @examples
 #' \dontrun{
 #' # test defined in mirtCAT help file, first example
-#' CATdesign <- mirtCAT(shiny_questions, mod, item_answers=answers, criteria = 'MI', 
-#'    design_elements = TRUE)
+#' CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 #' 
 #' # returns number 1 in this case, since that's the starting item
 #' findNextItem(CATdesign) 
