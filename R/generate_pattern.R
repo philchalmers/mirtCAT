@@ -54,20 +54,17 @@ generate_pattern <- function(mirt_object, Theta, df = NULL){
             stop('Only one correct answer is supported when drawing data')
     }
     ret <- character(nitems)
-    K_1 <- do.call(c, lapply(choices, length)) - 1L
     has_item_answers <- length(item_answers) > 0L
-    if(has_item_answers)
-        K_1[!is.na(item_answers)] <- 1L
     for(i in 1L:nitems){
         ii <- extract.item(mirt_object, i)
         P <- probtrace(ii, Theta)
-        uniq <- 0L:K_1[i]
+        uniq <- 1L:ncol(P) - 1L
         pattern[i] <- sample(uniq, 1L, prob = P)
         if(has_item_answers){
             ret[i] <- if(pattern[i] == 1L) item_answers[i] else
                 sample(as.character(choices[i, ][!choices[i, ] %in% item_answers[i]]), 1L)
         } else {
-            ret[i] <- choices[[i]][pattern[i]+1L]
+            ret[i] <- as.character(choices[i, ][pattern[i]+1L])
         }
     }
     ret

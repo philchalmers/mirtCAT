@@ -19,31 +19,26 @@ test_that('multidimensional', {
     sv$value[sv$name == 'COV_21'] <- 0.5
     mod2 <- mirt(dat, 2, pars = sv, TOL = NaN)
     
-    #simple math items
-    shiny_questions <- questions <- vector('list', nitems)
-    names(shiny_questions) <- names(questions) <- itemnames
-    answers <- character(nitems)
-    choices <- vector('list', nitems)
+    # simple math items
+    questions <- answers <- character(nitems)
+    choices <- matrix(NA, nitems, 5)
     spacing <- floor(d - min(d)) + 1 #easier items have more variation in the options
     
     for(i in 1:nitems){
         n1 <- sample(1:50, 1)
         n2 <- sample(51:100, 1)
         ans <- n1 + n2
-        questions[[i]] <- paste0(n1, ' + ', n2, ' = ?')
+        questions[i] <- paste0(n1, ' + ', n2, ' = ?')
         answers[i] <- as.character(ans)
         ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
         ch[sample(1:5, 1)] <- ans
-        choices[[i]] <- as.character(ch)
+        choices[i, ] <- as.character(ch)
     }
     
-    for(i in 1L:nitems){
-        shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],
-                                             label = questions[[i]],
-                                             choices = choices[[i]])
-    }
+    df <- data.frame(Question=questions, Option=choices, Answer=answers,
+                     Type = 'radio', stringsAsFactors = FALSE)
     
-    pat <- generate_pattern(mod2, Theta = c(0, 1), choices = choices, item_answers=answers)
+    pat <- generate_pattern(mod2, Theta = c(0, 1), df)
     expect_true(all(pat == as.character(c(96,60,86,81,120,82,89,97,124,81,80,126,101,131,108,89,
                                           125,113,121,106,95,71,97,82,109,58,62,141,92,85,105,104,
                                           120,107,115,111,107,108,119,105))))
@@ -58,7 +53,7 @@ test_that('multidimensional', {
     expect_equal(as.numeric(res$thetas), c(0.14631183, 0.70251940), tolerance = 1e-4)
     
     #sequential
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat)
+    res <- mirtCAT(df, mod2, local_pattern=pat)
     expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[41,]), c(0.3960947, 0.4065036), tolerance = 1e-4)
     
@@ -67,79 +62,79 @@ test_that('multidimensional', {
     oo <- plot(res, pick_theta=1)
     
     #adaptive (numerical)
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='DPrule',
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .5, numerical_info=TRUE))
     expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4904314, 0.4816468), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='Drule',
                    design = list(min_SEM = .5, numerical_info=TRUE))
     expect_equal(as.numeric(res$thetas), c(0.4736261, 1.0920463), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4952640, 0.4825968), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'TPrule')
     expect_equal(as.numeric(res$thetas), c(0.3437288, 0.9700641), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4984259, 0.4790044), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'WPrule')
     expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4904314, 0.4816468), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'EPrule')
     expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4904314, 0.4816468), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria = 'KL')
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria = 'KL')
     expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.3960947, 0.4065036), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria = 'KLn')
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria = 'KLn')
     expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.3960947, 0.4065036), tolerance = 1e-4)
     
     # non-numerical infos
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='DPrule',
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .4))
     expect_equal(res$items_answered, c(1,20,21,37,3,5,35,30,24,36,16,11,39,14,29,7,13,23,32,18,17,22,12,15,28,19,10,26,27,38,31,6,25,9,8,34,4,33,2,40))
     expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.3960947, 0.4065036), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, criteria='Drule',
+    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='Drule',
                    design = list(min_SEM = .5))
     expect_equal(as.numeric(res$thetas), c(0.4718224, 0.8060655), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4937443, 0.4917037), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'TPrule')
     expect_equal(as.numeric(res$thetas), c(0.4446583, 0.8397193), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4404435, 0.4914105), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'WPrule')
     expect_equal(as.numeric(res$thetas), c(0.6661044, 1.0048121), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4564089, 0.4913090), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'EPrule')
     expect_equal(as.numeric(res$thetas), c(0.4468275, 0.9738567), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.4933418, 0.4957023), tolerance = 1e-4)
     
-    res <- mirtCAT(shiny_questions, mod2, item_answers=answers, local_pattern=pat, 
+    res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'APrule')
     expect_equal(as.numeric(res$thetas), c(0.4718224, 0.8060655), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
