@@ -156,8 +156,7 @@ buildShinyElements <- function(questions, itemnames){
                                     choices = cs)
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
-            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i], 
-                                    inline = Type[i] == 'radio_inline',
+            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i],
                                     choices = na.omit(as.character(choices[i,])))
         } else if(Type[i] == 'text'){
             Qs[[i]] <- textInput(inputId = itemnames[i], label=Qs_char[i], value = '')

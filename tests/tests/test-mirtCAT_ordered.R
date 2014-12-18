@@ -91,4 +91,17 @@ test_that('ordered', {
                                         43,40,48,19,96,44,59,25,87,20,8,89,73))
     expect_equal(as.numeric(so$thetas_history[nrow(so$thetas_history), ]), 
                  c(-0.08138413, -0.29611701), tolerance = 1e-4)
+    
+    # generate.mirt_object tests
+    set.seed(1)
+    nitems <- 50
+    a1 <- rlnorm(nitems, .2,.2)
+    d <- rnorm(nitems)
+    g <- rbeta(nitems, 20, 80)
+    pars <- data.frame(a1=a1, d=d, g=g)
+    obj <- generate.mirt_object(pars, '3PL')
+    expect_is(obj, 'SingleGroupClass')
+    cfs <- coef(obj, simplify=TRUE, digits = 50)
+    expect_equal(as.numeric(cfs[[1]][1:3, 1:2]), as.numeric(as.matrix(pars[1:3, 1:2])), 
+                 tolerance = 1e-10)
 })

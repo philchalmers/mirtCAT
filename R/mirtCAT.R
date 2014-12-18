@@ -51,7 +51,9 @@
 #'   
 #' @param mirt_object single group object defined by the \code{mirt} package. This is required
 #'   if the test is to be scored adaptively or non-adaptively, but not required for general 
-#'   questionnaires
+#'   questionnaires. The object can be constructed by using the 
+#'   \code{\link{generate.mirt_object}} function if population parameters are known or by
+#'   including a calibrated model estimated from the \code{\link{mirt}} function with real data.
 #'   
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores in the CAT 
 #'   stage, with the addition of a \code{'fixed'} input to keep the latent trait estimates
@@ -264,7 +266,7 @@
 #' 
 #' @export mirtCAT
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
-#' @seealso \code{\link{generate_pattern}}
+#' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   
@@ -299,9 +301,9 @@
 #' @examples
 #' \dontrun{
 #' 
-#' # unidimensional scored example with generated items
+#' ### unidimensional scored example with generated items
 #' 
-#' # model
+#' # create mirt_object from estimated parameters
 #' set.seed(1234)
 #' nitems <- 50
 #' itemnames <- paste0('Item.', 1:nitems)
@@ -309,6 +311,12 @@
 #' d <- matrix(rnorm(nitems))
 #' dat <- simdata(a, d, 1000, itemtype = 'dich')
 #' mod <- mirt(dat, 1)
+#' coef(mod2, simplify=TRUE)
+#' 
+#' # alternatively, define mirt_object from population values (not run)
+#' pars <- data.frame(a1=a, d=d)
+#' mod2 <- generate.mirt_object(pars, itemtype='2PL')
+#' coef(mod2, simplify=TRUE)
 #' 
 #' # simple math items
 #' questions <- answers <- character(nitems)

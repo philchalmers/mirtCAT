@@ -11,6 +11,10 @@
 
 - `start_item` input now accepts `NA` to select a starting item at random
 
+- added `generate.mirt_object()` function to build the required `mirt_object` input given
+  population parameters
+  
+
 # Changes in mirtCAT 0.3
 
 - `item_answers` can now be a list input, indicating that more than one correct answer is
