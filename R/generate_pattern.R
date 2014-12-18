@@ -37,6 +37,8 @@ generate_pattern <- function(mirt_object, Theta, df = NULL){
     fn <- function(p, ns) sample(1L:ns, 1L, prob = p) - 1
     nitems <- ncol(mirt_object@Data$data)
     if(!is.matrix(Theta)) Theta <- matrix(Theta, 1L)
+    if(nrow(Theta) > 1L && !is.null(df))
+        stop('df argument only used for generating single-case response patterns')
     N <- nrow(Theta)
     pattern <- matrix(0L, N, nitems)
     if(is.null(df)){

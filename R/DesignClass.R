@@ -128,13 +128,13 @@ Design <- setRefClass("Design",
 Design$methods(
 
     # Check whether to stop adaptive test
-    Update.stop_now = function(){
-        nanswered <- sum(!is.na(MCE$person$responses))
-        if(MCE$person$score){
+    Update.stop_now = function(person){
+        nanswered <- sum(!is.na(person$responses))
+        if(person$score){
             if(nanswered >= min_items){
-                diff <- MCE$person$thetas_SE_history[nrow(MCE$person$thetas_SE_history), ]
+                diff <- person$thetas_SE_history[nrow(person$thetas_SE_history), ]
                 if(!is.nan(classify[1L])){
-                    z <- -abs(MCE$person$thetas - classify) / diff
+                    z <- -abs(person$thetas - classify) / diff
                     if(all(z < qnorm(classify_alpha))) stop_now <<- TRUE
                 } else {
                     met_SEM <<- diff < min_SEM
@@ -143,7 +143,7 @@ Design$methods(
             }
         }
         if(nanswered == max_items) stop_now <<- TRUE
-        if(max_time <= sum(MCE$person$item_time)) stop_now <<- TRUE
+        if(max_time <= sum(person$item_time)) stop_now <<- TRUE
     },
     
     Next.stage = function(item){

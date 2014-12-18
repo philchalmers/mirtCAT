@@ -62,7 +62,7 @@ server <- function(input, output) {
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                     if(itemclick > MCE$design$preCAT_nitems)
-                        MCE$design$Update.stop_now()
+                        MCE$design$Update.stop_now(MCE$person)
                 }
             } 
             

@@ -4,6 +4,13 @@
   a `data.frame` object for better clarity, and all shiny inputs regarding the questions, image 
   locations, etc, are specified in this object
 
+- the `local_pattern` input now accepts a matrix of response patterns for running simulation 
+  designs. Returns a list of person objects instead of a single object
+  
+- `generate_pattern()` now supports multiple Theta inputs specifically for simulation designs
+
+- `start_item` input now accepts `NA` to select a starting item at random
+
 # Changes in mirtCAT 0.3
 
 - `item_answers` can now be a list input, indicating that more than one correct answer is

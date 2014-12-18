@@ -92,7 +92,7 @@
 #'   items sequentially.
 #'   
 #' @param start_item a single number indicating which item should be used as the start item.
-#'   Default is 1
+#'   Default is 1. If \code{NA} is supplied a random starting value will be chosen
 #'   
 #' @param exposure a numeric vector specifying the amount of exposure control to apply for
 #'   each successive item. The default vector of 1's selects items which demonstrate 
@@ -416,16 +416,19 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
         score <- TRUE
         mirt_mins <- mirt_object@Data$mins
     }
-    if(!is.null(local_pattern))
+    if(!is.null(local_pattern)){
+        if(!is.matrix(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
         if(is.numeric(local_pattern))
-            local_pattern <- local_pattern - mirt_mins
+            local_pattern <- t(t(local_pattern) - mirt_mins)
+    }
     
     #setup objects
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
     test_object <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
-    design_object <- Design$new(method=method, criteria=criteria, start_item=start_item,
+    design_object <- Design$new(method=method, criteria=criteria, 
+                                start_item=if(is.na(start_item)) sample(1L:test_object$length, 1L),
                          nfact=test_object$nfact, design=design, exposure=exposure,
                          preCAT=preCAT, nitems=test_object$length)
     person_object <- Person$new(nfact=test_object$nfact, nitems=length(test_object$itemnames), 
@@ -452,34 +455,41 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     MCE$outfile <- tempfile(fileext='.png')
     
     if(length(local_pattern)){
-        person <- run_local(as.character(local_pattern), ...)
-        person$item_time <- numeric(0)
+        person <- run_local(local_pattern, nfact=test_object$nfact, start_item=start_item,
+                            nitems=length(test_object$itemnames), 
+                            thetas.start_in=design$thetas.start, score=score, ...)
     } else {
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     }
-    person$items_answered <- person$items_answered[!is.na(person$items_answered)]
-    ret <- list(raw_responses=person$raw_responses + 1L, 
-                responses=if(!is.null(item_answers)) as.numeric(person$responses + mirt_mins) 
-                    else as.numeric(rep(NA, length(mirt_mins))),
-                items_answered=person$items_answered,
-                thetas=person$thetas,
-                thetas_history=person$thetas_history,
-                thetas_SE_history=person$thetas_SE_history,
-                item_time=person$item_time,
-                demographics=person$demographics)
-    if(!is.null(design$classify)){
-        z <- -abs(ret$thetas - design$classify) / 
-            ret$thetas_SE_history[nrow(ret$thetas_SE_history),]
-        sig <- z < qnorm((1-design$classify_CI)/2)
-        direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff') 
-        direction[!sig] <- 'no decision'
-        ret$classification <- direction
+    if(!is.list(person)) person <- list(person)
+    ret.out <- vector('list', length(person))
+    for(i in 1L:length(person)){
+        person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
+        ret <- list(raw_responses=person[[i]]$raw_responses + 1L, 
+                    responses=if(!is.null(item_answers)) as.numeric(person[[i]]$responses + mirt_mins) 
+                        else as.numeric(rep(NA, length(mirt_mins))),
+                    items_answered=person[[i]]$items_answered,
+                    thetas=person[[i]]$thetas,
+                    thetas_history=person[[i]]$thetas_history,
+                    thetas_SE_history=person[[i]]$thetas_SE_history,
+                    item_time=person[[i]]$item_time,
+                    demographics=person[[i]]$demographics)
+        if(!is.null(design$classify)){
+            z <- -abs(ret$thetas - design$classify) / 
+                ret$thetas_SE_history[nrow(ret$thetas_SE_history),]
+            sig <- z < qnorm((1-design$classify_CI)/2)
+            direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff') 
+            direction[!sig] <- 'no decision'
+            ret$classification <- direction
+        }
+        colnames(ret$thetas) <- colnames(ret$thetas_history) <-
+            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
+        if(!person[[i]]$score)
+            ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
+        class(ret) <- 'mirtCAT'
+        ret.out[[i]] <- ret
     }
-    colnames(ret$thetas) <- colnames(ret$thetas_history) <-
-        colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
-    if(!person$score)
-        ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
-    class(ret) <- 'mirtCAT'
-    ret
+    if(length(ret.out) == 1L) return(ret.out[[1L]]) 
+    return(ret.out)
 }

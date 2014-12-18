@@ -95,7 +95,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
   items sequentially.}
 
 \item{start_item}{a single number indicating which item should be used as the start item.
-  Default is 1}
+  Default is 1. If \code{NA} is supplied a random starting value will be chosen}
 
 \item{exposure}{a numeric vector specifying the amount of exposure control to apply for
   each successive item. The default vector of 1's selects items which demonstrate
