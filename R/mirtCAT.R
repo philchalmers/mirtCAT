@@ -438,6 +438,7 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     }
     
     #setup objects
+    if(!is.null(df)) shinyGUI$stem_locations <- df$Stem
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
     test_object <- new('Test', mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,

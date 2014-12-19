@@ -58,7 +58,7 @@ server <- function(input, output) {
                         sum(MCE$person$item_time)
                     
                     #update Thetas
-                    MCE$person$Update.thetas(design, test)
+                    MCE$person$Update.thetas(MCE$design, MCE$test)
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                     if(itemclick > MCE$design@preCAT_nitems)
