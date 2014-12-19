@@ -22,7 +22,7 @@ getAcovs <- function(possible_patterns, method){
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         return(x)
-    }, pick=!MCE$design$met_SEM)
+    }, pick=!MCE$design@met_SEM)
     ret    
 } 
 

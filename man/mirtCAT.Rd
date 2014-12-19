@@ -9,8 +9,8 @@
 \usage{
 mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
   start_item = 1, exposure = rep(1, length(questions)),
-  local_pattern = NULL, design_elements = FALSE, design = list(),
-  shinyGUI = list(), preCAT = list(), ...)
+  local_pattern = NULL, design_elements = FALSE, cl = NULL,
+  design = list(), shinyGUI = list(), preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -118,6 +118,11 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
 
 \item{design_elements}{logical; return an object containing the test, person, and design
   elements? Primarily this is to be used with the \code{\link{findNextItem}} function}
+
+\item{cl}{an object definition to be passed to the parallel package
+  (see \code{?parallel::parLapply} for details). If defined, and if
+  \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help
+  decrease estimation times in simulation work}
 
 \item{design}{a list of design based parameters for adaptive and non-adaptive tests.
   These can be

@@ -33,7 +33,7 @@ Person$methods(
     # Update thetas
     Update.thetas = function(design, test){
         if(score){
-            method <- design$method
+            method <- design@method
             if(method == 'ML'){
                 if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
             }
@@ -54,15 +54,15 @@ Person$methods(
             thetas_history <<- rbind(thetas_history, thetas)
             set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
                      'DPrule', 'TPrule', 'EPrule', 'WPrule')
-            if(!design$numerical_info && test@nfact > 1L && 
-                   design$criteria %in% set){
+            if(!design@numerical_info && test@nfact > 1L && 
+                   design@criteria %in% set){
                 pick <- which(!is.na(responses))
                 infos <- lapply(pick, function(x, thetas)
                     FI(extract.item(test@mirt_object, x), Theta=thetas), thetas=thetas)
                 tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
                 for(i in 1L:length(infos))
                     tmp <- tmp + infos[[i]]
-                if(design$criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule'))
+                if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule'))
                     tmp <- tmp + solve(test@gp$gcov)
                 info_thetas <<- tmp
             }

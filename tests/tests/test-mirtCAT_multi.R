@@ -61,48 +61,6 @@ test_that('multidimensional', {
     expect_is(oo, 'trellis')
     oo <- plot(res, pick_theta=1)
     
-    #adaptive (numerical)
-    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
-                   design = list(min_SEM = .5, numerical_info=TRUE))
-    expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4904314, 0.4816468), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, criteria='Drule',
-                   design = list(min_SEM = .5, numerical_info=TRUE))
-    expect_equal(as.numeric(res$thetas), c(0.4736261, 1.0920463), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4952640, 0.4825968), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, 
-                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'TPrule')
-    expect_equal(as.numeric(res$thetas), c(0.3437288, 0.9700641), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4984259, 0.4790044), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, 
-                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'WPrule')
-    expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4904314, 0.4816468), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, 
-                   design = list(min_SEM = .5, numerical_info=TRUE), criteria = 'EPrule')
-    expect_equal(as.numeric(res$thetas), c(0.4307971, 1.0068197), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4904314, 0.4816468), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, criteria = 'KL')
-    expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.3960947, 0.4065036), tolerance = 1e-4)
-    
-    res <- mirtCAT(df, mod2, local_pattern=pat, criteria = 'KLn')
-    expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.3960947, 0.4065036), tolerance = 1e-4)
-    
-    # non-numerical infos
     res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .4))
     expect_equal(res$items_answered, c(1,20,21,37,3,5,35,30,24,36,16,11,39,14,29,7,13,23,32,18,17,22,12,15,28,19,10,26,27,38,31,6,25,9,8,34,4,33,2,40))

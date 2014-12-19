@@ -3,11 +3,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test){
-        design$stop_now <- FALSE
-        if(is.na(start_item)) design$start_item <- sample(1L:ncol(responses), 1L)
+        if(is.na(start_item)) design@start_item <- sample(1L:ncol(responses), 1L)
         person <- Person$new(nfact=nfact, nitems=nitems, 
                              thetas.start_in=thetas.start_in, score=score)
-        
         item <- findNextCATItem(person=person, test=test, design=design)
         person$items_answered[1L] <- item
         
@@ -24,12 +22,12 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             
             #update Thetas
             person$Update.thetas(design, test)
-            design$Update.stop_now(person)
-            if(i > design$preCAT_nitems)
-                if(design$stop_now) 
+            design <- Update.stop_now(design, person)
+            if(i > design@preCAT_nitems)
+                if(design@stop_now) 
                     break
             
-            design$Next.stage(item=i)
+            design <- Next.stage(design, item=i)
             
             item <- findNextCATItem(person=person, test=test, design=design)
             person$items_answered[i] <- item
@@ -41,7 +39,6 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                       nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
                       design=design, test=test)
     } else {
-        browser()
         ret <- parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses, 
                                    nfact=nfact, start_item=start_item, design=design, test=test,
                                    nitems=nitems, thetas.start_in=thetas.start_in, score=score,

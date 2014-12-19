@@ -115,7 +115,7 @@ Trule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
     infos <- lapply(which_not_answered, function(x)
         FI(extract.item(test@mirt_object, x), Theta=person$thetas))
     crit <- lapply(infos, function(x, person, w) sum(diag(x + person$info_thetas) * w),
-        person=person, w=design$Wrule_weights)
+        person=person, w=design@Wrule_weights)
     crit <- do.call(c, crit)
     crit
 }
@@ -128,7 +128,7 @@ Arule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
         if(is(ret, 'try-error')) ret <- diag(ncol(x)) * 1e10
         ret
     }, person=person)
-    crit <- lapply(acovs, function(x, w) sum(diag(x) * w), w=design$Wrule_weights)
+    crit <- lapply(acovs, function(x, w) sum(diag(x) * w), w=design@Wrule_weights)
     crit <- do.call(c, crit)
     crit
 }
@@ -137,7 +137,7 @@ Wrule <- function(which_not_answered, possible_patterns, person, test, row_loc, 
     infos <- lapply(which_not_answered, function(x)
         FI(extract.item(test@mirt_object, x), Theta=person$thetas))
     crit <- lapply(infos, function(x, person, w) w %*% (x + person$info_thetas) %*% w,
-                   person=person, w=design$Wrule_weights)
+                   person=person, w=design@Wrule_weights)
     crit <- do.call(c, crit)
     crit
 }
@@ -163,7 +163,7 @@ Trule2 <- function(which_not_answered, possible_patterns, person, test, row_loc,
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) sum(diag(x) * w), 
-                              w=design$Wrule_weights[!design$met_SEM]))
+                              w=design@Wrule_weights[!design@met_SEM]))
     crit
 }
 
@@ -176,7 +176,7 @@ Wrule2 <- function(which_not_answered, possible_patterns, person, test, row_loc,
         ret
     })
     crit <- do.call(c, lapply(infos, function(x, w) w %*% x %*% w, 
-                              w=design$Wrule_weights[!design$met_SEM]))
+                              w=design@Wrule_weights[!design@met_SEM]))
     crit
 }
 

@@ -14,6 +14,9 @@
 - added `generate.mirt_object()` function to build the required `mirt_object` input given
   population parameters
   
+- new `cl` argument in `mirtCAT()` for passing a parallel cluster object defined from the 
+  parallel package. Used to run simulation designs with parallel architecture for better speed
+  
 
 # Changes in mirtCAT 0.3
 

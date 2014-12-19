@@ -106,10 +106,15 @@ test_that('ordered', {
                  tolerance = 1e-10)
     
     #parallel test
-#     require(parallel, quietly=TRUE, warn.conflicts=FALSE)
-#     cl <- makeCluster(4)
-#     pats <- generate_pattern(obj, Theta = matrix(c(-2,-1,1,2),4))
-#     system.time(ret <- mirtCAT(mirt_object=obj, local_pattern = pars))
-#     system.time(ret <- mirtCAT(mirt_object=obj, local_pattern = pars, cl=cl))
+    require(parallel, quietly=TRUE, warn.conflicts=FALSE)
+    cl <- makeCluster(4)
+    pats <- generate_pattern(obj, Theta = matrix(c(-2,-1,1,2),4))
+    ret <- mirtCAT(mirt_object=obj, local_pattern = pats, criteria = 'MI')
+    ret2 <- mirtCAT(mirt_object=obj, local_pattern = pats, criteria = 'MI', cl=cl)
+    for(i in 1:4)
+        expect_true(as.numeric(ret[[i]]$thetas_SE_history[51,]) == 
+                         as.numeric(ret2[[i]]$thetas_SE_history[51,]))
+    stopCluster(cl)
+
     
 })

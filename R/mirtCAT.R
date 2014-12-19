@@ -114,10 +114,10 @@
 #'   is required to be numeric if no \code{questions} are supplied, otherwise it must contain 
 #'   character values of plausible responses
 #'   
-# @param cl an object definition to be passed to the parallel package 
-#   (see \code{?parallel::parLapply} for details). If defined, and if 
-#   \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
-#   decrease estimation times
+#' @param cl an object definition to be passed to the parallel package 
+#'   (see \code{?parallel::parLapply} for details). If defined, and if 
+#'   \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
+#'   decrease estimation times in simulation work
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
@@ -394,10 +394,9 @@
 #' }
 mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, exposure = rep(1, length(questions)), 
-                    local_pattern = NULL, design_elements=FALSE, 
+                    local_pattern = NULL, design_elements=FALSE, cl=NULL,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {    
-    cl = NULL
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- MCE$last_demographics <- NULL})
     Names <- if(!is.null(mirt_object)) colnames(mirt_object@Data$data) else NULL
@@ -443,7 +442,7 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     test_object <- new('Test', mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
-    design_object <- Design$new(method=method, criteria=criteria, 
+    design_object <- new('Design', method=method, criteria=criteria, 
                                 start_item=if(is.na(start_item)) sample(1L:test_object@length, 1L)
                                 else start_item,
                          nfact=test_object@nfact, design=design, exposure=exposure,

@@ -42,7 +42,7 @@ server <- function(input, output) {
         itemclick <- sum(!is.na(MCE$person$items_answered))
         
         # run survey
-        if(click > 2L && !MCE$design$stop_now){
+        if(click > 2L && !MCE$design@stop_now){
             if(itemclick >= 1L){
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test@itemnames[pick]
@@ -61,14 +61,14 @@ server <- function(input, output) {
                     MCE$person$Update.thetas(design, test)
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
-                    if(itemclick > MCE$design$preCAT_nitems)
-                        MCE$design$Update.stop_now(MCE$person)
+                    if(itemclick > MCE$design@preCAT_nitems)
+                        MCE$design <- Update.stop_now(MCE$design, MCE$person)
                 }
             } 
             
-            MCE$design$Next.stage(item=itemclick)
+            MCE$design <- Next.stage(MCE$design, item=itemclick)
             
-            if(!MCE$design$stop_now){
+            if(!MCE$design@stop_now){
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)
                 MCE$person$items_answered[itemclick+1L] <- item
                 return(MCE$shinyGUI$questions[[item]])
