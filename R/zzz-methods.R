@@ -4,7 +4,7 @@
 #' @export
 print.mirtCAT <- function(x, ...){
     if(!all(is.na(x$thetas))){
-        person <- c(sum(!is.na(x$responses)),
+        person <- c(sum(!is.na(x$raw_responses)),
                           x$thetas[1L,],
                           x$thetas_SE_history[nrow(x$thetas_SE_history),])        
         names(person) <- c('n.items.answered', paste0('Theta_', 1:length(x$thetas)),
