@@ -44,7 +44,7 @@ findNextCATItem <- function(person, test, design){
     lastitem <- sum(!is.na(person$items_answered))
     not_answered <- is.na(person$responses)
     which_not_answered <- which(not_answered)
-    K <- test$mirt_object@Data$K
+    K <- test@mirt_object@Data$K
     possible_patterns <- matrix(person$responses, sum(K[not_answered]), 
                                 length(not_answered), byrow=TRUE)
     row <- 1L

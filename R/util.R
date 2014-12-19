@@ -5,7 +5,7 @@ calcLL <- function(thetas){
     LL <- 0
     for(i in MCE$person$responses){
         if(!is.na(MCE$person$responses)){
-            item <- extract.item(MCE$test$mirt_object, i)
+            item <- extract.item(MCE$test@mirt_object, i)
             P <- probtrace(item, thetas)
             LL <- LL + log(P[ ,MCE$person$responses])
         }
@@ -14,11 +14,11 @@ calcLL <- function(thetas){
 }
 
 getAcovs <- function(possible_patterns, method){
-    ret <- fscores(MCE$test$mirt_object, return.acov = TRUE, 
+    ret <- fscores(MCE$test@mirt_object, return.acov = TRUE, 
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,
-                   rotate = MCE$test$fscores_args$rotate, theta_lim = MCE$test$fscores_args$theta_lim,
-                   mean = MCE$test$fscores_args$mean, cov = MCE$test$fscores_args$cov, 
-                   MI = MCE$test$fscores_args$MI, quadpts = MCE$test$quadpts)
+                   rotate = MCE$test@fscores_args$rotate, theta_lim = MCE$test@fscores_args$theta_lim,
+                   mean = MCE$test@fscores_args$mean, cov = MCE$test@fscores_args$cov, 
+                   MI = MCE$test@fscores_args$MI, quadpts = MCE$test@quadpts)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         return(x)

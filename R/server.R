@@ -45,20 +45,20 @@ server <- function(input, output) {
         if(click > 2L && !MCE$design$stop_now){
             if(itemclick >= 1L){
                 pick <- MCE$person$items_answered[itemclick]
-                name <- MCE$test$itemnames[pick]
+                name <- MCE$test@itemnames[pick]
                 ip <- input[[name]]
                 if(!is.null(ip)){
                     MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
-                        which(MCE$test$item_options[[pick]] %in% ip) - 1L
-                    if(!is.na(MCE$test$item_answers[[pick]]) && 
-                           MCE$test$item_class[pick] != 'nestlogit')
-                        MCE$person$responses[pick] <- as.integer(ip %in% MCE$test$item_answers[[pick]])
+                        which(MCE$test@item_options[[pick]] %in% ip) - 1L
+                    if(!is.na(MCE$test@item_answers[[pick]]) && 
+                           MCE$test@item_class[pick] != 'nestlogit')
+                        MCE$person$responses[pick] <- as.integer(ip %in% MCE$test@item_answers[[pick]])
                     
                     MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
                         sum(MCE$person$item_time)
                     
                     #update Thetas
-                    MCE$person$Update.thetas()
+                    MCE$person$Update.thetas(design, test)
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                     if(itemclick > MCE$design$preCAT_nitems)
@@ -95,7 +95,7 @@ server <- function(input, output) {
             if(!length(MCE$shinyGUI$demographics)) click <- click + 1L
             
         if(!MCE$STOP){
-            if(click > 2L && (click-2L) < MCE$test$length){
+            if(click > 2L && (click-2L) < MCE$test@length){
                 empty <- is.na(MCE$shinyGUI$stem_locations[[
                     MCE$person$items_answered[[click-2L]]]])
             } else empty <- TRUE

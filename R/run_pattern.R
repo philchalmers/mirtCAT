@@ -1,43 +1,51 @@
 run_local <- function(responses, nfact, start_item, nitems, thetas.start_in, 
-                      score, verbose = FALSE, ...){
+                      score, design, test, verbose = FALSE, cl = NULL, ...){
     
-    ret <- vector('list', nrow(responses))
-    
-    for(n in 1L:nrow(responses)){
-        
-        MCE$design$stop_now <- FALSE
-        if(is.na(start_item)) MCE$design$start_item <- sample(1L:ncol(responses), 1L)
+    fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
+                   score, verbose, design, test){
+        design$stop_now <- FALSE
+        if(is.na(start_item)) design$start_item <- sample(1L:ncol(responses), 1L)
         person <- Person$new(nfact=nfact, nitems=nitems, 
                              thetas.start_in=thetas.start_in, score=score)
         
-        item <- findNextCATItem(person=person, test=MCE$test, design=MCE$design)
+        item <- findNextCATItem(person=person, test=test, design=design)
         person$items_answered[1L] <- item
         
         for(i in 2L:(ncol(responses)+1L)){
             if(verbose) cat(sprintf('\rRow: %i; Item: %i; Thetas: %.3f; SE(Thetas): %.3f', n, i, person$thetas,
                                     person$thetas_SE_history[nrow(person$thetas_SE_history), ]))
             pick <- person$items_answered[i-1]
-            name <- MCE$test$itemnames[pick]
+            name <- test@itemnames[pick]
             ip <- responses[n, pick]
             person$raw_responses[pick] <- person$responses[pick] <- 
-                which(MCE$test$item_options[[pick]] %in% ip) - 1L
-            if(!is.na(MCE$test$item_answers[[pick]]) && MCE$test$item_class[pick] != 'nestlogit')
-                person$responses[pick] <- as.integer(ip == MCE$test$item_answers[[pick]])
+                which(test@item_options[[pick]] %in% ip) - 1L
+            if(!is.na(test@item_answers[[pick]]) && test@item_class[pick] != 'nestlogit')
+                person$responses[pick] <- as.integer(ip == test@item_answers[[pick]])
             
             #update Thetas
-            person$Update.thetas()
-            MCE$design$Update.stop_now(person)
-            if(i > MCE$design$preCAT_nitems)
-                if(MCE$design$stop_now) 
+            person$Update.thetas(design, test)
+            design$Update.stop_now(person)
+            if(i > design$preCAT_nitems)
+                if(design$stop_now) 
                     break
             
-            MCE$design$Next.stage(item=i)
+            design$Next.stage(item=i)
             
-            item <- findNextCATItem(person=person, test=MCE$test, design=MCE$design)
+            item <- findNextCATItem(person=person, test=test, design=design)
             person$items_answered[i] <- item
         }
-        MCE$item_time <- numeric(0)
-        ret[[n]] <- person
+        return(person)
+    }
+    if(is.null(cl) || nrow(responses) == 1L){
+        ret <- lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
+                      nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
+                      design=design, test=test)
+    } else {
+        browser()
+        ret <- parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses, 
+                                   nfact=nfact, start_item=start_item, design=design, test=test,
+                                   nitems=nitems, thetas.start_in=thetas.start_in, score=score,
+                                   verbose=verbose)
     }
     if(verbose) cat('\n')
     ret

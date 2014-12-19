@@ -114,6 +114,11 @@
 #'   is required to be numeric if no \code{questions} are supplied, otherwise it must contain 
 #'   character values of plausible responses
 #'   
+# @param cl an object definition to be passed to the parallel package 
+#   (see \code{?parallel::parLapply} for details). If defined, and if 
+#   \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
+#   decrease estimation times
+#'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
@@ -389,9 +394,10 @@
 #' }
 mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, exposure = rep(1, length(questions)), 
-                    local_pattern = NULL, design_elements=FALSE,
+                    local_pattern = NULL, design_elements=FALSE, 
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {    
+    cl = NULL
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- MCE$last_demographics <- NULL})
     Names <- if(!is.null(mirt_object)) colnames(mirt_object@Data$data) else NULL
@@ -434,15 +440,15 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     
     #setup objects
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
-    test_object <- Test$new(mirt_object=mirt_object, item_answers_in=item_answers, 
+    test_object <- new('Test', mirt_object=mirt_object, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
     design_object <- Design$new(method=method, criteria=criteria, 
-                                start_item=if(is.na(start_item)) sample(1L:test_object$length, 1L)
+                                start_item=if(is.na(start_item)) sample(1L:test_object@length, 1L)
                                 else start_item,
-                         nfact=test_object$nfact, design=design, exposure=exposure,
-                         preCAT=preCAT, nitems=test_object$length)
-    person_object <- Person$new(nfact=test_object$nfact, nitems=length(test_object$itemnames), 
+                         nfact=test_object@nfact, design=design, exposure=exposure,
+                         preCAT=preCAT, nitems=test_object@length)
+    person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                          thetas.start_in=design$thetas.start, score=score)
     if(!is.null(shinyGUI$resume_file)){
         person_object <- readRDS(shinyGUI$resume_file)
@@ -457,7 +463,7 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
         return(ret)
     }
     
-    #put in specific enviroment
+    #put in specific enviroment (move later TODO) 
     MCE$person <- person_object
     MCE$test <- test_object
     MCE$design <- design_object
@@ -465,13 +471,14 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     MCE$STOP <- FALSE
     MCE$outfile <- tempfile(fileext='.png')
     
-    if(length(local_pattern)){
-        person <- run_local(local_pattern, nfact=test_object$nfact, start_item=start_item,
-                            nitems=length(test_object$itemnames), 
-                            thetas.start_in=design$thetas.start, score=score, ...)
-    } else {
+    if(is.null(local_pattern)){
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
+    } else {
+        person <- run_local(local_pattern, nfact=test_object@nfact, start_item=start_item,
+                            nitems=length(test_object@itemnames), cl=cl,
+                            thetas.start_in=design$thetas.start, score=score, 
+                            design=design_object, test=test_object, ...)
     }
     if(!is.list(person)) person <- list(person)
     ret.out <- vector('list', length(person))
@@ -495,7 +502,7 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
             ret$classification <- direction
         }
         colnames(ret$thetas) <- colnames(ret$thetas_history) <-
-            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test$nfact)
+            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:test_object@nfact)
         if(!person[[i]]$score)
             ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
         class(ret) <- 'mirtCAT'

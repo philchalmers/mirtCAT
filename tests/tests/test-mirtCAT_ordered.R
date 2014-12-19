@@ -104,4 +104,12 @@ test_that('ordered', {
     cfs <- coef(obj, simplify=TRUE, digits = 50)
     expect_equal(as.numeric(cfs[[1]][1:3, 1:2]), as.numeric(as.matrix(pars[1:3, 1:2])), 
                  tolerance = 1e-10)
+    
+    #parallel test
+#     require(parallel, quietly=TRUE, warn.conflicts=FALSE)
+#     cl <- makeCluster(4)
+#     pats <- generate_pattern(obj, Theta = matrix(c(-2,-1,1,2),4))
+#     system.time(ret <- mirtCAT(mirt_object=obj, local_pattern = pars))
+#     system.time(ret <- mirtCAT(mirt_object=obj, local_pattern = pars, cl=cl))
+    
 })
