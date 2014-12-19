@@ -13,7 +13,7 @@ print.mirtCAT <- function(x, ...){
         rownames(ret) <- ''
         return(ret)
     } else {
-        return(data.frame('n.items.answered' = sum(!is.na(x$responses))))
+        return(data.frame('n.items.answered' = sum(!is.na(x$raw_responses))))
     }
 }
 
@@ -25,18 +25,23 @@ print.mirtCAT <- function(x, ...){
 #'   for items that were not administered
 #' @export
 summary.mirtCAT <- function(object, sort = TRUE, ...){
+    if(!all(is.na(object$thetas))){
+        person <- rbind(Estimates=object$thetas[1L,],
+                    SEs=object$thetas_SE_history[nrow(object$thetas_SE_history),])
+    } else person <- NULL
     pick <- if(sort){
         object$items_answered
     } else 1L:length(object$raw_responses)
     raw_responses <- object$raw_responses[pick]
-    responses <- object$responses[pick]
-    ret <- list(raw_responses=raw_responses,
-                scored_responses=responses,
+    scored_responses <- object$scored_responses[pick]
+    ret <- list(final_estimates=person,
+                raw_responses=raw_responses,
+                scored_responses=scored_responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
-    if(all(is.na(responses))) ret$scored_responses <- NULL
+    if(all(is.na(scored_responses))) ret$scored_responses <- NULL
     if(length(object$item_time))
         ret$item_time <- object$item_time[pick]
     if(length(ret$thetas_history) == 1L || is.na(ret$thetas_history))

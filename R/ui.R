@@ -14,7 +14,7 @@ ui <- function(){
             h5(MCE$shinyGUI$author),
             hr(),
             h4("\nInstructions:"),
-            h5("To progress through the survey/test, click on the button below."),            
+            h5("To progress through the interface, click on the button below."),            
             actionButton("Next", "Next")
         ),
         

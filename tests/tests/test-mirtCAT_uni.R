@@ -56,7 +56,7 @@ test_that('unidimensional', {
     expect_is(oo, 'trellis')
     
     res <- mirtCAT(df2, mod, local_pattern=pat, design = list(max_items = 5))
-    expect_true(sum(!is.na(res$raw_responses)) == 5L && sum(!is.na(res$responses)) == 5L)
+    expect_true(sum(!is.na(res$raw_responses)) == 5L && sum(!is.na(res$scored_responses)) == 5L)
     expect_true(nrow(!is.na(res$thetas_history)) == 6L && nrow(!is.na(res$thetas_SE_history)) == 6L)
     
     #adaptive
@@ -64,7 +64,7 @@ test_that('unidimensional', {
                    design = list(min_SEM = .4))
     expect_equal(as.numeric(res$thetas), 0.3708466, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[11L,]), 0.3930376, tolerance = 1e-4)
-    expect_true(sum(!is.na(res$raw_responses)) == 10L && sum(!is.na(res$responses)) == 10L)
+    expect_true(sum(!is.na(res$raw_responses)) == 10L && sum(!is.na(res$scored_responses)) == 10L)
     expect_true(nrow(!is.na(res$thetas_history)) == 11L && nrow(!is.na(res$thetas_SE_history)) == 11L)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',

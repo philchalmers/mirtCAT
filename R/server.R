@@ -34,7 +34,7 @@ server <- function(input, output) {
                 MCE$person$demographics <- MCE$last_demographics
             if(MCE$shinyGUI$temp_file != '')
                 saveRDS(MCE$person, MCE$shinyGUI$temp_file)
-            return(list(h5("Click \'Next\' to start the survey.")))
+            return(list(h5("Click \'Next\' to begin.")))
         }
         
         if(click == 3L) MCE$start_time <- proc.time()[3L]

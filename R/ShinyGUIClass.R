@@ -27,8 +27,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
                               demographics <<- list()
-                              lastpage <<- list(h5("End of survey/test. Click \'Next\' to save
-                                                       results and close application."))
+                              lastpage <<- list(h5("Session complete. Click \'Next\' to 
+                                                   close the application."))
                               temp_file <<- ''
                               css <<- ''
                                                  
