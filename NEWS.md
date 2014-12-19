@@ -17,6 +17,7 @@
 - new `cl` argument in `mirtCAT()` for passing a parallel cluster object defined from the 
   parallel package. Used to run simulation designs with parallel architecture for better speed
   
+- by default, the demographics page is n longer generated in the GUI  
 
 # Changes in mirtCAT 0.3
 

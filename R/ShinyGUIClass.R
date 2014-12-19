@@ -22,14 +22,11 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'mirtCAT'
                               author <<- 'Authors of survey'
-                              demographic_inputIDs <<- c('gender')
+                              demographic_inputIDs <<- character(0)
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
-                              demographics <<- list(selectInput(inputId = 'gender',
-                                                             label = 'Please select your gender.',
-                                                             choices = c('', 'Male', 'Female', 'Other'),
-                                                             selected = ''))
+                              demographics <<- list()
                               lastpage <<- list(h5("End of survey/test. Click \'Next\' to save
                                                        results and close application."))
                               temp_file <<- ''
@@ -44,11 +41,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       firstpage <<- shinyGUI$firstpage
                                   if(!is.null(shinyGUI$demographics)){
                                       demographics <<- shinyGUI$demographics
-                                      if(length(shinyGUI$demographics)){
-                                          demographic_inputIDs <<- shinyGUI$demographics_inputIDs 
-                                      } else {
-                                          demographic_inputIDs <<- character(0)
-                                      }
+                                      demographic_inputIDs <<- shinyGUI$demographics_inputIDs
                                   }
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage

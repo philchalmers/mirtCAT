@@ -206,9 +206,9 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
 
    If an empty list is passed, this page will be skipped.
 
-  \item{\code{demographics}}{The person information page used in the GUI for collecting
-    demographic information generated using tools from the shiny package. The default
-    collects only the respondent gender using the format
+  \item{\code{demographics}}{A person information page used in the GUI for collecting
+    demographic information, generated using tools from the shiny package. For example,
+    the following code asks the participants about their Gender:
 
     \preformatted{
          list(selectInput(inputId = 'gender',
@@ -217,7 +217,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
                   selected = ''))
         }
 
-     To skip the demographics page, supply an empty list as the argument.
+     By default, the demographics page is not included.
 
      }
 
