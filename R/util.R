@@ -1,18 +1,6 @@
 MCE <- new.env()
 MCE$complete <- TRUE
 
-calcLL <- function(thetas){
-    LL <- 0
-    for(i in MCE$person$responses){
-        if(!is.na(MCE$person$responses)){
-            item <- extract.item(MCE$test@mo, i)
-            P <- probtrace(item, thetas)
-            LL <- LL + log(P[ ,MCE$person$responses])
-        }
-    }
-    LL
-}
-
 getAcovs <- function(possible_patterns, method){
     ret <- fscores(MCE$test@mo, return.acov = TRUE, 
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,

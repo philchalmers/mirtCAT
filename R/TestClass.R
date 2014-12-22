@@ -1,6 +1,7 @@
 Test <- setClass(Class = "Test",                     
                     slots = c(
                         mo = 'SingleGroupClass',
+                        EIs = 'list',
                         ThetaGrid = 'matrix',
                         density = 'numeric',
                         quadpts = 'numeric',
@@ -66,6 +67,8 @@ setMethod("initialize", signature(.Object = "Test"),
                       tmp$MI <- dots$MI
               } 
               .Object@fscores_args <- tmp
+              .Object@EIs <- lapply(1L:.Object@length, 
+                                    function(x, test) extract.item(test, x), test=.Object@mo)
               .Object
           }
 )
