@@ -17,6 +17,7 @@ Depends:
     shiny (>= 0.10.0),
     lattice
 Imports:
+    Rcpp,
     methods
 Suggests:
     parallel,
@@ -26,6 +27,7 @@ ByteCompile: no
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
+LinkingTo: Rcpp, RcppArmadillo
 License: GPL (>= 3)
 Repository: CRAN
 Maintainer: Phil Chalmers <rphilip.chalmers@gmail.com>
