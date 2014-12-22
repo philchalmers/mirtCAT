@@ -3,6 +3,8 @@
 - major re-write of shiny inputs. Now the questions, answers, and options are all supplied through
   a `data.frame` object for better clarity, and all shiny inputs regarding the questions, image 
   locations, etc, are specified in this object
+  
+- `mirt_object` input renamed to `mo` for short
 
 - the `local_pattern` input now accepts a matrix of response patterns for running simulation 
   designs. Returns a list of person objects instead of a single object

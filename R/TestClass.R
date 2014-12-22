@@ -1,6 +1,6 @@
 Test <- setClass(Class = "Test",                     
                     slots = c(
-                        mirt_object = 'SingleGroupClass',
+                        mo = 'SingleGroupClass',
                         ThetaGrid = 'matrix',
                         density = 'numeric',
                         quadpts = 'numeric',
@@ -18,37 +18,37 @@ Test <- setClass(Class = "Test",
 )
 
 setMethod("initialize", signature(.Object = "Test"),
-          function(.Object, mirt_object, item_answers_in, item_options,
+          function(.Object, mo, item_answers_in, item_options,
                    quadpts_in, theta_range_in, dots){
-              mirt_object@exploratory <- FALSE
-              .Object@itemnames <- colnames(mirt_object@Data$data)
-              mirt_object@Data$mins <- rep(0L, length(mirt_object@Data$min))
-              .Object@mirt_object <- mirt_object
-              .Object@item_class <- sapply(mirt_object@pars, class)
+              mo@exploratory <- FALSE
+              .Object@itemnames <- colnames(mo@Data$data)
+              mo@Data$mins <- rep(0L, length(mo@Data$min))
+              .Object@mo <- mo
+              .Object@item_class <- sapply(mo@pars, class)
               if(is.null(item_answers_in))
                   item_answers_in <- as.character(rep(NA, length(.Object@itemnames)))
               
               .Object@item_answers <- as.list(item_answers_in)
               .Object@item_options <- item_options
               .Object@length <- length(.Object@item_answers)
-              .Object@nfact <- mirt_object@nfact
+              .Object@nfact <- mo@nfact
               if(is.null(quadpts_in)) 
-                  .Object@quadpts <- switch(as.character(mirt_object@nfact), 
+                  .Object@quadpts <- switch(as.character(mo@nfact), 
                                      '1'=61, '2'=31, '3'=15, '4'=9, '5'=7, 3)
               else .Object@quadpts <- quadpts_in
               if(is.null(theta_range_in)) .Object@theta_range <- c(-6, 6)
               else .Object@theta_range <- theta_range_in
-              gp <- mirt:::ExtractGroupPars(mirt_object@pars[[.Object@length + 1L]])
-              if(mirt_object@nfact == 1L){
+              gp <- mirt:::ExtractGroupPars(mo@pars[[.Object@length + 1L]])
+              if(mo@nfact == 1L){
                   .Object@ThetaGrid <- mirt:::thetaComb(seq(.Object@theta_range[1L],
                                                             .Object@theta_range[2L], 
                                                             length.out=.Object@quadpts),
-                                                        mirt_object@nfact)
+                                                        mo@nfact)
                   .Object@density <- mirt:::mirt_dmvnorm(.Object@ThetaGrid, mean=gp$gmeans, 
                                                   sigma=gp$gcov)
               }
               .Object@gp <- gp
-              tmp <- mirt_object@itemloc
+              tmp <- mo@itemloc
               .Object@itemloc2 <- tmp[-length(tmp)]
               tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
                           cov=gp$gcov, MI = 0)

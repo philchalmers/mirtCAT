@@ -1,6 +1,6 @@
 #' Generate a mirt object from population parameters
 #' 
-#' This function generate a \code{mirt_object} from known population parameters, which is  
+#' This function generate a \code{mirt} object from known population parameters, which is  
 #' then passed to \code{\link{mirtCAT}} function for running CAT applications.
 #' 
 #' @param parameters a matrix or data.frame of parameters corresponding to the model definitions
@@ -106,7 +106,11 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
     tmp <- parameters[,paste0('a', 1:nfact), drop=FALSE]
     tmp[is.na(tmp)] <- 0
     parameters[, paste0('a', 1:nfact)] <- tmp
-    sv <- mirt(dat, nfact, itemtype=itemtype, technical=list(customK=K), pars='values')
+    model <- character(nfact)
+    for(i in 1L:nfact)
+        model[i] <- paste0('F', i, ' = 1-', ncol(dat))
+    model <- mirt.model(paste0(model, collapse = '\n'))
+    sv <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K), pars='values')
     sv$est <- FALSE
     for(i in 1L:nitems){
         pick <- parameters[i, !is.na(parameters[i,]), drop=FALSE]
@@ -125,6 +129,6 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         vals <- latent_covariance[lower.tri(latent_covariance, TRUE)]
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
-    ret <- mirt(dat, nfact, itemtype=itemtype, technical=list(customK=K), TOL=NaN, pars=sv)
+    ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K), TOL=NaN, pars=sv)
     ret
 }

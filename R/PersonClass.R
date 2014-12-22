@@ -38,7 +38,7 @@ Person$methods(
                 if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
             }
             if(method != 'fixed'){
-                tmp <- try(fscores(test@mirt_object, method=method, response.pattern=responses,
+                tmp <- try(fscores(test@mo, method=method, response.pattern=responses,
                                    theta_lim=test@fscores_args$theta_lim,
                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov), 
@@ -58,7 +58,7 @@ Person$methods(
                    design@criteria %in% set){
                 pick <- which(!is.na(responses))
                 infos <- lapply(pick, function(x, thetas)
-                    FI(extract.item(test@mirt_object, x), Theta=thetas), thetas=thetas)
+                    FI(extract.item(test@mo, x), Theta=thetas), thetas=thetas)
                 tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
                 for(i in 1L:length(infos))
                     tmp <- tmp + infos[[i]]

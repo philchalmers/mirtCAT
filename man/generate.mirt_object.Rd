@@ -27,7 +27,7 @@ generate.mirt_object(parameters, itemtype, latent_means = NULL,
   assumed to be standard normal (i.e., and identity matrix)}
 }
 \description{
-This function generate a \code{mirt_object} from known population parameters, which is
+This function generate a \code{mirt} object from known population parameters, which is
 then passed to \code{\link{mirtCAT}} function for running CAT applications.
 }
 \examples{

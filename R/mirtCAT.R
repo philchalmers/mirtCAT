@@ -49,7 +49,7 @@
 #'       
 #'   }
 #'   
-#' @param mirt_object single group object defined by the \code{mirt} package. This is required
+#' @param mo single group object defined by the \code{mirt::mirt()} function. This is required
 #'   if the test is to be scored adaptively or non-adaptively, but not required for general 
 #'   questionnaires. The object can be constructed by using the 
 #'   \code{\link{generate.mirt_object}} function if population parameters are known or by
@@ -91,7 +91,7 @@
 #'   where \code{n} is the number of items previous answered), respectively. 
 #'   The \code{delta} criteria is defined in the \code{design} object
 #'   
-#'   Non-adaptive methods applicable even when no \code{mirt_object} is passed 
+#'   Non-adaptive methods applicable even when no \code{mo} is passed 
 #'   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting 
 #'   items sequentially.
 #'   
@@ -308,7 +308,7 @@
 #' 
 #' ### unidimensional scored example with generated items
 #' 
-#' # create mirt_object from estimated parameters
+#' # create mo from estimated parameters
 #' set.seed(1234)
 #' nitems <- 50
 #' itemnames <- paste0('Item.', 1:nitems)
@@ -318,7 +318,7 @@
 #' mod <- mirt(dat, 1)
 #' coef(mod2, simplify=TRUE)
 #' 
-#' # alternatively, define mirt_object from population values (not run)
+#' # alternatively, define mo from population values (not run)
 #' pars <- data.frame(a1=a, d=d)
 #' mod2 <- generate.mirt_object(pars, itemtype='2PL')
 #' coef(mod2, simplify=TRUE)
@@ -369,7 +369,7 @@
 #' set.seed(1)
 #' pat2 <- generate_pattern(mod, Theta = 0)
 #' head(pat2)
-#' print(mirtCAT(mirt_object=mod, local_pattern=pat2))
+#' print(mirtCAT(mo=mod, local_pattern=pat2))
 #' 
 #' # run CAT, and save results to object called person
 #' person <- mirtCAT(df, mod, item_answers=answers, criteria = 'MI', 
@@ -392,19 +392,19 @@
 #' print(res)
 #' 
 #' }
-mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 'seq', 
+mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq', 
                     start_item = 1, exposure = rep(1, length(questions)), 
                     local_pattern = NULL, design_elements=FALSE, cl=NULL,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
-{    
+{   
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- MCE$last_demographics <- NULL})
-    Names <- if(!is.null(mirt_object)) colnames(mirt_object@Data$data) else NULL
-    if(is.null(df)){
-        if(is.null(mirt_object)) stop('No df or mirt_object supplied')
-        questions <- vector('list', ncol(mirt_object@Data$data))
+    Names <- if(!missing(mo)) colnames(mo@Data$data) else NULL
+    if(missing(df)){
+        if(missing(mo)) stop('No df or mo supplied')
+        questions <- vector('list', ncol(mo@Data$data))
         names(questions) <- Names
-        K <- mirt_object@Data$K
+        K <- mo@Data$K
         item_options <- vector('list', length(K))
         for(i in 1L:length(K)){
             item_options[[i]] <- as.character(0L:(K[i]-1L))
@@ -413,23 +413,33 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
         }
         item_answers <- NULL
     } else {
+        if(!is.data.frame(df))
+            stop('df input must be a data.frame')
+        if(any(sapply(df, class) == 'factor')){
+            dfold <- df
+            df <- data.frame(sapply(dfold, as.character), stringsAsFactors = FALSE)
+            if(!all(df == dfold)) 
+                stop('Coercion of df elements to characters modified one or more elements. 
+                     When building the df with the data.frame() function pass the 
+                     option stringsAsFactors = FALSE to avoid this issue')
+        }
         obj <- buildShinyElements(df, itemnames = Names)
         questions <- obj$questions
         item_answers <- obj$item_answers
         item_options <- obj$item_options
         shinyGUI$stem_locations <- df$Stem
     }
-    if(is.null(mirt_object)){
+    if(missing(mo)){
         dat <- matrix(c(0,1), 2L, length(questions))
         colnames(dat) <- names(questions)
-        mirt_object <- mirt(dat, 1L, TOL=NaN)
+        mo <- mirt(dat, 1L, TOL=NaN)
         score <- FALSE
         if(!(criteria %in% c('seq', 'random')))
-            stop('Only random and seq criteria are available if no mirt_object was defined')
+            stop('Only random and seq criteria are available if no mo was defined')
         mirt_mins <- rep(0L, ncol(dat))
     } else {
         score <- TRUE
-        mirt_mins <- mirt_object@Data$mins
+        mirt_mins <- mo@Data$mins
     }
     if(!is.null(local_pattern)){
         if(!is.matrix(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
@@ -438,9 +448,9 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     }
     
     #setup objects
-    if(!is.null(df)) shinyGUI$stem_locations <- df$Stem
+    if(!missing(df)) shinyGUI$stem_locations <- df$Stem
     shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
-    test_object <- new('Test', mirt_object=mirt_object, item_answers_in=item_answers, 
+    test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
     design_object <- new('Design', method=method, criteria=criteria, 
@@ -485,7 +495,7 @@ mirtCAT <- function(df = NULL, mirt_object = NULL, method = 'MAP', criteria = 's
     for(i in 1L:length(person)){
         person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
         ret <- list(raw_responses=person[[i]]$raw_responses + 1L, 
-                    scored_responses=if(!is.null(item_answers) || is.null(df)) 
+                    scored_responses=if(!is.null(item_answers) || missing(df)) 
                         as.numeric(person[[i]]$responses + mirt_mins) 
                         else as.numeric(rep(NA, length(mirt_mins))),
                     items_answered=person[[i]]$items_answered,

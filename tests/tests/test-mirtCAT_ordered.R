@@ -8,7 +8,7 @@ test_that('ordered', {
     set.seed(1234)
     pat <- generate_pattern(mod, Theta = 0)
     expect_equal(c(3,2,3,2), pat[1,])
-    res <- mirtCAT(mirt_object = mod, local_pattern = pat)
+    res <- mirtCAT(mo = mod, local_pattern = pat)
     so <- summary(res)
     expect_equal(as.numeric(so$raw_responses), c(3,2,3,2))
     expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
@@ -63,12 +63,12 @@ test_that('ordered', {
     mod <- mirt(dat, model, pars = sv, TOL=NaN)
     
     pat <- generate_pattern(mod, Theta = c(-0.5, 0.5))
-    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule')
+    res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule')
     so <- summary(res)
     expect_equal(nrow(so$thetas_history), 22)
     expect_equal((so$items_answered), c(1,61,4,56,11,70,31,15,95,19,68,39,55,18,92,21,93,48,83,40,8))
     
-    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule', start_item = 10,
+    res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', start_item = 10,
                    preCAT = list(method = 'fixed', nitems = 5, criteria = 'KL'), 
                    design = list(thetas.start = c(-0.5, 0.5)))
     so <- summary(res)
@@ -84,7 +84,7 @@ test_that('ordered', {
     
     set.seed(1234)
     pat <- generate_pattern(mod, Theta = c(0,0))
-    res <- mirtCAT(mirt_object = mod, local_pattern = pat, criteria = 'Drule', 
+    res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', 
                    design = list(min_SEM=0.2))
     so <- summary(res)
     expect_equal((so$items_answered), c(1,61,11,70,4,31,56,39,83,15,92,95,50,68,21,55,18,93,
@@ -109,8 +109,8 @@ test_that('ordered', {
     require(parallel, quietly=TRUE, warn.conflicts=FALSE)
     cl <- makeCluster(4)
     pats <- generate_pattern(obj, Theta = matrix(c(-2,-1,1,2),4))
-    ret <- mirtCAT(mirt_object=obj, local_pattern = pats, criteria = 'MI')
-    ret2 <- mirtCAT(mirt_object=obj, local_pattern = pats, criteria = 'MI', cl=cl)
+    ret <- mirtCAT(mo=obj, local_pattern = pats, criteria = 'MI')
+    ret2 <- mirtCAT(mo=obj, local_pattern = pats, criteria = 'MI', cl=cl)
     for(i in 1:4)
         expect_true(as.numeric(ret[[i]]$thetas_SE_history[51,]) == 
                          as.numeric(ret2[[i]]$thetas_SE_history[51,]))

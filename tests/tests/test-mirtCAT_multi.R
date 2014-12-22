@@ -49,7 +49,7 @@ test_that('multidimensional', {
                                  0,0,1,1,1,1,1,1,1,1,0,1)))
     
     ## test numeric input
-    res <- mirtCAT(mirt_object=mod2, local_pattern=pat2)
+    res <- mirtCAT(mo=mod2, local_pattern=pat2)
     expect_equal(as.numeric(res$thetas), c(0.14631183, 0.70251940), tolerance = 1e-4)
     
     #sequential

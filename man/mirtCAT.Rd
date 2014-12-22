@@ -7,10 +7,10 @@
 \alias{summary.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
-  start_item = 1, exposure = rep(1, length(questions)),
-  local_pattern = NULL, design_elements = FALSE, cl = NULL,
-  design = list(), shinyGUI = list(), preCAT = list(), ...)
+mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
+  exposure = rep(1, length(questions)), local_pattern = NULL,
+  design_elements = FALSE, cl = NULL, design = list(),
+  shinyGUI = list(), preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -51,7 +51,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
 
   }}
 
-\item{mirt_object}{single group object defined by the \code{mirt} package. This is required
+\item{mo}{single group object defined by the \code{mirt::mirt()} function. This is required
   if the test is to be scored adaptively or non-adaptively, but not required for general
   questionnaires. The object can be constructed by using the
   \code{\link{generate.mirt_object}} function if population parameters are known or by
@@ -93,7 +93,7 @@ mirtCAT(df = NULL, mirt_object = NULL, method = "MAP", criteria = "seq",
   where \code{n} is the number of items previous answered), respectively.
   The \code{delta} criteria is defined in the \code{design} object
 
-  Non-adaptive methods applicable even when no \code{mirt_object} is passed
+  Non-adaptive methods applicable even when no \code{mo} is passed
   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting
   items sequentially.}
 
@@ -345,7 +345,7 @@ visit \url{http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html}.
 
 ### unidimensional scored example with generated items
 
-# create mirt_object from estimated parameters
+# create mo from estimated parameters
 set.seed(1234)
 nitems <- 50
 itemnames <- paste0('Item.', 1:nitems)
@@ -355,7 +355,7 @@ dat <- simdata(a, d, 1000, itemtype = 'dich')
 mod <- mirt(dat, 1)
 coef(mod2, simplify=TRUE)
 
-# alternatively, define mirt_object from population values (not run)
+# alternatively, define mo from population values (not run)
 pars <- data.frame(a1=a, d=d)
 mod2 <- generate.mirt_object(pars, itemtype='2PL')
 coef(mod2, simplify=TRUE)
@@ -406,7 +406,7 @@ summary(res)
 set.seed(1)
 pat2 <- generate_pattern(mod, Theta = 0)
 head(pat2)
-print(mirtCAT(mirt_object=mod, local_pattern=pat2))
+print(mirtCAT(mo=mod, local_pattern=pat2))
 
 # run CAT, and save results to object called person
 person <- mirtCAT(df, mod, item_answers=answers, criteria = 'MI',

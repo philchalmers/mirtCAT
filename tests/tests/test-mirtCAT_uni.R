@@ -175,7 +175,7 @@ test_that('unidimensional', {
     Theta <- matrix(c(-1,0,1),3)
     pats <- generate_pattern(mod, Theta = Theta)
     expect_equal(dim(pats), c(3,25))
-    res <- mirtCAT(mirt_object = mod, local_pattern=pats, criteria='MI')
+    res <- mirtCAT(mo = mod, local_pattern=pats, criteria='MI')
     sos <- lapply(res, summary)
     expect_equal(as.numeric(sos[[1]]$thetas_history[26,]), -0.7285426, tolerance = 1e-4)
     expect_equal(as.numeric(sos[[2]]$thetas_history[26,]), 0.004990072, tolerance = 1e-4)

@@ -4,10 +4,10 @@
 \alias{generate_pattern}
 \title{Generate a CAT patterns}
 \usage{
-generate_pattern(mirt_object, Theta, df = NULL)
+generate_pattern(mo, Theta, df = NULL)
 }
 \arguments{
-\item{mirt_object}{single group object defined by the \code{mirt} package}
+\item{mo}{single group object defined by the \code{mirt} package}
 
 \item{Theta}{a numeric vector indicating the latent theta values for a single person}
 
@@ -26,15 +26,15 @@ running independent CAT session when passed to \code{mirtCAT(..., local_pattern)
 
 # return real response vector given choices and (optional) answers
 pat <- generate_pattern(mod, Theta = 0, df=df)
-# mirtCAT(df, mirt_object=mod, local_pattern = pat)
+# mirtCAT(df, mo=mod, local_pattern = pat)
 
 # generate single pattern observed in dataset used to define mod
 pat2 <- generate_pattern(mod, Theta = 0)
-# mirtCAT(mirt_object=mod, local_pattern = pat2)
+# mirtCAT(mo=mod, local_pattern = pat2)
 
 # generate multiple patterns to be analyzed independently
 pat3 <- generate_pattern(mod, Theta = matrix(c(0, 2, -2), 3))
-# mirtCAT(mirt_object=mod, local_pattern = pat3)
+# mirtCAT(mo=mod, local_pattern = pat3)
 
 }
 }
