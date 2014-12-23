@@ -233,5 +233,3 @@ void P_comp(vector<double> &P, const vector<double> &par,
         P[i] = 1.0 - P[i+N];
     }
 }
-
-NumericMatrix ProbTrace(SEXP)
