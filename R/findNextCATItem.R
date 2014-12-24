@@ -35,11 +35,11 @@ print.mirtCAT_design <- function(x, ...){
    cat('Object of class \'mirtCAT_design\'\n')
 }
 
-findNextCATItem <- function(person, test, design){
+findNextCATItem <- function(person, test, design, start = TRUE){
     
     #heavy lifty CAT stuff just to find new item
     criteria <- design@criteria
-    if(all(is.na(person$responses)))
+    if(all(is.na(person$responses)) && start)
         return(design@start_item)
     lastitem <- sum(!is.na(person$items_answered))
     not_answered <- is.na(person$responses)

@@ -97,8 +97,11 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting
   items sequentially.}
 
-\item{start_item}{a single number indicating which item should be used as the start item.
-  Default is 1. If \code{NA} is supplied a random starting value will be chosen}
+\item{start_item}{two possible inputs to determine the starting item are available.
+  Passing a single number will indicate the specific item to be used as the start item;
+  default is 1, which selects the first item in the defined test/survey.
+  If a character string is passed then the item will be selected from one of
+  the item selections criteria available (see the \code{criteria} argument)}
 
 \item{exposure}{a numeric vector specifying the amount of exposure control to apply for
   each successive item. The default vector of 1's selects items which demonstrate
@@ -353,7 +356,7 @@ a <- matrix(rlnorm(nitems, .2, .3))
 d <- matrix(rnorm(nitems))
 dat <- simdata(a, d, 1000, itemtype = 'dich')
 mod <- mirt(dat, 1)
-coef(mod2, simplify=TRUE)
+coef(mod, simplify=TRUE)
 
 # alternatively, define mo from population values (not run)
 pars <- data.frame(a1=a, d=d)

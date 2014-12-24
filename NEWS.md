@@ -11,7 +11,9 @@
   
 - `generate_pattern()` now supports multiple Theta inputs specifically for simulation designs
 
-- `start_item` input now accepts `NA` to select a starting item at random
+- `start_item` input now accepts character value inputs (in addition to explicit numeric inputs)
+  corresponding to the `criteria` argument. This allows the first item to be selected using the 
+  (adaptive) selection criteria
 
 - added `generate.mirt_object()` function to build the required `mirt_object` input given
   population parameters

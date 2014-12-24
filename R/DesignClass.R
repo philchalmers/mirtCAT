@@ -49,7 +49,7 @@ setMethod("initialize", signature(.Object = "Design"),
               tmp <- exposure
               tmp[pick] <- (nitems:1L)[pick]
               .Object@exposure <- as.integer(tmp)
-              if(.Object@start_item != 1 && criteria == 'seq')
+              if(!is.nan(start_item) && .Object@start_item != 1 && criteria == 'seq')
                   stop('start_item must equal 1 with seq criteria')
               if(nfact > 1L && 
                      !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',

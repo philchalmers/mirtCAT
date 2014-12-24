@@ -95,8 +95,11 @@
 #'   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting 
 #'   items sequentially.
 #'   
-#' @param start_item a single number indicating which item should be used as the start item.
-#'   Default is 1. If \code{NA} is supplied a random starting value will be chosen
+#' @param start_item two possible inputs to determine the starting item are available. 
+#'   Passing a single number will indicate the specific item to be used as the start item;
+#'   default is 1, which selects the first item in the defined test/survey. 
+#'   If a character string is passed then the item will be selected from one of 
+#'   the item selections criteria available (see the \code{criteria} argument)
 #'   
 #' @param exposure a numeric vector specifying the amount of exposure control to apply for
 #'   each successive item. The default vector of 1's selects items which demonstrate 
@@ -316,7 +319,7 @@
 #' d <- matrix(rnorm(nitems))
 #' dat <- simdata(a, d, 1000, itemtype = 'dich')
 #' mod <- mirt(dat, 1)
-#' coef(mod2, simplify=TRUE)
+#' coef(mod, simplify=TRUE)
 #' 
 #' # alternatively, define mo from population values (not run)
 #' pars <- data.frame(a1=a, d=d)
@@ -454,12 +457,18 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
     design_object <- new('Design', method=method, criteria=criteria, 
-                                start_item=if(is.na(start_item)) sample(1L:test_object@length, 1L)
-                                else start_item,
+                                start_item=if(is.numeric(start_item)) start_item else NaN,
                          nfact=test_object@nfact, design=design, exposure=exposure,
                          preCAT=preCAT, nitems=test_object@length)
     person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                          thetas.start_in=design$thetas.start, score=score)
+    if(is.character(start_item)){
+        tmp <- design_object@criteria
+        design_object@criteria <- start_item
+        start_item <- findNextCATItem(person_object, test_object, design_object, start=FALSE)
+        design_object@start_item <- start_item
+        design_object@criteria <- tmp
+    }
     if(!is.null(shinyGUI$resume_file)){
         person_object <- readRDS(shinyGUI$resume_file)
         MCE$last_demographics <- person_object$demographics
