@@ -115,6 +115,4 @@ test_that('ordered', {
         expect_true(as.numeric(ret[[i]]$thetas_SE_history[51,]) == 
                          as.numeric(ret2[[i]]$thetas_SE_history[51,]))
     stopCluster(cl)
-
-    
 })

@@ -2,7 +2,8 @@
 // The majority of these functions are modification of code from the 
 // mirt package, version 1.7.1. December 22, 2014
 
-double antilogit(const double *x){
+double antilogit(const double *x)
+{
     double ret;
     if(*x > 998.0) ret = 1.0;
     else if(*x < -998.0) ret = 0.0;
@@ -19,33 +20,29 @@ double vecsum(const vector<double> &x)
     return(sum);
 }
 
-SEXP vec2mat(vector<double> &x, const int &nrow, const int &ncol) {
+SEXP vec2mat(vector<double> &x, const int &nrow, const int &ncol) 
+{
   NumericVector output = wrap(x);
   output.attr("dim") = Dimension(nrow, ncol);
   return(output);
 }
 
-void itemTrace(vector<double> &P, vector<double> &Pstar, const vector<double> &a, const double *d,
-        const NumericMatrix &Theta, const double *g, const double *u)
+void itemTrace(double &P, double &Pstar, const vector<double> &a, const double *d,
+        const vector<double> &Theta, const int &nfact, const double *g, const double *u)
 {
-    const int N = Theta.nrow();
-    const int nfact = Theta.ncol();
-
     if((*u - *g) > 0){
-        for (int i = 0; i < N; ++i){
-            double z = *d;
-            for (int j = 0; j < nfact; ++j)
-                z += a[j] * Theta(i,j);
-            if(z > ABS_MAX_Z) z = ABS_MAX_Z;
-            else if(z < -ABS_MAX_Z) z = -ABS_MAX_Z;
-            Pstar[i] = 1.0 / (1.0 + exp(-z));
-            P[i] = *g + (*u - *g) * Pstar[i];
-        }
+        double z = *d;
+        for (int j = 0; j < nfact; ++j)
+            z += a[j] * Theta[j];
+        if(z > ABS_MAX_Z) z = ABS_MAX_Z;
+        else if(z < -ABS_MAX_Z) z = -ABS_MAX_Z;
+        Pstar = 1.0 / (1.0 + exp(-z));
+        P = *g + (*u - *g) * Pstar;
     }
 }
 
-void P_dich(vector<double> &P, const vector<double> &par, const NumericMatrix &Theta,
-    const int &N, const int &nfact)
+void P_dich(vector<double> &P, const vector<double> &par, const vector<double> &Theta,
+    const int &nfact)
 {
     const int len = par.size();
     const double utmp = par[len-1];
@@ -55,21 +52,19 @@ void P_dich(vector<double> &P, const vector<double> &par, const NumericMatrix &T
     const double d = par[len-3];
 
     if((u - g) > 0){
-        for (int i = 0; i < N; ++i){
-            double z = d;
-            for (int j = 0; j < nfact; ++j)
-                z += par[j] * Theta(i,j);
-            if(z > ABS_MAX_Z) z = ABS_MAX_Z;
-            else if(z < -ABS_MAX_Z) z = -ABS_MAX_Z;
-            P[i+N] = g + (u - g) /(1.0 + exp(-z));
-            P[i] = 1.0 - P[i + N];
-        }
+        double z = d;
+        for (int j = 0; j < nfact; ++j)
+            z += par[j] * Theta[j];
+        if(z > ABS_MAX_Z) z = ABS_MAX_Z;
+        else if(z < -ABS_MAX_Z) z = -ABS_MAX_Z;
+        P[1] = g + (u - g) /(1.0 + exp(-z));
+        P[0] = 1.0 - P[1];
     }
 }
 
 void P_graded(vector<double> &P, const vector<double> &par,
-    const NumericMatrix &Theta, const int &N,
-    const int &nfact, const int &nint, const int &itemexp, const int &israting)
+    const vector<double> &Theta, 
+    const int &nfact, const int &nint, const int &israting)
 {
     const int parsize = par.size();
     vector<double> a(nfact);
@@ -83,50 +78,26 @@ void P_graded(vector<double> &P, const vector<double> &par,
         for(int i = nfact; i < parsize; ++i)
             d[i - nfact] = par[i];
     }
-    int notordered = 0;
-    for(int i = 1; i < nint; ++i)
-        notordered += d[i-1] <= d[i];
-    if(notordered){
-        int P_size = P.size();
-        for(int i = 0; i < P_size; ++i)
-            P[i] = 0.0;
-    } else {
-        const double nullzero = 0.0, nullone = 1.0;
-        NumericMatrix Pk(N, nint + 2);
-
-        for(int i = 0; i < N; ++i)
-            Pk(i,0) = 1.0;
-        for(int i = 0; i < nint; ++i){
-            vector<double> tmp1(N), tmp2(N);
-            itemTrace(tmp1, tmp2, a, &d[i], Theta, &nullzero, &nullone);
-            for(int j = 0; j < N; ++j)
-                Pk(j,i+1) = tmp2[j];
-        }
-        if(itemexp){
-            int which = N * (nint + 1) - 1;
-            for(int i = (Pk.ncol()-2); i >= 0; --i){
-                for(int j = (N-1); j >= 0; --j){
-                    P[which] = Pk(j,i) - Pk(j,i+1);
-                    if(P[which] < 1e-20) P[which] = 1e-20;
-                    else if((1.0 - P[which]) < 1e-20) P[which] = 1.0 - 1e-20;
-                    --which;
-                }
-            }
-        } else {
-            int which = 0;
-            for(int i = 0; i < Pk.ncol(); ++i){
-                for(int j = 0; j < Pk.nrow(); ++j){
-                    P[which] = Pk(j,i);
-                    ++which;
-                }
-            }
-        }
+    const double nullzero = 0.0, nullone = 1.0;
+    vector<double> Pk(nint + 2);
+    const int Pk_size = Pk.size();
+    Pk[0] = 1.0;
+    for(int i = 0; i < nint; ++i){
+        double tmp1, tmp2;
+        itemTrace(tmp1, tmp2, a, &d[i], Theta, nfact, &nullzero, &nullone);
+        Pk[i+1] = tmp2;
+    }
+    int which = nint;
+    for(int i = (Pk_size-2); i >= 0; --i){
+        P[which] = Pk[i] - Pk[i+1];
+        if(P[which] < 1e-50) P[which] = 1e-50;
+        else if((1.0 - P[which]) < 1e-50) P[which] = 1.0 - 1e-50;
+        --which;
     }
 }
 
 void P_nominal(vector<double> &P, const vector<double> &par,
-    const NumericMatrix &Theta, const int &N,
-    const int &nfact, const int &ncat, const int &returnNum,
+    const vector<double> &Theta, const int &nfact, const int &ncat,
     const int &israting)
 {
     vector<double> a(nfact), ak(ncat), d(ncat);
@@ -141,45 +112,28 @@ void P_nominal(vector<double> &P, const vector<double> &par,
             d[i] = par[i + nfact + ncat];
         }
     }
-    NumericMatrix Num(N, ncat);
+    vector<double> Num(ncat);
     vector<double> z(ncat);
-    vector<double> Den(N, 0.0);
-    vector<double> innerprod(N, 0.0);
-
-    for(int i = 0; i < N; ++i)
-        for(int j = 0; j < nfact; ++j)
-            innerprod[i] += Theta(i,j) * a[j];
-    for(int i = 0; i < N; ++i){
-        for(int j = 0; j < ncat; ++j)
-            z[j] = ak[j] * innerprod[i] + d[j];
-        double maxz = *std::max_element(z.begin(), z.end());
-        for(int j = 0; j < ncat; ++j){
-            z[j] = z[j] - maxz;
-            if(z[j] < -ABS_MAX_Z) z[j] = -ABS_MAX_Z;
-            Num(i,j) = exp(z[j]);
-            Den[i] += Num(i,j);
-        }
+    double Den = 0.0;
+    double innerprod = 0.0;
+    
+    for(int j = 0; j < nfact; ++j)
+        innerprod += Theta[j] * a[j];
+    for(int j = 0; j < ncat; ++j)
+        z[j] = ak[j] * innerprod + d[j];
+    double maxz = *std::max_element(z.begin(), z.end());
+    for(int j = 0; j < ncat; ++j){
+        z[j] = z[j] - maxz;
+        if(z[j] < -ABS_MAX_Z) z[j] = -ABS_MAX_Z;
+        Num[j] = exp(z[j]);
+        Den += Num[j];
     }
-    int which = 0;
-    if(returnNum){
-        for(int j = 0; j < ncat; ++j){
-            for(int i = 0; i < N; ++i){
-                P[which] = Num(i,j);
-                ++which;
-            }
-        }
-    } else {
-        for(int j = 0; j < ncat; ++j){
-            for(int i = 0; i < N; ++i){
-                P[which] = Num(i,j) / Den[i];
-                ++which;
-            }
-        }
-    }
+    for(int j = 0; j < ncat; ++j)
+        P[j] = Num[j] / Den;
 }
 
 void P_nested(vector<double> &P, const vector<double> &par,
-    const NumericMatrix &Theta, const int &N, const int &nfact, const int &ncat,
+    const vector<double> &Theta, const int &nfact, const int &ncat,
     const int &correct)
 {
 	const int par_size = par.size();
@@ -188,32 +142,23 @@ void P_nested(vector<double> &P, const vector<double> &par,
         dpar[i] = par[i];
     for(int i = nfact+3; i < par_size; ++i)
         npar[i - (nfact+3) + nfact] = par[i];
-    vector<double> Pd(N*2), Pn(N*(ncat-1));
-    P_dich(Pd, dpar, Theta, N, nfact);
-    P_nominal(Pn, npar, Theta, N, nfact, ncat-1, 0, 0);
-    NumericMatrix PD = vec2mat(Pd, N, 2);
-    NumericMatrix PN = vec2mat(Pn, N, ncat-1);
-
-    int k = 0, which = 0;
+    vector<double> Pd(2), Pn(ncat-1);
+    P_dich(Pd, dpar, Theta, nfact);
+    P_nominal(Pn, npar, Theta, nfact, ncat-1, 0);
+    int k = 0;
     for(int i = 0; i < ncat; ++i){
         if((i+1) == correct){
-            for(int j = 0; j < N; ++j){
-                P[which] = PD(j,1);
-                ++which;
-            }
+            P[k] = Pd[1];
             --k;
         } else {
-            for(int j = 0; j < N; ++j){
-                P[which] = PD(j,0) * PN(j,k);
-                ++which;
-            }
+            P[k] = Pd[0] * Pn[k];
         }
         ++k;
     }
 }
 
 void P_comp(vector<double> &P, const vector<double> &par,
-    const NumericMatrix &Theta, const int &N, const int &nfact)
+    const vector<double> &Theta, const int &nfact)
 {
     vector<double> a(nfact), d(nfact);
     for(int j = 0; j < nfact; ++j){
@@ -222,14 +167,66 @@ void P_comp(vector<double> &P, const vector<double> &par,
     }
     const double gtmp = par[nfact*2];
     const double g = antilogit(&gtmp);
-    for(int i = 0; i < N; ++i) P[i+N] = 1.0;
+    P[1] = 1.0;
     for(int j = 0; j < nfact; ++j)
-        for(int i = 0; i < N; ++i)
-            P[i+N] = P[i+N] * (1.0 / (1.0 + exp(-(a[j] * Theta(i,j) + d[j]))));
-    for(int i = 0; i < N; ++i){
-        P[i+N] = g + (1.0 - g) * P[i+N];
-        if(P[i+N] < 1e-20) P[i+N] = 1e-20;
-        else if (P[i+N] > 1.0 - 1e-20) P[i+N] = 1.0 - 1e-20;
-        P[i] = 1.0 - P[i+N];
+        P[1] = P[1] * (1.0 / (1.0 + exp(-(a[j] * Theta[j] + d[j]))));
+    P[1] = g + (1.0 - g) * P[1];
+    if(P[1] < 1e-20) P[1] = 1e-50;
+    else if (P[1] > 1.0 - 1e-50) P[1] = 1.0 - 1e-50;
+    P[0] = 1.0 - P[1];
+}
+
+vector<double> ProbTrace(const S4 &item, const vector<double> &Theta)
+{
+    const int nfact = Theta.size();
+    int itemclass = as<int>(item.slot("itemclass"));
+    int correct = 0;
+    if(itemclass == 8) correct = as<int>(item.slot("correctcat"));
+    int ncat = as<int>(item.slot("ncat"));
+    vector<double> par = as< vector<double> >(item.slot("par"));
+    vector<double> P(ncat);
+
+    /*
+        1 = dich
+        2 = graded
+        3 = gpcm
+        4 = nominal
+        5 = grsm
+        6 = rsm
+        7 = partcomp
+        8 = nestlogit
+    */
+    switch(itemclass){
+        case 1 :
+            P_dich(P, par, Theta, nfact);
+            break;
+        case 2 :
+            P_graded(P, par, Theta, nfact, ncat-1, 0);
+            break;
+        case 3 :
+            P_nominal(P, par, Theta, nfact, ncat, 0);
+            break;
+        case 4 :
+            P_nominal(P, par, Theta, ncat, 0, 0);
+            break;
+        case 5 :
+            P_graded(P, par, Theta, nfact, ncat-1, 1);
+            break;
+        case 6 :
+            P_nominal(P, par, Theta, nfact, ncat, 1);
+            break;
+        case 7 :
+            P_comp(P, par, Theta, nfact);
+            break;
+        case 8 :
+            P_nested(P, par, Theta, nfact, ncat, correct);
+            break;
+        case 9 :
+            break;
+        default :
+            Rprintf("How in the heck did you get here from a switch statement?\n");
+            break;
     }
+
+    return(P);
 }

@@ -94,9 +94,9 @@ test_that('multidimensional', {
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'APrule')
-    expect_equal(as.numeric(res$thetas), c(0.4718224, 0.8060655), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.5543021, 0.8456234), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4937443, 0.4917037), tolerance = 1e-4)
+                 c(0.488113, 0.493311), tolerance = 1e-4)
     
 })
 
