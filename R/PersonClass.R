@@ -12,12 +12,13 @@ Person <- setRefClass("Person",
                                     score = 'logical'),
                       
                       methods = list(
-                         initialize = function(nfact, nitems, thetas.start_in, score){
+                         initialize = function(nfact, nitems, thetas.start_in, score,
+                                               theta_SEs){
                              raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              items_answered <<- as.integer(rep(NA, nitems))
                              thetas <<- matrix(numeric(nfact), nrow=1L)
-                             thetas_SE_history <<- matrix(1, 1L, nfact)
+                             thetas_SE_history <<- matrix(theta_SEs, 1L)
                              score <<- score
                              item_time <<- numeric(nitems)
                              if(!is.null(thetas.start_in))

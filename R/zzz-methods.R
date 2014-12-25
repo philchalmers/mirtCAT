@@ -26,8 +26,8 @@ print.mirtCAT <- function(x, ...){
 #' @export
 summary.mirtCAT <- function(object, sort = TRUE, ...){
     if(!all(is.na(object$thetas))){
-        person <- rbind(Estimates=object$thetas[1L,],
-                    SEs=object$SE_thetas)
+        person <- rbind(object$thetas[1L,], object$SE_thetas)
+        rownames(person) <- c('Estimates', 'SEs')
     } else person <- NULL
     pick <- if(sort){
         object$items_answered

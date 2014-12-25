@@ -96,17 +96,17 @@ Drule <- function(which_not_answered, person, test, thetas){
 
 Trule <- function(which_not_answered, person, test, design, thetas){
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          3, design@Wrule_weights, person$info_thetas)
+          3, design@weights, person$info_thetas)
 }
 
 Arule <- function(which_not_answered, person, test, design, thetas){
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          4, design@Wrule_weights, person$info_thetas)
+          4, design@weights, person$info_thetas)
 }
 
 Wrule <- function(which_not_answered, person, test, design, thetas){
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          5, design@Wrule_weights, person$info_thetas)
+          5, design@weights, person$info_thetas)
 }
 
 Erule <- function(which_not_answered, person, test, thetas){

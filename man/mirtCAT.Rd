@@ -25,11 +25,11 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
 
   \describe{
 
-  \item{\code{Type}}{Indicates the type of response input
-    to use from the shiny package. The supported types are: 'radio' for radio buttons,
-    'radio_inline' for radio buttons that are organized horizontally,
-    'select' for a pull-down box for selecting inputs, or 'text' for requiring
-    typed user input.}
+    \item{\code{Type}}{Indicates the type of response input
+      to use from the shiny package. The supported types are: 'radio' for radio buttons,
+      'radio_inline' for radio buttons that are organized horizontally,
+      'select' for a pull-down box for selecting inputs, or 'text' for requiring
+      typed user input.}
 
     \item{\code{Question}}{A character vector containing all the questions
       or stems to be generated.}
@@ -38,15 +38,15 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
       options for each item, where the # corresponds to the specific category. For
       instance, a test with 4 unique response options for each item would contain
       the columns (\code{Option.1}, \code{Option.2}, \code{Option.3}, \code{Option.4}).
-      If, however, some items have less categories then \code{NA}'s can be used for response
+      If, however, some items have fewer categories than others then \code{NA}'s can be used for response
       options that do not apply.}
 
-    \item{\code{Answer} or \code{Answer.#}}{(Optional) A character vector (or multiple character)
-      vectors indicating a scoring key for items that have correct answer(s). If there
+    \item{\code{Answer} or \code{Answer.#}}{(Optional) A character vector (or multiple character
+      vectors) indicating the scoring key for items that have correct answer(s). If there
       is no correct answer for a question then a value of \code{NA} must be declared.}
 
     \item{\code{Stem}}{(Optional) a character vector of paths pointing to .png, .jpeg, or .gif
-    files to be used as item stems. \code{NA}s are used if the item has no corresponding file.}
+      files to be used as graphical item stems. \code{NA}s are used if the item has no corresponding file.}
 
   }}
 
@@ -141,16 +141,13 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced
     quadrature grid. Default is \code{c(-6,6)}}
 
-  \item{\code{Wrule_weights}}{weights used when \code{criteria == 'Wrule'}. The default
+  \item{\code{weights}}{weights used when \code{criteria == 'Wrule'}, but also
+    will be applied for weighted trace functions in the T- and A-rules. The default
     weights the latent dimensions equally. Default is \code{rep(1/nfact), nfact)},
-    where \code{nfact} is the number of test dimensions;  }
+    where \code{nfact} is the number of test dimensions}
 
   \item{\code{KL_delta}}{interval range used when \code{criteria = 'KL'}
     or \code{criteria = 'KLn'}. Default is \code{0.1}}
-
-  \item{\code{max_time}}{maximum time allowed for the generated GUI, measured
-    in seconds. For instance, if the test should stop after 10 minutes then the number
-    600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}
 
   \item{\code{content}}{an optional character vector indicating the type of content measured
     by an item. Must be supplied in conjunction with \code{content_prop}}
@@ -229,6 +226,10 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
   \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics
     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
     the \code{demographics} default}
+
+  \item{\code{max_time}}{maximum time allowed for the generated GUI, measured
+    in seconds. For instance, if the test should stop after 10 minutes then the number
+    600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}
 
   \item{\code{temp_file}}{a character vector indicating where a temporary .rds file
     containing the response information should be saved while the GUI is running.

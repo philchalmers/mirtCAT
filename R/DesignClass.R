@@ -11,7 +11,7 @@ Design <- setClass(Class = "Design",
                              stop_now = 'logical',
                              exposure = 'numeric',
                              SH = 'logical',
-                             Wrule_weights = 'numeric',
+                             weights = 'numeric',
                              KL_delta = 'numeric',
                              start_item = 'integer',
                              preCAT_nitems = 'integer',
@@ -30,7 +30,7 @@ Design <- setClass(Class = "Design",
 
 setMethod("initialize", signature(.Object = "Design"),
           function(.Object, method, criteria, nfact, design,
-                   start_item, preCAT, nitems){
+                   start_item, preCAT, nitems, max_time){
               .Object@numerical_info <- FALSE
               .Object@method <- method
               .Object@criteria <- criteria
@@ -53,13 +53,13 @@ setMethod("initialize", signature(.Object = "Design"),
                   stop('Selected criteria not valid for multidimensional tests')
               .Object@min_SEM <- .3
               .Object@met_SEM <- rep(FALSE, nfact)
-              .Object@Wrule_weights <- rep(1/nfact, nfact)
+              .Object@weights <- rep(1/nfact, nfact)
               .Object@min_items <- 1L
               .Object@max_items <- nitems
               .Object@stop_now <- FALSE 
               .Object@preCAT_nitems <- 0L
               .Object@KL_delta <- 0.1
-              .Object@max_time <- Inf
+              .Object@max_time <- if(is.null(max_time)) Inf else max_time
               .Object@use_content <- FALSE
               .Object@content_prop_empirical <- 1
               .Object@classify <- NaN
@@ -82,8 +82,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@max_time <- design$max_time
                   if(!is.null(design$KL_delta))
                       .Object@KL_delta <- design$KL_delta
-                  if(!is.null(design$Wrule_weights)) 
-                      .Object@Wrule_weights <- design$Wrule_weights
+                  if(!is.null(design$weights)) 
+                      .Object@weights <- design$weights
                   if(!is.null(design$min_SEM))
                       .Object@min_SEM <- design$min_SEM
                   if(!is.null(design$min_items))
@@ -108,8 +108,8 @@ setMethod("initialize", signature(.Object = "Design"),
               }
               if(.Object@use_content && criteria == 'seq')
                   stop('content designs are not supported for seq criteria')
-              if(!mirt:::closeEnough(sum(.Object@Wrule_weights)-1, -1e-6, 1e-6))
-                  stop('Wrule_weights does not sum to 1')
+              if(!mirt:::closeEnough(sum(.Object@weights)-1, -1e-6, 1e-6))
+                  stop('weights does not sum to 1')
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
                   stop('min_SEM criteria is not a suitable length')
               if(length(preCAT)){

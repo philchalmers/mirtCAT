@@ -50,6 +50,16 @@ generate_pattern <- function(mo, Theta, df = NULL){
         }
         return(t(t(pattern) + mo@Data$mins))
     } else {
+        if(!is.data.frame(df))
+            stop('df input must be a data.frame')
+        if(any(sapply(df, class) == 'factor')){
+            dfold <- df
+            df <- data.frame(sapply(dfold, as.character), stringsAsFactors = FALSE)
+            if(!all(df == dfold)) 
+                stop('Coercion of df elements to characters modified one or more elements. 
+                     When building the df with the data.frame() function pass the 
+                     option stringsAsFactors = FALSE to avoid this issue')
+        }
         choices <- df[,grepl('Option', colnames(df))]
         item_answers <- df[,grepl('Answer', colnames(df))]
         if(is.matrix(item_answers))
