@@ -67,7 +67,7 @@ findNextCATItem <- function(person, test, design, start = TRUE){
         tmp <- table(design@content[!is.na(person$responses)])
         design@content_prop_empirical <- as.numeric(tmp/sum(tmp))
     }
-    thetas <- if(!is.nan(design@classify[1L])) design@classify else person$thetas
+    thetas <- person$thetas
     
     if(criteria == 'seq'){
         return(as.integer(lastitem + 1L))
