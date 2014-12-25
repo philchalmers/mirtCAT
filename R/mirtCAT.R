@@ -101,16 +101,6 @@
 #'   If a character string is passed then the item will be selected from one of 
 #'   the item selections criteria available (see the \code{criteria} argument)
 #'   
-#' @param exposure a numeric vector specifying the amount of exposure control to apply for
-#'   each successive item. The default vector of 1's selects items which demonstrate 
-#'   the maximum CAT critiera (i.e., no exposure control), however if the item exposure 
-#'   is greater than 1, and \code{exposure[item] == n}, then the \code{n} most optimal
-#'   criteria will be randomly sampled from. For instance, if 
-#'   \code{exposure[5] == 3}, and \code{critiera = 'MI'}, then when the fifth item is to be 
-#'   selected from the remaining pool of items the top 3 candidate items demonstrating 
-#'   the largest information criteria will be sampled from. Naturally, the first and last 
-#'   elements of \code{exposure} are ignored since exposure control will be meaningless
-#' 
 #' @param local_pattern a character/numeric vector or matrix of response patterns 
 #'   used to run the CAT application without generating the GUI interface. 
 #'   This option requires complete response pattern(s) to be supplied. \code{local_pattern} 
@@ -183,6 +173,19 @@
 #'   \item{\code{classify_CI}}{a numeric vector indicating the confident intervals used to 
 #'     classify individuals being above or below values in \code{classify}. Values must 
 #'     be between 0 and 1 (e.g., 0.95 gives 95\% confidence interval)}
+#'     
+#'   \item{\code{exposure}}{a numeric vector specifying the amount of exposure control to apply for
+#'     each successive item (length must equal the number of items). 
+#'     The default uses no exposure control. If the item exposure 
+#'     is greater than 1 then the \code{n} most optimal
+#'     criteria will be randomly sampled from. For instance, if 
+#'     \code{exposure[5] == 3}, and \code{critiera = 'MI'}, then when the fifth item is to be 
+#'     selected from the remaining pool of items the top 3 candidate items demonstrating 
+#'     the largest information criteria will be sampled from. Naturally, the first and last 
+#'     elements of \code{exposure} are ignored since exposure control will be meaningless
+#'   
+#'   }
+#'   
 #'   
 #' }
 #' 
@@ -399,8 +402,7 @@
 #' 
 #' }
 mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq', 
-                    start_item = 1, exposure = rep(1, length(questions)), 
-                    local_pattern = NULL, design_elements=FALSE, cl=NULL,
+                    start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
@@ -462,7 +464,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
                      theta_range_in=design$theta_range, dots=list(...))
     design_object <- new('Design', method=method, criteria=criteria, 
                                 start_item=if(is.numeric(start_item)) start_item else NaN,
-                         nfact=test_object@nfact, design=design, exposure=exposure,
+                         nfact=test_object@nfact, design=design, 
                          preCAT=preCAT, nitems=test_object@length)
     person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                          thetas.start_in=design$thetas.start, score=score)

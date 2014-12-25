@@ -9,7 +9,8 @@ Design <- setClass(Class = "Design",
                              min_items = 'integer',
                              max_items = 'integer',
                              stop_now = 'logical',
-                             exposure = 'integer',
+                             exposure = 'numeric',
+                             SH = 'logical',
                              Wrule_weights = 'numeric',
                              KL_delta = 'numeric',
                              start_item = 'integer',
@@ -29,7 +30,7 @@ Design <- setClass(Class = "Design",
 
 setMethod("initialize", signature(.Object = "Design"),
           function(.Object, method, criteria, nfact, design,
-                   start_item, preCAT, nitems, exposure){
+                   start_item, preCAT, nitems){
               .Object@numerical_info <- FALSE
               .Object@method <- method
               .Object@criteria <- criteria
@@ -43,12 +44,6 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@CAT_criteria <- criteria
               .Object@CAT_method <- method
               .Object@start_item <- as.integer(start_item)
-              if(!length(exposure) == nitems)
-                  stop('exposure input is not the correct length')
-              pick <- exposure > nitems:1L
-              tmp <- exposure
-              tmp[pick] <- (nitems:1L)[pick]
-              .Object@exposure <- as.integer(tmp)
               if(!is.nan(start_item) && .Object@start_item != 1 && criteria == 'seq')
                   stop('start_item must equal 1 with seq criteria')
               if(nfact > 1L && 
@@ -69,6 +64,8 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@content_prop_empirical <- 1
               .Object@classify <- NaN
               .Object@classify_alpha <- .05
+              .Object@exposure <- rep(1, nitems)
+              .Object@SH <- FALSE
               if(length(design)){
                   if(!is.null(design$content)){
                       .Object@use_content <- TRUE
@@ -101,6 +98,12 @@ setMethod("initialize", signature(.Object = "Design"),
                       if(design$classify_CI > 1 || design$classify_CI < 0)
                           stop('classify_CI criteria must be between 0 and 1')
                       .Object@classify_alpha <- (1 - design$classify_CI)/2
+                  }
+                  if(!is.null(design$exposure)){
+                      if(length(design$exposure) != nitems)
+                          stop('exposure vector length not equal to number of items')
+                      .Object@exposure <- design$exposure
+                      .Object@SH <- all(design$exposure <= 1 && design$exposure >= 0)
                   }
               }
               if(.Object@use_content && criteria == 'seq')

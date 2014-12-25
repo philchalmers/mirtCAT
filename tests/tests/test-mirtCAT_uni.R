@@ -80,7 +80,7 @@ test_that('unidimensional', {
     exposure <- rep(3L, nrow(df2))
     set.seed(1234)
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
-                   design = list(min_SEM = .4), method = 'EAP', exposure=exposure,
+                   design = list(min_SEM = .4, exposure=exposure), method = 'EAP', 
                    start_item=sample(c(1:nrow(df2)), 1))
     expect_equal(as.numeric(res$thetas), 0.6289133, tolerance = 1e-4)
     so <- summary(res)
