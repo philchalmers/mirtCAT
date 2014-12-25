@@ -408,6 +408,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     Names <- if(!missing(mo)) colnames(mo@Data$data) else NULL
     if(missing(df)){
         if(missing(mo)) stop('No df or mo supplied')
+        if(is.null(local_pattern)) stop('missing df input, and no local_pattern supplied')
         questions <- vector('list', ncol(mo@Data$data))
         names(questions) <- Names
         K <- mo@Data$K
