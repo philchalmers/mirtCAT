@@ -129,6 +129,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         vals <- latent_covariance[lower.tri(latent_covariance, TRUE)]
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
-    ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K), TOL=NaN, pars=sv)
+    ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE), 
+                TOL=NaN, pars=sv, quadpts = 1)
     ret
 }
