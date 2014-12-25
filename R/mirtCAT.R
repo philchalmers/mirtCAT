@@ -282,13 +282,16 @@
 #'   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the respective
 #'     items, where NA indicates the item was not answered}
 #'     
-#'   \item{\code{responses}}{A numeric vector of scored responses if the \code{item_answers} input
+#'   \item{\code{scored_responses}}{A numeric vector of scored responses if the \code{item_answers} input
 #'     was used for each respective item}
 #'   
 #'   \item{\code{items_answered}}{An integer vector indicating the order in which the items were 
 #'     answered}
 #'   
 #'   \item{\code{thetas}}{A numeric vector indicating the final theta estimates}
+#'   
+#'   \item{\code{SE_thetas}}{A numeric vector indicating the standard errors of the 
+#'     final theta estimates}
 #'   
 #'   \item{\code{thetas_history}}{A matrix indicating the progression of updating the theta values
 #'     during the test}
@@ -509,22 +512,23 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
                         else as.numeric(rep(NA, length(mirt_mins))),
                     items_answered=person[[i]]$items_answered,
                     thetas=person[[i]]$thetas,
+                    SE_thetas=person[[i]]$thetas_SE_history[nrow(person[[i]]$thetas_SE_history), 
+                                                            ,drop=FALSE],
                     thetas_history=person[[i]]$thetas_history,
                     thetas_SE_history=person[[i]]$thetas_SE_history,
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics)
         if(!is.null(design$classify)){
-            z <- -abs(ret$thetas - design$classify) / 
-                ret$thetas_SE_history[nrow(ret$thetas_SE_history),]
+            z <- -abs(ret$thetas - design$classify) / ret$SE_thetas
             sig <- z < qnorm((1-design$classify_CI)/2)
-            direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff') 
+            direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff')
             direction[!sig] <- 'no decision'
             ret$classification <- direction
         }
-        colnames(ret$thetas) <- colnames(ret$thetas_history) <-
+        colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
             colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:test_object@nfact)
         if(!person[[i]]$score)
-            ret$thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
+            ret$thetas <- ret$SE_thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
         class(ret) <- 'mirtCAT'
         ret.out[[i]] <- ret
     }

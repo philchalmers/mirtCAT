@@ -6,7 +6,7 @@ print.mirtCAT <- function(x, ...){
     if(!all(is.na(x$thetas))){
         person <- c(sum(!is.na(x$raw_responses)),
                           x$thetas[1L,],
-                          x$thetas_SE_history[nrow(x$thetas_SE_history),])        
+                          x$SE_thetas[1L,])        
         names(person) <- c('n.items.answered', paste0('Theta_', 1:length(x$thetas)),
                            paste0('SE.Theta_', 1:length(x$thetas)))
         ret <- t(as.data.frame(person))
@@ -27,7 +27,7 @@ print.mirtCAT <- function(x, ...){
 summary.mirtCAT <- function(object, sort = TRUE, ...){
     if(!all(is.na(object$thetas))){
         person <- rbind(Estimates=object$thetas[1L,],
-                    SEs=object$thetas_SE_history[nrow(object$thetas_SE_history),])
+                    SEs=object$SE_thetas)
     } else person <- NULL
     pick <- if(sort){
         object$items_answered

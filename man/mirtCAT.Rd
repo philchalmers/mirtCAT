@@ -301,13 +301,16 @@ Returns a list object of class \code{'Person'} containing the following elements
   \item{\code{raw_responses}}{A numeric vector indicating the raws responses to the respective
     items, where NA indicates the item was not answered}
 
-  \item{\code{responses}}{A numeric vector of scored responses if the \code{item_answers} input
+  \item{\code{scored_responses}}{A numeric vector of scored responses if the \code{item_answers} input
     was used for each respective item}
 
   \item{\code{items_answered}}{An integer vector indicating the order in which the items were
     answered}
 
   \item{\code{thetas}}{A numeric vector indicating the final theta estimates}
+
+  \item{\code{SE_thetas}}{A numeric vector indicating the standard errors of the
+    final theta estimates}
 
   \item{\code{thetas_history}}{A matrix indicating the progression of updating the theta values
     during the test}
