@@ -233,51 +233,57 @@ vector<double> ProbTrace(const S4 &item, const vector<double> &Theta)
 
 arma::mat Info(const S4 &item, const vector<double> &Theta){
     const int nfact = Theta.size();
-    arma::mat info_mat = arma::zeros<arma::mat>(nfact, nfact);
-    int itemclass = as<int>(item.slot("itemclass"));    
+    arma::mat info_mat = arma::zeros<arma::mat>(nfact, nfact); 
+    int itemclass = as<int>(item.slot("itemclass")); 
     vector<double> par = as< vector<double> >(item.slot("par"));
-    vector<double> P = ProbTrace(item, Theta);
-    const int P_size = P.size();
-    
+
     if(itemclass == 1){
+        vector<double> a(nfact);
+        for(int i = 0; i < nfact; ++i) a[i] = par[i];
         const int len = par.size();
         const double utmp = par[len-1];
         const double gtmp = par[len-2];
+        const double d = par[len-3];
         const double g = antilogit(&gtmp);
         const double u = antilogit(&utmp);
-        double PQ = P[0] * P[1];
+        double P = 0, Ps = 0;
+        itemTrace(P, Ps, a, &d, Theta, nfact, &g, &u);
+        double Q = 1.0 - P;
+        double PQ = (1.0 - Ps) * Ps;
         for(int i = 0; i < nfact; ++i){
-            double dP1 = (u-g) * par[i] * PQ;
+            double dP1 = (u-g) * a[i] * PQ;
             for(int j = 0; j < nfact; ++j){
                 if(i != j){
-                    double dP2 = (u-g) * par[j] * PQ;
-                    info_mat(i,j) = dP1 * dP2 / PQ;
+                    double dP2 = (u-g) * a[j] * PQ;
+                    info_mat(i,j) = dP1 * dP2 / Q + dP1 * dP2 / P;
                 } else {
-                    info_mat(i,i) = dP1 * dP1 / PQ;
+                    info_mat(i,i) = dP1 * dP1 / Q + dP1 * dP1 / P;
                 }
             }
         }
     } else {
-    	vector<double> Pstar(P_size-1);
-    	double accum = P[P_size-1];
-    	Pstar[P_size-2] = accum;
-    	if(P_size > 2){
-    		for(int i = P_size - 2; i > 0; --i){
+        vector<double> P = ProbTrace(item, Theta);
+        const int P_size = P.size();
+        vector<double> Pstar(P_size-1);
+        double accum = P[P_size-1];
+        Pstar[P_size-2] = accum;
+        if(P_size > 2){
+            for(int i = P_size - 2; i > 0; --i){
                 accum += P[i];
                 Pstar[i-1] = accum;
-    	    }
-    	}
+            }
+        }
         double PQ = 0.0;
         for(int i = 0; i < P_size - 1; ++i)
-        	PQ += Pstar[i] * (1.0 - Pstar[i]);
+            PQ += Pstar[i] * (1.0 - Pstar[i]);
         for(int i = 0; i < nfact; ++i){
-    		for(int j = 0; j < nfact; ++j){
-    			if(i <= j)
-    				info_mat(i,j) = par[i] * par[j] * PQ;
-    			if(i != j)
-    				info_mat(j,i) = info_mat(i,j);
-    		}
-    	}
+            for(int j = 0; j < nfact; ++j){
+                if(i <= j)
+                    info_mat(i,j) = par[i] * par[j] * PQ;
+                if(i != j)
+                    info_mat(j,i) = info_mat(i,j);
+            }
+        }
     }
     return(info_mat);
 }
