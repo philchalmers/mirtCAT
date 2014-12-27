@@ -230,3 +230,54 @@ vector<double> ProbTrace(const S4 &item, const vector<double> &Theta)
 
     return(P);
 }
+
+arma::mat Info(const S4 &item, const vector<double> &Theta){
+    const int nfact = Theta.size();
+    arma::mat info_mat = arma::zeros<arma::mat>(nfact, nfact);
+    int itemclass = as<int>(item.slot("itemclass"));    
+    vector<double> par = as< vector<double> >(item.slot("par"));
+    vector<double> P = ProbTrace(item, Theta);
+    const int P_size = P.size();
+    
+    if(itemclass == 1){
+        const int len = par.size();
+        const double utmp = par[len-1];
+        const double gtmp = par[len-2];
+        const double g = antilogit(&gtmp);
+        const double u = antilogit(&utmp);
+        double PQ = P[0] * P[1];
+        for(int i = 0; i < nfact; ++i){
+            double dP1 = (u-g) * par[i] * PQ;
+            for(int j = 0; j < nfact; ++j){
+                if(i != j){
+                    double dP2 = (u-g) * par[j] * PQ;
+                    info_mat(i,j) = dP1 * dP2 / PQ;
+                } else {
+                    info_mat(i,i) = dP1 * dP1 / PQ;
+                }
+            }
+        }
+    } else {
+    	vector<double> Pstar(P_size-1);
+    	double accum = P[P_size-1];
+    	Pstar[P_size-2] = accum;
+    	if(P_size > 2){
+    		for(int i = P_size - 2; i > 0; --i){
+                accum += P[i];
+                Pstar[i-1] = accum;
+    	    }
+    	}
+        double PQ = 0.0;
+        for(int i = 0; i < P_size - 1; ++i)
+        	PQ += Pstar[i] * (1.0 - Pstar[i]);
+        for(int i = 0; i < nfact; ++i){
+    		for(int j = 0; j < nfact; ++j){
+    			if(i <= j)
+    				info_mat(i,j) = par[i] * par[j] * PQ;
+    			if(i != j)
+    				info_mat(j,i) = info_mat(i,j);
+    		}
+    	}
+    }
+    return(info_mat);
+}

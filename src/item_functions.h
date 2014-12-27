@@ -15,4 +15,6 @@ const double ABS_MAX_Z = 35;
 
 vector<double> ProbTrace(const S4 &, const vector<double> &);
 
+arma::mat Info(const S4 &, const vector<double> &);
+
 #endif
