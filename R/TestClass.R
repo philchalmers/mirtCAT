@@ -50,7 +50,7 @@ setMethod("initialize", signature(.Object = "Test"),
               }
               .Object@gp <- gp
               tmp <- mo@itemloc
-              .Object@itemloc2 <- tmp[-length(tmp)]
+              .Object@itemloc2 <- as.integer(tmp[-length(tmp)])
               tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
                           cov=gp$gcov, MI = 0)
               if(length(dots)){

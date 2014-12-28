@@ -155,13 +155,14 @@ test_that('unidimensional', {
     
     # content balancing
     set.seed(1)
-    content <- c(rep('C1', 10), rep('C2', 10), rep('C3', 5))
-    content_prop <- c('C1'=.45, 'C2'=.35, 'C3'=.2)
-    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='random',
+    content <- c(rep('C1', 15), rep('C2', 10))
+    content_prop <- c('C1'=.7, 'C2'=.3)
+    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4, content_prop=content_prop, content=content), 
                    method = 'MAP') #should crash with 'seq'
     so <- summary(res)
-    expect_equal(so$items_answered[1:5], c(1,14,25,10,17))
+    expect_equal(so$items_answered[1:5], c(1,20,2,15,24))
+    expect_equal(as.numeric(table(content[so$items_answered])/10), c(.7, .3))
     
     content_prop <- c('C1'=.8, 'C2'=.1, 'C3'=.1)
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',

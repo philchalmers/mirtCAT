@@ -151,7 +151,7 @@
 #'   \item{\code{content}}{an optional character vector indicating the type of content measured
 #'     by an item. Must be supplied in conjunction with \code{content_prop}}
 #'     
-#'   \item{\code{content_prop}}{an optional named numeric numeric vector indicating the 
+#'   \item{\code{content_prop}}{an optional named numeric vector indicating the 
 #'     distribution of item content proportions. A \code{content} vector must also be supplied
 #'     to indicate the item content membership. For instance, if \code{content} contains three
 #'     possible item content domains 'Addition', 'Subtraction', and 'Multiplication', and the 

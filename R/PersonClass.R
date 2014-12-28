@@ -41,11 +41,11 @@ Person$methods(
                 if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
             }
             if(method != 'fixed'){
-                tmp <- try(fscores(test@mo, method=method, response.pattern=responses,
+                suppressWarnings(tmp <- try(fscores(test@mo, method=method, response.pattern=responses,
                                    theta_lim=test@fscores_args$theta_lim,
                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov), 
-                           silent=TRUE)
+                           silent=TRUE))
                 if(!is(tmp, 'try-error'))
                     thetas <<- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
                 thetas_SE_history <<- rbind(thetas_SE_history, 

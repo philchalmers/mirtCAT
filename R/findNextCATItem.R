@@ -63,10 +63,6 @@ findNextCATItem <- function(person, test, design, start = TRUE){
     #saftey features
     if(length(unique(na.omit(person$responses))) < 2L) method <- 'MAP'
     if(sum(!is.na(person$responses)) < 5L) method <- 'MAP'
-    if(design@use_content){
-        tmp <- table(design@content[!is.na(person$responses)])
-        design@content_prop_empirical <- as.numeric(tmp/sum(tmp))
-    }
     thetas <- person$thetas
     
     if(criteria == 'seq'){
@@ -158,6 +154,10 @@ findNextCATItem <- function(person, test, design, start = TRUE){
     }
     
     if(design@use_content){
+        if(sum(!is.na(person$responses)) > 0){
+            tmp <- table(design@content[!is.na(person$responses)])
+            design@content_prop_empirical <- as.numeric(tmp/sum(tmp))
+        }
         dif <- design@content_prop - design@content_prop_empirical
         tmp <- names(dif)[max(dif) == dif]
         if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]

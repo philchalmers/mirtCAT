@@ -93,9 +93,9 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         if(itemtype[i] %in% c('2PL', 'ideal', 'PC2PL')){
             K[i] <- 2L
         } else if(itemtype[i] %in% c('graded', 'grsm')){
-            K[i] <- sum(grepl('d', nms)) + 1L
+            K[i] <- max(sapply(strsplit(nms[grepl('d', nms)], 'd'), function(x) as.numeric(x[2])))
         } else if(itemtype[i] %in% c('gpcm', 'nominal', '2PLNRM')){
-            K[i] <- sum(grepl('d', nms))
+            K[i] <- max(sapply(strsplit(nms[grepl('d', nms)], 'd'), function(x) as.numeric(x[2]))) + 1
         } else {
             stop(sprintf('%s is an invalid itemtype argument. Please fix!', itemtype[i]))
         }
@@ -111,7 +111,6 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         model[i] <- paste0('F', i, ' = 1-', ncol(dat))
     model <- mirt.model(paste0(model, collapse = '\n'))
     sv <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K), pars='values')
-    sv$est <- FALSE
     for(i in 1L:nitems){
         pick <- parameters[i, !is.na(parameters[i,]), drop=FALSE]
         nms <- colnames(pick)
@@ -129,7 +128,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         vals <- latent_covariance[lower.tri(latent_covariance, TRUE)]
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
-    ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE), 
+    ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE, message=FALSE), 
                 TOL=NaN, pars=sv, quadpts = 1)
     ret
 }
