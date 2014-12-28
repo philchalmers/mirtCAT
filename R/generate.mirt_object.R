@@ -129,6 +129,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
     ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE, message=FALSE), 
-                TOL=NaN, pars=sv, quadpts = 1)
+                TOL=NaN, pars=sv, quadpts = 1, rotate = 'none')
+    ret@exploratory <- FALSE
     ret
 }
