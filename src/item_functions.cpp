@@ -253,9 +253,10 @@ arma::mat Info(const S4 &item, const vector<double> &Theta){
         for(int i = 0; i < nfact; ++i){
             double dP1 = (u-g) * a[i] * PQ;
             for(int j = 0; j < nfact; ++j){
-                if(i != j){
+                if(i < j){
                     double dP2 = (u-g) * a[j] * PQ;
                     info_mat(i,j) = dP1 * dP2 / Q + dP1 * dP2 / P;
+                    info_mat(j,i) = info_mat(i,j);
                 } else {
                     info_mat(i,i) = dP1 * dP1 / Q + dP1 * dP1 / P;
                 }
