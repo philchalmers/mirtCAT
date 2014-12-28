@@ -10,7 +10,7 @@ Design <- setClass(Class = "Design",
                              max_items = 'integer',
                              stop_now = 'logical',
                              exposure = 'numeric',
-                             SH = 'logical',
+                             exposure_type = 'character',
                              weights = 'numeric',
                              KL_delta = 'numeric',
                              start_item = 'integer',
@@ -65,7 +65,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@classify <- NaN
               .Object@classify_alpha <- .05
               .Object@exposure <- rep(1, nitems)
-              .Object@SH <- FALSE
+              .Object@exposure_type <- 'none'
               if(length(design)){
                   if(!is.null(design$content)){
                       .Object@use_content <- TRUE
@@ -102,8 +102,16 @@ setMethod("initialize", signature(.Object = "Design"),
                   if(!is.null(design$exposure)){
                       if(length(design$exposure) != nitems)
                           stop('exposure vector length not equal to number of items')
-                      .Object@exposure <- design$exposure
-                      .Object@SH <- all(design$exposure <= 1 && design$exposure >= 0)
+                      exposure_type <- ifelse(all(design$exposure <= 1 && design$exposure >= 0), 
+                                              'SH', 'sample')
+                      exposure <- if(exposure_type == 'SH') design$exposure 
+                      else as.integer(design$exposure)
+                      if(exposure_type == 'sample')
+                          if(!all(exposure == design$exposure & exposure >= 1)) 
+                              stop('sampling exposure method does not contain integer 
+                                   values greater than or equal to 1')
+                      .Object@exposure <- exposure
+                      .Object@exposure_type <- exposure_type
                   }
               }
               if(.Object@use_content && criteria == 'seq')

@@ -87,6 +87,16 @@ test_that('unidimensional', {
     expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
                  0.3921753, tolerance = 1e-4)
     
+    set.seed(1)
+    exposure <- rep(0.5, nrow(df2))
+    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
+                   design = list(min_SEM = .4, exposure=exposure), method = 'EAP', 
+                   start_item=sample(c(1:nrow(df2)), 1))
+    expect_equal(as.numeric(res$thetas), 0.3576277, tolerance = 1e-4)
+    so <- summary(res)
+    expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
+                 0.3985145, tolerance = 1e-4)
+    
     set.seed(12)
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='random')

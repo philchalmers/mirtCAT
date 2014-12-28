@@ -157,7 +157,6 @@ findNextCATItem <- function(person, test, design, start = TRUE){
         stop('Selection criteria does not exist')
     }
     
-    exposure <- design@exposure[lastitem+1L]    
     if(design@use_content){
         dif <- design@content_prop - design@content_prop_empirical
         tmp <- names(dif)[max(dif) == dif]
@@ -167,15 +166,30 @@ findNextCATItem <- function(person, test, design, start = TRUE){
         if(sum(pick) > 0L){            
             index <- index[pick]
             crit <- crit[pick]
-            exposure <- min(design@exposure[lastitem+1L], sum(pick))
         }
     }
-    if(exposure == 1L){
-        item <- index[which(max(crit) == crit)][1L]
-    } else {
-        rnk <- rank(crit, ties.method = 'random')
-        pick <- which(rnk %in% 1L:exposure)
-        item <- index[sample(pick, 1L)]
-    }
+    if(design@exposure_type != 'none'){
+        if(design@exposure_type == 'sample'){
+            exposure <- design@exposure[lastitem+1L]
+            if(exposure == 1L){
+                item <- index[which(max(crit) == crit)][1L]
+            } else {
+                rnk <- rank(crit, ties.method = 'random')
+                pick <- which(rnk %in% 1L:exposure)
+                item <- index[sample(pick, 1L)]
+            }
+        } else if(design@exposure_type == 'SH'){
+            while(TRUE){
+                item <- index[which(max(crit) == crit)][1L]
+                comp <- runif(1, 0, 1)
+                if(design@exposure[item] >= comp && person$valid_item[item]) break
+                if(length(crit) == 1L) break 
+                person$valid_item[item] <- FALSE
+                pick <- index != item
+                index <- index[pick]
+                crit <- crit[pick]
+            }
+        }
+    } else item <- index[which(max(crit) == crit)][1L]
     return(as.integer(item))
 }

@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.4
 
+- include Sympson-Hetter method of item exposure control
+
 - major re-write of shiny inputs. Now the questions, answers, and options are all supplied through
   a `data.frame` object for better clarity, and all shiny inputs regarding the questions, image 
   locations, etc, are specified in this object
@@ -21,7 +23,7 @@
 - new `cl` argument in `mirtCAT()` for passing a parallel cluster object defined from the 
   parallel package. Used to run simulation designs with parallel architecture for better speed
   
-- by default, the demographics page is n longer generated in the GUI  
+- by default, the demographics page is no longer generated in the GUI  
 
 # Changes in mirtCAT 0.3
 

@@ -9,6 +9,7 @@ Person <- setRefClass("Person",
                                     info_thetas = 'matrix',
                                     demographics = 'data.frame',
                                     item_time = 'numeric',
+                                    valid_item = 'logical',
                                     score = 'logical'),
                       
                       methods = list(
@@ -16,6 +17,7 @@ Person <- setRefClass("Person",
                                                theta_SEs){
                              raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
+                             valid_item <<- rep(TRUE, nitems)
                              items_answered <<- as.integer(rep(NA, nitems))
                              thetas <<- matrix(numeric(nfact), nrow=1L)
                              thetas_SE_history <<- matrix(theta_SEs, 1L)

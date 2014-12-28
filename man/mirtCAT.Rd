@@ -180,7 +180,13 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
     \code{exposure[5] == 3}, and \code{critiera = 'MI'}, then when the fifth item is to be
     selected from the remaining pool of items the top 3 candidate items demonstrating
     the largest information criteria will be sampled from. Naturally, the first and last
-    elements of \code{exposure} are ignored since exposure control will be meaningless
+    elements of \code{exposure} are ignored since exposure control will be meaningless.
+
+    If all elements in \code{exposure} are between 0 and 1 then the Sympson-Hetter exposure
+    control method will be implemented. In this method, an item is administered only if it
+    passes a probability simulation experiment, otherwise it is removed from the item pool.
+    Values closer to 1 are more likely to appear in the test, while value closer to 0 are more
+    likely to be randomly discarded.
 
   }
 
