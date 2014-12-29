@@ -20,6 +20,8 @@
 #' @param latent_covariance (optional) a covariance matrix used to define the population 
 #'   variance-covariance structure between the latent traits. By default the relationship is 
 #'   assumed to be standard normal (i.e., and identity matrix)
+#'   
+#' @param key scoring key required for nested-logit models. See \code{\link{mirt}} for details
 #' 
 #' @export generate.mirt_object
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
@@ -68,7 +70,7 @@
 #' 
 #' }
 generate.mirt_object <- function(parameters, itemtype, latent_means = NULL, 
-                                 latent_covariance = NULL){
+                                 latent_covariance = NULL, key = NULL){
     if(missing(itemtype))
         stop('Must define an itemtype argument')
     if(missing(parameters))
@@ -110,7 +112,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
     for(i in 1L:nfact)
         model[i] <- paste0('F', i, ' = 1-', ncol(dat))
     model <- mirt.model(paste0(model, collapse = '\n'))
-    sv <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K), pars='values')
+    sv <- mirt(dat, model, itemtype=itemtype, key=key, technical=list(customK=K), pars='values')
     for(i in 1L:nitems){
         pick <- parameters[i, !is.na(parameters[i,]), drop=FALSE]
         nms <- colnames(pick)
@@ -129,7 +131,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
     ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE, message=FALSE), 
-                TOL=NaN, pars=sv, quadpts = 1, rotate = 'none')
+                TOL=NaN, pars=sv, quadpts = 1, key=key, rotate = 'none')
     ret@exploratory <- FALSE
     ret
 }

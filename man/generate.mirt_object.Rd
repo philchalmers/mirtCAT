@@ -5,7 +5,7 @@
 \title{Generate a mirt object from population parameters}
 \usage{
 generate.mirt_object(parameters, itemtype, latent_means = NULL,
-  latent_covariance = NULL)
+  latent_covariance = NULL, key = NULL)
 }
 \arguments{
 \item{parameters}{a matrix or data.frame of parameters corresponding to the model definitions
@@ -25,6 +25,8 @@ generate.mirt_object(parameters, itemtype, latent_means = NULL,
 \item{latent_covariance}{(optional) a covariance matrix used to define the population
   variance-covariance structure between the latent traits. By default the relationship is
   assumed to be standard normal (i.e., and identity matrix)}
+
+\item{key}{scoring key required for nested-logit models. See \code{\link{mirt}} for details}
 }
 \description{
 This function generate a \code{mirt} object from known population parameters, which is

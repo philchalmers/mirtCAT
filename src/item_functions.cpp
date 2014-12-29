@@ -98,7 +98,7 @@ void P_graded(vector<double> &P, const vector<double> &par,
 
 void P_nominal(vector<double> &P, const vector<double> &par,
     const vector<double> &Theta, const int &nfact, const int &ncat,
-    const int &israting)
+    const int &israting, const int &returnNum)
 {
     vector<double> a(nfact), ak(ncat), d(ncat);
     for(int i = 0; i < nfact; ++i)
@@ -128,8 +128,13 @@ void P_nominal(vector<double> &P, const vector<double> &par,
         Num[j] = exp(z[j]);
         Den += Num[j];
     }
-    for(int j = 0; j < ncat; ++j)
-        P[j] = Num[j] / Den;
+    if(returnNum){
+    	for(int j = 0; j < ncat; ++j)
+	        P[j] = Num[j];
+    } else {
+	    for(int j = 0; j < ncat; ++j)
+	        P[j] = Num[j] / Den;
+	}
 }
 
 void P_nested(vector<double> &P, const vector<double> &par,
@@ -144,7 +149,7 @@ void P_nested(vector<double> &P, const vector<double> &par,
         npar[i - (nfact+3) + nfact] = par[i];
     vector<double> Pd(2), Pn(ncat-1);
     P_dich(Pd, dpar, Theta, nfact);
-    P_nominal(Pn, npar, Theta, nfact, ncat-1, 0);
+    P_nominal(Pn, npar, Theta, nfact, ncat-1, 0, 0);
     int k = 0;
     for(int i = 0; i < ncat; ++i){
         if((i+1) == correct){
@@ -204,16 +209,16 @@ vector<double> ProbTrace(const S4 &item, const vector<double> &Theta)
             P_graded(P, par, Theta, nfact, ncat-1, 0);
             break;
         case 3 :
-            P_nominal(P, par, Theta, nfact, ncat, 0);
+            P_nominal(P, par, Theta, nfact, ncat, 0, 0);
             break;
         case 4 :
-            P_nominal(P, par, Theta, ncat, 0, 0);
+            P_nominal(P, par, Theta, nfact, ncat, 0, 0);
             break;
         case 5 :
             P_graded(P, par, Theta, nfact, ncat-1, 1);
             break;
         case 6 :
-            P_nominal(P, par, Theta, nfact, ncat, 1);
+            P_nominal(P, par, Theta, nfact, ncat, 1, 0);
             break;
         case 7 :
             P_comp(P, par, Theta, nfact);
@@ -224,11 +229,125 @@ vector<double> ProbTrace(const S4 &item, const vector<double> &Theta)
         case 9 :
             break;
         default :
-            Rprintf("How in the heck did you get here from a switch statement?\n");
+            Rprintf("Traceline function not supported.\n");
             break;
     }
 
     return(P);
+}
+
+void I_dich(arma::mat &info_mat, const S4 &item, 
+	const vector<double> &par, const vector<double> &Theta, const int &nfact)
+{
+	vector<double> a(nfact);
+    for(int i = 0; i < nfact; ++i) a[i] = par[i];
+    const int len = par.size();
+    const double utmp = par[len-1];
+    const double gtmp = par[len-2];
+    const double d = par[len-3];
+    const double g = antilogit(&gtmp);
+    const double u = antilogit(&utmp);
+    double P = 0, Ps = 0;
+    itemTrace(P, Ps, a, &d, Theta, nfact, &g, &u);
+    double Q = 1.0 - P;
+    double PQ = (1.0 - Ps) * Ps;
+    for(int i = 0; i < nfact; ++i){
+        double dP1 = (u-g) * a[i] * PQ;
+        for(int j = 0; j < nfact; ++j){
+            if(i < j){
+                double dP2 = (u-g) * a[j] * PQ;
+                info_mat(i,j) = dP1 * dP2 / Q + dP1 * dP2 / P;
+                info_mat(j,i) = info_mat(i,j);
+            } else {
+                info_mat(i,i) = dP1 * dP1 / Q + dP1 * dP1 / P;
+            }
+        }
+    }
+    
+}
+
+void I_graded(arma::mat &info_mat, const S4 &item, 
+	const vector<double> &par, const vector<double> &Theta, const int &nfact)
+{
+    vector<double> P = ProbTrace(item, Theta);
+    const int P_size = P.size();
+    vector<double> Pstar(P_size-1);
+    double accum = P[P_size-1];
+    Pstar[P_size-2] = accum;
+    if(P_size > 2){
+        for(int i = P_size - 2; i > 0; --i){
+            accum += P[i];
+            Pstar[i-1] = accum;
+        }
+    }
+    double PQ = 0.0;
+    for(int i = 0; i < P_size - 1; ++i)
+        PQ += Pstar[i] * (1.0 - Pstar[i]);
+    for(int i = 0; i < nfact; ++i){
+        for(int j = 0; j < nfact; ++j){
+            if(i <= j)
+                info_mat(i,j) = par[i] * par[j] * PQ;
+            if(i != j)
+                info_mat(j,i) = info_mat(i,j);
+        }
+    } 
+}
+
+void I_nominal(arma::mat &info_mat, const S4 &item, 
+	const vector<double> &par, const vector<double> &Theta, const int &nfact,
+	const int &israting)
+{
+	const int ncat = as<int>(item.slot("ncat"));
+	vector<double> a(nfact), ak(ncat), d(ncat);
+    for(int i = 0; i < nfact; ++i)
+        a[i] = par[i];
+    for(int i = 0; i < ncat; ++i)
+        ak[i] = par[i + nfact];
+    vector<double> Num(ncat), P(ncat);
+    double Den = 0.0;
+    P_nominal(Num, par, Theta, nfact, ncat, israting, 1);
+    for(int i = 0; i < ncat; ++i) Den += Num[i];
+    for(int i = 0; i < ncat; ++i) P[i] = Num[i]/Den;
+    for(int k = 0; k < nfact; ++k){
+	    for(int j = 0; j < nfact; ++j){
+	    	if(k <= j){
+		    	double I2 = 0.0;
+		    	vector<double> dP1(ncat);
+		    	double inner = 0.0;
+		    	for(int i = 0; i < ncat; ++i)
+		    		inner += Num[i] * ak[i] * a[j];
+		    	for(int i = 0; i < ncat; ++i)
+		    		dP1[i] = ak[i] * a[j] * P[i] - P[i] * inner / Den;
+		    	if(k != j){
+		    		vector<double> dP2(ncat);
+		    		for(int i = 0; i < ncat; ++i)
+		    			inner += Num[i] * ak[i] * a[k];
+			    	for(int i = 0; i < ncat; ++i)
+			    		dP2[i] = ak[i] * a[k] * P[i] - P[i] * inner / Den;
+			    	for(int i = 0; i < ncat; ++i)
+			    		I2 += dP1[i] * dP2[i] / P[i];
+			    	info_mat(j, k) = I2;
+			    	info_mat(k, j) = I2;
+		    	} else {
+		    		for(int i = 0; i < ncat; ++i)
+			    		I2 += dP1[i] * dP1[i] / P[i];
+			    	info_mat(j, j) = I2;
+		    	}
+		    }
+	    }
+	}
+}
+
+void I_comp(arma::mat &info_mat, const S4 &item, 
+	const vector<double> &par, const vector<double> &Theta, const int &nfact)
+{
+	Rprintf("Information for partcomp models not implemented yet\n");
+}
+
+void I_nested(arma::mat &info_mat, const S4 &item, 
+	const vector<double> &par, const vector<double> &Theta, const int &nfact)
+{
+	Rprintf("Information for nested-logit models not implemented yet.\nUse nominal model instead.\n");
 }
 
 arma::mat Info(const S4 &item, const vector<double> &Theta){
@@ -237,54 +356,36 @@ arma::mat Info(const S4 &item, const vector<double> &Theta){
     int itemclass = as<int>(item.slot("itemclass")); 
     vector<double> par = as< vector<double> >(item.slot("par"));
 
-    if(itemclass == 1){
-        vector<double> a(nfact);
-        for(int i = 0; i < nfact; ++i) a[i] = par[i];
-        const int len = par.size();
-        const double utmp = par[len-1];
-        const double gtmp = par[len-2];
-        const double d = par[len-3];
-        const double g = antilogit(&gtmp);
-        const double u = antilogit(&utmp);
-        double P = 0, Ps = 0;
-        itemTrace(P, Ps, a, &d, Theta, nfact, &g, &u);
-        double Q = 1.0 - P;
-        double PQ = (1.0 - Ps) * Ps;
-        for(int i = 0; i < nfact; ++i){
-            double dP1 = (u-g) * a[i] * PQ;
-            for(int j = 0; j < nfact; ++j){
-                if(i < j){
-                    double dP2 = (u-g) * a[j] * PQ;
-                    info_mat(i,j) = dP1 * dP2 / Q + dP1 * dP2 / P;
-                    info_mat(j,i) = info_mat(i,j);
-                } else {
-                    info_mat(i,i) = dP1 * dP1 / Q + dP1 * dP1 / P;
-                }
-            }
-        }
-    } else {
-        vector<double> P = ProbTrace(item, Theta);
-        const int P_size = P.size();
-        vector<double> Pstar(P_size-1);
-        double accum = P[P_size-1];
-        Pstar[P_size-2] = accum;
-        if(P_size > 2){
-            for(int i = P_size - 2; i > 0; --i){
-                accum += P[i];
-                Pstar[i-1] = accum;
-            }
-        }
-        double PQ = 0.0;
-        for(int i = 0; i < P_size - 1; ++i)
-            PQ += Pstar[i] * (1.0 - Pstar[i]);
-        for(int i = 0; i < nfact; ++i){
-            for(int j = 0; j < nfact; ++j){
-                if(i <= j)
-                    info_mat(i,j) = par[i] * par[j] * PQ;
-                if(i != j)
-                    info_mat(j,i) = info_mat(i,j);
-            }
-        }
+    switch(itemclass){
+    	case 1 :
+            I_dich(info_mat, item, par, Theta, nfact);
+            break;
+        case 2 :
+            I_graded(info_mat, item, par, Theta, nfact);
+            break;
+        case 3 :
+            I_nominal(info_mat, item, par, Theta, nfact, 0);
+            break;
+        case 4 :
+            I_nominal(info_mat, item, par, Theta, nfact, 0);
+            break;
+        case 5 :
+            I_graded(info_mat, item, par, Theta, nfact);
+            break;
+        case 6 :
+            I_nominal(info_mat, item, par, Theta, nfact, 1);
+            break;
+        case 7 :
+            I_comp(info_mat, item, par, Theta, nfact);
+            break;
+        case 8 :
+            I_nested(info_mat, item, par, Theta, nfact);
+            break;
+        case 9 :
+            break;
+        default :
+            Rprintf("Infomation function not supported.\n");
+            break;
     }
     return(info_mat);
 }

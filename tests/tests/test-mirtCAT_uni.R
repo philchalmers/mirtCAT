@@ -164,13 +164,6 @@ test_that('unidimensional', {
     expect_equal(so$items_answered[1:5], c(1,20,2,15,24))
     expect_equal(as.numeric(table(content[so$items_answered])/10), c(.7, .3))
     
-    content_prop <- c('C1'=.8, 'C2'=.1, 'C3'=.1)
-    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
-                   design = list(min_SEM = .4, content_prop=content_prop, content=content), 
-                   method = 'MAP') 
-    so <- summary(res)
-    expect_equal(so$items_answered[1:5], c(1,20,2,3,24))
-    
     #pass other args through ...
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='KL', theta_lim = c(-1,1))
