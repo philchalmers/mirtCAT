@@ -78,8 +78,6 @@ setMethod("initialize", signature(.Object = "Design"),
                       tmp[1L:length(tmp)] <- 0
                       .Object@content_prop_empirical <- tmp
                   }
-                  if(!is.null(design$max_time))
-                      .Object@max_time <- design$max_time
                   if(!is.null(design$KL_delta))
                       .Object@KL_delta <- design$KL_delta
                   if(!is.null(design$weights)) 

@@ -160,3 +160,22 @@ buildShinyElements <- function(questions, itemnames){
     ret <- list(questions=Qs, item_answers=item_answers, item_options=choices2)
     return(ret)
 }
+
+formatTime <- function(delta){
+    hours <- delta %/% 3600
+    mins <- delta %/% 60 - hours * 60
+    if(hours > 1){
+        h <- hours
+        m <- ifelse((mins %/% 30) == 1, 30, 0) 
+        out <- sprintf('More than %d hours and %d minutes.', h, m)
+    } else if(mins >= 15) {
+        m <- switch(as.character((mins %/% 15)),
+                    '3' = '45', '2' = '30', '1' = '15')
+        out <- sprintf('More than %s minutes.', m)
+    } else {
+        m <- switch(as.character((mins %/% 5) + 1),
+                    '3' = '15', '2' = '10', '1' = '5')
+        out <- sprintf('Less than %s minutes.', m)
+    }
+    out
+}
