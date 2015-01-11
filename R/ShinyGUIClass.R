@@ -10,6 +10,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     delete_png = 'logical',
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
+                                    width = 'numeric',
+                                    height = 'numeric',
                                     css = 'character'),
                       
                       methods = list(
@@ -31,6 +33,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                    close the application."))
                               temp_file <<- ''
                               css <<- ''
+                              width <<- 1000
+                              height <<- 1000
                                                  
                               if(length(shinyGUI)){
                                   if(!is.null(shinyGUI$title))
@@ -49,6 +53,10 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       temp_file <<- shinyGUI$temp_file
                                   if(!is.null(shinyGUI$css))
                                       css <<- shinyGUI$css
+                                  if(!is.null(shinyGUI$stem_dims)){
+                                      width <<- shinyGUI$stem_dims[1]
+                                      height <<- shinyGUI$stem_dims[2]
+                                  }
                               }
                           })
                       

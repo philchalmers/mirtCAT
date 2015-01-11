@@ -260,9 +260,10 @@
 #'    
 #'    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation 
 #'      elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
-#'      prior to constructing the user interface
-#'    
-#'    }
+#'      prior to constructing the user interface}
+#'      
+#'    \item{\code{stem_dims}}{numeric vector of length 2 corresponding to image stem width 
+#'      (in pixels). Default is \code{c(1000, 1000)} for the width and height}
 #'   
 #' }
 #' 

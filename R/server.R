@@ -110,7 +110,9 @@ server <- function(input, output) {
                         height = 1,
                         alt = ""))
         } else {
-            return(list(src = MCE$shinyGUI$stem_locations[[click-2L]]))
+            return(list(src = MCE$shinyGUI$stem_locations[[click-2L]],
+                        width = MCE$shinyGUI$width,
+                        height = MCE$shinyGUI$height))
         }
         
     }, deleteFile = FALSE)
