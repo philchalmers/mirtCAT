@@ -9,9 +9,9 @@ ui <- function(){
         #  Application title
         headerPanel(MCE$shinyGUI$title),
         
-        if(is.finite(MCE$design@max_items)){
+        if(is.finite(MCE$design@max_time)){
             h6(paste0('Time remaining: ', 
-                      formatTime(MCE$design@max_items - sum(MCE$person$item_time))))
+                      formatTime(MCE$design@max_time - sum(MCE$person$item_time))))
         } else NULL,
         
         sidebarPanel(

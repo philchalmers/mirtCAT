@@ -14,9 +14,11 @@ Design <- setClass(Class = "Design",
                              weights = 'numeric',
                              KL_delta = 'numeric',
                              start_item = 'integer',
-                             preCAT_nitems = 'integer',
+                             preCAT_max_items = 'integer',
+                             preCAT_min_items = 'integer',
                              preCAT_criteria = 'character',
                              preCAT_method = 'character',
+                             preCAT_response_var = 'logical',
                              CAT_criteria = 'character',
                              CAT_method = 'character',
                              max_time = 'numeric',
@@ -57,7 +59,9 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@min_items <- 1L
               .Object@max_items <- nitems
               .Object@stop_now <- FALSE 
-              .Object@preCAT_nitems <- 0L
+              .Object@preCAT_min_items <- 0L
+              .Object@preCAT_max_items <- 0L
+              .Object@preCAT_response_var <- FALSE
               .Object@KL_delta <- 0.1
               .Object@max_time <- if(is.null(max_time)) Inf else max_time
               .Object@use_content <- FALSE
@@ -119,15 +123,21 @@ setMethod("initialize", signature(.Object = "Design"),
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
                   stop('min_SEM criteria is not a suitable length')
               if(length(preCAT)){
-                  if(is.null(preCAT$nitems))
-                      stop('preCAT nitems must be specified')
-                  else .Object@preCAT_nitems <- as.integer(preCAT$nitems)
+                  if(is.null(preCAT$max_items))
+                      stop('preCAT max_items must be specified')
+                  else .Object@preCAT_max_items <- as.integer(preCAT$max_items)
+                  if(!is.null(preCAT$min_items))
+                      .Object@preCAT_min_items <- as.integer(preCAT$min_items)
                   if(is.null(preCAT$method))
                       .Object@preCAT_method <- 'MAP'
                   else .Object@preCAT_method <- preCAT$method
                   if(is.null(preCAT$criteria))
                       .Object@preCAT_criteria <- 'random'
                   else .Object@preCAT_criteria <- preCAT$criteria
+                  if(!is.null(preCAT$response_variance)) 
+                      .Object@preCAT_response_var <- preCAT$response_variance
+                  if(.Object@preCAT_min_items > .Object@preCAT_max_items)
+                      stop('preCAT_min_items > preCAT_max_items')
                   .Object@criteria <- .Object@preCAT_criteria
                   .Object@method <- .Object@preCAT_method
               }
@@ -161,11 +171,23 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
 )
 
 setMethod("Next.stage", signature(.Object = "Design"),
-          function(.Object, item){
-              if(item == .Object@preCAT_nitems){
-                  .Object@criteria <- .Object@CAT_criteria
-                  .Object@method <- .Object@CAT_method
+          function(.Object, person, test, item){
+              if(item >= .Object@preCAT_min_items){
+                  if(.Object@preCAT_response_var){
+                      suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
+                                                          response.pattern=person$responses), 
+                                                  silent=TRUE))
+                      if(is.finite(tmp[,'F1'])){
+                          .Object@criteria <- .Object@CAT_criteria
+                          .Object@method <- .Object@CAT_method
+                      }
+                  }
+                  if(item == .Object@preCAT_max_items){
+                      .Object@criteria <- .Object@CAT_criteria
+                      .Object@method <- .Object@CAT_method
+                  }
               }
               .Object
           }
+          
 )

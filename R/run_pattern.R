@@ -23,11 +23,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             #update Thetas
             person$Update.thetas(design, test)
             design <- Update.stop_now(design, person)
-            if(i > design@preCAT_nitems)
-                if(design@stop_now) 
-                    break
+            if(design@stop_now) break
             
-            design <- Next.stage(design, item=i)
+            design <- Next.stage(design, person=person, test=test, item=i)
             
             item <- findNextCATItem(person=person, test=test, design=design)
             person$items_answered[i] <- item

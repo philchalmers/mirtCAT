@@ -44,4 +44,11 @@ test_that('classify', {
     expect_equal(as.numeric(out), c(-1.5164219, -1.4566952, 0.1128962, 0.5229815,
                                     1.0865988,  1.2154775), tolerance = 1e-4)
     
+    preCAT <- list(response_variance = TRUE, min_items = 1, max_items = 20, method = 'fixed')    
+    res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
+                   design = list(classify=0, classify_CI=.95), preCAT=preCAT)
+    expect_equal(summary(res[[1]])$thetas_history[1:6,1], c(0,0,0,-0.4033607,-0.5572152,-0.8296894), tolerance = 1e-4)
+    expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,0,0.8378148,0.6034093), tolerance = 1e-4)
+    expect_equal(summary(res[[3]])$thetas_history[6:8,1], c(0, 1.056420, 1.236754), tolerance = 1e-4)
+    
 })

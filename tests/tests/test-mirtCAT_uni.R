@@ -136,7 +136,7 @@ test_that('unidimensional', {
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'ML', criteria='KLn',
-                   preCAT = list(nitems = 5L, criteria = 'seq'))
+                   preCAT = list(max_items = 5L, criteria = 'seq', method = 'fixed'))
     expect_equal(as.numeric(res$thetas), 0.188614, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
                  0.3966434, tolerance = 1e-4)

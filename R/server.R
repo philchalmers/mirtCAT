@@ -61,12 +61,11 @@ server <- function(input, output) {
                     MCE$person$Update.thetas(MCE$design, MCE$test)
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
-                    if(itemclick > MCE$design@preCAT_nitems)
-                        MCE$design <- Update.stop_now(MCE$design, MCE$person)
+                    MCE$design <- Update.stop_now(MCE$design, MCE$person)
                 }
             } 
             
-            MCE$design <- Next.stage(MCE$design, item=itemclick)
+            MCE$design <- Next.stage(MCE$design, person=MCE$person, test=MCE$test, item=itemclick)
             
             if(!MCE$design@stop_now){
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)

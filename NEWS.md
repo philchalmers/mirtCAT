@@ -1,5 +1,9 @@
 # Changes in mirtCAT 0.4
 
+- in `preCAT` list input change `nitems` to `min_items` and `max_items` for better control. Also 
+  include a `response_variance` logical to terminate the preCAT stage when variability in the 
+  the response options occurs (so that ML estimation becomes plausible)
+
 - include Sympson-Hetter method of item exposure control
 
 - major re-write of shiny inputs. Now the questions, answers, and options are all supplied through

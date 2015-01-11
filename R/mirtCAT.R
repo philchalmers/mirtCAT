@@ -272,14 +272,21 @@
 #'   to use the \code{preCAT} input:
 #'   
 #'   \describe{
-#'     \item{\code{nitems}}{number of items to administer before the CAT session begins.
-#'       An input greater than 0 is required}
+#'     \item{\code{min_items}}{minimum number of items to administer before the CAT session begins.
+#'       Default is 0}
+#'       
+#'     \item{\code{max_items}}{max number of items to administer before the CAT session begins.
+#'       An input greater than 0 is required to run the preCAT stage}
 #'     
 #'     \item{\code{criteria}}{selection criteria (see above). Default is 'random'}
 #'     
 #'     \item{\code{method}}{estimation criteria (see above). It is generally recommended to 
 #'       select a method which can deal with all-or-none response patterns, such as 'EAP'
 #'       or 'MAP', or in the multidimensional case 'DPrule' or 'TPrule'. Default is 'MAP'}
+#'       
+#'     \item{response_variance}{logical; terminate the preCAT stage when there is variability in the 
+#'       response pattern (i.e., when maximum-likelihood estimation contains a potential optimum)?
+#'       Default is FALSE}
 #'    }
 #' 
 #' @export mirtCAT
