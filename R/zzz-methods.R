@@ -100,6 +100,8 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
     tmp <- x$items_answered
     tmp <- rep(c(0,tmp[!is.na(tmp)]), nfact)
     thetaslong$item <- factor(tmp, levels = unique(tmp))
+    CV <- x$classify_values
+    if(!is.null(CV)) CV <- rep(CV, each = nrow(thetas))
     if(nfact > 1L){
         return(xyplot(F1 ~ item|thetas, data=thetaslong, 
                       main = main,
@@ -111,6 +113,10 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                                         col=grey(.9), border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
+                          if(!is.null(CV)){
+                              tmp <- CV[subscripts]
+                              panel.abline(h=tmp[1], col = 'red', ...)
+                          }
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
@@ -126,6 +132,8 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                                         col=grey(.9), border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
+                          if(!is.null(CV))
+                              panel.abline(h=CV[1], col = 'red', ...)
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 

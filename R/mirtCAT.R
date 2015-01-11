@@ -8,9 +8,9 @@
 #' object may be omitted.
 #' 
 #' All tests will stop once the \code{'min_SEM'} criteria has been reached or classification
-#' above or below a cutoff can be made. If all questions should
-#' be answered, users should specify an extremely small \code{'min_SEM'} or equivalently 
-#' a large \code{'min_items'} criteria.
+#' above or below the specified cutoffs can be made. If all questions should
+#' be answered, users should specify an extremely small \code{'min_SEM'} or, equivalently, 
+#' a large \code{'min_items'} criteria to the \code{design} list input.
 #' 
 #' @section HTML help files, exercises, and examples:
 #' 
@@ -101,7 +101,7 @@
 #'   If a character string is passed then the item will be selected from one of 
 #'   the item selections criteria available (see the \code{criteria} argument)
 #'   
-#' @param local_pattern a character/numeric vector or matrix of response patterns 
+#' @param local_pattern a character/numeric matrix of response patterns 
 #'   used to run the CAT application without generating the GUI interface. 
 #'   This option requires complete response pattern(s) to be supplied. \code{local_pattern} 
 #'   is required to be numeric if no \code{questions} are supplied, otherwise it must contain 
@@ -115,7 +115,7 @@
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
-#' @param design a list of design based parameters for adaptive and non-adaptive tests. 
+#' @param design a list of design based control parameters for adaptive and non-adaptive tests. 
 #'   These can be
 #' 
 #' \describe{
@@ -185,10 +185,7 @@
 #'     control method will be implemented. In this method, an item is administered only if it 
 #'     passes a probability simulation experiment, otherwise it is removed from the item pool.
 #'     Values closer to 1 are more likely to appear in the test, while value closer to 0 are more
-#'     likely to be randomly discarded.
-#'   
-#'   }
-#'   
+#'     likely to be randomly discarded.}
 #'   
 #' }
 #' 
@@ -288,10 +285,12 @@
 #'     \item{response_variance}{logical; terminate the preCAT stage when there is variability in the 
 #'       response pattern (i.e., when maximum-likelihood estimation contains a potential optimum)?
 #'       Default is FALSE}
-#'    }
+#' }
 #' 
 #' @export mirtCAT
+#' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
+#' 
 #' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
@@ -323,6 +322,10 @@
 #'   \item{\code{demographics}}{A data.frame object containing the information collected on the 
 #'     first page of the shiny GUI. This is used to store the demographic information for each
 #'     participant} 
+#'     
+#'   \item{\code{classification}}{A character vector indicating whether the traits could be 
+#'     classified as 'above' or 'below' the desired cutoffs}
+#'     
 #' }
 #' 
 #' @keywords CAT, MCAT, computerized adaptive testing
@@ -374,7 +377,7 @@
 #' df$Answer <- answers
 #' (res_seq <- mirtCAT(df, mod)) #sequential scoring 
 #' (res_random <- mirtCAT(df, mod, criteria = 'random')) #random
-#' (res_MI <- mirtCAT(df, mod, criteria = 'MI')) #adaptive
+#' (res_MI <- mirtCAT(df, mod, criteria = 'MI', start_item = 'MI')) #adaptive, MI starting item
 #' 
 #' summary(res_seq)
 #' summary(res_random)
@@ -386,7 +389,9 @@
 #' set.seed(1)
 #' pat <- generate_pattern(mod, Theta = 0, df=df)
 #' head(pat)
-#' res <- mirtCAT(df, mod, local_pattern=pat) #seq scoring with character pattern
+#' 
+#' # seq scoring with character pattern for the entire test (adjust min_items)
+#' res <- mirtCAT(df, mod, local_pattern=pat, design = list(min_items = 50)) 
 #' summary(res)
 #' 
 #' # same as above, but using special input vector that doesn't require df input
@@ -395,9 +400,9 @@
 #' head(pat2)
 #' print(mirtCAT(mo=mod, local_pattern=pat2))
 #' 
-#' # run CAT, and save results to object called person
-#' person <- mirtCAT(df, mod, item_answers=answers, criteria = 'MI', 
-#'   local_pattern=pat)
+#' # run CAT, and save results to object called person (start at 10th item)
+#' person <- mirtCAT(df, mod, item_answers = answers, criteria = 'MI', 
+#'                   start_item = 10, local_pattern = pat)
 #' print(person)
 #' summary(person)
 #' 
@@ -409,10 +414,10 @@
 #'
 #' ### save response object to temp directory in case session ends early
 #' wdf <- paste0(getwd(), '/temp_file.rds')
-#' res <- mirtCAT(df, mod, shinyGUI=list(temp_file=wdf))
+#' res <- mirtCAT(df, mod, shinyGUI = list(temp_file = wdf))
 #' 
 #' # resume test this way if test was stopped early (and temp files were saved)
-#' res <- mirtCAT(df, mod, shinyGUI=list(resume_file=wdf))
+#' res <- mirtCAT(df, mod, shinyGUI = list(resume_file = wdf))
 #' print(res)
 #' 
 #' }
@@ -544,6 +549,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
             direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff')
             direction[!sig] <- 'no decision'
             ret$classification <- direction
+            ret$classify_values <- design$classify
         }
         colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
             colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:test_object@nfact)
