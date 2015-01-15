@@ -12,9 +12,8 @@ computerized adaptive tests using item response theory methodology.
 ## Examples and Evaluated Help Files
 
 Various examples and worked help files have been compiled using the `knitr` package to generate
-HTML output, and are available [here](http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html). 
-User contributions are also welcome, where the source code examples are demonstrated on the 
-`gh-pages` branch of this repository in the `source` directory.
+HTML output, and are available on the [wiki](https://github.com/philchalmers/mirtCAT/wiki).
+User contributions are welcome!
 
 # Installing from Github
 

@@ -31,5 +31,6 @@ LinkingTo: Rcpp, RcppArmadillo
 License: GPL (>= 3)
 Repository: CRAN
 Maintainer: Phil Chalmers <rphilip.chalmers@gmail.com>
-URL: https://github.com/philchalmers/mirtCAT
+URL: https://github.com/philchalmers/mirtCAT,
+     https://github.com/philchalmers/mirtCAT/wiki
 BugReports: https://github.com/philchalmers/mirtCAT/issues?state=open

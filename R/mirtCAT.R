@@ -15,7 +15,7 @@
 #' @section HTML help files, exercises, and examples:
 #' 
 #' To access examples, vignettes, and exercise files that have been generated with knitr please
-#' visit \url{http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html}.
+#' visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 #' 
 #' @param df a \code{data.frame} object containing the character vector inputs required to generate 
 #'   GUI questions through shiny. Each row in the object corresponds to a unique
