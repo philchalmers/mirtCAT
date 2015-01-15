@@ -206,34 +206,31 @@ hr {
 <p>The following defines three Likert scale questions, and stores the GUI answers to a <code>results</code> 
 object.</p>
 
-<pre><code class="r">library(&#39;mirtCAT&#39;)
+<pre><code class="r">library(&quot;mirtCAT&quot;)
 
-## Define empty list of questions
-questions &lt;- list()
+### Create simple non-adaptive interface ###
 
-## Potential choices for each item (can be unique for each item)
-choices &lt;- c(&#39;Strongly Disagree&#39;, &#39;Disagree&#39;, &#39;Neutral&#39;,
-             &#39;Agree&#39;, &#39;Strongly Agree&#39;)
+## Potential options for each item
+options &lt;- matrix(c(&quot;Strongly Disagree&quot;, &quot;Disagree&quot;, &quot;Neutral&quot;, &quot;Agree&quot;, &quot;Strongly Agree&quot;),
+    nrow = 3, ncol = 5, byrow = TRUE)
 
-## Define question inputs and variable lables
-questions$Q1 &lt;- radioButtons(inputId = &#39;Q1&#39;,
-                             label = &#39;Building tests with mirtCAT is difficult.&#39;,
-                             choices = choices)
-questions$Q2 &lt;- radioButtons(inputId = &#39;Q2&#39;,
-                             label = &#39;Building tests with mirtCAT requires a lot of coding.&#39;,
-                             choices = choices)
-questions$Q3 &lt;- radioButtons(inputId = &#39;Q3&#39;,
-                             label = &#39;Building tests with mirtCAT is fantastic.&#39;,
-                             choices = choices)
+questions &lt;- c(&quot;Building CATs with mirtCAT is difficult.&quot;,
+               &quot;Building tests with mirtCAT requires a lot of coding.&quot;,
+               &quot;I would use mirtCAT in my research.&quot;)
+
+df &lt;- data.frame(Question = questions, Option = options, Type = &quot;radio&quot;)
+df
 
 ## Run the mirtCAT web interface and store results
-results &lt;- mirtCAT(questions)
+results &lt;- mirtCAT(df = df)
+print(results)
+summary(results)
 </code></pre>
 
 <p>If we wish to modify the <code>demographics</code> page to collect information about a 
 participants gender and occupation, we could use the following.</p>
 
-<pre><code class="r">### Modify demographics page to collect occupation and gender variables ###
+<pre><code class="r">### Include a demographics page to collect occupation and gender variables ###
 demographics &lt;- list(textInput(inputId = &#39;occupation&#39;,
                                label = &#39;What is your occupation?&#39;,
                                value = &#39;&#39;),
@@ -241,8 +238,9 @@ demographics &lt;- list(textInput(inputId = &#39;occupation&#39;,
                                  label = &#39;Please select your gender.&#39;,
                                  choices = c(&#39;&#39;, &#39;Male&#39;, &#39;Female&#39;, &#39;Other&#39;),
                                  selected = &#39;&#39;))
-results &lt;- mirtCAT(questions, shinyGUI = list(demographics = demographics,
+results &lt;- mirtCAT(df, shinyGUI = list(demographics = demographics,
                                               demographics_inputIDs = c(&#39;occupation&#39;, &#39;gender&#39;)))
+summary(results)
 </code></pre>
 
 </body>

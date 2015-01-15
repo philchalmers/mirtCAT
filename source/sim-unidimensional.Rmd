@@ -1,0 +1,32 @@
+Unidimensional CAT simulation
+======================================
+
+Example of how to build a unidimensional CAT simulation.
+
+```{r eval=FALSE}
+nitems <- 1000
+N <- 5000
+Theta <- matrix(rnorm(N))
+a <- matrix(rlnorm(nitems, .2, .3), nitems)
+d <- rnorm(nitems)
+pars <- data.frame(a1 = a, d = d, g = 0.2)
+mirt_object <- generate.mirt_object(pars, '3PL')
+responses <- generate_pattern(mirt_object, Theta = Theta)
+
+library(parallel)
+cl <- makeCluster(detectCores())
+design <- list(min_SEM = .25, min_items = 10, max_items = 50)
+mirtCAT_results <- mirtCAT(mo = mirt_object, local_pattern = responses,
+                           start_item = 'MI', method = 'EAP',
+                           criteria = 'MI', design = design, cl = cl)
+plot(mirtCAT_results[[1]])
+plot(mirtCAT_results[[2]])
+
+## summarize results
+library(plyr)
+est.Theta1 <- laply(mirtCAT_results, function(x) x$thetas)
+ave_nans <- mean(laply(mirtCAT_results, function(x) length(x$items_answered)))
+(r <- cor(Theta[,1], est.Theta1))
+(bias <- mean(Theta[,1] - est.Theta1))
+(RMSD <- sqrt(mean((Theta[,1] - est.Theta1)^2)))
+```

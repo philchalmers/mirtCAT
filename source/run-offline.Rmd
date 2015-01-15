@@ -8,28 +8,32 @@ offline use (for testing or Monte Carlo simulation research).
 ```{r}
 library('mirtCAT')
 
-### Define population parameters for MCAT ###
-
 ## Define population parameters
-a <- c(1.0, 1.2, 0.9, 0.8, 1.1, 1.2, 0.8, 0.7, 0.5, 1.0)
-d <- c(-1.0, 1.5, 0.0, 0.5, -0.5, -1.0, 0.0, 0.1, 1.1, -0.2)
+a <- c(1, 1.2, 0.9, 0.8, 1.1, 1.2, 0.8, 0.7, 0.5, 1)
+d <- c(-1, 1.5, 0, 0.5, -0.5, -1, 0, 0.1, 1.1, -0.2)
 g <- rep(0.2, 10)
+pars <- data.frame(a1 = a, d = d, g = g)
+lc <- matrix(2)
 
-## Generate an arbitrary dataset of 0 and 1s for each item
-dat <- matrix(c(0,1), nrow=2, ncol=10)
+## Generate mirt_object for CAT session
+mirt_object <- generate.mirt_object(pars, itemtype = "3PL", latent_covariance = lc)
+coef(mirt_object, simplify = TRUE)
 
-## Obtain starting values from mirt()
-sv <- mirt(data=dat, model=1, pars='values')
+## generate random response pattern
+set.seed(1)
+pattern <- generate_pattern(mirt_object, Theta = 1)
+print(pattern)
 
-## Set starting values equal to population values
-sv$value[sv$name == 'a1'] <- a
-sv$value[sv$name == 'd'] <- d
-sv$value[sv$name == 'g'] <- g
+result <- mirtCAT(mo = mirt_object, local_pattern = pattern, start_item = "MI", criteria = "MI")
+print(result)
+summary(result)
+plot(result)
+```
 
-## Create mirt_object which performs no optimization steps
-mirt_object <- mirt(data=dat, model=1, pars=sv, TOL=NaN)
-print(mirt_object)
-coef(mirt_object)
+```{r}
+# score the final response vector with a different estimator
+responses <- summary(result, sort = FALSE)$scored_responses
+fscores(mirt_object, response.pattern = responses, method = "ML")
 ```
 
 This next section generates a plausible response vector given $\theta = 1$, and passes
@@ -42,18 +46,8 @@ pattern <- generate_pattern(mirt_object, Theta = 1)
 print(pattern)
 
 # use adaptive method using maximum-information item selection
-result <- mirtCAT(mirt_object=mirt_object, local_pattern=pattern, criteria='MI')
+result <- mirtCAT(mo=mirt_object, local_pattern=pattern, criteria='MI', start_item = 'MI')
 print(result)
 summary(result)
 plot(result)
-```
-
-Given the returned object from `mirtCAT()`, we can perform additional computations such as 
-determining what the final score would have been given maximum-likelihood estimation (instead 
-of the default MAP).
-
-```{r}
-#obtain responses
-responses <- summary(result, sort=FALSE)$responses
-fscores(mirt_object, response.pattern = responses, method = 'ML')
 ```

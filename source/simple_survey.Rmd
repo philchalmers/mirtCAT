@@ -5,35 +5,32 @@ The following defines three Likert scale questions, and stores the GUI answers t
 object.
 
 ```{r, eval=FALSE}
-library('mirtCAT')
+library("mirtCAT")
 
-## Define empty list of questions
-questions <- list()
+### Create simple non-adaptive interface ###
 
-## Potential choices for each item (can be unique for each item)
-choices <- c('Strongly Disagree', 'Disagree', 'Neutral',
-             'Agree', 'Strongly Agree')
+## Potential options for each item
+options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+    nrow = 3, ncol = 5, byrow = TRUE)
 
-## Define question inputs and variable lables
-questions$Q1 <- radioButtons(inputId = 'Q1',
-                             label = 'Building tests with mirtCAT is difficult.',
-                             choices = choices)
-questions$Q2 <- radioButtons(inputId = 'Q2',
-                             label = 'Building tests with mirtCAT requires a lot of coding.',
-                             choices = choices)
-questions$Q3 <- radioButtons(inputId = 'Q3',
-                             label = 'Building tests with mirtCAT is fantastic.',
-                             choices = choices)
+questions <- c("Building CATs with mirtCAT is difficult.",
+               "Building tests with mirtCAT requires a lot of coding.",
+               "I would use mirtCAT in my research.")
+
+df <- data.frame(Question = questions, Option = options, Type = "radio")
+df
 
 ## Run the mirtCAT web interface and store results
-results <- mirtCAT(questions)
+results <- mirtCAT(df = df)
+print(results)
+summary(results)
 ```
 
 If we wish to modify the `demographics` page to collect information about a 
 participants gender and occupation, we could use the following.
 
 ```{r, eval=FALSE}
-### Modify demographics page to collect occupation and gender variables ###
+### Include a demographics page to collect occupation and gender variables ###
 demographics <- list(textInput(inputId = 'occupation',
                                label = 'What is your occupation?',
                                value = ''),
@@ -41,6 +38,7 @@ demographics <- list(textInput(inputId = 'occupation',
                                  label = 'Please select your gender.',
                                  choices = c('', 'Male', 'Female', 'Other'),
                                  selected = ''))
-results <- mirtCAT(questions, shinyGUI = list(demographics = demographics,
+results <- mirtCAT(df, shinyGUI = list(demographics = demographics,
                                               demographics_inputIDs = c('occupation', 'gender')))
+summary(results)
 ```

@@ -15,43 +15,28 @@ nitems <- 100
 itemnames <- paste0('Item.', 1:nitems)
 a <- matrix(rlnorm(nitems, .2, .3))
 d <- matrix(rnorm(nitems))
-
-# create dummy dataset
-dat <- matrix(c(1,0), 2, nitems)
-colnames(dat) <- itemnames
-
-# use population values for model
-sv <- mirt(dat, 1, pars = 'values')
-sv$value[sv$name == 'a1'] <- a[,1]
-sv$value[sv$name == 'd'] <- d[,1]
-sv$value[sv$name == 'g'] <- 0.2
-mod <- mirt(dat, 1, pars = sv, TOL = NaN)
+pars <- data.frame(a1=a, d=d, g=0.2)
+mod <- generate.mirt_object(pars, '3PL')
 
 # math items definitions
 # addition for one factor and multiplication for the other
-shiny_questions <- questions <- vector('list', nitems)
-names(shiny_questions) <- names(questions) <- itemnames
-answers <- character(nitems)
-choices <- vector('list', nitems)
+questions <- answers <- character(nitems)
+choices <- matrix('a', nitems, 5)
 spacing <- floor(d - min(d)) + 1 #easier items have more variation
 
 for(i in 1:nitems){
     n1 <- sample(1:100, 1)
     n2 <- sample(101:200, 1)
     ans <- n1 + n2
-    questions[[i]] <- paste0(n1, ' + ', n2, ' = ?')
+    questions[i] <- paste0(n1, ' + ', n2, ' = ?')
     answers[i] <- as.character(ans)
     ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
     ch[sample(1:5, 1)] <- ans
-    choices[[i]] <- as.character(ch)
+    choices[i,] <- as.character(ch)
 }
 
-# load list of items and their answers
-for(i in 1L:nitems){
-    shiny_questions[[i]] <- radioButtons(inputId = itemnames[i],
-                                         label = questions[[i]],
-                                         choices = choices[[i]])
-}
+df <- data.frame(Questions=questions, Answer=answers, Option=choices, Type='radio')
+head(df)
 ```
 
 Check how test is expected to behave given its overall information criteria.
@@ -63,12 +48,13 @@ plot(mod)
 plot(mod, type = 'infoSE', theta_lim=c(-3,3))
 ```
 
-Run the GUI using maximum-information selection, EAP estimation, 
+Run the GUI using maximum-information selection, EAP estimation, random starting item,
 and stopping when $SE(\hat{\theta}) < 0.5$.
 
 ```{r, eval=FALSE}
-result <- mirtCAT(shiny_questions, mod, item_answers = answers, method = 'EAP', criteria = 'MI', 
+result <- mirtCAT(df, mod, method = 'EAP', criteria = 'MI', start_item = 'random',
                   design = list(min_SEM = 0.5))
 print(result)
 plot(result)
+summary(result)
 ```

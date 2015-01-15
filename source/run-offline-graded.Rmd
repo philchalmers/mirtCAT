@@ -1,7 +1,7 @@
 Offline run with polytomous items
 ======================================
 
-The following code block uses `mirt` to define population parameters for ten 3PL IRT models.
+The following code block uses `mirt` to define population parameters for 250 graded response IRT models.
 This will be used to set up a CAT interface that can be used for online use or 
 offline use (for testing or Monte Carlo simulation research).
 
@@ -15,12 +15,10 @@ N <- 500 #calibration sample size
 a <- matrix(rlnorm(bank*2, .2,.3), bank)
 a[1:75, 1] <- a[250:175, 2] <- 0
 d <- matrix(seq(1.25, -1.25, length.out=4), bank, 4, byrow=TRUE) + rnorm(bank)
-dat <- simdata(a ,d, N, itemtype = 'graded', sigma = matrix(c(1,.5,.5,1),2,2))
-model <- mirt.model('F1 = 1-174
-                    F2 = 76-250
-                    COV = F1*F2')
-mod <- mirt(dat, model, TOL=1e-3)
-coef(mod)[245:251]
+pars <- data.frame(a, d)
+colnames(pars) <- c('a1', 'a2', paste0('d', 1:4))
+mod <- generate.mirt_object(pars, itemtype = 'graded')
+head(coef(mod, simplify=TRUE)$items)
 ```
 
 This next section generates a plausible response vector given $\theta_1 = -1$ and 
@@ -30,12 +28,12 @@ This next section generates a plausible response vector given $\theta_1 = -1$ an
 ## generate random response pattern
 set.seed(1)
 pattern <- generate_pattern(mod, Theta = c(-1, 0.5))
-head(pattern)
+head(pattern[1L,])
 
 # use adaptive method using Kullback-Leibler item selection with root-N adjustment
-#   with ML estimation of latent traits
-result <- mirtCAT(mirt_object=mod, local_pattern=pattern, criteria='KLn',
-                  design = list(min_SEM=.2), method = 'ML')
+#   with MAP estimation of latent traits
+result <- mirtCAT(mo=mod, local_pattern=pattern, criteria='KLn',
+                  design = list(min_SEM=.2), method = 'MAP')
 print(result)
-plot(result, scales = list(x = list(at = NULL)))
+plot(result, scales = list(x = list(at = NULL)), SE = 1.96) #95% confidence interval
 ```

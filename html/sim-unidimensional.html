@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Customize GUI</title>
+<title>Unidimensional CAT simulation</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -201,113 +201,35 @@ hr {
 </head>
 
 <body>
-<h1>Customize GUI</h1>
+<h1>Unidimensional CAT simulation</h1>
 
-<p>This demonstrates how to modify various elements in the shiny GUI.</p>
+<p>Example of how to build a unidimensional CAT simulation.</p>
 
-<pre><code class="r">library(&#39;mirtCAT&#39;)
+<pre><code class="r">nitems &lt;- 1000
+N &lt;- 5000
+Theta &lt;- matrix(rnorm(N))
+a &lt;- matrix(rlnorm(nitems, .2, .3), nitems)
+d &lt;- rnorm(nitems)
+pars &lt;- data.frame(a1 = a, d = d, g = 0.2)
+mirt_object &lt;- generate.mirt_object(pars, &#39;3PL&#39;)
+responses &lt;- generate_pattern(mirt_object, Theta = Theta)
 
-# define population IRT parameters
-set.seed(1234)
-nitems &lt;- 120
-itemnames &lt;- paste0(&quot;Item.&quot;, 1:nitems)
-a &lt;- matrix(c(rlnorm(nitems/2, 0.2, 0.3), rnorm(nitems/4, 0, 0.3), numeric(nitems/2),
-    rnorm(nitems/4, 0, 0.3), rlnorm(nitems/2, 0.2, 0.3)), nitems)
-d &lt;- matrix(rnorm(nitems))
-pars &lt;- data.frame(a, d)
-colnames(pars) &lt;- c(&quot;a1&quot;, &quot;a2&quot;, &quot;d&quot;)
-trait_cov &lt;- matrix(c(1, 0.5, 0.5, 1), 2, 2)
+library(parallel)
+cl &lt;- makeCluster(detectCores())
+design &lt;- list(min_SEM = .25, min_items = 10, max_items = 50)
+mirtCAT_results &lt;- mirtCAT(mo = mirt_object, local_pattern = responses,
+                           start_item = &#39;MI&#39;, method = &#39;EAP&#39;,
+                           criteria = &#39;MI&#39;, design = design, cl = cl)
+plot(mirtCAT_results[[1]])
+plot(mirtCAT_results[[2]])
 
-# create mirt_object
-mod &lt;- generate.mirt_object(pars, itemtype = &quot;2PL&quot;, latent_covariance = trait_cov)
-
-# math items definitions addition for one factor and multiplication for the other
-questions &lt;- answers &lt;- character(nitems)
-options &lt;- matrix(&quot;&quot;, nitems, 5)
-spacing &lt;- floor(d - min(d)) + 1  #easier items have more variation
-
-for (i in 1:nitems) {
-    if (i &lt; 31) {
-        # addition
-        n1 &lt;- sample(1:100, 1)
-        n2 &lt;- sample(101:200, 1)
-        ans &lt;- n1 + n2
-        questions[i] &lt;- paste0(n1, &quot; + &quot;, n2, &quot; = ?&quot;)
-    } else if (i &lt; 61) {
-        # addition and multiplication
-        n1 &lt;- sample(1:50, 1)
-        n2 &lt;- sample(51:100, 1)
-        m1 &lt;- sample(1:10, 1)
-        m2 &lt;- sample(1:10, 1)
-        ans &lt;- n1 + n2 + m1 * m2
-        questions[i] &lt;- paste0(n1, &quot; + &quot;, n2, &quot; + &quot;, m1, &quot; * &quot;, m2, &quot; = ?&quot;)
-    } else if (i &lt; 91) {
-        # multiplication and addition
-        n1 &lt;- sample(1:10, 1)
-        n2 &lt;- sample(1:10, 1)
-        m1 &lt;- sample(1:25, 1)
-        m2 &lt;- sample(1:25, 1)
-        ans &lt;- n1 + n2 + m1 * m2
-        questions[i] &lt;- paste0(m1, &quot; * &quot;, m2, &quot; + &quot;, n1, &quot; + &quot;, n2, &quot; = ?&quot;)
-    } else {
-        # multiplication
-        m1 &lt;- sample(1:50, 1)
-        m2 &lt;- sample(1:50, 1)
-        ans &lt;- n1 + n2 + m1 * m2
-        questions[i] &lt;- paste0(m1, &quot; * &quot;, m2, &quot; = ?&quot;)
-    }
-    answers[i] &lt;- as.character(ans)
-    ch &lt;- ans + sample(c(-5:-1, 1:5) * spacing[i, ], 5)
-    ch[sample(1:5, 1)] &lt;- ans
-    options[i, ] &lt;- as.character(ch)
-}
-
-# load list of items and their answers
-df &lt;- data.frame(Question = questions, Option = options, Answer = answers, Type = &quot;radio&quot;)
-</code></pre>
-
-<p>The following adds two .png files to the GUI as item stems for more customized item stimuli.</p>
-
-<pre><code class="r">type &lt;- c(&quot;radio_inline&quot;, &quot;select&quot;)
-questions &lt;- c(&quot;&quot;, &quot;Which equation in the above table is INCORRECT?&quot;)
-options &lt;- rbind(c(&quot;1236&quot;, &quot;1238&quot;, &quot;1240&quot;, &quot;1242&quot;, &quot;1244&quot;), c(&quot;A)&quot;, &quot;B)&quot;, &quot;C)&quot;, &quot;D)&quot;,
-    &quot;E)&quot;))
-answers &lt;- c(&quot;1236&quot;, &quot;D)&quot;)
-stem_locations &lt;- c(&quot;/path/to/Math-stem.png&quot;, &quot;/path/to/Table-stem.png&quot;)
-twoitems &lt;- data.frame(Question = questions, Option = options, Answer = answers,
-    Stem = stem_locations, Type = type, stringsAsFactors = FALSE)
-
+## summarize results
 library(plyr)
-df2 &lt;- rbind.fill(twoitems, df)
-results &lt;- mirtCAT(df = df2, design = list(max_items = 2))
-</code></pre>
-
-<p>Finally, the following modifies various elements, such as the minimum and maximum number of items
-to administer, the amount of item exposure to sample from, and performs a Pre-CAT stage to 
-collect response data prior to the CAT session. </p>
-
-<p>As well, several GUI elements are modified, such as the title, author names, the first page,
-and the last page.</p>
-
-<pre><code class="r">design_list &lt;- list(max_items = 30, min_items = 10, min_SEM = 0.4, exposure = rep(3, 120))
-
-# in pre-CAT stage select 5 items using DPrule and use EAP estimates
-preCAT_list &lt;- list(max_items = 5, criteria = &quot;DPrule&quot;, method = &quot;EAP&quot;)
-
-# change aesthetics of GUI, including title, authors, header, and initial message
-title &lt;- &quot;Example Test&quot;
-authors &lt;- &quot;I. M. D. Author&quot;
-firstpage &lt;- list(h2(&quot;Example Test&quot;), h5(&quot;Please answer each item to the best of your ability.\n                     The results of this test will remain completely anonymous\n                     and are only used for research purposes.&quot;))
-lastpage &lt;- list(h3(&quot;Thank you for completing the test. Please click &#39;Next&#39; to\n                    save your results.&quot;))
-demographics &lt;- list(textInput(inputId = &quot;occupation&quot;, label = &quot;What is your occupation?&quot;,
-    value = &quot;&quot;), selectInput(inputId = &quot;gender&quot;, label = &quot;Please select your gender.&quot;,
-    choices = c(&quot;&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Other&quot;), selected = &quot;&quot;))
-shinyGUI_list &lt;- list(title = title, authors = authors, demographics = demographics,
-    demographics_inputIDs = c(&quot;occupation&quot;, &quot;gender&quot;), firstpage = firstpage, lastpage = lastpage)
-
-# run the customized GUI interface
-results &lt;- mirtCAT(df = df, mo = mod, criteria = &quot;Drule&quot;, start_item = &quot;DPrule&quot;,
-    shinyGUI = shinyGUI_list, design = design_list, preCAT = preCAT_list)
+est.Theta1 &lt;- laply(mirtCAT_results, function(x) x$thetas)
+ave_nans &lt;- mean(laply(mirtCAT_results, function(x) length(x$items_answered)))
+(r &lt;- cor(Theta[,1], est.Theta1))
+(bias &lt;- mean(Theta[,1] - est.Theta1))
+(RMSD &lt;- sqrt(mean((Theta[,1] - est.Theta1)^2)))
 </code></pre>
 
 </body>
