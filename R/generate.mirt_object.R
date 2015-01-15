@@ -94,9 +94,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         }
         if(itemtype[i] %in% c('2PL', 'ideal', 'PC2PL')){
             K[i] <- 2L
-        } else if(itemtype[i] %in% c('graded', 'grsm')){
-            K[i] <- max(sapply(strsplit(nms[grepl('d', nms)], 'd'), function(x) as.numeric(x[2])))
-        } else if(itemtype[i] %in% c('gpcm', 'nominal', '2PLNRM')){
+        } else if(itemtype[i] %in% c('graded', 'grsm', 'gpcm', 'nominal', '2PLNRM')){
             K[i] <- max(sapply(strsplit(nms[grepl('d', nms)], 'd'), function(x) as.numeric(x[2]))) + 1
         } else {
             stop(sprintf('%s is an invalid itemtype argument. Please fix!', itemtype[i]))

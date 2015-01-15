@@ -160,7 +160,7 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                           if(all(z < qnorm(.Object@classify_alpha))) .Object@stop_now <- TRUE
                           } else {
                               .Object@met_SEM <- diff < .Object@min_SEM
-                              if(all(.Object@met_SEM)) .Object@stop_now <- TRUE
+                              if(!any(is.nan(diff)) && all(.Object@met_SEM)) .Object@stop_now <- TRUE
                           }
                   }
               }
