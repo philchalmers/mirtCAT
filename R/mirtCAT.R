@@ -435,11 +435,8 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         names(questions) <- Names
         K <- mo@Data$K
         item_options <- vector('list', length(K))
-        for(i in 1L:length(K)){
+        for(i in 1L:length(K))
             item_options[[i]] <- as.character(0L:(K[i]-1L))
-            questions[[i]] <- selectInput(inputId = Names[i], label = '', 
-                                          choices = item_options[[i]])
-        }
         df <- data.frame()
         item_answers <- NULL
     } else {
@@ -479,7 +476,8 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     
     #setup objects
     if(!missing(df)) shinyGUI$stem_locations <- df$Stem
-    shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI)
+    if(is.null(local_pattern)) 
+        shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI)
     test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
@@ -498,7 +496,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         design_object@start_item <- start_item
         design_object@criteria <- tmp
     }
-    if(!is.null(shinyGUI$resume_file)){
+    if(is.null(local_pattern) && !is.null(shinyGUI$resume_file)){
         person_object <- readRDS(shinyGUI$resume_file)
         MCE$last_demographics <- person_object$demographics
         shinyGUI_object$demographics <- list()
@@ -515,13 +513,13 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     MCE$person <- person_object
     MCE$test <- test_object
     MCE$design <- design_object
-    MCE$shinyGUI <- shinyGUI_object
     MCE$STOP <- FALSE
     MCE$outfile <- tempfile(fileext='.png')
     MCE$shift_back <- 0L
     MCE$invalid_count <- 0L
     
     if(is.null(local_pattern)){
+        MCE$shinyGUI <- shinyGUI_object
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     } else {
