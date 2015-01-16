@@ -47,6 +47,7 @@ server <- function(input, output) {
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test@itemnames[pick]
                 ip <- input[[name]]
+                if(is.null(ip)) ip <- input[[paste0(MCE$invalid_count, '.TeMpInTeRnAl',name)]]
                 if(!is.null(ip)){
                     MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
                         which(MCE$test@item_options[[pick]] %in% ip) - 1L
@@ -62,6 +63,12 @@ server <- function(input, output) {
                     if(MCE$shinyGUI$temp_file != '')
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                     MCE$design <- Update.stop_now(MCE$design, MCE$person)
+                } else {
+                    MCE$shift_back <- MCE$shift_back + 1L
+                    MCE$invalid_count <- MCE$invalid_count + 1L
+                    tmp <- buildShinyElements(MCE$shinyGUI$df[pick,], 
+                                              paste0(MCE$invalid_count, '.TeMpInTeRnAl',name))
+                    return(tmp$questions)
                 }
             } 
             
@@ -89,7 +96,7 @@ server <- function(input, output) {
         
     output$item_stem <- renderImage({
         
-        click <- input$Next
+        click <- input$Next - MCE$shift_back
         if(click > 0L)
             if(!length(MCE$shinyGUI$demographics)) click <- click + 1L
             

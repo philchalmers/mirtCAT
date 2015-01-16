@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.4
 
+- respones in GUI now are blank by default
+
 - in `preCAT` list input change `nitems` to `min_items` and `max_items` for better control. Also 
   include a `response_variance` logical to terminate the preCAT stage when variability in the 
   the response options occurs (so that ML estimation becomes plausible)

@@ -3,6 +3,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                       fields = list(title = 'character',
                                     author = 'character',
                                     questions = 'list',
+                                    df = 'data.frame',
                                     firstpage = 'list',
                                     demographics = 'list',
                                     lastpage = 'list',
@@ -15,8 +16,9 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     css = 'character'),
                       
                       methods = list(
-                          initialize = function(questions, shinyGUI){
+                          initialize = function(questions, df, shinyGUI){
                               questions <<- questions
+                              df <<- df
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else stem_locations <<- shinyGUI$stem_locations

@@ -440,6 +440,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
             questions[[i]] <- selectInput(inputId = Names[i], label = '', 
                                           choices = item_options[[i]])
         }
+        df <- data.frame()
         item_answers <- NULL
     } else {
         if(!is.data.frame(df))
@@ -478,7 +479,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     
     #setup objects
     if(!missing(df)) shinyGUI$stem_locations <- df$Stem
-    shinyGUI_object <- ShinyGUI$new(questions=questions, shinyGUI=shinyGUI)
+    shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI)
     test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
                      item_options=item_options, quadpts_in=design$quadpts,
                      theta_range_in=design$theta_range, dots=list(...))
@@ -517,6 +518,8 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     MCE$shinyGUI <- shinyGUI_object
     MCE$STOP <- FALSE
     MCE$outfile <- tempfile(fileext='.png')
+    MCE$shift_back <- 0L
+    MCE$invalid_count <- 0L
     
     if(is.null(local_pattern)){
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)

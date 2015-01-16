@@ -141,10 +141,10 @@ buildShinyElements <- function(questions, itemnames){
             cs <- na.omit(choices[i, ])
             Qs[[i]] <- radioButtons(inputId = itemnames[i], label=Qs_char[i],
                                     inline = Type[i] == 'radio_inline',
-                                    choices = cs)
+                                    choices = cs, selected = '')
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
-            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i],
+            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i], selected = '',
                                     choices = na.omit(as.character(choices[i,])))
         } else if(Type[i] == 'text'){
             Qs[[i]] <- textInput(inputId = itemnames[i], label=Qs_char[i], value = '')
