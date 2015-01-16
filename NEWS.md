@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.4
 
+- `forced_choice` argument for shinyGUI input to state whether respones for each item are 
+  required (for CATs, this should always be TRUE)
+
 - respones in GUI now are blank by default
 
 - in `preCAT` list input change `nitems` to `min_items` and `max_items` for better control. Also 

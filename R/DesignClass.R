@@ -151,7 +151,7 @@ setGeneric('Next.stage', function(.Object, ...) standardGeneric("Next.stage"))
 
 setMethod("Update.stop_now", signature(.Object = "Design"),
           function(.Object, person){
-              nanswered <- sum(!is.na(person$responses))
+              nanswered <- sum(!is.na(person$items_answered))
               if(person$score){
                   if(nanswered >= .Object@min_items){
                       diff <- person$thetas_SE_history[nrow(person$thetas_SE_history), ]

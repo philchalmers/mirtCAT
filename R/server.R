@@ -64,18 +64,30 @@ server <- function(input, output) {
                         saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                     MCE$design <- Update.stop_now(MCE$design, MCE$person)
                 } else {
-                    MCE$shift_back <- MCE$shift_back + 1L
-                    MCE$invalid_count <- MCE$invalid_count + 1L
-                    tmp <- buildShinyElements(MCE$shinyGUI$df[pick,], 
-                                              paste0(MCE$invalid_count, '.TeMpInTeRnAl',name))
-                    return(tmp$questions)
+                    if(MCE$shinyGUI$forced_choice){
+                        MCE$shift_back <- MCE$shift_back + 1L
+                        MCE$invalid_count <- MCE$invalid_count + 1L
+                        tmp <- buildShinyElements(MCE$shinyGUI$df[pick,], 
+                                                  paste0(MCE$invalid_count, '.TeMpInTeRnAl',name))
+                        return(tmp$questions)
+                    } else {
+                        MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
+                            sum(MCE$person$item_time)
+                        #update Thetas (same as above)
+                        MCE$person$Update.thetas(MCE$design, MCE$test)
+                        if(MCE$shinyGUI$temp_file != '')
+                            saveRDS(MCE$person, MCE$shinyGUI$temp_file)
+                        MCE$design <- Update.stop_now(MCE$design, MCE$person)
+                        MCE$person$valid_item[pick] <- FALSE
+                    }
                 }
             } 
             
             MCE$design <- Next.stage(MCE$design, person=MCE$person, test=MCE$test, item=itemclick)
             
             if(!MCE$design@stop_now){
-                item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design)
+                item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design,
+                                        start=FALSE)
                 MCE$person$items_answered[itemclick+1L] <- item
                 return(MCE$shinyGUI$questions[[item]])
             }

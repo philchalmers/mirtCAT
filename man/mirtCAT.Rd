@@ -263,6 +263,9 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
    \item{\code{stem_dims}}{numeric vector of length 2 corresponding to image stem width
      (in pixels). Default is \code{c(1000, 1000)} for the width and height}
 
+   \item{forced_choice}{logical; require a respones to each item? Default is \code{TRUE}.
+     This should only be set to \code{FALSE} for surveys (not CATs)}
+
 }}
 
 \item{preCAT}{a list object which can be used to specify a pre-CAT block in which
@@ -362,7 +365,7 @@ a large \code{'min_items'} criteria to the \code{design} list input.
 
 
 To access examples, vignettes, and exercise files that have been generated with knitr please
-visit \url{http://philchalmers.github.io/mirtCAT/mirtCAT-vignettes.html}.
+visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 }
 \examples{
 \dontrun{

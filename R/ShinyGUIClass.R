@@ -13,12 +13,14 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     temp_file = 'character',
                                     width = 'numeric',
                                     height = 'numeric',
+                                    forced_choice = 'logical',
                                     css = 'character'),
                       
                       methods = list(
                           initialize = function(questions, df, shinyGUI){
                               questions <<- questions
                               df <<- df
+                              forced_choice <<- TRUE
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else stem_locations <<- shinyGUI$stem_locations
@@ -49,6 +51,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       demographics <<- shinyGUI$demographics
                                       demographic_inputIDs <<- shinyGUI$demographics_inputIDs
                                   }
+                                  if(!is.null(shinyGUI$forced_choice))
+                                      forced_choice <<- shinyGUI$forced_choice
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage
                                   if(!is.null(shinyGUI$temp_file))
