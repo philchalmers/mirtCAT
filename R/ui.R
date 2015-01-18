@@ -19,7 +19,7 @@ ui <- function(){
             if(MCE$shinyGUI$author != '') h5(MCE$shinyGUI$author) else NULL,
             if(MCE$shinyGUI$author != '') hr() else NULL,
             h4("\nInstructions:"),
-            h5("To progress through the interface, click on the button below."),            
+            h5(MCE$shinyGUI$instructions),            
             actionButton("Next", "Next")
         ),
         

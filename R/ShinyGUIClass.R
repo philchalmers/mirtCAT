@@ -7,6 +7,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     firstpage = 'list',
                                     demographics = 'list',
                                     lastpage = 'list',
+                                    instructions = 'character',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
                                     demographic_inputIDs = 'character',
@@ -28,6 +29,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'mirtCAT'
                               author <<- 'Authors of survey'
+                              instructions <<- "To progress through the interface, click on the button below."
                               demographic_inputIDs <<- character(0)
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
@@ -41,6 +43,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               height <<- 1000
                                                  
                               if(length(shinyGUI)){
+                                  if(!is.null(shinyGUI$instructions))
+                                      instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$title))
                                       title <<- shinyGUI$title
                                   if(!is.null(shinyGUI$authors))

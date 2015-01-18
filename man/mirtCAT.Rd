@@ -200,6 +200,11 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
     \code{'Author of survey'}. If the input is an empty string (\code{''}) then the author
     information will be omitted in the GUI}
 
+  \item{\code{instructions}}{A character string indicating how to use the GUI. Default is:
+
+    \preformatted{"To progress through the interface, click on the button below."}
+  }
+
   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
     and information message.
 
@@ -264,7 +269,7 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
    \item{\code{stem_dims}}{numeric vector of length 2 corresponding to image stem width
      (in pixels). Default is \code{c(1000, 1000)} for the width and height}
 
-   \item{forced_choice}{logical; require a respones to each item? Default is \code{TRUE}.
+   \item{\code{forced_choice}}{logical; require a respones to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}
 
 }}
@@ -287,7 +292,7 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
       select a method which can deal with all-or-none response patterns, such as 'EAP'
       or 'MAP', or in the multidimensional case 'DPrule' or 'TPrule'. Default is 'MAP'}
 
-    \item{response_variance}{logical; terminate the preCAT stage when there is variability in the
+    \item{\code{response_variance}}{logical; terminate the preCAT stage when there is variability in the
       response pattern (i.e., when maximum-likelihood estimation contains a potential optimum)?
       Default is FALSE}
 }}
