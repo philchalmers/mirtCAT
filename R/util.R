@@ -139,15 +139,15 @@ buildShinyElements <- function(questions, itemnames){
     for(i in 1L:length(Qs)){
         if(Type[i] %in% c('radio', 'radio_inline')){
             cs <- na.omit(choices[i, ])
-            Qs[[i]] <- radioButtons(inputId = itemnames[i], label=Qs_char[i],
+            Qs[[i]] <- radioButtons(inputId = itemnames[i], label='',
                                     inline = Type[i] == 'radio_inline',
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
-            Qs[[i]] <- selectInput(inputId = itemnames[i], label=Qs_char[i], selected = '',
+            Qs[[i]] <- selectInput(inputId = itemnames[i], label='', selected = '',
                                     choices = na.omit(as.character(choices[i,])))
         } else if(Type[i] == 'text'){
-            Qs[[i]] <- textInput(inputId = itemnames[i], label=Qs_char[i], value = '')
+            Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '')
         }
     }
     pick <- questions[,grepl('Answer', names),drop=FALSE]

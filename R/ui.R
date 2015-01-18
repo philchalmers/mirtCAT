@@ -15,9 +15,9 @@ ui <- function(){
         } else NULL,
         
         sidebarPanel(
-            h4("Authors:"),
-            h5(MCE$shinyGUI$author),
-            hr(),
+            if(MCE$shinyGUI$author != '') h4("Authors:") else NULL,
+            if(MCE$shinyGUI$author != '') h5(MCE$shinyGUI$author) else NULL,
+            if(MCE$shinyGUI$author != '') hr() else NULL,
             h4("\nInstructions:"),
             h5("To progress through the interface, click on the button below."),            
             actionButton("Next", "Next")

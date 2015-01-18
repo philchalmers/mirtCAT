@@ -196,7 +196,8 @@
 #'     \code{'mirtCAT'}}
 #'   
 #'   \item{\code{authors}}{A character string for the author names. Default is 
-#'     \code{'Author of survey'}}
+#'     \code{'Author of survey'}. If the input is an empty string (\code{''}) then the author 
+#'     information will be omitted in the GUI}
 #'
 #'   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
 #'     and information message. 
