@@ -71,6 +71,13 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@exposure <- rep(1, nitems)
               .Object@exposure_type <- 'none'
               if(length(design)){
+                  dnames <- names(design)
+                  gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
+                              'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
+                              'classify', 'classify_CI', 'exposure')
+                  if(!all(dnames %in% gnames))
+                      stop('The following inputs to design are invalid: ',
+                           paste0(dnames[!(dnames %in% gnames)], ' '))
                   if(!is.null(design$content)){
                       .Object@use_content <- TRUE
                       .Object@content <- factor(design$content)
@@ -123,6 +130,11 @@ setMethod("initialize", signature(.Object = "Design"),
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
                   stop('min_SEM criteria is not a suitable length')
               if(length(preCAT)){
+                  dnames <- names(preCAT)
+                  gnames <- c('min_items', 'max_items', 'criteria', 'method', 'response_variance')
+                  if(!all(dnames %in% gnames))
+                      stop('The following inputs to preCAT are invalid: ',
+                           paste0(dnames[!(dnames %in% gnames)], ' '))
                   if(is.null(preCAT$max_items))
                       stop('preCAT max_items must be specified')
                   else .Object@preCAT_max_items <- as.integer(preCAT$max_items)

@@ -45,6 +45,13 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               height <<- 1000
                                                  
                               if(length(shinyGUI)){
+                                  dnames <- names(shinyGUI)
+                                  gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
+                                              'demographics_inputIDs', 'max_time', 'temp_file', 'resume_file',
+                                              'lastpage', 'css', 'stem_dims', 'forced_choice')
+                                  if(!all(dnames %in% gnames))
+                                      stop('The following inputs to shinyGUI are invalid: ',
+                                           paste0(dnames[!(dnames %in% gnames)], ' '))
                                   if(!is.null(shinyGUI$instructions))
                                       instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$title))
