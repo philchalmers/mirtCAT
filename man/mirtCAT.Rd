@@ -200,9 +200,12 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
     \code{'Author of survey'}. If the input is an empty string (\code{''}) then the author
     information will be omitted in the GUI}
 
-  \item{\code{instructions}}{A character string indicating how to use the GUI. Default is:
+  \item{\code{instructions}}{A three part character vector indicating how to use the GUI.
+    Default is:
 
-    \preformatted{"To progress through the interface, click on the button below."}
+    \preformatted{c("Instructions:",
+       "To progress through the interface, click on the action button below.",
+       "Next")}
   }
 
   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
@@ -258,8 +261,8 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
   \item{\code{lastpage}}{Last message indicating that the test has been completed
     (i.e., criteria has been met). Default is
 
-    \preformatted{list(h5("End of survey. Click \'Next\' to save results
-      and close application."))}
+    \preformatted{list(h5("You have sucessfully completed the interface.
+      Click the action button to terminate the application."))}
    }
 
    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation

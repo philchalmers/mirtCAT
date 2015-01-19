@@ -29,14 +29,16 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                rep(TRUE, 20L))
                               title <<- 'mirtCAT'
                               author <<- 'Authors of survey'
-                              instructions <<- "To progress through the interface, click on the button below."
+                              instructions <<- c("Instructions:",
+                                                 "To progress through the interface, click on the action button below.",
+                                                 "Next")
                               demographic_inputIDs <<- character(0)
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
                               demographics <<- list()
-                              lastpage <<- list(h5("Session complete. Click \'Next\' to 
-                                                   close the application."))
+                              lastpage <<- list(h5("You have sucessfully completed the interface.
+                                                   Click the action button to terminate the application."))
                               temp_file <<- ''
                               css <<- ''
                               width <<- 1000
