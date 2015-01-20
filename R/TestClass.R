@@ -52,7 +52,7 @@ setMethod("initialize", signature(.Object = "Test"),
               tmp <- mo@itemloc
               .Object@itemloc2 <- as.integer(tmp[-length(tmp)])
               tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
-                          cov=gp$gcov, MI = 0)
+                          cov=gp$gcov, MI = 0, QMC=FALSE, custom_den=NULL)
               if(length(dots)){
                   if(!is.null(dots$rotate))
                       warning('rotation not supported in mirtCAT. Using fixed
@@ -65,6 +65,10 @@ setMethod("initialize", signature(.Object = "Test"),
                       tmp$cov <- dots$cov
                   if(!is.null(dots$MI))
                       tmp$MI <- dots$MI
+                  if(!is.null(dots$QMC))
+                      tmp$QMC <- dots$QMC
+                  if(!is.null(dots$custom_den))
+                      tmp$custom_den <- dots$custom_den
               } 
               .Object@fscores_args <- tmp
               .Object@EIs <- lapply(1L:.Object@length, 

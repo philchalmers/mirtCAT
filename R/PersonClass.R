@@ -44,7 +44,8 @@ Person$methods(
                 suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses,
                                    theta_lim=test@fscores_args$theta_lim,
                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
-                                   mean = test@fscores_args$mean, cov = test@fscores_args$cov))
+                                   mean = test@fscores_args$mean, cov = test@fscores_args$cov,
+                                   QMC=test@fscores_args$QMC, custom_den=test@fscores_args$custom_den))
                 thetas <<- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
                 thetas_SE_history <<- rbind(thetas_SE_history, 
                                             tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
