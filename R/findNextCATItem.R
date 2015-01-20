@@ -29,12 +29,6 @@ findNextItem <- function(x){
     return(findNextCATItem(person=x$person, test=x$test, design=x$design))
 }
 
-#' @rdname findNextItem
-#' @export
-print.mirtCAT_design <- function(x, ...){ 
-   cat('Object of class \'mirtCAT_design\'\n')
-}
-
 findNextCATItem <- function(person, test, design, start = TRUE){
     
     #heavy lifty CAT stuff just to find new item

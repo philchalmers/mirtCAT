@@ -2,12 +2,9 @@
 % Please edit documentation in R/findNextCATItem.R
 \name{findNextItem}
 \alias{findNextItem}
-\alias{print.mirtCAT_design}
 \title{Find next CAT item}
 \usage{
 findNextItem(x)
-
-\method{print}{mirtCAT_design}(x, ...)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function

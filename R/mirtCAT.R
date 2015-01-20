@@ -260,7 +260,7 @@
 #'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
 #'     (i.e., criteria has been met). Default is 
 #'   
-#'     \preformatted{list(h5("You have sucessfully completed the interface. 
+#'     \preformatted{list(h5("You have successfully completed the interface. 
 #'       Click the action button to terminate the application."))}
 #'    }    
 #'    
@@ -271,7 +271,7 @@
 #'    \item{\code{stem_dims}}{numeric vector of length 2 corresponding to image stem width 
 #'      (in pixels). Default is \code{c(1000, 1000)} for the width and height}
 #'      
-#'    \item{\code{forced_choice}}{logical; require a respones to each item? Default is \code{TRUE}.
+#'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'   
 #' }
