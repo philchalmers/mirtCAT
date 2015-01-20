@@ -189,7 +189,7 @@ setMethod("Next.stage", signature(.Object = "Design"),
                       suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
                                                           response.pattern=person$responses), 
                                                   silent=TRUE))
-                      if(is.finite(tmp[,'F1'])){
+                      if(all(is.finite(na.omit(tmp[1L, ])))){
                           .Object@criteria <- .Object@CAT_criteria
                           .Object@method <- .Object@CAT_method
                       }
