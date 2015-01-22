@@ -238,8 +238,13 @@ coef(mirt_object, simplify = TRUE)
 ## Item.10 1.0 -0.2 0.2 1
 ## 
 ## $groupPars
-##     MEAN_1 COV_11
-## par      0      2
+## $groupPars$means
+## MEAN_1 
+##      0 
+## 
+## $groupPars$cov
+##    F1
+## F1  2
 </code></pre>
 
 <pre><code class="r">## generate random response pattern
@@ -270,9 +275,6 @@ print(result)
 ## 
 ## $raw_responses
 ##  [1] 2 1 2 2 2 1 2 1 2 2
-## 
-## $scored_responses
-##  [1] 1 0 1 1 1 0 1 0 1 1
 ## 
 ## $items_answered
 ##  [1]  5  6 10  3  1  7  2  4  8  9
@@ -316,10 +318,20 @@ responses &lt;- summary(result, sort = FALSE)$scored_responses
 fscores(mirt_object, response.pattern = responses, method = &quot;ML&quot;)
 </code></pre>
 
+<pre><code>## 
+## Method:  ML
+## 
+## Empirical Reliability:
+## F1 
+## NA
+</code></pre>
+
 <pre><code>##      Item.1 Item.2 Item.3 Item.4 Item.5 Item.6 Item.7 Item.8 Item.9
-## [1,]      1      1      1      0      1      0      0      1      1
-##      Item.10        F1     SE_F1
-## [1,]       1 0.5976364 0.8816145
+## [1,]      0      0      0      0      0      0      0      0      0
+## [2,]      1      1      1      1      1      1      1      1      1
+##      Item.10   F1 SE_F1
+## [1,]       0 -Inf    NA
+## [2,]       1  Inf    NA
 </code></pre>
 
 <p>This next section generates a plausible response vector given \(\theta = 1\), and passes
@@ -354,9 +366,6 @@ print(result)
 ## 
 ## $raw_responses
 ##  [1] 2 1 2 2 2 1 2 1 2 2
-## 
-## $scored_responses
-##  [1] 1 0 1 1 1 0 1 0 1 1
 ## 
 ## $items_answered
 ##  [1]  5  6 10  3  1  7  2  4  8  9
