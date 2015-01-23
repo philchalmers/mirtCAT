@@ -38,7 +38,7 @@ RcppExport SEXP ComputeCriteria(SEXP Rpars, SEXP RTheta, SEXP Rwhich_not_answere
     const List pars(Rpars);
     const vector<double> Theta = as< vector<double> >(RTheta);
     const vector<int> which_not_answered = as< vector<int> >(Rwhich_not_answered);
-    const NumericVector rw(Rw);
+    NumericVector rw(Rw); //cannot be const for arma
     const int criteria = as<int>(Rcriteria);
     const int len = which_not_answered.size();
     const int nfact = Theta.size();
