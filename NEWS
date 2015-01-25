@@ -1,4 +1,4 @@
-Changes in mirtCAT 0.4
+Changes in mirtCAT 0.4.2
 
   - `forced_choice` argument for shinyGUI input to state whether respones
   for each item are required (for CATs, this should always be TRUE)
