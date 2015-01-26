@@ -1,3 +1,10 @@
+# Changes in mirtCAT 0.5
+
+BUGFIX
+
+- the `summary(mod, sort=FALSE)` argument returned a NULL object instead of the unsorted response.
+  This has been patched and is now tested for
+
 # Changes in mirtCAT 0.4.2
 
 - `forced_choice` argument for shinyGUI input to state whether respones for each item are 

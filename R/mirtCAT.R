@@ -545,7 +545,8 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
     for(i in 1L:length(person)){
         person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
         ret <- list(raw_responses=person[[i]]$raw_responses + 1L, 
-                    scored_responses=as.integer(person[[i]]$responses + mirt_mins),
+                    scored_responses=if(person_object$score) as.integer(person[[i]]$responses + mirt_mins) 
+                    else rep(NA, length(person[[i]]$raw_responses)),
                     items_answered=person[[i]]$items_answered,
                     thetas=person[[i]]$thetas,
                     SE_thetas=person[[i]]$thetas_SE_history[nrow(person[[i]]$thetas_SE_history), 
