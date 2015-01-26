@@ -50,5 +50,8 @@ test_that('classify', {
     expect_equal(summary(res[[1]])$thetas_history[1:6,1], c(0,0,0,-0.4033607,-0.5572152,-0.8296894), tolerance = 1e-4)
     expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,0,0.8378148,0.6034093), tolerance = 1e-4)
     expect_equal(summary(res[[3]])$thetas_history[6:8,1], c(0, 1.056420, 1.236754), tolerance = 1e-4)
+    scored <- summary(res[[3]], sort=FALSE)$scored_responses
+    out <- fscores(mod, response.pattern = scored)
+    expect_equal(as.numeric(out[,'F1']), 1.301461, tolerance = 1e-4)
     
 })
