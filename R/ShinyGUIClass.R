@@ -28,7 +28,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               delete_png <<- c(TRUE, TRUE, TRUE, is.na(stem_locations), 
                                                rep(TRUE, 20L))
                               title <<- 'mirtCAT'
-                              author <<- 'Authors of survey'
+                              author <<- 'Author information'
                               instructions <<- c("Instructions:",
                                                  "To progress through the interface, click on the action button below.",
                                                  "Next")
@@ -41,14 +41,14 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                    Click the action button to terminate the application."))
                               temp_file <<- ''
                               css <<- ''
-                              width <<- 1000
-                              height <<- 1000
+                              width <<- 690
+                              height <<- 230
                                                  
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 'resume_file',
-                                              'lastpage', 'css', 'stem_dims', 'forced_choice')
+                                              'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '))

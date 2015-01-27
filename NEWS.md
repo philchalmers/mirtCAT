@@ -2,6 +2,8 @@
 
 BUGFIX
 
+- fix stem location bug, and add better aspect ratio
+
 - the `summary(mod, sort=FALSE)` argument returned a NULL object instead of the unsorted response.
   This has been patched and is now tested for
 
