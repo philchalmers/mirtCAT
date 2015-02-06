@@ -24,7 +24,23 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               forced_choice <<- TRUE
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
-                              } else stem_locations <<- shinyGUI$stem_locations
+                              } else {
+                                  stem_locations <<- as.character(sapply(shinyGUI$stem_locations, 
+                                    function(x){                                        
+                                        ret <- if(!is.na(x)){
+                                            org <- x
+                                            exsts <- file.exists(x)
+                                            if(!exsts){
+                                                x <- paste0(getwd(), '/', x)
+                                                exsts <- file.exists(x)
+                                            }
+                                            if(!exsts) 
+                                                stop(sprintf('The following file cannot be located: %s', org))
+                                            normalizePath(x, mustWork = TRUE)
+                                        } else NA
+                                        return(ret)
+                                  }))
+                              }
                               delete_png <<- c(TRUE, TRUE, TRUE, is.na(stem_locations), 
                                                rep(TRUE, 20L))
                               title <<- 'mirtCAT'

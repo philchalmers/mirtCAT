@@ -2,7 +2,9 @@
 
 - `df` input can now be a list for including more fine tuned shiny inputs
 
-BUGFIX
+- check for the existance of graphical item stems, and allow relative or absolute paths
+
+## BUGFIX
 
 - fix stem location bug, and add better aspect ratio
 

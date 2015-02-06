@@ -48,8 +48,9 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
       vectors) indicating the scoring key for items that have correct answer(s). If there
       is no correct answer for a question then a value of \code{NA} must be declared.}
 
-    \item{\code{Stem}}{(Optional) a character vector of paths pointing to .png, .jpeg, or .gif
-      files to be used as graphical item stems. \code{NA}s are used if the item has no corresponding file.}
+    \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths
+      pointing to .png, .jpeg, or .gif files to be used as graphical item stems.
+      \code{NA}s are used if the item has no corresponding file.}
 
   }}
 
