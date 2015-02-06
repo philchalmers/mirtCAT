@@ -17,7 +17,8 @@
 #' To access examples, vignettes, and exercise files that have been generated with knitr please
 #' visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 #' 
-#' @param df a \code{data.frame} object containing the character vector inputs required to generate 
+#' @param df a \code{data.frame} or \code{list} object 
+#'   containing the character vector inputs required to generate 
 #'   GUI questions through shiny. Each row in the object corresponds to a unique
 #'   item. The object supports the follow column name combinations as inputs to specify the 
 #'   type of response format, questions, options, answers, and stems:
@@ -30,10 +31,12 @@
 #'       'select' for a pull-down box for selecting inputs, or 'text' for requiring 
 #'       typed user input.} 
 #'     
-#'     \item{\code{Question}}{A character vector containing all the questions
-#'       or stems to be generated.} 
+#'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
+#'       character vector containing all the questions or stems to be generated.
+#'       If \code{df} is a \code{list}, then the commands must be suitable for output with 
+#'       \code{shiny} (e.g., \code{Question <- list(h6('Item 1'), list(h6('Nested', h4(' item 2'))))})} 
 #'       
-#'     \item{\code{Option.#}}{Column names pertaining to the possible response
+#'     \item{\code{Option.#}}{Names pertaining to the possible response
 #'       options for each item, where the # corresponds to the specific category. For
 #'       instance, a test with 4 unique response options for each item would contain
 #'       the columns (\code{Option.1}, \code{Option.2}, \code{Option.3}, \code{Option.4}).
@@ -449,18 +452,19 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         item_options <- vector('list', length(K))
         for(i in 1L:length(K))
             item_options[[i]] <- as.character(0L:(K[i]-1L))
-        df <- data.frame()
+        df <- list()
         item_answers <- NULL
     } else {
-        if(!is.data.frame(df))
-            stop('df input must be a data.frame')
-        if(any(sapply(df, class) == 'factor')){
-            dfold <- df
-            df <- data.frame(sapply(dfold, as.character), stringsAsFactors = FALSE)
-            if(!all(df == dfold)) 
-                stop('Coercion of df elements to characters modified one or more elements. 
-                     When building the df with the data.frame() function pass the 
-                     option stringsAsFactors = FALSE to avoid this issue')
+        if(!is.data.frame(df) && !is.list(df))
+            stop('df input must be a data.frame or list')
+        if(is.data.frame(df)){
+            if(any(sapply(df, class) == 'factor')){
+                warning('Converting all factor variables to strings with as.character(). 
+                    Use stringsAsFactors = FALSE when defining df to avoid this.')
+                df <- lapply(df, as.character)
+            }
+            df <- as.list(df)
+            df$Question <- lapply(df$Question, shiny::p)
         }
         obj <- buildShinyElements(df, itemnames = Names)
         questions <- obj$questions

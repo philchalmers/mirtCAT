@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.5
 
+- `df` input can now be a list for including more fine tuned shiny inputs
+
 BUGFIX
 
 - fix stem location bug, and add better aspect ratio

@@ -67,9 +67,9 @@ server <- function(input, output) {
                     if(MCE$shinyGUI$forced_choice){
                         MCE$shift_back <- MCE$shift_back + 1L
                         MCE$invalid_count <- MCE$invalid_count + 1L
-                        tmp <- buildShinyElements(MCE$shinyGUI$df[pick,], 
-                                                  paste0(MCE$invalid_count, '.TeMpInTeRnAl',name))
-                        return(list(p(MCE$shinyGUI$df[pick, 'Question']), tmp$questions))
+                        tmp <- lapply(MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
+                        tmp <- buildShinyElements(tmp, paste0(MCE$invalid_count, '.TeMpInTeRnAl', name))
+                        return(list(MCE$shinyGUI$df$Question[[pick]], tmp$questions))
                     } else {
                         MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
                             sum(MCE$person$item_time)
@@ -89,7 +89,7 @@ server <- function(input, output) {
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design,
                                         start=FALSE)
                 MCE$person$items_answered[itemclick+1L] <- item
-                return(list(p(MCE$shinyGUI$df[item,'Question']), MCE$shinyGUI$questions[[item]]))
+                return(list(MCE$shinyGUI$df$Question[[item]], MCE$shinyGUI$questions[[item]]))
             }
         }
         

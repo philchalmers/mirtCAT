@@ -121,21 +121,20 @@ slowTheHeckDown <- function(x = .1){
 }
 
 buildShinyElements <- function(questions, itemnames){
-    if(!is.data.frame(questions))
-        stop('questions input must be a data.frame')
-    if(!all(sapply(questions, class) == 'character')) 
+    J <- length(questions$Question)
+    if(!all(sapply(questions[names(questions) != 'Question'], is.character))) 
         stop('Only character classes are supported in questions input')
-    if(is.null(itemnames)) itemnames <- paste0('Item.', 1:nrow(questions))
-    names <- colnames(questions)
+    if(is.null(itemnames)) itemnames <- paste0('Item.', 1L:J)
+    names <- names(questions)
     Qs_char <- questions$Question
     Type <- questions$Type
     if(is.null(Qs_char)) stop('Question column not specified')
     if(is.null(Type)) stop('Type column not specified')
     if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text')))
         stop('Type input in shiny_questions contains invalid arguments')
-    Qs <- vector('list', nrow(questions))
-    choices <- as.matrix(questions[,grepl('Option', names)])
-    colnames(choices) <- NULL
+    Qs <- vector('list', J)
+    choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
+    names(choices) <- NULL
     for(i in 1L:length(Qs)){
         if(Type[i] %in% c('radio', 'radio_inline')){
             cs <- na.omit(choices[i, ])
@@ -144,13 +143,13 @@ buildShinyElements <- function(questions, itemnames){
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
-            Qs[[i]] <- selectInput(inputId = itemnames[i], label='', selected = '',
-                                    choices = na.omit(as.character(choices[i,])))
+            Qs[[i]] <- selectInput(inputId = itemnames[i], label='', selected = '', 
+                                    choices = cs)
         } else if(Type[i] == 'text'){
             Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '')
         }
     }
-    pick <- questions[,grepl('Answer', names),drop=FALSE]
+    pick <- as.data.frame(questions[grepl('Answer', names),drop=FALSE], stringsAsFactors = FALSE)
     if(length(pick)){
         item_answers <- split(pick, 1:nrow(pick))
         item_answers <- lapply(item_answers, na.omit)
