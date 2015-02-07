@@ -155,13 +155,14 @@ server <- function(input, output) {
                 empty <- is.na(file)
                 if(!empty){
                     if(grepl('\\.[mM][dD]$', file)){
-                        markdownToHTML(file=file, output = MCE$outfile2, fragment.only = TRUE)
+                        markdown::markdownToHTML(file=file, output=MCE$outfile2, 
+                                                 fragment.only = TRUE)
                         contents <- readLines(MCE$outfile2)
                         return(HTML(contents))
                     } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
                         contents <- readLines(file)
                         return(contents)
-                    }
+                    } else empty <- TRUE
                 }
             } else empty <- TRUE
         } else empty <- TRUE

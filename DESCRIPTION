@@ -17,7 +17,8 @@ Depends:
     lattice
 Imports:
     Rcpp,
-    methods
+    methods,
+    markdown
 Suggests:
     parallel,
     knitr,
