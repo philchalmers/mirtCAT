@@ -161,13 +161,13 @@ server <- function(input, output) {
                         return(HTML(contents))
                     } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
                         contents <- readLines(file)
-                        return(contents)
+                        return(HTML(contents))
                     } else empty <- TRUE
                 }
             } else empty <- TRUE
         } else empty <- TRUE
         
-        if(empty) return(' ')
+        return(' ')
         
     })
     
