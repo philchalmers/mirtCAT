@@ -106,42 +106,6 @@ server <- function(input, output) {
         
     }) 
         
-    output$item_stem <- renderImage({
-        
-        click <- input$Next - MCE$shift_back
-        if(click > 0L)
-            if(!length(MCE$shinyGUI$demographics)) click <- click + 1L
-            
-        if(!MCE$STOP){
-            if(click > 2L && (click-2L) < MCE$test@length){
-                file <- MCE$shinyGUI$stem_locations[[
-                    MCE$person$items_answered[[click-2L]]]]
-                empty <- is.na(file)
-                if(!empty){
-                    valid <- grepl('\\.[pP][nN][gG]$', file) || grepl('\\.[jJ][pP][eE][gG]$', file) ||
-                        grepl('\\.[gG][iI][fF]$', file)
-                    empty <- !valid
-                }
-            } else empty <- TRUE
-        } else empty <- TRUE
-        
-        if(empty){
-            outfile <- MCE$outfile
-            png(outfile, width=1, height=1)
-            dev.off()
-            return(list(src = outfile,
-                        contentType = 'image/png',
-                        width = 1,
-                        height = 1,
-                        alt = ""))
-        } else {
-            return(list(src = MCE$shinyGUI$stem_locations[[click-2L]],
-                        width = MCE$shinyGUI$width,
-                        height = MCE$shinyGUI$height))
-        }
-        
-    }, deleteFile = FALSE)
-
     output$item_stem_html <- renderUI({
         
         click <- input$Next - MCE$shift_back
@@ -157,10 +121,10 @@ server <- function(input, output) {
                     if(grepl('\\.[mM][dD]$', file)){
                         markdown::markdownToHTML(file=file, output=MCE$outfile2, 
                                                  fragment.only = TRUE)
-                        contents <- readLines(MCE$outfile2)
+                        contents <- readLines(MCE$outfile2, warn = FALSE)
                         return(HTML(contents))
                     } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
-                        contents <- readLines(file)
+                        contents <- readLines(file, warn = FALSE)
                         return(HTML(contents))
                     } else empty <- TRUE
                 }

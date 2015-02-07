@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.5
 
+- graphical images (png, gif, and jpeg) no logner supported. Stems preferably should in HTML 
+  for best results and control
+
 - Stem paths can now point to and render HTML and markdown files in the GUI
 
 - `df` input can now be a list for including more fine tuned shiny inputs

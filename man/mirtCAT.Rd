@@ -49,8 +49,7 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
       is no correct answer for a question then a value of \code{NA} must be declared.}
 
     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths
-      pointing to .png, .jpeg, or .gif files to be used as graphical item stems, or markdown (.md) and
-      HTML (.html) files to be rendered as standard HTML output.
+      pointing external markdown (.md) or HTML (.html) files to be used as item stems.
       \code{NA}s are used if the item has no corresponding file.}
 
   }}
@@ -273,9 +272,6 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation
      elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
      prior to constructing the user interface}
-
-   \item{\code{stem_dims}}{numeric vector of length 2 corresponding to image stem width
-     (in pixels). Default is \code{c(1000, 1000)} for the width and height}
 
    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}

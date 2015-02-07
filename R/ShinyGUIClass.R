@@ -57,8 +57,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                    Click the action button to terminate the application."))
                               temp_file <<- ''
                               css <<- ''
-                              width <<- 690
-                              height <<- 230
                                                  
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
@@ -88,10 +86,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       temp_file <<- shinyGUI$temp_file
                                   if(!is.null(shinyGUI$css))
                                       css <<- shinyGUI$css
-                                  if(!is.null(shinyGUI$stem_dims)){
-                                      width <<- shinyGUI$stem_dims[1]
-                                      height <<- shinyGUI$stem_dims[2]
-                                  }
                               }
                           })
                       
