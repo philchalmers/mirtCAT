@@ -49,7 +49,8 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
       is no correct answer for a question then a value of \code{NA} must be declared.}
 
     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths
-      pointing to .png, .jpeg, or .gif files to be used as graphical item stems.
+      pointing to .png, .jpeg, or .gif files to be used as graphical item stems, or markdown (.md) and
+      HTML (.html) files to be rendered as standard HTML output.
       \code{NA}s are used if the item has no corresponding file.}
 
   }}

@@ -114,8 +114,14 @@ server <- function(input, output) {
             
         if(!MCE$STOP){
             if(click > 2L && (click-2L) < MCE$test@length){
-                empty <- is.na(MCE$shinyGUI$stem_locations[[
-                    MCE$person$items_answered[[click-2L]]]])
+                file <- MCE$shinyGUI$stem_locations[[
+                    MCE$person$items_answered[[click-2L]]]]
+                empty <- is.na(file)
+                if(!empty){
+                    valid <- grepl('\\.[pP][nN][gG]$', file) || grepl('\\.[jJ][pP][eE][gG]$', file) ||
+                        grepl('\\.[gG][iI][fF]$', file)
+                    empty <- !valid
+                }
             } else empty <- TRUE
         } else empty <- TRUE
         
@@ -135,5 +141,33 @@ server <- function(input, output) {
         }
         
     }, deleteFile = FALSE)
+
+    output$item_stem_html <- renderUI({
+        
+        click <- input$Next - MCE$shift_back
+        if(click > 0L)
+            if(!length(MCE$shinyGUI$demographics)) click <- click + 1L
+        
+        if(!MCE$STOP){
+            if(click > 2L && (click-2L) < MCE$test@length){
+                file <- MCE$shinyGUI$stem_locations[[
+                    MCE$person$items_answered[[click-2L]]]]
+                empty <- is.na(file)
+                if(!empty){
+                    if(grepl('\\.[mM][dD]$', file)){
+                        markdownToHTML(file=file, output = MCE$outfile2, fragment.only = TRUE)
+                        contents <- readLines(MCE$outfile2)
+                        return(HTML(contents))
+                    } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
+                        contents <- readLines(file)
+                        return(contents)
+                    }
+                }
+            } else empty <- TRUE
+        } else empty <- TRUE
+        
+        if(empty) return(' ')
+        
+    })
     
 }

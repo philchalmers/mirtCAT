@@ -48,7 +48,8 @@
 #'       is no correct answer for a question then a value of \code{NA} must be declared.}
 #'       
 #'     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths 
-#'       pointing to .png, .jpeg, or .gif files to be used as graphical item stems. 
+#'       pointing to .png, .jpeg, or .gif files to be used as graphical item stems, or markdown (.md) and 
+#'       HTML (.html) files to be rendered as standard HTML output. 
 #'       \code{NA}s are used if the item has no corresponding file.} 
 #'       
 #'   }
@@ -442,7 +443,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
-                MCE$STOP <- MCE$outfile <- MCE$last_demographics <- NULL})
+                MCE$STOP <- MCE$outfile <- MCE$outfile2 <- MCE$last_demographics <- NULL})
     Names <- if(!missing(mo)) colnames(mo@Data$data) else NULL
     if(missing(df)){
         if(missing(mo)) stop('No df or mo supplied')
@@ -526,16 +527,15 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     
-    #put in specific enviroment (move later TODO) 
-    MCE$person <- person_object
-    MCE$test <- test_object
-    MCE$design <- design_object
-    MCE$STOP <- FALSE
-    MCE$outfile <- tempfile(fileext='.png')
-    MCE$shift_back <- 0L
-    MCE$invalid_count <- 0L
-    
     if(is.null(local_pattern)){
+        MCE$person <- person_object
+        MCE$test <- test_object
+        MCE$design <- design_object
+        MCE$STOP <- FALSE
+        MCE$outfile <- tempfile(fileext='.png')
+        MCE$outfile2 <- tempfile(fileext='.html')
+        MCE$shift_back <- 0L
+        MCE$invalid_count <- 0L
         MCE$shinyGUI <- shinyGUI_object
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person

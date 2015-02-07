@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.5
 
+- Stem paths can now point to and render HTML and markdown files in the GUI
+
 - `df` input can now be a list for including more fine tuned shiny inputs
 
 - check for the existance of graphical item stems, and allow relative or absolute paths

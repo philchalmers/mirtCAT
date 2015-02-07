@@ -25,6 +25,7 @@ ui <- function(){
         
         mainPanel(
             imageOutput("item_stem", width = 'auto', height = 'auto'),
+            htmlOutput("item_stem_html"),
             uiOutput("Main")    
         )
         
