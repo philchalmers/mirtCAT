@@ -526,11 +526,11 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         class(ret) <- "mirtCAT_design"
         return(ret)
     }
+    MCE$test <- test_object
+    MCE$design <- design_object
     
     if(is.null(local_pattern)){
         MCE$person <- person_object
-        MCE$test <- test_object
-        MCE$design <- design_object
         MCE$STOP <- FALSE
         MCE$outfile <- tempfile(fileext='.png')
         MCE$outfile2 <- tempfile(fileext='.html')
