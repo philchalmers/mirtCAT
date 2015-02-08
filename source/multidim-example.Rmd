@@ -11,6 +11,7 @@ addition and multiplication.
 
 ```{r}
 library('mirtCAT')
+options(stringsAsFactors = FALSE)
 
 # define population IRT parameters
 set.seed(1234)

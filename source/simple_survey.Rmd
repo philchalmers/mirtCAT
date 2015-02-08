@@ -6,6 +6,7 @@ object.
 
 ```{r, eval=FALSE}
 library("mirtCAT")
+options(stringsAsFactors = FALSE)
 
 ### Create simple non-adaptive interface ###
 

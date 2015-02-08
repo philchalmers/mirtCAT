@@ -5,6 +5,7 @@ This demonstrates how to modify various elements in the shiny GUI.
 
 ```{r, eval=FALSE}
 library('mirtCAT')
+options(stringsAsFactors = FALSE)
 
 # define population IRT parameters
 set.seed(1234)
@@ -73,7 +74,8 @@ questions <- c("", "Which equation in the above table is INCORRECT?")
 options <- rbind(c("1236", "1238", "1240", "1242", "1244"), c("A)", "B)", "C)", "D)",
     "E)"))
 answers <- c("1236", "D)")
-stem_locations <- c("/path/to/Math-stem.png", "/path/to/Table-stem.png")
+stem_locations <- c("/path/to/Math-stem.html", 
+                    "/path/to/Table-stem.html")
 twoitems <- data.frame(Question = questions, Option = options, Answer = answers,
     Stem = stem_locations, Type = type, stringsAsFactors = FALSE)
 

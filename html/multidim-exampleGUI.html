@@ -224,7 +224,9 @@ addition and multiplication.</p>
 ## Loading required package: shiny
 </code></pre>
 
-<pre><code class="r"># define population IRT parameters
+<pre><code class="r">options(stringsAsFactors = FALSE)
+
+# define population IRT parameters
 set.seed(1234)
 nitems &lt;- 120
 itemnames &lt;- paste0(&quot;Item.&quot;, 1:nitems)

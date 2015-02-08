@@ -206,6 +206,7 @@ hr {
 <p>This demonstrates how to modify various elements in the shiny GUI.</p>
 
 <pre><code class="r">library(&#39;mirtCAT&#39;)
+options(stringsAsFactors = FALSE)
 
 # define population IRT parameters
 set.seed(1234)
@@ -273,7 +274,8 @@ questions &lt;- c(&quot;&quot;, &quot;Which equation in the above table is INCOR
 options &lt;- rbind(c(&quot;1236&quot;, &quot;1238&quot;, &quot;1240&quot;, &quot;1242&quot;, &quot;1244&quot;), c(&quot;A)&quot;, &quot;B)&quot;, &quot;C)&quot;, &quot;D)&quot;,
     &quot;E)&quot;))
 answers &lt;- c(&quot;1236&quot;, &quot;D)&quot;)
-stem_locations &lt;- c(&quot;/path/to/Math-stem.png&quot;, &quot;/path/to/Table-stem.png&quot;)
+stem_locations &lt;- c(&quot;/path/to/Math-stem.html&quot;, 
+                    &quot;/path/to/Table-stem.html&quot;)
 twoitems &lt;- data.frame(Question = questions, Option = options, Answer = answers,
     Stem = stem_locations, Type = type, stringsAsFactors = FALSE)
 

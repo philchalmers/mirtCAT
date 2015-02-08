@@ -8,6 +8,7 @@ The following codeblock defines 100 items for a math test measuring addition ski
 
 ```{r}
 library('mirtCAT')
+options(stringsAsFactors = FALSE)
 
 # define population IRT parameters
 set.seed(1234)
