@@ -18,8 +18,11 @@
 #' visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 #' 
 #' @param df a \code{data.frame} or \code{list} object 
-#'   containing the character vector inputs required to generate 
-#'   GUI questions through shiny. Each row in the object corresponds to a unique
+#'   containing the \code{character} vector inputs required to generate 
+#'   GUI questions through shiny. If \code{factor}s are supplied instead of \code{character} vectors 
+#'   then the inputs will be coerced using the \code{as.character()} function (set 
+#'   \code{stringsAsFactors = FALSE} when defining a \code{data.frame} to avoid this). 
+#'   Each row in the object corresponds to a unique
 #'   item. The object supports the follow column name combinations as inputs to specify the 
 #'   type of response format, questions, options, answers, and stems:
 #'   
@@ -456,12 +459,7 @@ mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq',
         if(!is.data.frame(df) && !is.list(df))
             stop('df input must be a data.frame or list')
         if(is.data.frame(df)){
-            if(any(sapply(df, class) == 'factor')){
-                warning('Converting all factor variables to strings with as.character(). 
-                    Use stringsAsFactors = FALSE when defining df to avoid this.')
-                df <- lapply(df, as.character)
-            }
-            df <- as.list(df)
+            df <- lapply(df, as.character)
             df$Question <- lapply(df$Question, shiny::p)
         }
         obj <- buildShinyElements(df, itemnames = Names)

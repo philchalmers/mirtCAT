@@ -19,8 +19,11 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
 }
 \arguments{
 \item{df}{a \code{data.frame} or \code{list} object
-  containing the character vector inputs required to generate
-  GUI questions through shiny. Each row in the object corresponds to a unique
+  containing the \code{character} vector inputs required to generate
+  GUI questions through shiny. If \code{factor}s are supplied instead of \code{character} vectors
+  than the inputs will be coerced using the \code{as.character()} function (set
+  \code{stringsAsFactors = FALSE} when defining a \code{data.frame} to avoid this).
+  Each row in the object corresponds to a unique
   item. The object supports the follow column name combinations as inputs to specify the
   type of response format, questions, options, answers, and stems:
 
