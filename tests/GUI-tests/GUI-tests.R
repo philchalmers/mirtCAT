@@ -16,6 +16,6 @@ results <- mirtCAT(df = df)
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # HTML/markdown stems
-df <- data.frame(Question = "", Option = options, Type = "radio",
+df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
                  Stem = c('Math-stem.html', 'Question.md', ''))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
