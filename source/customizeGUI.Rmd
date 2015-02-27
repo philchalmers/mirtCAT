@@ -69,13 +69,22 @@ df <- data.frame(Question = questions, Option = options, Answer = answers, Type 
 The following adds two .png files to the GUI as item stems for more customized item stimuli.
 
 ```{r eval=FALSE}
+# download the stems
+download.file("https://raw.githubusercontent.com/philchalmers/mirtCAT/master/tests/GUI-tests/Math-stem.html", 
+              destfile = "Math-stem.html", method = "curl")
+
+download.file("https://raw.githubusercontent.com/philchalmers/mirtCAT/master/tests/GUI-tests/Table-stem.html", 
+              destfile = "Table-stem.html", method = "curl")
+
+# construct new stems inputs
 type <- c("radio_inline", "select")
 questions <- c("", "Which equation in the above table is INCORRECT?")
 options <- rbind(c("1236", "1238", "1240", "1242", "1244"), c("A)", "B)", "C)", "D)",
     "E)"))
 answers <- c("1236", "D)")
-stem_locations <- c("/path/to/Math-stem.html", 
-                    "/path/to/Table-stem.html")
+
+#stem paths can be relative or absolute (relative here, in the save working directory)
+stem_locations <- c("Math-stem.html", "Table-stem.html")
 twoitems <- data.frame(Question = questions, Option = options, Answer = answers,
     Stem = stem_locations, Type = type, stringsAsFactors = FALSE)
 
