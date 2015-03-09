@@ -7,9 +7,9 @@
 \alias{summary.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
-  local_pattern = NULL, design_elements = FALSE, cl = NULL,
-  design = list(), shinyGUI = list(), preCAT = list(), ...)
+mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
+  start_item = 1, local_pattern = NULL, design_elements = FALSE,
+  cl = NULL, design = list(), shinyGUI = list(), preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -21,7 +21,7 @@ mirtCAT(df, mo, method = "MAP", criteria = "seq", start_item = 1,
 \item{df}{a \code{data.frame} or \code{list} object
   containing the \code{character} vector inputs required to generate
   GUI questions through shiny. If \code{factor}s are supplied instead of \code{character} vectors
-  than the inputs will be coerced using the \code{as.character()} function (set
+  then the inputs will be coerced using the \code{as.character()} function (set
   \code{stringsAsFactors = FALSE} when defining a \code{data.frame} to avoid this).
   Each row in the object corresponds to a unique
   item. The object supports the follow column name combinations as inputs to specify the

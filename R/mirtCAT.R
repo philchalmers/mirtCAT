@@ -437,138 +437,30 @@
 #' print(res)
 #' 
 #' }
-mirtCAT <- function(df, mo, method = 'MAP', criteria = 'seq', 
+mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
                 MCE$STOP <- MCE$outfile <- MCE$outfile2 <- MCE$last_demographics <- NULL})
-    Names <- if(!missing(mo)) colnames(mo@Data$data) else NULL
-    if(missing(df)){
-        if(missing(mo)) stop('No df or mo supplied')
-        if(is.null(local_pattern)) stop('missing df input, and no local_pattern supplied')
-        questions <- vector('list', ncol(mo@Data$data))
-        names(questions) <- Names
-        K <- mo@Data$K
-        item_options <- vector('list', length(K))
-        for(i in 1L:length(K))
-            item_options[[i]] <- as.character(0L:(K[i]-1L))
-        df <- list()
-        item_answers <- NULL
-    } else {
-        if(!is.data.frame(df) && !is.list(df))
-            stop('df input must be a data.frame or list')
-        if(is.data.frame(df)){
-            df <- lapply(df, as.character)
-            df$Question <- lapply(df$Question, shiny::p)
-        }
-        obj <- buildShinyElements(df, itemnames = Names)
-        questions <- obj$questions
-        item_answers <- obj$item_answers
-        item_options <- obj$item_options
-        shinyGUI$stem_locations <- df$Stem
-    }
-    if(missing(mo)){
-        dat <- matrix(c(0,1), 2L, length(questions))
-        colnames(dat) <- names(questions)
-        mo <- mirt(dat, 1L, TOL=NaN)
-        score <- FALSE
-        if(!(criteria %in% c('seq', 'random')))
-            stop('Only random and seq criteria are available if no mo was defined')
-        mirt_mins <- rep(0L, ncol(dat))
-    } else {
-        score <- TRUE
-        mirt_mins <- mo@Data$mins
-    }
-    if(!is.null(local_pattern)){
-        if(!is.matrix(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
-        if(is.numeric(local_pattern))
-            local_pattern <- t(t(local_pattern) - mirt_mins)
-    }
-    
-    #setup objects
-    if(!missing(df)) shinyGUI$stem_locations <- df$Stem
-    if(is.null(local_pattern)) 
-        shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI)
-    test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
-                     item_options=item_options, quadpts_in=design$quadpts,
-                     theta_range_in=design$theta_range, dots=list(...))
-    design_object <- new('Design', method=method, criteria=criteria, 
-                         start_item=if(is.numeric(start_item)) start_item else NaN,
-                         max_time=shinyGUI$max_time, 
-                         nfact=test_object@nfact, design=design, 
-                         preCAT=preCAT, nitems=test_object@length)
-    person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
-                         thetas.start_in=design$thetas.start, score=score, 
-                         theta_SEs=sqrt(diag(test_object@gp$gcov)))
-    if(is.character(start_item)){
-        tmp <- design_object@criteria
-        design_object@criteria <- start_item
-        start_item <- findNextCATItem(person_object, test_object, design_object, start=FALSE)
-        design_object@start_item <- start_item
-        design_object@criteria <- tmp
-    }
-    if(is.null(local_pattern) && !is.null(shinyGUI$resume_file)){
-        person_object <- readRDS(shinyGUI$resume_file)
-        MCE$last_demographics <- person_object$demographics
-        shinyGUI_object$demographics <- list()
-        shinyGUI_object$firstpage <- list()
-        shinyGUI_object$demographic_inputIDs <- character(0)
-    }
+    mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
+                     start_item=start_item, local_pattern=local_pattern, 
+                     design_elements=design_elements, cl=cl,
+                     design=design, shinyGUI=shinyGUI, preCAT=preCAT, ...)
     if(design_elements){
-        ret <- list(person=person_object, test=test_object, design=design_object)
+        ret <- list(person=MCE$person, test=MCE$test, design=MCE$design)
         class(ret) <- "mirtCAT_design"
         return(ret)
     }
-    MCE$test <- test_object
-    MCE$design <- design_object
-    
     if(is.null(local_pattern)){
-        MCE$person <- person_object
-        MCE$STOP <- FALSE
-        MCE$outfile <- tempfile(fileext='.png')
-        MCE$outfile2 <- tempfile(fileext='.html')
-        MCE$shift_back <- 0L
-        MCE$invalid_count <- 0L
-        MCE$shinyGUI <- shinyGUI_object
         runApp(list(ui = ui(), server = server), launch.browser=TRUE)
         person <- MCE$person
     } else {
-        person <- run_local(local_pattern, nfact=test_object@nfact, start_item=start_item,
-                            nitems=length(test_object@itemnames), cl=cl,
-                            thetas.start_in=design$thetas.start, score=score, 
-                            design=design_object, test=test_object, ...)
+        person <- run_local(MCE$local_pattern, nfact=MCE$test@nfact, start_item=start_item,
+                            nitems=length(MCE$test@itemnames), cl=cl,
+                            thetas.start_in=design$thetas.start, score=MCE$score, 
+                            design=MCE$design, test=MCE$test, ...)
     }
-    if(!is.list(person)) person <- list(person)
-    ret.out <- vector('list', length(person))
-    for(i in 1L:length(person)){
-        person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
-        ret <- list(raw_responses=person[[i]]$raw_responses + 1L, 
-                    scored_responses=if(person_object$score) as.integer(person[[i]]$responses + mirt_mins) 
-                    else rep(NA, length(person[[i]]$raw_responses)),
-                    items_answered=person[[i]]$items_answered,
-                    thetas=person[[i]]$thetas,
-                    SE_thetas=person[[i]]$thetas_SE_history[nrow(person[[i]]$thetas_SE_history), 
-                                                            ,drop=FALSE],
-                    thetas_history=person[[i]]$thetas_history,
-                    thetas_SE_history=person[[i]]$thetas_SE_history,
-                    item_time=person[[i]]$item_time,
-                    demographics=person[[i]]$demographics)
-        if(!is.null(design$classify)){
-            z <- -abs(ret$thetas - design$classify) / ret$SE_thetas
-            sig <- z < qnorm((1-design$classify_CI)/2)
-            direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff')
-            direction[!sig] <- 'no decision'
-            ret$classification <- direction
-            ret$classify_values <- design$classify
-        }
-        colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
-            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:test_object@nfact)
-        if(!person[[i]]$score)
-            ret$thetas <- ret$SE_thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
-        class(ret) <- 'mirtCAT'
-        ret.out[[i]] <- ret
-    }
-    if(length(ret.out) == 1L) return(ret.out[[1L]]) 
-    return(ret.out)
+    ret <- mirtCAT_post_internal(person=person, design=design)
+    return(ret)
 }
