@@ -100,8 +100,10 @@ server <- function(input, output) {
                 saveRDS(MCE$person, MCE$shinyGUI$temp_file)
             return(MCE$shinyGUI$lastpage)
         } else {
-            if(!is.null(MCE$final_fun)) 
-                MCE$final_fun()
+            if(!is.null(MCE$final_fun)){
+                ret <- mirtCAT_post_internal(person=MCE$person, design=MCE$design)
+                MCE$final_fun(person = ret)
+            }   
             stopApp()
             return(NULL)
         }

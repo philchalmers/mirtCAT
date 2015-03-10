@@ -11,7 +11,9 @@ mirtCAT_preamble(..., final_fun = NULL)
 
 \item{final_fun}{a function called just before the shiny GUI has been terminated, primarily for
   saving results externally with packages such as \code{rDrop}
-  (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web}
+  (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web. The function
+  must be of the form \code{final_fun <- function(person){...}}, where \code{person} is the
+  standard output returned from \code{\link{mirtCAT}}}
 }
 \description{
 This is largely an internal function called by \code{\link{mirtCAT}}, however it is made

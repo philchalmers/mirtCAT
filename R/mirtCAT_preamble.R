@@ -5,7 +5,9 @@
 #' 
 #' @param final_fun a function called just before the shiny GUI has been terminated, primarily for
 #'   saving results externally with packages such as \code{rDrop} 
-#'   (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web
+#'   (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web. The function
+#'   must be of the form \code{final_fun <- function(person){...}}, where \code{person} is the 
+#'   standard output returned from \code{\link{mirtCAT}}
 #' 
 #' @param ... arguments passed to \code{\link{mirtCAT}}
 #' 
@@ -133,13 +135,13 @@ mirtCAT_post_internal <- function(person, design){
                     thetas_SE_history=person[[i]]$thetas_SE_history,
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics)
-        if(!is.null(design$classify)){
-            z <- -abs(ret$thetas - design$classify) / ret$SE_thetas
-            sig <- z < qnorm((1-design$classify_CI)/2)
-            direction <- ifelse((ret$thetas - design$classify) > 0, 'above cutoff', 'below cutoff')
+        if(!is.nan(design@classify[1L])){
+            z <- -abs(ret$thetas - design@classify) / ret$SE_thetas
+            sig <- z < qnorm(design@classify_alpha)
+            direction <- ifelse((ret$thetas - design@classify) > 0, 'above cutoff', 'below cutoff')
             direction[!sig] <- 'no decision'
             ret$classification <- direction
-            ret$classify_values <- design$classify
+            ret$classify_values <- design@classify
         }
         colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
             colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test@nfact)

@@ -16,7 +16,7 @@ results <- mirtCAT(df = df)
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 ## two step hosting
-my_fun <- function() cat('Hello world\n')
+my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)
 runApp(createShinyGUI())
 

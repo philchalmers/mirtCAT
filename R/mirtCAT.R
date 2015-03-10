@@ -461,6 +461,6 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                             thetas.start_in=design$thetas.start, score=MCE$score, 
                             design=MCE$design, test=MCE$test, ...)
     }
-    ret <- mirtCAT_post_internal(person=person, design=design)
+    ret <- mirtCAT_post_internal(person=person, design=MCE$design)
     return(ret)
 }

@@ -4,7 +4,7 @@
 \alias{createShinyGUI}
 \title{Function returning an object used by shiny}
 \usage{
-createShinyGUI(final_fun = NULL)
+createShinyGUI()
 }
 \description{
 This function returns the GUI setup results by calling \code{\link{shinyApp}}.
