@@ -100,6 +100,8 @@ server <- function(input, output) {
                 saveRDS(MCE$person, MCE$shinyGUI$temp_file)
             return(MCE$shinyGUI$lastpage)
         } else {
+            if(!is.null(MCE$final_fun)) 
+                MCE$final_fun()
             stopApp()
             return(NULL)
         }

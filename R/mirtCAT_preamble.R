@@ -3,22 +3,26 @@
 #' This is largely an internal function called by \code{\link{mirtCAT}}, however it is made 
 #' public for better use with external web-hosting interfaces (like \url{http://www.shinyapps.io/}).
 #' 
+#' @param final_fun a function called just before the shiny GUI has been terminated, primarily for
+#'   saving results externally with packages such as \code{rDrop} 
+#'   (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web
+#' 
 #' @param ... arguments passed to \code{\link{mirtCAT}}
 #' 
 #' @export mirtCAT_preamble
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
-#' @seealso \code{\link{mirtCAT}} 
-mirtCAT_preamble <- function(...){
-    return(mirtCAT_preamble_internal(...))
+#' @seealso \code{\link{mirtCAT}}, \code{\link{createShinyGUI}} 
+mirtCAT_preamble <- function(..., final_fun = NULL){
+    return(mirtCAT_preamble_internal(final_fun = final_fun, ...))
 }
 
 # set this up to avoid double documentation
 mirtCAT_preamble_internal <- 
     function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
              start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
-             design = list(), shinyGUI = list(), preCAT = list(), ...)
+             design = list(), shinyGUI = list(), preCAT = list(), final_fun = NULL, ...)
     {
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
         if(is.null(df)){
@@ -97,6 +101,7 @@ mirtCAT_preamble_internal <-
         MCE$design <- design_object
         MCE$local_pattern <- local_pattern
         MCE$mirt_mins <- mirt_mins
+        MCE$final_fun <- final_fun
         
         if(is.null(local_pattern)){
             MCE$person <- person_object

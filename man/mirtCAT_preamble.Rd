@@ -4,10 +4,14 @@
 \alias{mirtCAT_preamble}
 \title{Preamble function called by mirtCAT}
 \usage{
-mirtCAT_preamble(...)
+mirtCAT_preamble(..., final_fun = NULL)
 }
 \arguments{
 \item{...}{arguments passed to \code{\link{mirtCAT}}}
+
+\item{final_fun}{a function called just before the shiny GUI has been terminated, primarily for
+  saving results externally with packages such as \code{rDrop}
+  (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web}
 }
 \description{
 This is largely an internal function called by \code{\link{mirtCAT}}, however it is made
@@ -17,6 +21,6 @@ public for better use with external web-hosting interfaces (like \url{http://www
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
 \seealso{
-\code{\link{mirtCAT}}
+\code{\link{mirtCAT}}, \code{\link{createShinyGUI}}
 }
 

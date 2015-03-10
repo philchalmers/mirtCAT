@@ -15,6 +15,11 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df)
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+## two step hosting
+my_fun <- function() cat('Hello world\n')
+mirtCAT_preamble(df, final_fun = my_fun)
+runApp(createShinyGUI())
+
 # HTML/markdown stems
 df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
                  Stem = c('Math-stem.html', 'Question.md', ''))

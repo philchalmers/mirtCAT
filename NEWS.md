@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.5
 
+- include more functions to allow easier web hosting in locations such as `shinyapps.io`. Namely,
+  `mirtCAT_preamble()` and `createShinyGUI()`
+
 - graphical images (png, gif, and jpeg) no logner supported. Stems preferably should in HTML 
   for best results and control
 
