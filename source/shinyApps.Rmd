@@ -1,0 +1,109 @@
+shinyApps hosting
+======================================
+
+This demonstrates explains how to deploy a `mirtCAT` GUI on [shinyApps.io](http://www.shinyapps.io/),
+and saving the results to a local Dropbox folder through the `rDrop` package on [Github](https://github.com/karthik/rDrop). 
+
+Configurations
+--------------------------------------
+
+Before getting started, installation of additional packages are required. Run the following code
+to install the required packages:
+
+```{r, eval=FALSE}
+install.packages(c("devtools", "ROAuth"))
+devtools::install_github("karthik/rDrop")
+```
+
+Follow the instructions for [rDrop](https://github.com/karthik/rDrop) to obtain a `.rdata` file with 
+your Dropbox credentials. As well, you'll need to set up an account with shinyApps.io, and the 
+following [tutorial](http://shiny.rstudio.com/articles/shinyapps.html) will help to get you started.
+
+Be sure to test that `shinyApps.io` is working for you by hosting a test application consisting of a
+`server.R` and `ui.R` file, and test that the Dropbox credentials allow you to upload R objects
+to your Dropbox.
+
+mirtCAT files
+--------------------------------------
+
+The standard `mirtCAT()` function cannot be run on `shinyApps.io`, therefore the process must be 
+broken into two seperate functions and placed in an external source file (i.e., no `server.R` or 
+`ui.R` files are required). The two functions are: `mirtCAT_preamble()`, which is essentially
+equivalent to `mirtCAT()` and accepts all the arguments, and `createShinyApp()` which generates 
+the required GUI. Three things are important here:
+
+- To run a `mirtCAt` GUI, one file must be submitted called `app.R`, containing all the instructions
+  to deploy the GUI
+- `mirtCAT_preamble()` must be run before `createShinyApp()` to ensure that the GUI is properly
+  set up, and
+- `createShinyApp()` must be the last function called in `app.R`
+
+Additional files may be uploaded, such as a `questions.csv` file or other files, and can be imported
+in the `app.R` file.
+
+Example
+--------------------------------------
+
+The following defines a simple survey and stores the results to a local Dropbox folder with the 
+`save_fun()` definition which is passed to the `final_fun` argument. 
+This function is the last function called before the interface is terminated,
+and therefore will save the results when `shinyApps.io` is finalized.
+
+```{r eval=FALSE}
+#######################################
+# example 'app.R' file for shinyApps.io
+#######################################
+
+# Load the required packages
+library(ROAuth)
+library(rDrop)
+library(mirtCAT)
+
+#-----------------------------------------
+## mirtCAT definitions
+
+## Potential options for each item
+options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+                  nrow = 3, ncol = 5, byrow = TRUE)
+
+# read questions in from a csv file
+questions <- read.csv('questions.csv', header = FALSE, stringsAsFactors = FALSE)[,1]
+
+# create df object for mirtCAT.preamble()
+df <- data.frame(Question = questions, Option = options, Type = "radio")
+
+#-----------------------------------------
+# helper function
+
+# function to save to my authenticated dropbox folder
+save_fun <- function(person){
+
+    load('my_dropbox_credentials.rdata') #credentials object from rDrop instructions
+
+    # save final result to dropbox
+    rDrop::dropbox_save(dropbox_credentials, person,
+                        file = Sys.time(), # file name is saved as the system time
+                        verbose = FALSE, ext = ".Rdata")
+
+    invisible()
+}
+
+#-----------------------------------------
+# run the interface
+
+mirtCAT_preamble(df = df, shinyGUI = list(forced_choice = FALSE),
+                 final_fun = save_fun)
+createShinyGUI()
+```
+
+In the example above, three files were uploaded to `shinyApps.io`:
+
+- The `app.R` file, containing the above instructions,
+- A `questions.csv` containing text-based questions, and
+- An R workspace file called `'my_dropbox_credentials.rdata'`, containing the object 
+  `dropbox_credentials` for authenticating the personal Dropbox folder
+  
+
+Modifying the arguments in `mirtCAT_preamble()` will change how the session is organized, 
+perhaps changed to an adaptive session if a `mo` object is included, and the 
+GUI can be tested locally by using a call to `shiny::runApp(createShinyGUI())`.
