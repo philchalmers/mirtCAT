@@ -18,6 +18,9 @@
 
 - the `summary(mod, sort=FALSE)` argument returned a NULL object instead of the unsorted response.
   This has been patched and is now tested for
+  
+- when no `df` is supplied, check that the responses are in a plausible range 
+  (reported by Gerard Flens)
 
 # Changes in mirtCAT 0.4.2
 

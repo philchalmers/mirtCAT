@@ -30,6 +30,7 @@ mirtCAT_preamble_internal <-
         if(is.null(df)){
             if(is.null(mo)) stop('No df or mo supplied')
             if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied')
+            if(is.vector(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
             questions <- vector('list', ncol(mo@Data$data))
             names(questions) <- Names
             K <- mo@Data$K
@@ -38,6 +39,14 @@ mirtCAT_preamble_internal <-
                 item_options[[i]] <- 0L:(K[i]-1L)
             df <- list()
             item_answers <- NULL
+            sapply(1L:length(K), function(i, local_pattern, item_options, mins){
+                opts <- item_options[[i]] + mins[i]
+                if(!all(local_pattern[,i] %in% opts)){
+                    outs <- as.character(c(i, min(opts), max(opts)))
+                    stop(sprintf('For item %s, responses must be between %s and %s. Please fix.',
+                                 outs[1L], outs[2L], outs[3L]))
+                }
+            }, local_pattern=local_pattern, item_options=item_options, mins=mo@Data$mins)
         } else {
             if(!is.data.frame(df) && !is.list(df))
                 stop('df input must be a data.frame or list')
