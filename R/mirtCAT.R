@@ -111,8 +111,10 @@
 #' @param local_pattern a character/numeric matrix of response patterns 
 #'   used to run the CAT application without generating the GUI interface. 
 #'   This option requires complete response pattern(s) to be supplied. \code{local_pattern} 
-#'   is required to be numeric if no \code{questions} are supplied, otherwise it must contain 
-#'   character values of plausible responses
+#'   is required to be numeric if no \code{questions} are supplied, and these must have the 
+#'   lowest category scored as 0 and the highest category scored as the number of options - 1.
+#'   Otherwise, it must contain character values of plausible responses which corresponds to the
+#'   answer key and/or options supplied in \code{df}
 #'   
 #' @param cl an object definition to be passed to the parallel package 
 #'   (see \code{?parallel::parLapply} for details). If defined, and if 

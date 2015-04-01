@@ -35,7 +35,7 @@ mirtCAT_preamble_internal <-
             K <- mo@Data$K
             item_options <- vector('list', length(K))
             for(i in 1L:length(K))
-                item_options[[i]] <- as.character(0L:(K[i]-1L))
+                item_options[[i]] <- 0L:(K[i]-1L)
             df <- list()
             item_answers <- NULL
         } else {

@@ -112,8 +112,10 @@ mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
 \item{local_pattern}{a character/numeric matrix of response patterns
   used to run the CAT application without generating the GUI interface.
   This option requires complete response pattern(s) to be supplied. \code{local_pattern}
-  is required to be numeric if no \code{questions} are supplied, otherwise it must contain
-  character values of plausible responses}
+  is required to be numeric if no \code{questions} are supplied, and these must have the
+  lowest category scored as 0 and the highest category scored as the number of options - 1.
+  Otherwise, it must contain character values of plausible responses which corresponds to the
+  answer key and/or options supplied in \code{df}}
 
 \item{design_elements}{logical; return an object containing the test, person, and design
   elements? Primarily this is to be used with the \code{\link{findNextItem}} function}
