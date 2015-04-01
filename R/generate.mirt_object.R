@@ -23,6 +23,10 @@
 #'   
 #' @param key scoring key required for nested-logit models. See \code{\link{mirt}} for details
 #' 
+#' @param min_category the value representing the lowest category index. By default this is 0,
+#'   therefore the respond suitable for the first category is 0, second is 1, and so on up to 
+#'   \code{K - 1}
+#' 
 #' @export generate.mirt_object
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' @seealso \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{generate_pattern}}
@@ -70,7 +74,8 @@
 #' 
 #' }
 generate.mirt_object <- function(parameters, itemtype, latent_means = NULL, 
-                                 latent_covariance = NULL, key = NULL){
+                                 latent_covariance = NULL, key = NULL, 
+                                 min_category = rep(0L, length(itemtype))){
     if(missing(itemtype))
         stop('Must define an itemtype argument')
     if(missing(parameters))
@@ -128,6 +133,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
         vals <- latent_covariance[lower.tri(latent_covariance, TRUE)]
         sv$value[sv$item == 'GROUP' & grepl('COV', sv$name)] <- vals
     }
+    dat <- t(t(dat) + min_category)
     ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE, message=FALSE), 
                 TOL=NaN, pars=sv, quadpts = 1, key=key, rotate = 'none')
     ret@exploratory <- FALSE

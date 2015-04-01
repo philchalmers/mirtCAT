@@ -5,7 +5,8 @@
 \title{Generate a mirt object from population parameters}
 \usage{
 generate.mirt_object(parameters, itemtype, latent_means = NULL,
-  latent_covariance = NULL, key = NULL)
+  latent_covariance = NULL, key = NULL, min_category = rep(0L,
+  length(itemtype)))
 }
 \arguments{
 \item{parameters}{a matrix or data.frame of parameters corresponding to the model definitions
@@ -27,6 +28,10 @@ generate.mirt_object(parameters, itemtype, latent_means = NULL,
   assumed to be standard normal (i.e., and identity matrix)}
 
 \item{key}{scoring key required for nested-logit models. See \code{\link{mirt}} for details}
+
+\item{min_category}{the value representing the lowest category index. By default this is 0,
+  therefore the respond suitable for the first category is 0, second is 1, and so on up to
+  \code{K - 1}}
 }
 \description{
 This function generate a \code{mirt} object from known population parameters, which is
