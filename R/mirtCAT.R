@@ -128,10 +128,14 @@
 #'   These can be
 #' 
 #' \describe{
-#'   \item{\code{min_SEM}}{Default is \code{0.3}; minimum standard error or measurement
+#'   \item{\code{min_SEM}}{Default is \code{rep(0.3, nfact)}; minimum standard error or measurement
 #'     to be reached for the latent traits (thetas) before the test is stopped. If the test is
 #'     multidimensional, either a single value or a vector of values may be supplied to provide
 #'     SEM criteria values for each dimension}
+#'     
+#'   \item{delta_thetas}{Default is \code{rep(0, nfact)}; stopping criteria based on the change in latent
+#'     trait values (e.g., a change from \code{theta = 1.5} to \code{theta = 1.54} would 
+#'     stop the CAT if \code{delta_thetas = 0.05}). The default disables this stopping criteria}
 #'     
 #'   \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
 #'     Default is \code{rep(0, nfact)}}

@@ -4,6 +4,7 @@ Design <- setClass(Class = "Design",
                              criteria_estimator = 'character',
                              classify = 'numeric',
                              classify_alpha = 'numeric',
+                             delta_thetas = 'numeric',
                              min_SEM = 'numeric',
                              met_SEM = 'logical',
                              min_items = 'integer',
@@ -58,7 +59,8 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@weights <- rep(1/nfact, nfact)
               .Object@min_items <- 1L
               .Object@max_items <- nitems
-              .Object@stop_now <- FALSE 
+              .Object@stop_now <- FALSE
+              .Object@delta_thetas <- rep(0, nfact)
               .Object@preCAT_min_items <- 0L
               .Object@preCAT_max_items <- 0L
               .Object@preCAT_response_var <- FALSE
@@ -74,7 +76,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
-                              'classify', 'classify_CI', 'exposure')
+                              'classify', 'classify_CI', 'exposure', 'delta_thetas')
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '))
@@ -95,6 +97,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@weights <- design$weights
                   if(!is.null(design$min_SEM))
                       .Object@min_SEM <- design$min_SEM
+                  if(!is.null(design$delta_thetas))
+                      .Object@delta_thetas <- design$delta_thetas
                   if(!is.null(design$min_items))
                       .Object@min_items <- as.integer(design$min_items)
                   if(!is.null(design$max_items))
@@ -170,10 +174,14 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                       if(!is.nan(.Object@classify[1L])){
                           z <- -abs(person$thetas - .Object@classify) / diff
                           if(all(z < qnorm(.Object@classify_alpha))) .Object@stop_now <- TRUE
-                          } else {
-                              .Object@met_SEM <- diff < .Object@min_SEM
-                              if(!any(is.nan(diff)) && all(.Object@met_SEM)) .Object@stop_now <- TRUE
-                          }
+                      } else {
+                          .Object@met_SEM <- diff < .Object@min_SEM
+                          if(!any(is.nan(diff)) && all(.Object@met_SEM)) .Object@stop_now <- TRUE
+                      }
+                      diff2 <- abs(person$thetas_history[nrow(person$thetas_history),] - 
+                                       person$thetas_history[nrow(person$thetas_history)-1L,])
+                      if(all(diff2 < .Object@delta_thetas))
+                          .Object@stop_now <- TRUE
                   }
               }
               if(nanswered == .Object@max_items) .Object@stop_now <- TRUE

@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.5
 
+- add `delta_thetas` argument to design list to stop CAT if change between latent trait updates
+  is less than this distance criteria
+
 - include more functions to allow easier web hosting in locations such as `shinyapps.io`. Namely,
   `mirtCAT_preamble()` and `createShinyGUI()`
 
