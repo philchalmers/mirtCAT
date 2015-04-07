@@ -20,7 +20,10 @@ weighted_mat <- function(mat, row_loc, which_not_answered, P = rep(1, length(row
     mat2 <- vector('list', length(unique(row_loc)))
     for(i in 1L:length(mat2)){
         pick <- which(row_loc == which_not_answered[i])
-        mat2[[i]] <- do.call(`+`, mat[pick])
+        tmp <- mat[pick]
+        for(j in 2L:length(pick))
+            tmp[[1L]] <- tmp[[1L]] + tmp[[j]]
+        mat2[[i]] <- tmp[[1L]]
     }
     mat2
 }
