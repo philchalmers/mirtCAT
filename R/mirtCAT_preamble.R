@@ -113,9 +113,9 @@ mirtCAT_preamble_internal <-
         MCE$local_pattern <- local_pattern
         MCE$mirt_mins <- mirt_mins
         MCE$final_fun <- final_fun
+        MCE$person <- person_object
         
         if(is.null(local_pattern)){
-            MCE$person <- person_object
             MCE$STOP <- FALSE
             MCE$outfile <- tempfile(fileext='.png')
             MCE$outfile2 <- tempfile(fileext='.html')

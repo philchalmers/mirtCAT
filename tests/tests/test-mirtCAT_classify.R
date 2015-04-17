@@ -42,7 +42,7 @@ test_that('classify', {
                                            "above cutoff", "above cutoff")))
     out <- sapply(res, function(x) x$thetas)
     expect_equal(as.numeric(out), c(-1.5164219, -1.4566952, 0.1128962, 0.5229815,
-                                    1.0865988,  1.2154775), tolerance = 1e-4)
+                                    1.0865988,  1.2154775), tolerance = 1e-2)
     
     preCAT <- list(response_variance = TRUE, min_items = 1, max_items = 20, method = 'fixed')    
     res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
