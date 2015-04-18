@@ -389,3 +389,10 @@ arma::mat Info(const S4 &item, const vector<double> &Theta){
     }
     return(info_mat);
 }
+
+RcppExport SEXP ItemInfo(SEXP Ritem, SEXP RTheta){
+    const S4 item(Ritem);
+    const vector<double> Theta = as< vector<double> >(RTheta);
+    arma::mat ret = Info(item, Theta);
+    return(wrap(ret));
+}

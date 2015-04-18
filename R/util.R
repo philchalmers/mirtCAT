@@ -1,6 +1,10 @@
 MCE <- new.env()
 MCE$complete <- TRUE
 
+FI <- function(mirt_item, Theta){
+    .Call('ItemInfo', mirt_item, Theta)
+}
+
 getAcovs <- function(possible_patterns, method){
     ret <- fscores(MCE$test@mo, return.acov = TRUE, 
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,

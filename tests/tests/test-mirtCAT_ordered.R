@@ -87,10 +87,9 @@ test_that('ordered', {
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', 
                    design = list(min_SEM=0.2))
     so <- summary(res)
-    expect_equal((so$items_answered), c(1,61,11,4,70,31,39,56,50,15,83,21,18,92,95,68,43,55,93,40,
-                                        48,19,44,96,25,20,59,12,87,8,89,30,90))
+    expect_equal((so$items_answered), c(1,61,11,70,4,31,56,39,83,50,92,95,15,68,21,55,18,93,43,40,48,96,19,59,44,25,87,20,89,90))
     expect_equal(as.numeric(so$thetas_history[nrow(so$thetas_history), ]), 
-                 c(-0.05521666, -0.23028118), tolerance = 1e-4)
+                 c(-0.0649059, -0.2302821), tolerance = 1e-4)
     
     # generate.mirt_object tests
     set.seed(1)
