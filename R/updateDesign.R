@@ -11,7 +11,7 @@
 #' @seealso \code{\link{mirtCAT}}, \code{\link{findNextItem}}
 #' @export updateDesign
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
-#' @return returns returns an object of class 'mirtCAT_design' with updated elements
+#' @return returns an object of class 'mirtCAT_design' with updated elements.
 #' @examples
 #' \dontrun{
 #' # test defined in mirtCAT help file, first example
@@ -32,7 +32,9 @@ updateDesign <- function(x, items, responses, Theta=NULL){
         Theta <- matrix(Theta, nrow = 1L)
         x$person$thetas <- Theta
     }
-    x$person$responses[items] <- as.integer(responses)
+    if(any(items > length(x$person$responses)))
+        stop('Items locations are larger than the length of the test.')
+    x$person$responses[items] <- x$person$raw_responses[items] <- as.integer(responses)
     pick <- min(which(is.na(x$person$items_answered)))
     x$person$items_answered[pick:(length(responses)+pick-1L)] <- as.integer(items)
     return(x)

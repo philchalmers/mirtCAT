@@ -26,15 +26,13 @@ Design <- setClass(Class = "Design",
                              use_content = 'logical',
                              content = 'factor',
                              content_prop = 'numeric',
-                             content_prop_empirical = 'numeric',
-                             numerical_info = 'logical'),
+                             content_prop_empirical = 'numeric'),
                    validity = function(object) return(TRUE)
 )
 
 setMethod("initialize", signature(.Object = "Design"),
           function(.Object, method, criteria, nfact, design,
                    start_item, preCAT, nitems, max_time){
-              .Object@numerical_info <- FALSE
               .Object@method <- method
               .Object@criteria <- criteria
               .Object@criteria_estimator <- 'MAP'
@@ -103,8 +101,6 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@min_items <- as.integer(design$min_items)
                   if(!is.null(design$max_items))
                       .Object@max_items <- as.integer(design$max_items)
-                  if(!is.null(design$numerical_info))
-                      .Object@numerical_info <- design$numerical_info
                   if(!is.null(design$classify))
                       .Object@classify <- design$classify
                   if(!is.null(design$classify_CI)){

@@ -17,7 +17,7 @@ when passing \code{design_elements = TRUE}}
 \item{Theta}{(optional) vector indicating the value of Theta/latent traits to be set}
 }
 \value{
-returns returns an object of class 'mirtCAT_design' with updated elements
+returns an object of class 'mirtCAT_design' with updated elements.
 }
 \description{
 A function that will update the object returned from \code{\link{findNextItem}}.
