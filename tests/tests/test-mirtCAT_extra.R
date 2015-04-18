@@ -40,5 +40,7 @@ test_that('extra', {
     expect_equal(1, findNextItem(CATdesign))
     CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
     expect_equal(20, findNextItem(CATdesign))
+    CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
+    expect_equal(3, findNextItem(CATdesign))
     
 })

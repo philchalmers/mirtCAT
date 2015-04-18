@@ -16,7 +16,8 @@ findNextItem(x)
 returns a numeric value indicating the index of the next item to be selected
 }
 \description{
-A function that returns the next item in the computerized adaptive test.
+A function that returns the next item in the computerized adaptive test. This should be used
+in conjunction with the \code{\link{updateDesign}} function.
 }
 \examples{
 \dontrun{
@@ -28,6 +29,10 @@ findNextItem(CATdesign)
 
 # detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
+findNextItem(CATdesign)
+
+#alternatively, update the Theta using the internal ReferenceClass method
+CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
 findNextItem(CATdesign)
 }
 }

@@ -106,27 +106,6 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
     r/2
 }
 
-extract_choices <- function(x){
-    if(is(x, 'shiny.tag.list')){
-        if(!is.null(x[[1L]][[2L]]$children[[1]])){ #selectInput
-            split <- strsplit(x[[1L]][[2L]]$children[[1]], "\"")[[1L]]
-            ret <- split[seq(from = 2L, to = length(split), by = 2L)]
-        } else { #textInput
-            ret <- ''
-        }
-    } else if(is(x, 'shiny.tag')){ #radioInput
-        split <- lapply(x$children[[2L]], function(x) x$children[[1L]]$attribs$value)
-        ret <- do.call(c, split)
-    }
-    return(ret)
-}
-
-slowTheHeckDown <- function(x = .1){
-    p1 <- proc.time()
-    Sys.sleep(x)
-    proc.time() - p1
-}
-
 buildShinyElements <- function(questions, itemnames){
     J <- length(questions$Question)
     if(!all(sapply(questions[names(questions) != 'Question'], is.character))) 
