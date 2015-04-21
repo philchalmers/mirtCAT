@@ -33,6 +33,11 @@ findNextItem(CATdesign)
 # detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 findNextItem(CATdesign)
+
+# alternatively, update the Theta using the internal ReferenceClass method
+Person$help('Update.thetas') # internal help file for class 'Person'
+CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
+findNextItem(CATdesign)
 }
 }
 \author{

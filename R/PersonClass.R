@@ -15,6 +15,7 @@ Person <- setRefClass("Person",
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
                                                theta_SEs){
+                             'Initialize the person object given background information'
                              raw_responses <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              valid_item <<- rep(TRUE, nitems)
@@ -35,6 +36,8 @@ Person$methods(
     
     # Update thetas
     Update.thetas = function(design, test){
+        'Update the latent trait (theta) values using information 
+        from the design and test objects'
         if(score){
             method <- design@method
             if(method == 'ML'){

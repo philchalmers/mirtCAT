@@ -19,6 +19,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                       
                       methods = list(
                           initialize = function(questions, df, shinyGUI){
+                              'Initialize the shiny GUI given questions, df, and shinyGUI list'
                               questions <<- questions
                               df <<- df
                               forced_choice <<- TRUE
