@@ -9,6 +9,7 @@ Design <- setClass(Class = "Design",
                              met_SEM = 'logical',
                              min_items = 'integer',
                              max_items = 'integer',
+                             items_not_scored = 'integer',
                              stop_now = 'logical',
                              exposure = 'numeric',
                              exposure_type = 'character',
@@ -26,7 +27,8 @@ Design <- setClass(Class = "Design",
                              use_content = 'logical',
                              content = 'factor',
                              content_prop = 'numeric',
-                             content_prop_empirical = 'numeric'),
+                             content_prop_empirical = 'numeric',
+                             constraints = 'list'),
                    validity = function(object) return(TRUE)
 )
 
@@ -70,11 +72,13 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@classify_alpha <- .05
               .Object@exposure <- rep(1, nitems)
               .Object@exposure_type <- 'none'
+              .Object@constraints <- list()
+              .Object@items_not_scored <- integer(0L)
               if(length(design)){
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
-                              'classify', 'classify_CI', 'exposure', 'delta_thetas')
+                              'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints')
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '))
@@ -121,6 +125,29 @@ setMethod("initialize", signature(.Object = "Design"),
                                    values greater than or equal to 1')
                       .Object@exposure <- exposure
                       .Object@exposure_type <- exposure_type
+                  }
+                  if(!is.null(design$constraints)){
+                      if(!all(names(design$constraints) %in% 
+                              c("independent", "unordered", "ordered", "not_scored")))
+                         stop('Named element in constraints list not suppored')
+                      if(any(names(design$constraints) == 'not_scored')){
+                          .Object@items_not_scored <- 
+                              as.integer(design$constraints$not_scored)
+                          design$constraints$not_scored <- NULL
+                      }
+                      nms <- names(design$constraints)
+                      design$constraints[nms == 'unordered'] <- 
+                          lapply(design$constraints[nms == 'unordered'], 
+                             function(x) sample(x, length(x)))
+                      nms[nms == 'unordered'] <- 'ordered'
+                      names(design$constraints) <- nms
+                      .Object@constraints <- design$constraints
+                      pick <- sapply(design$constraints, 
+                                     function(x, start_item) any(x == start_item),
+                                     start_item=start_item)
+                      if((any(pick) && names(pick)[pick]) == 'independent')
+                        stop('The first item can not be used in an \'independent\' constraint. 
+                              Consider removing the items that will not be used from the test.')
                   }
               }
               if(.Object@use_content && criteria == 'seq')

@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.5
 
+- fix bug when using SH exposure control when the pool runs out of items
+
 - add `delta_thetas` argument to design list to stop CAT if change between latent trait updates
   is less than this distance criteria
 

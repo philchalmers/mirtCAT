@@ -164,3 +164,5 @@ formatTime <- function(delta){
     }
     out
 }
+
+last_item <- function(items_answered) items_answered[max(which(!is.na(items_answered)))]

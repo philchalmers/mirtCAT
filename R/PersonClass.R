@@ -38,13 +38,17 @@ Person$methods(
     Update.thetas = function(design, test){
         'Update the latent trait (theta) values using information 
         from the design and test objects'
+        responses2 <- responses
+        responses2[design@items_not_scored] <- NA
         if(score){
             method <- design@method
+            if(last_item(items_answered) %in% design@items_not_scored)
+                method <- 'fixed'
             if(method == 'ML'){
-                if(length(unique(na.omit(responses))) < 2L) method <- 'MAP'
+                if(length(unique(na.omit(responses2))) < 2L) method <- 'MAP'
             }
             if(method != 'fixed'){
-                suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses,
+                suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
                                    theta_lim=test@fscores_args$theta_lim,
                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov,
@@ -60,7 +64,7 @@ Person$methods(
             set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
                      'DPrule', 'TPrule', 'EPrule', 'WPrule')
             if(test@nfact > 1L && design@criteria %in% set){
-                pick <- which(!is.na(responses))
+                pick <- which(!is.na(responses2))
                 infos <- lapply(pick, function(x, thetas)
                     FI(extract.item(test@mo, x), Theta=thetas), thetas=thetas)
                 tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))

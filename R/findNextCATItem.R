@@ -43,7 +43,9 @@ findNextCATItem <- function(person, test, design, start = TRUE){
         return(design@start_item)
     lastitem <- sum(!is.na(person$items_answered))
     not_answered <- is.na(person$responses)
+    not_answered[!person$valid_item] <- FALSE
     which_not_answered <- which(not_answered)
+    if(!length(which_not_answered)) stop('Ran out of items to administer.')
     K <- test@mo@Data$K
     if(criteria %in% c('MEI', 'MEPV', 'MLWI', 'MPWI', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
         possible_patterns <- matrix(person$responses, sum(K[not_answered]), 
@@ -55,7 +57,7 @@ findNextCATItem <- function(person, test, design, start = TRUE){
             row_loc[row:(row+length(resp)-1L)] <- ii
             for(j in 1L:length(resp)){
                 possible_patterns[row, ii] <- resp[j]
-                row <- row + 1L   
+                row <- row + 1L
             }
         }
     }
@@ -191,5 +193,29 @@ findNextCATItem <- function(person, test, design, start = TRUE){
             }
         }
     } else item <- index[which(max(crit) == crit)][1L]
+    if(length(design@constraints)){
+        pick <- sapply(design@constraints, function(x, item){
+            any(item == x)
+        }, item=item)
+        constr <- design@constraints[pick]
+        if(any(names(constr) == 'independent')){
+            pick2 <- sapply(constr, c)[, 1L]
+            person$valid_item[pick2[pick2 != item]] <- FALSE
+        } else if(any(names(constr) == 'ordered')){
+            item <- constr[[1L]][1L]
+        }
+        prev <- last_item(person$items_answered)
+        pick <- sapply(design@constraints, function(x, item){
+            any(item == x)
+        }, item=prev)
+        tmp <- design@constraints[pick]$ordered
+        constr <- design@constraints[pick]
+        if(any(names(constr) == 'ordered')){
+            if(any(prev == tmp)){
+                tmp2 <- which(tmp == prev) + 1L
+                if(tmp2 <= length(tmp)) item <- tmp[tmp2]
+            }
+        }
+    }
     return(as.integer(item))
 }
