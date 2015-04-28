@@ -5,16 +5,16 @@ FI <- function(mirt_item, Theta){
     .Call('ItemInfo', mirt_item, Theta)
 }
 
-getAcovs <- function(possible_patterns, method){
-    ret <- fscores(MCE$test@mo, return.acov = TRUE, 
+getAcovs <- function(possible_patterns, method, test, design){
+    ret <- fscores(test@mo, return.acov = TRUE, 
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,
-                   rotate = MCE$test@fscores_args$rotate, theta_lim = MCE$test@fscores_args$theta_lim,
-                   mean = MCE$test@fscores_args$mean, cov = MCE$test@fscores_args$cov, 
-                   MI = MCE$test@fscores_args$MI, quadpts = MCE$test@quadpts)
+                   rotate = test@fscores_args$rotate, theta_lim = test@fscores_args$theta_lim,
+                   mean = test@fscores_args$mean, cov = test@fscores_args$cov, 
+                   MI = test@fscores_args$MI, quadpts = test@quadpts)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         return(x)
-    }, pick=!MCE$design@met_SEM)
+    }, pick=!design@met_SEM)
     ret    
 } 
 

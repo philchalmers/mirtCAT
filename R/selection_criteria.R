@@ -20,7 +20,7 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc, th
     crit
 }
 
-MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc, thetas){
+MEPV <- function(which_not_answered, possible_patterns, person, test, design, row_loc, thetas){
     P <- numeric(nrow(possible_patterns))
     for(i in which_not_answered){
         p <- probtrace(test@EIs[[i]], person$thetas)
@@ -28,7 +28,7 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, row_loc, t
     }
     pp2 <- possible_patterns
     pp2[ ,which(possible_patterns[1L, ] == possible_patterns[2L,])] <- NA
-    acovstmp <- getAcovs(pp2, method = 'MAP')
+    acovstmp <- getAcovs(pp2, method = 'MAP', test=test, design=design)
     acovs <- weighted_mat(P=P, mat=acovstmp, row_loc=row_loc, 
                           which_not_answered=which_not_answered)
     crit <- do.call(c, acovs)

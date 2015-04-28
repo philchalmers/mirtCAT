@@ -121,7 +121,7 @@ findNextCATItem <- function(person, test, design, start = TRUE){
         index <- which_not_answered
     } else if(criteria == 'MEPV'){
         crit <- -MEPV(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-                    person=person, test=test, row_loc=row_loc, thetas=thetas)
+                    person=person, test=test, design=design, row_loc=row_loc, thetas=thetas)
         index <- which_not_answered
     } else if(criteria == 'MLWI'){
         crit <- MLWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
