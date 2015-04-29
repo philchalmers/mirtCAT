@@ -46,7 +46,7 @@ MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc, t
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
         tmp <- test@itemloc2[pick] + possible_patterns[i, pick]
-        LL[[i]] <- exp(rowSums(ll[,tmp]))
+        LL[[i]] <- exp(rowSums(ll[,tmp, drop=FALSE]))
     }
     infostmp <- as.list(.Call('ComputeCriteria', test@EIs, person$thetas, 
                               which_not_answered, 1, 0, person$info_thetas))
@@ -73,7 +73,7 @@ MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc, t
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
         tmp <- test@itemloc2[pick] + possible_patterns[i, pick]
-        LL[[i]] <- exp(rowSums(ll[,tmp]))
+        LL[[i]] <- exp(rowSums(ll[,tmp, drop=FALSE]))
     }
     infostmp <- as.list(.Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
                       1, 0, person$info_thetas))
