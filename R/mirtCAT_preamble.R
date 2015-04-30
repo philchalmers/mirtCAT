@@ -28,8 +28,9 @@ mirtCAT_preamble_internal <-
     {
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
         if(is.null(df)){
-            if(is.null(mo)) stop('No df or mo supplied')
-            if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied')
+            if(is.null(mo)) stop('No df or mo supplied', call.=FALSE)
+            if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied', 
+                                            call.=FALSE)
             if(is.vector(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
             questions <- vector('list', ncol(mo@Data$data))
             names(questions) <- Names
@@ -44,12 +45,12 @@ mirtCAT_preamble_internal <-
                 if(!all(local_pattern[,i] %in% opts)){
                     outs <- as.character(c(i, min(opts), max(opts)))
                     stop(sprintf('For item %s, responses must be between %s and %s. Please fix.',
-                                 outs[1L], outs[2L], outs[3L]))
+                                 outs[1L], outs[2L], outs[3L]), call.=FALSE)
                 }
             }, local_pattern=local_pattern, item_options=item_options, mins=mo@Data$mins)
         } else {
             if(!is.data.frame(df) && !is.list(df))
-                stop('df input must be a data.frame or list')
+                stop('df input must be a data.frame or list', call.=FALSE)
             if(is.data.frame(df)){
                 df <- lapply(df, as.character)
                 df$Question <- lapply(df$Question, shiny::p)
@@ -66,7 +67,7 @@ mirtCAT_preamble_internal <-
             mo <- mirt(dat, 1L, TOL=NaN)
             score <- FALSE
             if(!(criteria %in% c('seq', 'random')))
-                stop('Only random and seq criteria are available if no mo was defined')
+                stop('Only random and seq criteria are available if no mo was defined', call.=FALSE)
             mirt_mins <- rep(0L, ncol(dat))
         } else {
             score <- TRUE

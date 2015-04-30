@@ -36,7 +36,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                 exsts <- file.exists(x)
                                             }
                                             if(!exsts) 
-                                                stop(sprintf('The following file cannot be located: %s', org))
+                                                stop(sprintf('The following file cannot be located: %s', org), call.=FALSE)
                                             normalizePath(x, mustWork = TRUE)
                                         } else NA
                                         return(ret)
@@ -66,7 +66,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
-                                           paste0(dnames[!(dnames %in% gnames)], ' '))
+                                           paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
                                   if(!is.null(shinyGUI$instructions))
                                       instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$title))

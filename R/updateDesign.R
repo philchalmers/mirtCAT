@@ -32,13 +32,13 @@
 #' 
 updateDesign <- function(x, items, responses, Theta=NULL){
     if(missing(x) || missing(items) || missing(responses))
-        stop('require inputs have not been supplied')
+        stop('require inputs have not been supplied', call.=FALSE)
     if(!is.null(Theta)){
         Theta <- matrix(Theta, nrow = 1L)
         x$person$thetas <- Theta
     }
     if(any(items > length(x$person$responses)))
-        stop('Items locations are larger than the length of the test.')
+        stop('Items locations are larger than the length of the test.', call.=FALSE)
     x$person$responses[items] <- x$person$raw_responses[items] <- as.integer(responses)
     pick <- min(which(is.na(x$person$items_answered)))
     x$person$items_answered[pick:(length(responses)+pick-1L)] <- as.integer(items)

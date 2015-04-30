@@ -42,10 +42,10 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
     if(is.list(x)) {
         fx <- x$y; x <- x$x
         if(length(x) == 0)
-            stop("list 'x' has no valid $x component")
+            stop("list 'x' has no valid $x component", call.=FALSE)
     }
     if((n <- length(x)) != length(fx))
-        stop("'fx' must have same length as 'x'")
+        stop("'fx' must have same length as 'x'", call.=FALSE)
     
     if(is.unsorted(x)) { i <- sort.list(x); x <- x[i]; fx <- fx[i] }
     if(any(i <- duplicated(x))) {
@@ -55,24 +55,24 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
         fx <- fx[!i]
     }
     if(any(diff(x) == 0))
-        stop("bug in 'duplicated()' killed me: have still multiple x[]!")
+        stop("bug in 'duplicated()' killed me: have still multiple x[]!", call.=FALSE)
     
     if(missing(a)) a <- x[1]
-    else if(any(a < x[1])) stop("'a' must NOT be smaller than min(x)")
+    else if(any(a < x[1])) stop("'a' must NOT be smaller than min(x)", call.=FALSE)
     if(missing(b)) b <- x[n]
-    else if(any(b > x[n])) stop("'b' must NOT be larger  than max(x)")
+    else if(any(b > x[n])) stop("'b' must NOT be larger  than max(x)", call.=FALSE)
     if(length(a) != 1 && length(b) != 1 && length(a) != length(b))
-        stop("'a' and 'b' must have length 1 or same length !")
+        stop("'a' and 'b' must have length 1 or same length !", call.=FALSE)
     else {
         k <- max(length(a),length(b))
-        if(any(b < a))    stop("'b' must be elementwise >= 'a'")
+        if(any(b < a))    stop("'b' must be elementwise >= 'a'", call.=FALSE)
     }
     
     if(use.spline) {
         xy <- spline(x,fx, n = max(1024, 3*n))
         ##-- Work around spline(.) BUG:  (ex.:  range(spline(1:20,1:20,n=95)))
         if(xy$x[length(xy$x)] < x[n]) {
-            if(TRUE) cat("working around spline(.) BUG --- hmm, really?\n\n")
+            if(TRUE) cat("working around spline(.) BUG --- hmm, really?\n\n", call.=FALSE)
             xy$x <- c(xy$x,  x[n])
             xy$y <- c(xy$y, fx[n])
         }
@@ -109,15 +109,15 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
 buildShinyElements <- function(questions, itemnames){
     J <- length(questions$Question)
     if(!all(sapply(questions[names(questions) != 'Question'], is.character))) 
-        stop('Only character classes are supported in questions input')
+        stop('Only character classes are supported in questions input', call.=FALSE)
     if(is.null(itemnames)) itemnames <- paste0('Item.', 1L:J)
     names <- names(questions)
     Qs_char <- questions$Question
     Type <- questions$Type
-    if(is.null(Qs_char)) stop('Question column not specified')
-    if(is.null(Type)) stop('Type column not specified')
+    if(is.null(Qs_char)) stop('Question column not specified', call.=FALSE)
+    if(is.null(Type)) stop('Type column not specified', call.=FALSE)
     if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text')))
-        stop('Type input in shiny_questions contains invalid arguments')
+        stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
     names(choices) <- NULL

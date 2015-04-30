@@ -56,7 +56,7 @@ setMethod("initialize", signature(.Object = "Test"),
               if(length(dots)){
                   if(!is.null(dots$rotate))
                       warning('rotation not supported in mirtCAT. Using fixed
-                                           slope coefficients')
+                                           slope coefficients', call.=FALSE)
                   if(!is.null(dots$theta_lim))
                       tmp$theta_lim <- dots$theta_lim
                   if(!is.null(dots$mean))

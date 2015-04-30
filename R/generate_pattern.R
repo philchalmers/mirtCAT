@@ -38,7 +38,7 @@ generate_pattern <- function(mo, Theta, df = NULL){
     nitems <- ncol(mo@Data$data)
     if(!is.matrix(Theta)) Theta <- matrix(Theta, 1L)
     if(nrow(Theta) > 1L && !is.null(df))
-        stop('df argument only used for generating single-case response patterns')
+        stop('df argument only used for generating single-case response patterns', call.=FALSE)
     N <- nrow(Theta)
     pattern <- matrix(0L, N, nitems)
     if(is.null(df)){
@@ -51,19 +51,19 @@ generate_pattern <- function(mo, Theta, df = NULL){
         return(t(t(pattern) + mo@Data$mins))
     } else {
         if(!is.data.frame(df))
-            stop('df input must be a data.frame')
+            stop('df input must be a data.frame', call.=FALSE)
         if(any(sapply(df, class) == 'factor')){
             dfold <- df
             df <- data.frame(sapply(dfold, as.character), stringsAsFactors = FALSE)
             if(!all(df == dfold)) 
                 stop('Coercion of df elements to characters modified one or more elements. 
                      When building the df with the data.frame() function pass the 
-                     option stringsAsFactors = FALSE to avoid this issue')
+                     option stringsAsFactors = FALSE to avoid this issue', call.=FALSE)
         }
         choices <- df[,grepl('Option', colnames(df))]
         item_answers <- df[,grepl('Answer', colnames(df))]
         if(is.matrix(item_answers))
-            stop('Only one correct answer is supported when drawing data')
+            stop('Only one correct answer is supported when drawing data', call.=FALSE)
     }
     ret <- character(nitems)
     has_item_answers <- length(item_answers) > 0L

@@ -31,7 +31,7 @@
 #' }
 findNextItem <- function(x){
     if(class(x) != 'mirtCAT_design')
-        stop('input is not the correct class')
+        stop('input is not the correct class', call.=FALSE)
     return(findNextCATItem(person=x$person, test=x$test, design=x$design))
 }
 
@@ -45,7 +45,7 @@ findNextCATItem <- function(person, test, design, start = TRUE){
     not_answered <- is.na(person$responses)
     not_answered[!person$valid_item] <- FALSE
     which_not_answered <- which(not_answered)
-    if(!length(which_not_answered)) stop('Ran out of items to administer.')
+    if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
     K <- test@mo@Data$K
     if(criteria %in% c('MEI', 'MEPV', 'MLWI', 'MPWI', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
         possible_patterns <- matrix(person$responses, sum(K[not_answered]), 
@@ -152,7 +152,7 @@ findNextCATItem <- function(person, test, design, start = TRUE){
                       design=design, thetas=thetas)
         index <- which_not_answered
     } else {
-        stop('Selection criteria does not exist')
+        stop('Selection criteria does not exist', call.=FALSE)
     }
     
     if(design@use_content){

@@ -69,7 +69,7 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
     if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))
-        stop('plot not available for non-adaptive tests')
+        stop('plot not available for non-adaptive tests', call.=FALSE)
     p <- floor((1-(pnorm(-abs(SE))*2))*100)
     if(is.null(main)){
         if(SE == 1)
