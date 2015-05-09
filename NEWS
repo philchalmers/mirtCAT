@@ -1,3 +1,33 @@
+Changes in mirtCAT 0.5
+
+  - fix bug when using SH exposure control when the pool runs out of items
+
+  - add `delta_thetas` argument to design list to stop CAT if change between
+  latent trait updates is less than this distance criteria
+
+  - include more functions to allow easier web hosting in locations such as
+  `shinyapps.io`. Namely, `mirtCAT_preamble()` and `createShinyGUI()`
+
+  - graphical images (png, gif, and jpeg) no logner supported. Stems preferably
+  should in HTML for best results and control
+
+  - Stem paths can now point to and render HTML and markdown files in the GUI
+
+  - `df` input can now be a list for including more fine tuned shiny inputs
+
+  - check for the existance of graphical item stems, and allow relative or
+  absolute paths
+
+BUGFIX
+
+  - fix stem location bug, and add better aspect ratio
+
+  - the `summary(mod, sort=FALSE)` argument returned a NULL object instead
+  of the unsorted response.  This has been patched and is now tested for
+
+  - when no `df` is supplied, check that the responses are in a plausible
+  range (reported by Gerard Flens)
+
 Changes in mirtCAT 0.4.2
 
   - `forced_choice` argument for shinyGUI input to state whether respones
