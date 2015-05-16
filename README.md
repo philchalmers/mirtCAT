@@ -2,6 +2,8 @@
 
 Computerized Adaptive Testing with Multidimensional Item Response Theory
 
+![Welcome](extras/01-Welcome.jpg)
+
 ## Description
 
 Provides tools to generate an HTML interface for creating adaptive
@@ -14,6 +16,9 @@ computerized adaptive tests using item response theory methodology.
 Various examples and worked help files have been compiled using the `knitr` package to generate
 HTML output, and are available on the [wiki](https://github.com/philchalmers/mirtCAT/wiki).
 User contributions are welcome!
+
+![Math](extras/04-Math_stem_Question.jpg)
+![Table](extras/05-Table_stem_question.jpg)
 
 # Installing from Github
 
