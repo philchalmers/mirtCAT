@@ -288,11 +288,14 @@
 #'     information. Note that the demographics GUI page will appear again, but this information
 #'     will not be used and can be skipped.}
 #'     
-#'   \item{\code{lastpage}}{Last message indicating that the test has been completed 
-#'     (i.e., criteria has been met). Default is 
+#'   \item{\code{lastpage}}{A function printing the last message, indicating that the test has been completed 
+#'     (i.e., criteria has been met). The function requires exactly one argument (called \code{person}), where 
+#'     the input argument is the person object that has been updated throught the test. The default function is 
 #'   
-#'     \preformatted{list(h5("You have successfully completed the interface. 
-#'       Click the action button to terminate the application."))}
+#'     \preformatted{function(person){ 
+#'                     return(list(h5("You have successfully completed the interface. 
+#'                                    Click the action button to terminate the application.")))
+#'                      } }
 #'    }    
 #'    
 #'    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation 

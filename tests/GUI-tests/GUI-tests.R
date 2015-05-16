@@ -15,6 +15,15 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df)
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# change final message
+lastpagefun <- function(person){
+    #browser() ## browser can be helpful here to see the contents of 'person'
+    est <- as.vector(person$thetas)
+    return(list(h5("You have successfully completed the interface."), 
+                   h6(sprintf("Your final theta estimate to two decimal places is %.2f.", est))))
+} 
+results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE, lastpage=lastpagefun))
+
 ## two step hosting
 my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)

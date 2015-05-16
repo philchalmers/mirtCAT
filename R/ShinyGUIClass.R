@@ -6,7 +6,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     df = 'list',
                                     firstpage = 'list',
                                     demographics = 'list',
-                                    lastpage = 'list',
+                                    lastpage = 'function',
                                     instructions = 'character',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
@@ -54,8 +54,9 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
                               demographics <<- list()
-                              lastpage <<- list(h5("You have successfully completed the interface.
-                                                   Click the action button to terminate the application."))
+                              lastpage <<- function(person) 
+                                            return(list(h5("You have successfully completed the interface.
+                                                   Click the action button to terminate the application.")))
                               temp_file <<- ''
                               css <<- ''
                                                  
