@@ -110,7 +110,7 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       panel = function(x, y, lower, upper, subscripts, ...){
                           lower <- lower[subscripts]; upper <- upper[subscripts]
                           panel.polygon(c(x, rev(x)), c(upper, rev(lower)), 
-                                        col=grey(.9), border = FALSE, ...)
+                                        col="#E6E6E6", border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
                           if(!is.null(CV)){
@@ -129,7 +129,7 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       upper = thetasSEhighlong$F1,
                       panel = function(x, y, lower, upper, subscripts, ...){
                           panel.polygon(c(x, rev(x)), c(upper, rev(lower)), 
-                                        col=grey(.9), border = FALSE, ...)
+                                        col="#E6E6E6", border = FALSE, ...)
                           panel.points(x, y, ...)
                           panel.lines(x, y, ...)
                           if(!is.null(CV))
