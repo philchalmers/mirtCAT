@@ -18,6 +18,6 @@
 #' @title Computerized Adaptive Testing with Multidimensional Item Response Theory
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' @useDynLib mirtCAT
-#' @import mirt shiny methods lattice Rcpp stats
+#' @import mirt shiny methods lattice Rcpp
 #' @keywords package
 NULL
