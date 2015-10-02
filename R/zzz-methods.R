@@ -65,9 +65,15 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #'   \code{'CAT ##\% Confidence Intervals'} depending on the SE input
 #' @param SE size of the standard errors to plot. The default is 1, and therefore plots the
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
+#' @param par.strip.text plotting argument passed to \code{\link{lattice}}
+#' @param par.settings plotting argument passed to \code{\link{lattice}}
 #' @param ... additional arguments to be passed to \code{lattice} or \code{fscores}
 #' @export
-plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
+plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, 
+                         par.strip.text = list(cex = 0.7),
+                         par.settings = list(strip.background = list(col = '#9ECAE1'),
+                                             strip.border = list(col = "black")),
+                         ...){
     if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))
         stop('plot not available for non-adaptive tests', call.=FALSE)
     p <- floor((1-(pnorm(-abs(SE))*2))*100)
@@ -120,7 +126,8 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
-                      xlab = 'Item', ...))
+                      xlab = 'Item', par.strip.text=par.strip.text,
+                      par.settings=par.settings, ...))
         
     } else {
         return(xyplot(F1 ~ item, data=thetaslong, 
@@ -137,6 +144,7 @@ plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, ...){
                       },
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
-                      xlab = 'Item', ...))
+                      xlab = 'Item', par.strip.text=par.strip.text,
+                      par.settings=par.settings, ...))
     }
 }
