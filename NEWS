@@ -1,3 +1,8 @@
+Changes in mirtCAT 0.6
+
+  - changed `lastpage` element in `shinyGUI` input from a list to a function
+  to allow messages containing information pertaining to the session
+
 Changes in mirtCAT 0.5
 
   - fix bug when using SH exposure control when the pool runs out of items
