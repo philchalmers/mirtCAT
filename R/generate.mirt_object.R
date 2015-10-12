@@ -136,6 +136,6 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
     dat <- t(t(dat) + min_category)
     ret <- mirt(dat, model, itemtype=itemtype, technical=list(customK=K, warn=FALSE, message=FALSE), 
                 TOL=NaN, pars=sv, quadpts = 1, key=key, rotate = 'none')
-    ret@exploratory <- FALSE
+    ret@Options$exploratory <- FALSE
     ret
 }

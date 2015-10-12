@@ -37,11 +37,10 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, design, ro
 
 MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc, thetas){
     Theta <- test@ThetaGrid
-    density <- test@density
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = test@mo@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
                                  Theta=Theta, 
-                                 itemloc = test@mo@itemloc,
+                                 itemloc = test@mo@Model$itemloc,
                                  CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
@@ -64,11 +63,10 @@ MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc, t
 
 MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc, thetas){
     Theta <- test@ThetaGrid
-    density <- test@density
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = test@mo@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
                                       Theta=Theta, 
-                                      itemloc = test@mo@itemloc,
+                                      itemloc = test@mo@Model$itemloc,
                                       CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
@@ -140,9 +138,9 @@ IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, de
                 den=FALSE, thetas){
     Theta <- matrix(seq(person$thetas-delta, person$thetas+delta, length.out=test@quadpts))
     LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = test@mo@pars,
+    ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
                                       Theta=Theta, 
-                                      itemloc = test@mo@itemloc,
+                                      itemloc = test@mo@Model$itemloc,
                                       CUSTOM.IND=list()))
     for(i in 1L:nrow(possible_patterns)){
         pick <- !is.na(possible_patterns[i,])
