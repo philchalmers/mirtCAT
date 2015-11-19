@@ -12,7 +12,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     creating simple questionnaires forms to collect response data directly in R.
 Roxygen: list(wrap = FALSE)
 Depends:
-    mirt (>= 1.13.5),
+    mirt (>= 1.14),
     shiny (>= 0.11.0),
     lattice
 Imports:
