@@ -101,7 +101,7 @@ As well, several GUI elements are modified, such as the title, author names, the
 and the last page.
 
 ```{r eval=FALSE}
-design_list <- list(max_items = 30, min_items = 10, min_SEM = 0.4, exposure = rep(3, 120))
+design_list <- list(max_items = 10, min_items = 5, min_SEM = 0.4, exposure = rep(3, 120))
 
 # in pre-CAT stage select 5 items using DPrule and use EAP estimates
 preCAT_list <- list(max_items = 5, criteria = "DPrule", method = "EAP")
@@ -109,8 +109,18 @@ preCAT_list <- list(max_items = 5, criteria = "DPrule", method = "EAP")
 # change aesthetics of GUI, including title, authors, header, and initial message
 title <- "Example Test"
 authors <- "I. M. D. Author"
-firstpage <- list(h2("Example Test"), h5("Please answer each item to the best of your ability.\n                     The results of this test will remain completely anonymous\n                     and are only used for research purposes."))
-lastpage <- list(h3("Thank you for completing the test. Please click 'Next' to\n                    save your results."))
+firstpage <- list(h2("Example Test"), h5("Please answer each item to the best of your ability. ",        
+       "The results of this test will remain completely anonymous ", 
+       "and are only used for research purposes."))
+lastpage <- function(person){
+    list(h2("Thank you for completing the test."), 
+         h4('Your final ability estimate for ability are:'),
+        h4(sprintf("Ability one: %.3f, SE = %.3f", person$thetas[1],
+                   person$thetas_SE_history[nrow(person$thetas_SE_history), 1])),
+        h4(sprintf("Ability two: %.3f, SE = %.3f", person$thetas[2],
+                   person$thetas_SE_history[nrow(person$thetas_SE_history), 2])),
+        h3("Please click 'Next' to close the application."))
+}
 demographics <- list(textInput(inputId = "occupation", label = "What is your occupation?",
     value = ""), selectInput(inputId = "gender", label = "Please select your gender.",
     choices = c("", "Male", "Female", "Other"), selected = ""))
