@@ -162,7 +162,7 @@ firstpage &lt;- list(h2(&quot;Example Test&quot;), h5(&quot;Please answer each i
        &quot;and are only used for research purposes.&quot;))
 lastpage &lt;- function(person){
     list(h2(&quot;Thank you for completing the test.&quot;), 
-         h4('Your final ability estimate for ability are:'),
+         h4('Your final ability estimates are:'),
         h4(sprintf(&quot;Ability one: %.3f, SE = %.3f&quot;, person$thetas[1],
                    person$thetas_SE_history[nrow(person$thetas_SE_history), 1])),
         h4(sprintf(&quot;Ability two: %.3f, SE = %.3f&quot;, person$thetas[2],

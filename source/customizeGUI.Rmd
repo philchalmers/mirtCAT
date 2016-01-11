@@ -114,7 +114,7 @@ firstpage <- list(h2("Example Test"), h5("Please answer each item to the best of
        "and are only used for research purposes."))
 lastpage <- function(person){
     list(h2("Thank you for completing the test."), 
-         h4('Your final ability estimate for ability are:'),
+         h4('Your final ability estimates are:'),
         h4(sprintf("Ability one: %.3f, SE = %.3f", person$thetas[1],
                    person$thetas_SE_history[nrow(person$thetas_SE_history), 1])),
         h4(sprintf("Ability two: %.3f, SE = %.3f", person$thetas[2],
