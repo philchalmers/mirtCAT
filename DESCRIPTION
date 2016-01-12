@@ -10,6 +10,8 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     package. Suitable for applying unidimensional and multidimensional
     computerized adaptive tests using item response theory methodology and for
     creating simple questionnaires forms to collect response data directly in R.
+    Package also contains tools useful for performing Monte Carlo simulations 
+    for studying the behaviour of computerized adaptive test banks.
 Roxygen: list(wrap = FALSE)
 Depends:
     mirt (>= 1.14),
@@ -22,6 +24,7 @@ Imports:
     markdown
 Suggests:
     parallel,
+    SimDesign,
     knitr,
     testthat
 ByteCompile: no
