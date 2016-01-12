@@ -246,9 +246,12 @@
 #'               The following interface was created using the mirtCAT package. 
 #'               To cite the package use citation(\\'mirtCATd\\') in R.')
 #'          }
-#'       }
-#'       
-#'    If an empty list is passed, this page will be skipped.
+#'          
+#'      If an empty list is passed, this page will be skipped.
+#'    }
+#'    
+#'    \item{\code{begin_message}}{Text to display on the page prior to beginning the CAT. Default 
+#'      is \code{"Click the action button to begin."}}
 #' 
 #'   \item{\code{demographics}}{A person information page used in the GUI for collecting 
 #'     demographic information, generated using tools from the shiny package. For example,

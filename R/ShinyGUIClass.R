@@ -8,6 +8,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     demographics = 'list',
                                     lastpage = 'function',
                                     instructions = 'character',
+                                    begin_message = 'character',
                                     stem_locations = 'character',
                                     delete_png = 'logical',
                                     demographic_inputIDs = 'character',
@@ -50,6 +51,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                  "To progress through the interface, click on the action button below.",
                                                  "Next")
                               demographic_inputIDs <<- character(0)
+                              begin_message <<- "Click the action button to begin."
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')
@@ -64,12 +66,15 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   dnames <- names(shinyGUI)
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 'resume_file',
-                                              'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations')
+                                              'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
+                                              'begin_message')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
                                   if(!is.null(shinyGUI$instructions))
                                       instructions <<- shinyGUI$instructions
+                                  if(!is.null(shinyGUI$begin_message))
+                                      begin_message <<- shinyGUI$begin_message
                                   if(!is.null(shinyGUI$title))
                                       title <<- shinyGUI$title
                                   if(!is.null(shinyGUI$authors))

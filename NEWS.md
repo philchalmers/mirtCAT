@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.6
 
+- new `begin_message` input to `shinyGUI` to change message prior to starting the CAT
+
 - changed `lastpage` element in `shinyGUI` input from a list to a function to allow messages 
   containing information pertaining to the session
 
