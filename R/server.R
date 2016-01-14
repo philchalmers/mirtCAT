@@ -39,6 +39,12 @@ server <- function(input, output) {
         
         if(click == 3L) MCE$start_time <- proc.time()[3L]
         
+        if(MCE$resume_file){
+            MCE$resume_file <- FALSE
+            item <- max(which(!is.na(MCE$person$items_answered)))
+            return(list(MCE$shinyGUI$df$Question[[item]], MCE$shinyGUI$questions[[item]]))
+        }
+        
         itemclick <- sum(!is.na(MCE$person$items_answered))
         
         # run survey
@@ -89,6 +95,8 @@ server <- function(input, output) {
                 item <- findNextCATItem(person=MCE$person, test=MCE$test, design=MCE$design,
                                         start=FALSE)
                 MCE$person$items_answered[itemclick+1L] <- item
+                if(MCE$shinyGUI$temp_file != '')
+                    saveRDS(MCE$person, MCE$shinyGUI$temp_file)
                 return(list(MCE$shinyGUI$df$Question[[item]], MCE$shinyGUI$questions[[item]]))
             }
         }

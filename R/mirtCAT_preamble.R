@@ -102,12 +102,15 @@ mirtCAT_preamble_internal <-
             design_object@start_item <- start_item
             design_object@criteria <- tmp
         }
-        if(is.null(local_pattern) && file.exists(shinyGUI$temp_file)){
-            person_object <- readRDS(shinyGUI$temp_file)
-            MCE$last_demographics <- person_object$demographics
-            shinyGUI_object$demographics <- list()
-            shinyGUI_object$firstpage <- list()
-            shinyGUI_object$demographic_inputIDs <- character(0)
+        if(is.null(local_pattern) && !is.null(shinyGUI$temp_file)){
+            if(file.exists(shinyGUI$temp_file)){
+                person_object <- readRDS(shinyGUI$temp_file)
+                MCE$last_demographics <- person_object$demographics
+                MCE$resume_file <- TRUE
+                shinyGUI_object$demographics <- list()
+                shinyGUI_object$firstpage <- list()
+                shinyGUI_object$demographic_inputIDs <- character(0)
+            } else MCE$resume_file <- FALSE
         }
         MCE$test <- test_object
         MCE$design <- design_object

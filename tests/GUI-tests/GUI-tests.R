@@ -25,10 +25,8 @@ lastpagefun <- function(person){
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE, lastpage=lastpagefun))
 
 # save and resume temp file
-mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds'))
-
 mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
-mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes
+mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
 
 ## two step hosting
 my_fun <- function(person) cat('Hello world\n')
