@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.6
 
+- `resume_file` removed, now if an associated `temp_file` is detected it will be used to resume
+  the GUI session
+
 - new `begin_message` input to `shinyGUI` to change message prior to starting the CAT
 
 - changed `lastpage` element in `shinyGUI` input from a list to a function to allow messages 

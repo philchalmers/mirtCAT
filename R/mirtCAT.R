@@ -283,13 +283,8 @@
 #'     unexpected computer restarts.      
 #'     
 #'     If \code{NULL}, no temp file will be created. Upon completion of the test, the 
-#'     temp file will be deleted}
-#'     
-#'   \item{\code{resume_file}}{a character vector indicating where a temporary .rds file 
-#'     containing the response information was saved (see \code{temp_file}). Allows the GUI
-#'     session to be continued using the previously stored demographic and response pattern 
-#'     information. Note that the demographics GUI page will appear again, but this information
-#'     will not be used and can be skipped.}
+#'     temp file will be deleted. If a file already exists, however, then this will be used to 
+#'     resume the GUI at the last location where the session was interupted}
 #'     
 #'   \item{\code{lastpage}}{A function printing the last message, indicating that the test has been completed 
 #'     (i.e., criteria has been met). The function requires exactly one argument (called \code{person}), where 
@@ -463,7 +458,7 @@
 #' res <- mirtCAT(df, mod, shinyGUI = list(temp_file = wdf))
 #' 
 #' # resume test this way if test was stopped early (and temp files were saved)
-#' res <- mirtCAT(df, mod, shinyGUI = list(resume_file = wdf))
+#' res <- mirtCAT(df, mod, shinyGUI = list(temp_file = wdf))
 #' print(res)
 #' 
 #' }

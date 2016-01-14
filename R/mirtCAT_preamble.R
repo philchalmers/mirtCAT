@@ -102,8 +102,8 @@ mirtCAT_preamble_internal <-
             design_object@start_item <- start_item
             design_object@criteria <- tmp
         }
-        if(is.null(local_pattern) && !is.null(shinyGUI$resume_file)){
-            person_object <- readRDS(shinyGUI$resume_file)
+        if(is.null(local_pattern) && file.exists(shinyGUI$temp_file)){
+            person_object <- readRDS(shinyGUI$temp_file)
             MCE$last_demographics <- person_object$demographics
             shinyGUI_object$demographics <- list()
             shinyGUI_object$firstpage <- list()

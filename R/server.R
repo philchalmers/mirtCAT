@@ -103,7 +103,9 @@ server <- function(input, output) {
             if(!is.null(MCE$final_fun)){
                 ret <- mirtCAT_post_internal(person=MCE$person, design=MCE$design)
                 MCE$final_fun(person = ret)
-            }   
+            }
+            if(MCE$shinyGUI$temp_file != '')
+                file.remove(MCE$shinyGUI$temp_file)
             stopApp()
             return(NULL)
         }
