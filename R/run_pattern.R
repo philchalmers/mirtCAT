@@ -1,5 +1,5 @@
 run_local <- function(responses, nfact, start_item, nitems, thetas.start_in, 
-                      score, design, test, verbose = FALSE, cl = NULL, ...){
+                      score, design, test, verbose = FALSE, cl = NULL){
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test){

@@ -16,6 +16,13 @@
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{createShinyGUI}} 
+#' 
+#' @examples
+#' \dontrun{
+#' 
+#' mirtCAT_preamble(df = df)
+#' 
+#' }
 mirtCAT_preamble <- function(..., final_fun = NULL){
     return(mirtCAT_preamble_internal(final_fun = final_fun, ...))
 }

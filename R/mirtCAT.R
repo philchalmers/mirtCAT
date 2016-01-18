@@ -328,6 +328,9 @@
 #'       Default is FALSE}
 #' }
 #' 
+#' @param ... additional arguments to be passed to \code{\link{mirt}}, \code{\link{fscores}}, 
+#'   or \code{\link{runApp}}
+#' 
 #' @export mirtCAT
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
@@ -478,13 +481,13 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(is.null(local_pattern)){
-        runApp(createShinyGUI(), launch.browser=TRUE)
+        runApp(createShinyGUI(), launch.browser=TRUE, ...)
         person <- MCE$person
     } else {
         person <- run_local(MCE$local_pattern, nfact=MCE$test@nfact, start_item=start_item,
                             nitems=length(MCE$test@itemnames), cl=cl,
                             thetas.start_in=design$thetas.start, score=MCE$score, 
-                            design=MCE$design, test=MCE$test, ...)
+                            design=MCE$design, test=MCE$test)
     }
     ret <- mirtCAT_post_internal(person=person, design=MCE$design)
     return(ret)

@@ -19,6 +19,13 @@ standard output returned from \code{\link{mirtCAT}}}
 This is largely an internal function called by \code{\link{mirtCAT}}, however it is made 
 public for better use with external web-hosting interfaces (like \url{http://www.shinyapps.io/}).
 }
+\examples{
+\dontrun{
+
+mirtCAT_preamble(df = df)
+
+}
+}
 \author{
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }

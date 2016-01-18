@@ -331,7 +331,8 @@ decrease estimation times in simulation work}
       Default is FALSE}
 }}
 
-\item{...}{additional arguments to be passed to \code{lattice} or \code{fscores}}
+\item{...}{additional arguments to be passed to \code{\link{mirt}}, \code{\link{fscores}}, 
+or \code{\link{runApp}}}
 
 \item{x}{object of class \code{'mirtCAT'}}
 
@@ -354,6 +355,8 @@ standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-dis
 \item{par.strip.text}{plotting argument passed to \code{\link{lattice}}}
 
 \item{par.settings}{plotting argument passed to \code{\link{lattice}}}
+
+\item{...}{additional arguments to be passed to \code{lattice} or \code{fscores}}
 }
 \value{
 Returns a list object of class \code{'Person'} containing the following elements:
