@@ -107,32 +107,50 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
 }
 
 buildShinyElements <- function(questions, itemnames){
-    J <- length(questions$Question)
+    J <- length(questions$Type)
     if(!all(sapply(questions[names(questions) != 'Question'], is.character))) 
         stop('Only character classes are supported in questions input', call.=FALSE)
     if(is.null(itemnames)) itemnames <- paste0('Item.', 1L:J)
     names <- names(questions)
     Qs_char <- questions$Question
     Type <- questions$Type
-    if(is.null(Qs_char)) stop('Question column not specified', call.=FALSE)
+    if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
+        stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text')))
+    if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text', 'slider')))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
+    choices_list <- vector('list', J)
     names(choices) <- NULL
     for(i in 1L:length(Qs)){
         if(Type[i] %in% c('radio', 'radio_inline')){
             cs <- na.omit(choices[i, ])
+            choices_list[[i]] <- cs
             Qs[[i]] <- radioButtons(inputId = itemnames[i], label='',
                                     inline = Type[i] == 'radio_inline',
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
+            choices_list[[i]] <- cs
             Qs[[i]] <- selectInput(inputId = itemnames[i], label='', selected = '', 
                                     choices = cs)
         } else if(Type[i] == 'text'){
             Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '')
+        } else if(Type[i] == 'slider'){
+            VALUE <- as.numeric(ifelse(is.null(questions$value[i]), questions$min[i], questions$value[i]))
+            MIN <- as.numeric(questions$min[i])
+            MAX <- as.numeric(questions$max[i])
+            STEP <- as.numeric(questions$step[i])
+            ROUND <- ifelse(is.null(questions$round[i]), FALSE, questions$round[i])
+            WIDTH <- ifelse(is.null(questions$width[i]), NULL, questions$width[i])
+            TICKS <- ifelse(is.null(questions$ticks[i]), TRUE, questions$ticks[i])
+            PRE <- ifelse(is.null(questions$pre[i]), NULL, questions$pre[i])
+            POST <- ifelse(is.null(questions$post[i]), NULL, questions$post[i])
+            Qs[[i]] <- sliderInput(inputId = itemnames[i], label='', min = MIN, max = MAX,
+                                   value = VALUE, step = STEP, round = ROUND, width = WIDTH,
+                                   ticks = TICKS, pre = PRE, post = POST)
+            choices_list[[i]] <- as.character(seq(from=MIN, to=MAX, by=STEP))
         }
     }
     pick <- as.data.frame(questions[grepl('Answer', names),drop=FALSE], stringsAsFactors = FALSE)
@@ -140,9 +158,9 @@ buildShinyElements <- function(questions, itemnames){
         item_answers <- split(pick, 1:nrow(pick))
         item_answers <- lapply(item_answers, na.omit)
     } else item_answers <- NULL
-    choices2 <- split(choices, 1:nrow(choices))
-    choices2 <- lapply(choices2, na.omit)
-    ret <- list(questions=Qs, item_answers=item_answers, item_options=choices2)
+    choices_list <- lapply(choices_list, na.omit)
+    if(length(Qs) != J) stop('Questions have not been properly defined!', call.=FALSE)
+    ret <- list(questions=Qs, item_answers=item_answers, item_options=choices_list)
     return(ret)
 }
 

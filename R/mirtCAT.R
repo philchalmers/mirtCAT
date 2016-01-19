@@ -56,6 +56,12 @@
 #'       
 #'   }
 #'   
+#'   In cases where \code{'slider'} inputs are used instead only the \code{Question} input is required.
+#'   In rows where the \code{Type == 'slider'} the column names will correpond to the input arguments
+#'   to \code{\link{sliderInput}}. The minimum possible inputs for \code{'slider'} items is to include
+#'   a \code{min}, \code{max}, and \code{step} column. Other options such as \code{step}, \code{round},
+#'   \code{pre}, \code{post}, \code{ticks}, and \code{width} are also supported. 
+#'   
 #' @param mo single group object defined by the \code{mirt::mirt()} function. This is required
 #'   if the test is to be scored adaptively or non-adaptively, but not required for general 
 #'   questionnaires. The object can be constructed by using the 

@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.6
 
+- added `slider` Type input for `sliderInput` rating scale questions
+
 - `resume_file` removed, now if an associated `temp_file` is detected it will be used to resume
   the GUI session
 

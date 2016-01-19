@@ -33,6 +33,18 @@ my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)
 runApp(createShinyGUI())
 
+# slider input
+df$Option.5 <- NULL
+df$min <- c(1,NA,NA)
+df$max <- c(5,NA,NA)
+df$value <- c(3,NA,NA)
+df$step <- c(1, NA, NA)
+df$Type[1] <- 'slider'
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
+df <- data.frame(Question = questions, min=rep(1,3), max=rep(5,3), step=rep(1,3), Type = 'slider')
+results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
 # HTML/markdown stems
 df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
                  Stem = c('Math-stem.html', 'Question.md', ''))
