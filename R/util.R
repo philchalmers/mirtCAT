@@ -143,10 +143,10 @@ buildShinyElements <- function(questions, itemnames){
             MAX <- as.numeric(questions$max[i])
             STEP <- as.numeric(questions$step[i])
             ROUND <- ifelse(is.null(questions$round[i]), FALSE, questions$round[i])
-            WIDTH <- ifelse(is.null(questions$width[i]), NULL, questions$width[i])
             TICKS <- ifelse(is.null(questions$ticks[i]), TRUE, questions$ticks[i])
-            PRE <- ifelse(is.null(questions$pre[i]), NULL, questions$pre[i])
-            POST <- ifelse(is.null(questions$post[i]), NULL, questions$post[i])
+            WIDTH <- if(is.null(questions$width[i])) NULL else questions$width[i]
+            PRE <- if(is.null(questions$pre[i])) NULL else questions$pre[i]
+            POST <- if(is.null(questions$post[i])) NULL else questions$post[i]
             Qs[[i]] <- sliderInput(inputId = itemnames[i], label='', min = MIN, max = MAX,
                                    value = VALUE, step = STEP, round = ROUND, width = WIDTH,
                                    ticks = TICKS, pre = PRE, post = POST)
