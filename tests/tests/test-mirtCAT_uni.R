@@ -178,6 +178,11 @@ test_that('unidimensional', {
     expect_true(so$classification == 'above cutoff')
     expect_equal(as.numeric(res$thetas), 0.5866167, tolerance = 1e-4)
     
+    ##fscores call
+    responses <- res$raw_responses_location
+    fs <- fscores(mod, response.pattern = responses)
+    expect_equal(unname(fs[,'F1']), -0.07335547, tolerance = 1e-4)
+    
     ## example sim cell
     set.seed(1)
     Theta <- matrix(c(-1,0,1),3)

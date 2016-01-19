@@ -52,10 +52,12 @@ server <- function(input, output) {
             if(itemclick >= 1L){
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test@itemnames[pick]
-                ip <- as.character(input[[name]])
+                ip <- input[[name]]
                 if(is.null(ip)) ip <- input[[paste0(MCE$invalid_count, '.TeMpInTeRnAl',name)]]
                 if(!is.null(ip)){
-                    MCE$person$raw_responses[pick] <- MCE$person$responses[pick] <- 
+                    ip <- as.character(ip)
+                    MCE$person$raw_responses[pick] <- ip
+                    MCE$person$responses[pick] <- MCE$person$raw_responses_location[pick] <- 
                         which(MCE$test@item_options[[pick]] %in% ip) - 1L
                     if(!is.na(MCE$test@item_answers[[pick]]) && 
                            MCE$test@item_class[pick] != 'nestlogit')

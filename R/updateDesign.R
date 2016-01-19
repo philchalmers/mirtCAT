@@ -39,7 +39,8 @@ updateDesign <- function(x, items, responses, Theta=NULL){
     }
     if(any(items > length(x$person$responses)))
         stop('Items locations are larger than the length of the test.', call.=FALSE)
-    x$person$responses[items] <- x$person$raw_responses[items] <- as.integer(responses)
+    x$person$responses[items] <- x$person$raw_responses_location[items] <- as.integer(responses)
+    x$person$raw_responses[items] <- as.character(x$person$raw_responses_location[items] + 1L)
     pick <- min(which(is.na(x$person$items_answered)))
     x$person$items_answered[pick:(length(responses)+pick-1L)] <- as.integer(items)
     return(x)

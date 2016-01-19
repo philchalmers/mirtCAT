@@ -1,5 +1,9 @@
 # Changes in mirtCAT 0.6
 
+- the `raw_responses` vector returned for each participant is now a character vector instead of an integer,
+  and the previous category location form is now found in `raw_responses_location` (for use with functions 
+  such as `fscores()`)
+
 - added `slider` Type input for `sliderInput` rating scale questions
 
 - `resume_file` removed, now if an associated `temp_file` is detected it will be used to resume

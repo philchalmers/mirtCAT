@@ -144,7 +144,8 @@ mirtCAT_post_internal <- function(person, design){
     ret.out <- vector('list', length(person))
     for(i in 1L:length(person)){
         person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
-        ret <- list(raw_responses=person[[i]]$raw_responses + 1L, 
+        ret <- list(raw_responses=person[[i]]$raw_responses, 
+                    raw_responses_location=person[[i]]$raw_responses_location,
                     scored_responses=if(person[[1L]]$score) as.integer(person[[i]]$responses + 
                                                                            MCE$mirt_mins) 
                     else rep(NA, length(person[[i]]$raw_responses)),
