@@ -158,7 +158,6 @@ buildShinyElements <- function(questions, itemnames){
         item_answers <- split(pick, 1:nrow(pick))
         item_answers <- lapply(item_answers, na.omit)
     } else item_answers <- NULL
-    choices_list <- lapply(choices_list, na.omit)
     if(length(Qs) != J) stop('Questions have not been properly defined!', call.=FALSE)
     ret <- list(questions=Qs, item_answers=item_answers, item_options=choices_list)
     return(ret)
