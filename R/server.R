@@ -58,8 +58,7 @@ server <- function(input, output) {
                     ip <- as.character(ip)
                     MCE$person$raw_responses[pick] <- ip
                     if(!is.null(MCE$test@item_options[[pick]])){
-                        MCE$person$responses[pick] <- MCE$person$raw_responses_location[pick] <- 
-                            which(MCE$test@item_options[[pick]] %in% ip) - 1L
+                        MCE$person$responses[pick] <- which(MCE$test@item_options[[pick]] %in% ip) - 1L
                     }
                     if(!is.na(MCE$test@item_answers[[pick]]) && 
                            MCE$test@item_class[pick] != 'nestlogit'){

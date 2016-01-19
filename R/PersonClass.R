@@ -1,7 +1,6 @@
 Person <- setRefClass("Person", 
                       
                       fields = list(raw_responses = 'character',
-                                    raw_responses_location = 'integer',
                                     responses = 'integer',
                                     items_answered = 'integer',
                                     thetas = 'matrix',
@@ -18,7 +17,6 @@ Person <- setRefClass("Person",
                                                theta_SEs){
                              'Initialize the person object given background information'
                              raw_responses <<- as.character(rep(NA, nitems))
-                             raw_responses_location <<- as.integer(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              valid_item <<- rep(TRUE, nitems)
                              items_answered <<- as.integer(rep(NA, nitems))

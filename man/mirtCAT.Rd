@@ -372,10 +372,6 @@ Returns a list object of class \code{'Person'} containing the following elements
   \item{\code{raw_responses}}{A character vector indicating the raws responses to the respective
     items, where NA indicates the item was not answered}
     
-  \item{\code{raw_responses_location}}{An integer vector indicating the category indecies for the 
-    raws responses to the respective items (primarily for use with \code{\link{fscores}}). 
-    NA values indicates the item was not answered} 
-    
   \item{\code{scored_responses}}{An integer vector of scored responses if the \code{item_answers} input
     was used for each respective item}
   

@@ -179,9 +179,9 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas), 0.5866167, tolerance = 1e-4)
     
     ##fscores call
-    responses <- res$raw_responses_location
+    responses <- res$scored_responses
     fs <- fscores(mod, response.pattern = responses)
-    expect_equal(unname(fs[,'F1']), -0.07335547, tolerance = 1e-4)
+    expect_equal(unname(fs[,'F1']), .6192153, tolerance = 1e-4)
     
     ## example sim cell
     set.seed(1)

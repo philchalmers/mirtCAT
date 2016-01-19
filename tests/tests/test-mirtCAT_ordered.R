@@ -13,6 +13,11 @@ test_that('ordered', {
     expect_equal(as.numeric(so$raw_responses), c(3,2,3,2))
     expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
     
+    #fscores call
+    responses <- res$scored_responses
+    fs <- fscores(mod, response.pattern = responses)
+    expect_equal(unname(fs[,'F1']), -.675978, tolerance = 1e-4)
+    
     choices <- c('SD', 'D', 'A', 'SA')
     df <- data.frame(Type = 'radio', Question = as.character(1:nitems), stringsAsFactors = FALSE)
     df$Option.1 <- 'SD'
