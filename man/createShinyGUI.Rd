@@ -4,22 +4,21 @@
 \alias{createShinyGUI}
 \title{Function returning an object used by shiny}
 \usage{
-createShinyGUI(...)
-}
-\arguments{
-\item{...}{additional arguments to be passed to \code{\link{shinyApp}}}
+createShinyGUI()
 }
 \description{
 This function returns the GUI setup results by calling \code{\link{shinyApp}}. 
 Primarily, this is only useful when hosting the application publicly, such as 
 through \url{http://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
-run \emph{before} this function is called.
+run \emph{before} this function is called. The object is executed by calling \code{\link{runApp}}.
 }
 \examples{
 \dontrun{
 
 mirtCAT_preamble(df = df)
-createShinyGUI(options = list(port = 7790))
+GUI <- createShinyGUI()
+runApp(GUI, port = 8000)
+
 } 
 }
 \author{

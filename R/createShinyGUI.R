@@ -3,9 +3,7 @@
 #' This function returns the GUI setup results by calling \code{\link{shinyApp}}. 
 #' Primarily, this is only useful when hosting the application publicly, such as 
 #' through \url{http://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
-#' run \emph{before} this function is called.
-#' 
-#' @param ... additional arguments to be passed to \code{\link{shinyApp}}
+#' run \emph{before} this function is called. The object is executed by calling \code{\link{runApp}}.
 #' 
 #' @export createShinyGUI
 #' 
@@ -17,8 +15,10 @@
 #' \dontrun{
 #' 
 #' mirtCAT_preamble(df = df)
-#' createShinyGUI(options = list(port = 7790))
+#' GUI <- createShinyGUI()
+#' runApp(GUI, port = 8000)
+#' 
 #' } 
-createShinyGUI <- function(...){
-    return(shinyApp(ui=ui(), server=server, ...))
+createShinyGUI <- function(){
+    return(shinyApp(ui=ui(), server=server))
 }

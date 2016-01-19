@@ -57,11 +57,13 @@ server <- function(input, output) {
                 if(!is.null(ip)){
                     ip <- as.character(ip)
                     MCE$person$raw_responses[pick] <- ip
-                    MCE$person$responses[pick] <- MCE$person$raw_responses_location[pick] <- 
-                        which(MCE$test@item_options[[pick]] %in% ip) - 1L
-                    if(!is.na(MCE$test@item_answers[[pick]]) && 
-                           MCE$test@item_class[pick] != 'nestlogit')
-                        MCE$person$responses[pick] <- as.integer(ip %in% MCE$test@item_answers[[pick]])
+                    if(!is.null(MCE$test@item_options[[pick]])){
+                        MCE$person$responses[pick] <- MCE$person$raw_responses_location[pick] <- 
+                            which(MCE$test@item_options[[pick]] %in% ip) - 1L
+                        if(!is.na(MCE$test@item_answers[[pick]]) && 
+                               MCE$test@item_class[pick] != 'nestlogit')
+                            MCE$person$responses[pick] <- as.integer(ip %in% MCE$test@item_answers[[pick]])
+                    }
                     
                     MCE$person$item_time[pick] <- proc.time()[3L] - MCE$start_time - 
                         sum(MCE$person$item_time)

@@ -31,7 +31,7 @@ mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and 
 ## two step hosting
 my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)
-runApp(createShinyGUI())
+runApp(createShinyGUI(), port = 8000)
 
 # slider input
 df$Option.5 <- NULL
@@ -44,6 +44,10 @@ results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 df <- data.frame(Question = questions, min=rep(1,3), max=rep(5,3), step=rep(1,3), Type = 'slider')
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
+# text input
+df <- data.frame(Question = questions, Type = 'text')
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # HTML/markdown stems
 df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
