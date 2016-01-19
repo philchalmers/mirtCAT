@@ -29,10 +29,10 @@
 #'   \describe{
 #'   
 #'     \item{\code{Type}}{Indicates the type of response input 
-#'       to use from the shiny package. The supported types are: 'radio' for radio buttons,
-#'       'radio_inline' for radio buttons that are organized horizontally,
-#'       'select' for a pull-down box for selecting inputs, or 'text' for requiring 
-#'       typed user input.} 
+#'       to use from the shiny package. The supported types are: \code{'radio'} for radio buttons,
+#'       \code{'radio_inline'} for radio buttons that are organized horizontally,
+#'       \code{'select'} for a pull-down box for selecting inputs, \code{'text'} for requiring 
+#'       typed user input, or \code{'slider'} for generating slider inputs (see instructions below).} 
 #'     
 #'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
 #'       character vector containing all the questions or stems to be generated.
@@ -54,13 +54,14 @@
 #'       pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
 #'       \code{NA}s are used if the item has no corresponding file.} 
 #'       
+#'     \item{\code{...}}{ In cases where \code{'slider'} inputs are used instead only 
+#'       the \code{Question} input is required along with (at minimum) a 
+#'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
+#'       column names will correpond to the input arguments to \code{\link{sliderInput}}. 
+#'       Other input column options such as \code{step}, \code{round}, \code{pre}, \code{post}, 
+#'       \code{ticks}, and \code{width} are also supported.} 
+#'       
 #'   }
-#'   
-#'   In cases where \code{'slider'} inputs are used instead only the \code{Question} input is required.
-#'   In rows where the \code{Type == 'slider'} the column names will correpond to the input arguments
-#'   to \code{\link{sliderInput}}. The minimum possible inputs for \code{'slider'} items is to include
-#'   a \code{min}, \code{max}, and \code{step} column. Other options such as \code{step}, \code{round},
-#'   \code{pre}, \code{post}, \code{ticks}, and \code{width} are also supported. 
 #'   
 #' @param mo single group object defined by the \code{mirt::mirt()} function. This is required
 #'   if the test is to be scored adaptively or non-adaptively, but not required for general 
