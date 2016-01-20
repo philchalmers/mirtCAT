@@ -32,6 +32,8 @@ mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and 
 my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)
 runApp(createShinyGUI(), port = 8000)
+person <- getPerson()
+person$raw_responses
 
 # slider input
 df$Option.5 <- NULL

@@ -15,15 +15,15 @@
 #' \dontrun{
 #' 
 #' mirtCAT_preamble(df = df)
-#' GUI <- createShinyGUI()
-#' runApp(GUI, port = 8000)
+#' runApp(createShinyGUI(), port = 8000)
 #' 
 #' person <- getPerson()
 #' summary(person)
 #' 
 #' } 
 createShinyGUI <- function(){
+    on.exit(MCE$preamble_defined <- NULL)
     if(is.null(MCE$preamble_defined))
-        stop('mirtCAT_preamble function has not been run')
+        stop('Please use a fresh mirtCAT_preamble() call prior to calling createShinyGUI().')
     return(shinyApp(ui=ui(), server=server))
 }
