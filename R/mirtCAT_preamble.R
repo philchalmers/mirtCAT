@@ -2,10 +2,12 @@
 #' 
 #' This is largely an internal function called by \code{\link{mirtCAT}}, however it is made 
 #' public for better use with external web-hosting interfaces (like \url{http://www.shinyapps.io/}).
+#' For more information see \url{http://shiny.rstudio.com/articles/persistent-data-storage.html} for 
+#' further information about saving output remotely when using \code{shiny}.
 #' 
 #' @param final_fun a function called just before the shiny GUI has been terminated, primarily for
-#'   saving results externally with packages such as \code{rDrop} 
-#'   (\url{https://github.com/karthik/rDrop}) when applications are hosted on the web. The function
+#'   saving results externally with packages such as \code{rDrop2}, \code{RAmazonS3}, 
+#'   \code{googlesheets}, \code{RMySQL}, and so on when applications are hosted on the web. The function
 #'   must be of the form \code{final_fun <- function(person){...}}, where \code{person} is the 
 #'   standard output returned from \code{\link{mirtCAT}}
 #' 
