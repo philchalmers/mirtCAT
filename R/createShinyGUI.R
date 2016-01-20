@@ -9,7 +9,7 @@
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
-#' @seealso \code{\link{mirtCAT}}, \code{\link{mirtCAT_preamble}}
+#' @seealso \code{\link{mirtCAT}}, \code{\link{mirtCAT_preamble}}, \code{\link{getPerson}}
 #' 
 #' @examples 
 #' \dontrun{
@@ -17,6 +17,7 @@
 #' mirtCAT_preamble(df = df)
 #' GUI <- createShinyGUI()
 #' runApp(GUI, port = 8000)
+#' person <- getPerson()
 #' 
 #' } 
 createShinyGUI <- function(){

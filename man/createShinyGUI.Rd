@@ -18,6 +18,7 @@ run \emph{before} this function is called. The object is executed by calling \co
 mirtCAT_preamble(df = df)
 GUI <- createShinyGUI()
 runApp(GUI, port = 8000)
+person <- getPerson()
 
 } 
 }
@@ -25,6 +26,6 @@ runApp(GUI, port = 8000)
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
 \seealso{
-\code{\link{mirtCAT}}, \code{\link{mirtCAT_preamble}}
+\code{\link{mirtCAT}}, \code{\link{mirtCAT_preamble}}, \code{\link{getPerson}}
 }
 

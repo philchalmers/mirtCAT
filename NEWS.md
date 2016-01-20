@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.6
 
+- added `getPerson()` function to assign a person object following the use of `createShinyGUI`
+
 - the `raw_responses` vector returned for each participant is now a character vector instead of an integer
 
 - added `slider` Type input for `sliderInput` rating scale questions
