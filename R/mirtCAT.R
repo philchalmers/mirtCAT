@@ -336,7 +336,7 @@
 #' }
 #' 
 #' @param ... additional arguments to be passed to \code{\link{mirt}}, \code{\link{fscores}}, 
-#'   or \code{\link{runApp}}
+#'   \code{\link{runApp}}, or \code{lattice}
 #' 
 #' @export mirtCAT
 #' 

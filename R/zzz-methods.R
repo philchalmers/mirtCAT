@@ -67,7 +67,6 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
 #' @param par.strip.text plotting argument passed to \code{\link{lattice}}
 #' @param par.settings plotting argument passed to \code{\link{lattice}}
-#' @param ... additional arguments to be passed to \code{lattice} or \code{fscores}
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, SE = 1, main = NULL, 
                          par.strip.text = list(cex = 0.7),
