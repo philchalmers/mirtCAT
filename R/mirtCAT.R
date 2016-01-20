@@ -477,7 +477,8 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
-                MCE$STOP <- MCE$outfile <- MCE$outfile2 <- MCE$last_demographics <- NULL})
+             MCE$STOP <- MCE$outfile <- MCE$outfile2 <- MCE$last_demographics <- 
+             MCE$preamble_defined <- NULL})
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl,

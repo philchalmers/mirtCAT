@@ -17,9 +17,13 @@
 #' mirtCAT_preamble(df = df)
 #' GUI <- createShinyGUI()
 #' runApp(GUI, port = 8000)
+#' 
 #' person <- getPerson()
+#' summary(person)
 #' 
 #' } 
 createShinyGUI <- function(){
+    if(is.null(MCE$preamble_defined))
+        stop('mirtCAT_preamble function has not been run')
     return(shinyApp(ui=ui(), server=server))
 }

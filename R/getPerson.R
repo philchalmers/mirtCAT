@@ -15,8 +15,9 @@
 #' mirtCAT_preamble(df = df)
 #' GUI <- createShinyGUI()
 #' runApp(GUI, port = 8000)
-#' person <- getPerson()
 #' 
+#' person <- getPerson()
+#' summary(person)
 #' } 
 getPerson <- function(){
     ret <- mirtCAT_post_internal(person=MCE$person, design=MCE$design)

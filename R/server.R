@@ -52,7 +52,7 @@ server <- function(input, output) {
             if(itemclick >= 1L){
                 pick <- MCE$person$items_answered[itemclick]
                 name <- MCE$test@itemnames[pick]
-                ip <- input[[name]]
+                ip <- unname(input[[name]])
                 if(is.null(ip)) ip <- input[[paste0(MCE$invalid_count, '.TeMpInTeRnAl',name)]]
                 if(!is.null(ip)){
                     ip <- as.character(ip)

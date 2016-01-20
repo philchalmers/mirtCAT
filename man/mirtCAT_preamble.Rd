@@ -32,6 +32,6 @@ mirtCAT_preamble(df = df)
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
 \seealso{
-\code{\link{mirtCAT}}, \code{\link{createShinyGUI}}
+\code{\link{mirtCAT}}, \code{\link{createShinyGUI}}, \code{\link{getPerson}}
 }
 

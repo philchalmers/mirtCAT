@@ -17,7 +17,7 @@
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
-#' @seealso \code{\link{mirtCAT}}, \code{\link{createShinyGUI}} 
+#' @seealso \code{\link{mirtCAT}}, \code{\link{createShinyGUI}}, \code{\link{getPerson}} 
 #' 
 #' @examples
 #' \dontrun{
@@ -137,7 +137,10 @@ mirtCAT_preamble_internal <-
             MCE$invalid_count <- 0L
             MCE$shinyGUI <- shinyGUI_object
         }
+        
+        MCE$preamble_defined <- TRUE
     
+        invisible()
     }
 
 

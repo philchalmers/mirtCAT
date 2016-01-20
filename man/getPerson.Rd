@@ -16,8 +16,9 @@ and is only required when the GUI is launched by the \code{\link{createShinyGUI}
 mirtCAT_preamble(df = df)
 GUI <- createShinyGUI()
 runApp(GUI, port = 8000)
-person <- getPerson()
 
+person <- getPerson()
+summary(person)
 } 
 }
 \author{

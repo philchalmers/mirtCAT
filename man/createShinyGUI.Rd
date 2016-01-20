@@ -18,7 +18,9 @@ run \emph{before} this function is called. The object is executed by calling \co
 mirtCAT_preamble(df = df)
 GUI <- createShinyGUI()
 runApp(GUI, port = 8000)
+
 person <- getPerson()
+summary(person)
 
 } 
 }
