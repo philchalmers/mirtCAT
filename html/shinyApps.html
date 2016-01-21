@@ -204,20 +204,21 @@ hr {
 <h1>shinyApps hosting</h1>
 
 <p>This demonstrates explains how to deploy a <code>mirtCAT</code> GUI on <a href="http://www.shinyapps.io/">shinyApps.io</a>,
-and saving the results to a local Dropbox folder through the <code>rDrop</code> package on <a href="https://github.com/karthik/rDrop">Github</a>. </p>
+and saving the results to a local Dropbox folder through the <code>rdrop2</code> package. </p>
 
 <h2>Configurations</h2>
 
 <p>Before getting started, installation of additional packages are required. Run the following code
 to install the required packages:</p>
 
-<pre><code class="r">install.packages(c(&quot;devtools&quot;, &quot;ROAuth&quot;))
-devtools::install_github(&quot;karthik/rDrop&quot;)
+<pre><code class="r">install.packages(&quot;rdrop2&quot;)
 </code></pre>
 
-<p>Follow the instructions for <a href="https://github.com/karthik/rDrop">rDrop</a> to obtain a <code>.rdata</code> file with 
-your Dropbox credentials. As well, you&#39;ll need to set up an account with shinyApps.io, and the 
-following <a href="http://shiny.rstudio.com/articles/shinyapps.html">tutorial</a> will help to get you started.</p>
+<p>Follow the instructions for <a href="https://github.com/karthik/rdrop2">rdrop2</a> to obtain a <code>.rdata</code> file with 
+your Dropbox credentials. As well, you&#39;ll need to set up an account with <code>shinyApps.io</code>, and the 
+following <a href="http://shiny.rstudio.com/articles/shinyapps.html">tutorial</a> will help to get you started. For a general
+idea how how to save results when using <code>shinyApps.io</code>, as well as an introduction to other methods of exporting data,
+see <a href="http://shiny.rstudio.com/articles/persistent-data-storage.html">this link</a>.</p>
 
 <p>Be sure to test that <code>shinyApps.io</code> is working for you by hosting a test application consisting of a
 <code>server.R</code> and <code>ui.R</code> file, and test that the Dropbox credentials allow you to upload R objects
@@ -236,11 +237,21 @@ the required GUI. Three things are important here:</p>
 to deploy the GUI</li>
 <li><code>mirtCAT_preamble()</code> must be run before <code>createShinyApp()</code> to ensure that the GUI is properly
 set up, and</li>
-<li><code>createShinyApp()</code> must be the last function called in <code>app.R</code></li>
+<li><code>createShinyApp()</code> must be the last function called in <code>app.R</code>. Implicitly <code>shinyApps.io</code> will wrap this function
+in a <code>runApp()</code> function, so you don&#39;t have to.</li>
 </ul>
 
 <p>Additional files may be uploaded, such as a <code>questions.csv</code> file or other files, and can be imported
 in the <code>app.R</code> file.</p>
+
+<h2>Setup</h2>
+
+<p>Before you can upload R objects to your dropbox folder you must first setup Dropbox to be accessed. After doing this
+you can save your token to a file and read this in later once it has been uploaded to the <code>shinyApp.io</code> server.</p>
+
+<pre><code class="r">token &lt;- drop_auth()
+saveRDS(token, &quot;droptoken.rds&quot;) # Upload this saved droptoken to the server
+</code></pre>
 
 <h2>Example</h2>
 
@@ -254,8 +265,7 @@ and therefore will save the results when <code>shinyApps.io</code> is finalized.
 #######################################
 
 # Load the required packages
-library(ROAuth)
-library(rDrop)
+library(rdrop2)
 library(mirtCAT)
 
 #-----------------------------------------
@@ -275,14 +285,12 @@ df &lt;- data.frame(Question = questions, Option = options, Type = &quot;radio&q
 # helper function
 
 # function to save to my authenticated dropbox folder
-save_fun &lt;- function(person){
-
-    load(&#39;my_dropbox_credentials.rdata&#39;) #credentials object from rDrop instructions
+final_fun &lt;- function(person){
+    token &lt;- readRDS(&quot;droptoken.rds&quot;) #read in dropbox token
+    drop_acc(dtoken = token) #load token
 
     # save final result to dropbox
-    rDrop::dropbox_save(dropbox_credentials, person,
-                        file = Sys.time(), # file name is saved as the system time
-                        verbose = FALSE, ext = &quot;.Rdata&quot;)
+    drop_upload(person, file = Sys.time()) #filename is just the date and time
 
     invisible()
 }
@@ -291,7 +299,7 @@ save_fun &lt;- function(person){
 # run the interface
 
 mirtCAT_preamble(df = df, shinyGUI = list(forced_choice = FALSE),
-                 final_fun = save_fun)
+                 final_fun = final_fun)
 createShinyGUI()
 </code></pre>
 
@@ -300,13 +308,13 @@ createShinyGUI()
 <ul>
 <li>The <code>app.R</code> file, containing the above instructions,</li>
 <li>A <code>questions.csv</code> containing text-based questions, and</li>
-<li>An R workspace file called <code>&#39;my_dropbox_credentials.rdata&#39;</code>, containing the object 
-<code>dropbox_credentials</code> for authenticating the personal Dropbox folder</li>
+<li>An R binary file called <code>&#39;droptoken.rds&#39;</code>, containing the object 
+dropbox credentials for authenticating the personal Dropbox folder</li>
 </ul>
 
 <p>Modifying the arguments in <code>mirtCAT_preamble()</code> will change how the session is organized, 
 perhaps changed to an adaptive session if a <code>mo</code> object is included, and the 
-GUI can be tested locally by using a call to <code>shiny::runApp(createShinyGUI())</code>.</p>
+GUI can be tested locally by using a call to <code>runApp(createShinyGUI())</code>.</p>
 
 </body>
 
