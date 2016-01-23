@@ -82,7 +82,7 @@ mirtCAT_preamble_internal <-
             score <- TRUE
             mirt_mins <- mo@Data$mins
         }
-        MCE$score <- score
+        .MCE$score <- score
         if(!is.null(local_pattern)){
             if(!is.matrix(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
             if(is.numeric(local_pattern))
@@ -111,34 +111,34 @@ mirtCAT_preamble_internal <-
             design_object@start_item <- start_item
             design_object@criteria <- tmp
         }
-        MCE$resume_file <- FALSE
+        .MCE$resume_file <- FALSE
         if(is.null(local_pattern) && shinyGUI_object$temp_file != ''){
             if(file.exists(shinyGUI_object$temp_file)){
                 person_object <- readRDS(shinyGUI_object$temp_file)
-                MCE$last_demographics <- person_object$demographics
-                MCE$resume_file <- TRUE
+                .MCE$last_demographics <- person_object$demographics
+                .MCE$resume_file <- TRUE
                 shinyGUI_object$demographics <- list()
                 shinyGUI_object$firstpage <- list()
                 shinyGUI_object$demographic_inputIDs <- character(0)
             } 
         }
-        MCE$test <- test_object
-        MCE$design <- design_object
-        MCE$local_pattern <- local_pattern
-        MCE$mirt_mins <- mirt_mins
-        MCE$final_fun <- final_fun
-        MCE$person <- person_object
+        .MCE$test <- test_object
+        .MCE$design <- design_object
+        .MCE$local_pattern <- local_pattern
+        .MCE$mirt_mins <- mirt_mins
+        .MCE$final_fun <- final_fun
+        .MCE$person <- person_object
         
         if(is.null(local_pattern)){
-            MCE$STOP <- FALSE
-            MCE$outfile <- tempfile(fileext='.png')
-            MCE$outfile2 <- tempfile(fileext='.html')
-            MCE$shift_back <- 0L
-            MCE$invalid_count <- 0L
-            MCE$shinyGUI <- shinyGUI_object
+            .MCE$STOP <- FALSE
+            .MCE$outfile <- tempfile(fileext='.png')
+            .MCE$outfile2 <- tempfile(fileext='.html')
+            .MCE$shift_back <- 0L
+            .MCE$invalid_count <- 0L
+            .MCE$shinyGUI <- shinyGUI_object
         }
         
-        MCE$preamble_defined <- TRUE
+        .MCE$preamble_defined <- TRUE
     
         invisible()
     }
@@ -151,7 +151,7 @@ mirtCAT_post_internal <- function(person, design){
         person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
         ret <- list(raw_responses=person[[i]]$raw_responses,
                     scored_responses=if(person[[1L]]$score) as.integer(person[[i]]$responses + 
-                                                                           MCE$mirt_mins) 
+                                                                           .MCE$mirt_mins) 
                     else rep(NA, length(person[[i]]$raw_responses)),
                     items_answered=person[[i]]$items_answered,
                     thetas=person[[i]]$thetas,
@@ -170,7 +170,7 @@ mirtCAT_post_internal <- function(person, design){
             ret$classify_values <- design@classify
         }
         colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
-            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:MCE$test@nfact)
+            colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:.MCE$test@nfact)
         if(!person[[i]]$score)
             ret$thetas <- ret$SE_thetas <- ret$thetas_history <- ret$thetas_SE_history <- NA
         class(ret) <- 'mirtCAT'

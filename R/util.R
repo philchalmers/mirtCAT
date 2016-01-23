@@ -1,5 +1,5 @@
-MCE <- new.env()
-MCE$complete <- TRUE
+.MCE <- new.env(parent=emptyenv())
+.MCE$complete <- TRUE
 
 FI <- function(mirt_item, Theta){
     .Call('ItemInfo', mirt_item, Theta)

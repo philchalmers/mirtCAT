@@ -476,27 +476,27 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                     start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
-    on.exit({MCE$person <- MCE$test <- MCE$design <- MCE$shinyGUI <- MCE$start_time <- 
-             MCE$STOP <- MCE$outfile <- MCE$outfile2 <- MCE$last_demographics <- 
-             MCE$preamble_defined <- NULL})
+    on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
+             .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
+             .MCE$preamble_defined <- NULL})
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl,
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, ...)
     if(design_elements){
-        ret <- list(person=MCE$person, test=MCE$test, design=MCE$design)
+        ret <- list(person=.MCE$person, test=.MCE$test, design=.MCE$design)
         class(ret) <- "mirtCAT_design"
         return(ret)
     }
     if(is.null(local_pattern)){
         runApp(createShinyGUI(), launch.browser=TRUE, ...)
-        person <- MCE$person
+        person <- .MCE$person
     } else {
-        person <- run_local(MCE$local_pattern, nfact=MCE$test@nfact, start_item=start_item,
-                            nitems=length(MCE$test@itemnames), cl=cl,
-                            thetas.start_in=design$thetas.start, score=MCE$score, 
-                            design=MCE$design, test=MCE$test)
+        person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,
+                            nitems=length(.MCE$test@itemnames), cl=cl,
+                            thetas.start_in=design$thetas.start, score=.MCE$score, 
+                            design=.MCE$design, test=.MCE$test)
     }
-    ret <- mirtCAT_post_internal(person=person, design=MCE$design)
+    ret <- mirtCAT_post_internal(person=person, design=.MCE$design)
     return(ret)
 }

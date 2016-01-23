@@ -22,8 +22,8 @@
 #' 
 #' } 
 createShinyGUI <- function(){
-    on.exit(MCE$preamble_defined <- NULL)
-    if(is.null(MCE$preamble_defined))
+    on.exit(.MCE$preamble_defined <- NULL)
+    if(is.null(.MCE$preamble_defined))
         stop('Please use a fresh mirtCAT_preamble() call prior to calling createShinyGUI().')
     return(shinyApp(ui=ui(), server=server))
 }
