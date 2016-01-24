@@ -13,6 +13,9 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 
 # forced and unforced
 results <- mirtCAT(df = df)
+
+df$inline <- TRUE
+df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # change final message
@@ -56,6 +59,9 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                  Stem = c('Math-stem.html', 'Question.md', ''))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# checkbox input
+df <- data.frame(Question = questions, Option=options, Type = 'checkbox')
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # shiny input questions
 questions <- list(h4("Building CATs with mirtCAT is difficult."),

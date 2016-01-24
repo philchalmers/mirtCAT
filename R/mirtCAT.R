@@ -30,9 +30,9 @@
 #'   
 #'     \item{\code{Type}}{Indicates the type of response input 
 #'       to use from the shiny package. The supported types are: \code{'radio'} for radio buttons,
-#'       \code{'radio_inline'} for radio buttons that are organized horizontally,
 #'       \code{'select'} for a pull-down box for selecting inputs, \code{'text'} for requiring 
-#'       typed user input, or \code{'slider'} for generating slider inputs (see instructions below).} 
+#'       typed user input, \code{'checkbox'} for allowing multiple responses to be checked off,
+#'       or \code{'slider'} for generating slider inputs (see instructions below).} 
 #'     
 #'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
 #'       character vector containing all the questions or stems to be generated.
@@ -59,7 +59,8 @@
 #'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
 #'       column names will correpond to the input arguments to \code{\link{sliderInput}}. 
 #'       Other input column options such as \code{step}, \code{round}, \code{pre}, \code{post}, 
-#'       \code{ticks}, and \code{width} are also supported.} 
+#'       \code{ticks}, \code{inline}, \code{placeholder}, \code{width}, and \code{size} 
+#'       are also supported for the respective inputs.} 
 #'       
 #'   }
 #'   

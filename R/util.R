@@ -117,26 +117,33 @@ buildShinyElements <- function(questions, itemnames){
     if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
         stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'radio_inline', 'select', 'text', 'slider')))
+    if(!all(Type %in% c('radio', 'select', 'text', 'slider', 'checkbox')))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
     choices_list <- vector('list', J)
     names(choices) <- NULL
     for(i in 1L:length(Qs)){
-        if(Type[i] %in% c('radio', 'radio_inline')){
+        if(Type[i] == 'radio'){
             cs <- na.omit(choices[i, ])
             choices_list[[i]] <- cs
+            inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
+            width <- questions$width[i]
             Qs[[i]] <- radioButtons(inputId = itemnames[i], label='',
-                                    inline = Type[i] == 'radio_inline',
+                                    inline = inline, width = width,
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
             cs <- na.omit(choices[i,])
             choices_list[[i]] <- cs
+            width <- questions$width[i]
+            size <- questions$size[i]
             Qs[[i]] <- selectInput(inputId = itemnames[i], label='', selected = '', 
-                                    choices = cs)
+                                    choices = cs, width=width, size=size)
         } else if(Type[i] == 'text'){
-            Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '')
+            width <- questions$width[i]
+            placeholder <- questions$placeholder[i]
+            Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '',
+                                 width=width, placeholder=placeholder)
         } else if(Type[i] == 'slider'){
             VALUE <- as.numeric(ifelse(is.null(questions$value[i]), questions$min[i], questions$value[i]))
             MIN <- as.numeric(questions$min[i])
@@ -144,13 +151,20 @@ buildShinyElements <- function(questions, itemnames){
             STEP <- as.numeric(questions$step[i])
             ROUND <- ifelse(is.null(questions$round[i]), FALSE, questions$round[i])
             TICKS <- ifelse(is.null(questions$ticks[i]), TRUE, questions$ticks[i])
-            WIDTH <- if(is.null(questions$width[i])) NULL else questions$width[i]
-            PRE <- if(is.null(questions$pre[i])) NULL else questions$pre[i]
-            POST <- if(is.null(questions$post[i])) NULL else questions$post[i]
+            WIDTH <- questions$width[i]
+            PRE <- questions$pre[i]
+            POST <- questions$post[i]
             Qs[[i]] <- sliderInput(inputId = itemnames[i], label='', min = MIN, max = MAX,
                                    value = VALUE, step = STEP, round = ROUND, width = WIDTH,
                                    ticks = TICKS, pre = PRE, post = POST)
             choices_list[[i]] <- as.character(seq(from=MIN, to=MAX, by=STEP))
+        } else if(Type[i] == 'checkbox'){
+            cs <- na.omit(choices[i,])
+            choices_list[[i]] <- cs
+            width <- questions$width[i]
+            inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
+            Qs[[i]] <- checkboxGroupInput(inputId = itemnames[i], label='', choices = cs,
+                                          width=width, inline=inline)
         }
     }
     pick <- as.data.frame(questions[grepl('Answer', names),drop=FALSE], stringsAsFactors = FALSE)

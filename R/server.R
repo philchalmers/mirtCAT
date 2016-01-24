@@ -56,13 +56,18 @@ server <- function(input, output) {
                 if(is.null(ip)) ip <- input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name)]]
                 if(!is.null(ip)){
                     ip <- as.character(ip)
-                    .MCE$person$raw_responses[pick] <- ip
+                    nanswers <- length(ip)
+                    .MCE$person$raw_responses[pick] <- paste0(ip, collapse = '; ')
                     if(!is.null(.MCE$test@item_options[[pick]])){
-                        .MCE$person$responses[pick] <- which(.MCE$test@item_options[[pick]] %in% ip) - 1L
+                        if(nanswers > 1L)
+                            .MCE$person$responses[pick] <- sum(.MCE$test@item_options[[pick]] %in% ip)
+                        else .MCE$person$responses[pick] <- which(.MCE$test@item_options[[pick]] %in% ip) - 1L
                     }
                     if(!is.na(.MCE$test@item_answers[[pick]]) && 
                            .MCE$test@item_class[pick] != 'nestlogit'){
-                        .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
+                        if(nanswers > 1L)
+                            .MCE$person$responses[pick] <- as.integer(sum(ip %in% .MCE$test@item_answers[[pick]]))
+                        else .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
                     }
                     .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time - 
                         sum(.MCE$person$item_time)

@@ -1,3 +1,11 @@
+# Changes in mirtCAT 0.7
+
+- support `checkbox` input type for `checkboxGroupInput()` function. Supplying one or more 
+  answers will score the items in a partial credit style
+
+- include missing input options in `df` input for `shiny` (e.g., width, placeholder, inline). Removed
+  `'radio_inline'` input because this can now be acomplishied by passing `Type = 'radio'` and `inline = TRUE`
+
 # Changes in mirtCAT 0.6
 
 - added `getPerson()` function to assign a person object following the use of `createShinyGUI`
