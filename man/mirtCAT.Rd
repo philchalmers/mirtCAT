@@ -32,10 +32,13 @@ type of response format, questions, options, answers, and stems:
 \describe{
 
   \item{\code{Type}}{Indicates the type of response input 
-    to use from the shiny package. The supported types are: \code{'radio'} for radio buttons,
-    \code{'select'} for a pull-down box for selecting inputs, \code{'text'} for requiring 
-    typed user input, \code{'checkbox'} for allowing multiple responses to be checked off,
-    or \code{'slider'} for generating slider inputs (see instructions below).} 
+    to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
+    (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
+    inputs (\code{\link{selectInput}}), \code{'text'} for requiring 
+    typed user input (\code{\link{textInput}}), \code{'checkbox'} for allowing multiple 
+    responses to be checked off (\code{\link{checkboxGroupInput}}),
+    or \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}). Note that slider
+    inputs require additional arguments to be passed; see \code{...} instructions below).} 
   
   \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
     character vector containing all the questions or stems to be generated.
