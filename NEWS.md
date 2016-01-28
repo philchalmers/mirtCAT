@@ -1,4 +1,4 @@
-# Changes in mirtCAT 0.7
+# Changes in mirtCAT 0.8
 
 - support `checkbox` input type for `checkboxGroupInput()` function. Supplying one or more 
   answers will score the items in a partial credit style
