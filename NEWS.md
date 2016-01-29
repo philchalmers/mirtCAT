@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.8
 
+- added `customNextItem` function to allow a completely customized method for declaring the
+item selection scheme
+
 - support `checkbox` input type for `checkboxGroupInput()` function. Supplying one or more 
   answers will score the items in a partial credit style
 

@@ -229,7 +229,18 @@ decrease estimation times in simulation work}
          \item{\code{unordered}}{same as ordered, except the items in the group will be selected at 
            random until the group is complete}
     }
+  }
   
+  \item{\code{customNextItem}}{a more advanced function of the form 
+    \code{customNextItem <- function(design, person, test)} to use a customized item selection
+    method. This requires more complex programming and understanding of \code{mirtCAT}s internal elements,
+    and it's recommended to initially use a \code{\link{browser}} to understand the state 
+    of the input arguents. 
+    
+    Use this if you wish to program your item selection techniques explicitly, though this 
+    can be combinded the internal \code{mirtCAT:::findNextCATItem} function with analogous inputs. 
+    Function must return a single integer value 
+    indicating the next item to adminster.
   }
   
 }}

@@ -107,7 +107,9 @@ mirtCAT_preamble_internal <-
         if(is.character(start_item)){
             tmp <- design_object@criteria
             design_object@criteria <- start_item
-            start_item <- findNextCATItem(person_object, test_object, design_object, start=FALSE)
+            start_item <- findNextCATItem(person=person_object, test=test_object, 
+                                          design=design_object, criteria=design_object@criteria,
+                                          start=FALSE)
             design_object@start_item <- start_item
             design_object@criteria <- tmp
         }

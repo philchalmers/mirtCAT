@@ -101,7 +101,7 @@ server <- function(input, output) {
             
             if(!.MCE$design@stop_now){
                 item <- findNextCATItem(person=.MCE$person, test=.MCE$test, design=.MCE$design,
-                                        start=FALSE)
+                                        criteria=.MCE$design@criteria, start=FALSE)
                 .MCE$person$items_answered[itemclick+1L] <- item
                 if(.MCE$shinyGUI$temp_file != '')
                     saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)

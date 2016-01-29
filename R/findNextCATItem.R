@@ -32,13 +32,13 @@
 findNextItem <- function(x){
     if(class(x) != 'mirtCAT_design')
         stop('input is not the correct class', call.=FALSE)
-    return(findNextCATItem(person=x$person, test=x$test, design=x$design))
+    return(findNextCATItem(person=x$person, test=x$test, design=x$design, 
+                           criteria = x$design@criteria))
 }
 
-findNextCATItem <- function(person, test, design, start = TRUE){
+findNextCATItem <- function(person, test, design, criteria, start = TRUE){
     
     #heavy lifty CAT stuff just to find new item
-    criteria <- design@criteria
     if(all(is.na(person$responses)) && start)
         return(design@start_item)
     lastitem <- sum(!is.na(person$items_answered))
@@ -84,6 +84,8 @@ findNextCATItem <- function(person, test, design, start = TRUE){
             #otherwise 0, item does not change
         }
         return(as.integer(item))
+    } else if(criteria == 'custom'){
+        return(as.integer(design@customNextItem(person=person, design=design, test=test)))
     } else if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, 
                    person=person, test=test, delta=design@KL_delta, thetas=thetas)
