@@ -136,8 +136,8 @@ server <- function(input, output) {
         
         if(!.MCE$STOP){
             if(click > 2L && (click-2L) < .MCE$test@length){
-                file <- .MCE$shinyGUI$stem_locations[[
-                    .MCE$person$items_answered[[click-2L]]]]
+                pick <- force(.MCE$person$items_answered[[click-2L]])
+                file <- .MCE$shinyGUI$stem_locations[pick]
                 empty <- is.na(file)
                 if(!empty){
                     if(grepl('\\.[mM][dD]$', file)){
