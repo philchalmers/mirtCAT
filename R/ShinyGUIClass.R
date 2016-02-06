@@ -10,17 +10,18 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     instructions = 'character',
                                     begin_message = 'character',
                                     stem_locations = 'character',
-                                    delete_png = 'logical',
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
-                                    css = 'character'),
+                                    css = 'character',
+                                    ui = 'function'),
                       
                       methods = list(
                           initialize = function(questions, df, shinyGUI){
                               'Initialize the shiny GUI given questions, df, and shinyGUI list'
+                              ui <<- default_UI
                               questions <<- questions
                               df <<- df
                               forced_choice <<- TRUE
@@ -43,8 +44,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                         return(ret)
                                   }))
                               }
-                              delete_png <<- c(TRUE, TRUE, TRUE, is.na(stem_locations), 
-                                               rep(TRUE, 20L))
                               title <<- 'mirtCAT'
                               author <<- 'Author information'
                               instructions <<- c("Instructions:",
@@ -67,10 +66,12 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
-                                              'begin_message')
+                                              'begin_message', 'ui')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
+                                  if(!is.null(shinyGUI$ui))
+                                      ui <<- shinyGUI$ui
                                   if(!is.null(shinyGUI$instructions))
                                       instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$begin_message))

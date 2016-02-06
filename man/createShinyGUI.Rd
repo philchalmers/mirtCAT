@@ -4,7 +4,11 @@
 \alias{createShinyGUI}
 \title{Function returning an object used by shiny}
 \usage{
-createShinyGUI()
+createShinyGUI(ui = NULL)
+}
+\arguments{
+\item{ui}{a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
+See \code{mirtCAT:::default_UI} for the internal code}
 }
 \description{
 This function returns the GUI setup results by calling \code{\link{shinyApp}}. 

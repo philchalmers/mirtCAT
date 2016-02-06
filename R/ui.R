@@ -1,4 +1,4 @@
-ui <- function(){
+default_UI <- function(){
     
     return(fluidPage(
         

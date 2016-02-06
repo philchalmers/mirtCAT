@@ -1,5 +1,7 @@
 # Changes in mirtCAT 0.8
 
+- `shinyGUI` input gained a `ui` element to allow users to completely customize the graphical UI with shiny code
+
 - added `customNextItem` function to allow a completely customized method for declaring the
 item selection scheme
 

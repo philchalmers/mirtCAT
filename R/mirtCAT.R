@@ -324,6 +324,9 @@
 #'      
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
+#'      
+#'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
+#'      See \code{mirtCAT:::default_UI} for the internal code}
 #'   
 #' }
 #' 
@@ -504,7 +507,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(is.null(local_pattern)){
-        runApp(createShinyGUI(), launch.browser=TRUE, ...)
+        runApp(createShinyGUI(ui=.MCE$ui), launch.browser=TRUE, ...)
         person <- .MCE$person
     } else {
         person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,

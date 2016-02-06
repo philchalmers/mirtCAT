@@ -327,6 +327,9 @@ decrease estimation times in simulation work}
      
    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}
+     
+   \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
+     See \code{mirtCAT:::default_UI} for the internal code}
   
 }}
 

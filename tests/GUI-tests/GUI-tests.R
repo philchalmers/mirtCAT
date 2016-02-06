@@ -38,6 +38,28 @@ runApp(createShinyGUI(), port = 8000)
 person <- getPerson()
 person$raw_responses
 
+# custom UI
+myUI <- function(){
+    return(fluidPage(
+        
+        #  Application title
+        headerPanel('My title'),
+        
+        mainPanel(
+            htmlOutput("item_stem_html"),
+            uiOutput("Main")    
+        ),
+        
+        sidebarPanel(
+            actionButton("Next", 'Next')
+        )
+        
+    )) #end bootstrapPage
+}
+
+mirtCAT_preamble(df, final_fun = my_fun)
+runApp(createShinyGUI(ui=myUI), port = 8000)
+
 # slider input
 df$Option.5 <- NULL
 df$min <- c(1,NA,NA)
