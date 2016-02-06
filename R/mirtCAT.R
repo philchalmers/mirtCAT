@@ -507,7 +507,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(is.null(local_pattern)){
-        runApp(createShinyGUI(ui=.MCE$ui), launch.browser=TRUE, ...)
+        runApp(createShinyGUI(ui=.MCE$shinyGUI$ui), launch.browser=TRUE, ...)
         person <- .MCE$person
     } else {
         person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,

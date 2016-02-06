@@ -42,9 +42,6 @@ person$raw_responses
 myUI <- function(){
     return(fluidPage(
         
-        #  Application title
-        headerPanel('My title'),
-        
         mainPanel(
             htmlOutput("item_stem_html"),
             uiOutput("Main")    
@@ -57,8 +54,9 @@ myUI <- function(){
     )) #end bootstrapPage
 }
 
-mirtCAT_preamble(df, final_fun = my_fun)
+mirtCAT_preamble(df)
 runApp(createShinyGUI(ui=myUI), port = 8000)
+mirtCAT(df=df, shinyGUI=list(ui=myUI))
 
 # slider input
 df$Option.5 <- NULL
