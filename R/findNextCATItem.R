@@ -1,12 +1,23 @@
 #' Find next CAT item
 #' 
 #' A function that returns the next item in the computerized adaptive test. This should be used
-#' in conjunction with the \code{\link{updateDesign}} function.
+#' in conjunction with the \code{\link{updateDesign}} function. The raw input forms can be used
+#' when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}.
 #' 
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 #'   when passing \code{design_elements = TRUE}
 #'   
-#' @param ... additional arguments to pass
+#' @param person internal person object. To be used when \code{customNextItem} function has been 
+#'   defined 
+#' 
+#' @param design internal design object. To be used when \code{customNextItem} function has been 
+#'   defined 
+#' 
+#' @param test internal test object. To be used when \code{customNextItem} function has been 
+#'   defined 
+#' 
+#' @param criteria item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
+#'   To be used when \code{customNextItem} function has been defined 
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}
 #' @export findNextItem
@@ -29,11 +40,17 @@
 #' CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
 #' findNextItem(CATdesign)
 #' }
-findNextItem <- function(x){
-    if(class(x) != 'mirtCAT_design')
-        stop('input is not the correct class', call.=FALSE)
-    return(findNextCATItem(person=x$person, test=x$test, design=x$design, 
-                           criteria = x$design@criteria))
+findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria = NULL){
+    if(missing(x)){
+        if(any(is.null(person) || is.null(test) || is.null(design) || is.null(criteria)))
+            stop('findNextItem has improper inputs', call.=FALSE)
+        return(findNextCATItem(person=person, test=test, design=design, criteria=criteria))
+    } else {
+        if(class(x) != 'mirtCAT_design')
+            stop('input is not the correct class', call.=FALSE)
+        return(findNextCATItem(person=x$person, test=x$test, design=x$design, 
+                               criteria = x$design@criteria))
+    }
 }
 
 findNextCATItem <- function(person, test, design, criteria, start = TRUE){

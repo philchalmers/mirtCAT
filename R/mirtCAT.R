@@ -34,7 +34,8 @@
 #'       inputs (\code{\link{selectInput}}), \code{'text'} for requiring 
 #'       typed user input (\code{\link{textInput}}), \code{'checkbox'} for allowing multiple 
 #'       responses to be checked off (\code{\link{checkboxGroupInput}}),
-#'       or \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}). Note that slider
+#'       \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}), or
+#'       \code{'none'} for presenting only an item stem with no selection options. Note that slider
 #'       inputs require additional arguments to be passed; see \code{...} instructions below).} 
 #'     
 #'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
@@ -235,7 +236,7 @@
 #'     of the input arguents. 
 #'     
 #'     Use this if you wish to program your item selection techniques explicitly, though this 
-#'     can be combinded the internal \code{mirtCAT:::findNextCATItem} function with analogous inputs. 
+#'     can be combinded the internal \code{\link{findNextItem}} function with analogous inputs. 
 #'     Function must return a single integer value 
 #'     indicating the next item to adminster.
 #'   }
@@ -325,8 +326,8 @@
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'      
-#'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
-#'      See \code{mirtCAT:::default_UI} for the internal code}
+#'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the 
+#'      default one will be used. See \code{mirtCAT:::default_UI} for the internal code definition}
 #'   
 #' }
 #' 

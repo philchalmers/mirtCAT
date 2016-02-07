@@ -99,6 +99,11 @@ df <- list(Question = questions,
 ## Run the mirtCAT web interface and store results
 results <- mirtCAT(df = df)
 
+# none type
+df <- data.frame(Question = c('Empty Q', questions), 
+                 Options=rbind(NA, options), Type = c('none', rep('radio', 3)))
+results <- mirtCAT(df = df)
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 #------------------------------------------------------------
 ### more lower level tests

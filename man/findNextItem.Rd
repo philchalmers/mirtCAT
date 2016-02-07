@@ -4,20 +4,32 @@
 \alias{findNextItem}
 \title{Find next CAT item}
 \usage{
-findNextItem(x)
+findNextItem(x, person = NULL, test = NULL, design = NULL,
+  criteria = NULL)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 when passing \code{design_elements = TRUE}}
 
-\item{...}{additional arguments to pass}
+\item{person}{internal person object. To be used when \code{customNextItem} function has been 
+defined}
+
+\item{test}{internal test object. To be used when \code{customNextItem} function has been 
+defined}
+
+\item{design}{internal design object. To be used when \code{customNextItem} function has been 
+defined}
+
+\item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
+To be used when \code{customNextItem} function has been defined}
 }
 \value{
 returns a numeric value indicating the index of the next item to be selected
 }
 \description{
 A function that returns the next item in the computerized adaptive test. This should be used
-in conjunction with the \code{\link{updateDesign}} function.
+in conjunction with the \code{\link{updateDesign}} function. The raw input forms can be used
+when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}.
 }
 \examples{
 \dontrun{

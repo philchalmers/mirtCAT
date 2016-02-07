@@ -117,7 +117,7 @@ buildShinyElements <- function(questions, itemnames){
     if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
         stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'select', 'text', 'slider', 'checkbox')))
+    if(!all(Type %in% c('radio', 'select', 'text', 'slider', 'checkbox', 'none')))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
@@ -165,6 +165,8 @@ buildShinyElements <- function(questions, itemnames){
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             Qs[[i]] <- checkboxGroupInput(inputId = itemnames[i], label='', choices = cs,
                                           width=width, inline=inline)
+        } else if(Type[i] == 'none'){
+            next
         }
     }
     pick <- as.data.frame(questions[grepl('Answer', names),drop=FALSE], stringsAsFactors = FALSE)

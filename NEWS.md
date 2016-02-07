@@ -1,21 +1,29 @@
 # Changes in mirtCAT 0.8
 
-- `shinyGUI` input gained a `ui` element to allow users to completely customize the graphical UI with shiny code
+- new `'none'` presentation Type to allow empty material with no responses (mainly for presenting 
+  reading passages or other testlet-based items). Useful when used in conjunction with the 
+  `constraints` input from the `design` list so that these items have predictible dependent 
+  pairings (or can be used with the `customNextItem` form as well for explicit dependencies)
 
-- added `customNextItem` function to allow a completely customized method for declaring the
-item selection scheme
+- `shinyGUI` input gained a `ui` element to allow users to completely customize the graphical UI 
+  with shiny code
+
+- added `customNextItem` function to allow a completely customized method for declaring the 
+  item selection scheme
 
 - support `checkbox` input type for `checkboxGroupInput()` function. Supplying one or more 
   answers will score the items in a partial credit style
 
-- include missing input options in `df` input for `shiny` (e.g., width, placeholder, inline). Removed
-  `'radio_inline'` input because this can now be acomplishied by passing `Type = 'radio'` and `inline = TRUE`
+- include missing input options in `df` input for `shiny` (e.g., width, placeholder, inline). 
+  Removed `'radio_inline'` input because this can now be acomplishied by passing 
+  `Type = 'radio'` and `inline = TRUE`
 
 # Changes in mirtCAT 0.6
 
 - added `getPerson()` function to assign a person object following the use of `createShinyGUI`
 
-- the `raw_responses` vector returned for each participant is now a character vector instead of an integer
+- the `raw_responses` vector returned for each participant is now a character vector instead of an 
+  integer
 
 - added `slider` Type input for `sliderInput` rating scale questions
 
