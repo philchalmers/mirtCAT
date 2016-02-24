@@ -29,7 +29,9 @@
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}
 #' @export findNextItem
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
-#' @return returns a numeric value indicating the index of the next item to be selected
+#' @return returns an integer value indicating the index of the next item to be selected or a
+#'   value of \code{NA} to indicate that the test should be terminated 
+#'   
 #' @examples
 #' \dontrun{
 #' # test defined in mirtCAT help file, first example

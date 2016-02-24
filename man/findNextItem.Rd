@@ -31,7 +31,8 @@ for smoother presentation. Useful when using the \code{customNextItem} function 
 \code{\link{mirtCAT}}}
 }
 \value{
-returns a numeric value indicating the index of the next item to be selected
+returns an integer value indicating the index of the next item to be selected or a
+  value of \code{NA} to indicate that the test should be terminated
 }
 \description{
 A function that returns the next item in the computerized adaptive test. This should be used

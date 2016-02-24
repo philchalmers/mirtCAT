@@ -243,7 +243,8 @@
 #'     Use this if you wish to program your item selection techniques explicitly, though this 
 #'     can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
 #'     Function must return a single integer value 
-#'     indicating the next item to administer.
+#'     indicating the next item to administer or an \code{NA} value to indicate that the test
+#'     should be terminated.
 #'   }
 #'   
 #' }
