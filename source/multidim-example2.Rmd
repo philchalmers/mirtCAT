@@ -1,0 +1,130 @@
+Multi-unidimensional Example
+======================================
+
+This example demonstrates how a multi-unidimensional IRT test can be presented in blocks of items
+at a time. This generally makes presentation more smooth, however you still will get the general 
+benifits of using a MIRT model as opposed to seperate unidimensional models (especially after 
+one block has been completed). 
+
+The following codeblock defines 100 items for a two factor math test measuring 
+addition and multiplication.
+
+```{r}
+library('mirtCAT')
+options(stringsAsFactors = FALSE)
+
+# define population IRT parameters
+set.seed(1234)
+nitems <- 120
+itemnames <- paste0("Item.", 1:nitems)
+a <- matrix(c(rlnorm(nitems/2, 0.2, 0.3), rnorm(nitems/4, 0, 0.3), numeric(nitems/2),
+    rnorm(nitems/4, 0, 0.3), rlnorm(nitems/2, 0.2, 0.3)), nitems)
+d <- matrix(rnorm(nitems))
+pars <- data.frame(a, d)
+colnames(pars) <- c("a1", "a2", "d")
+trait_cov <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
+
+# create mirt_object
+mod <- generate.mirt_object(pars, itemtype = "2PL", latent_covariance = trait_cov)
+
+# math items definitions addition for one factor and multiplication for the other
+questions <- answers <- character(nitems)
+options <- matrix("", nitems, 5)
+spacing <- floor(d - min(d)) + 1  #easier items have more variation
+
+for (i in 1:nitems) {
+    if (i < 31) {
+        # addition
+        n1 <- sample(1:100, 1)
+        n2 <- sample(101:200, 1)
+        ans <- n1 + n2
+        questions[i] <- paste0(n1, " + ", n2, " = ?")
+    } else if (i < 61) {
+        # addition and multiplication
+        n1 <- sample(1:50, 1)
+        n2 <- sample(51:100, 1)
+        m1 <- sample(1:10, 1)
+        m2 <- sample(1:10, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[i] <- paste0(n1, " + ", n2, " + ", m1, " * ", m2, " = ?")
+    } else if (i < 91) {
+        # multiplication and addition
+        n1 <- sample(1:10, 1)
+        n2 <- sample(1:10, 1)
+        m1 <- sample(1:25, 1)
+        m2 <- sample(1:25, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[i] <- paste0(m1, " * ", m2, " + ", n1, " + ", n2, " = ?")
+    } else {
+        # multiplication
+        m1 <- sample(1:50, 1)
+        m2 <- sample(1:50, 1)
+        ans <- n1 + n2 + m1 * m2
+        questions[i] <- paste0(m1, " * ", m2, " = ?")
+    }
+    answers[i] <- as.character(ans)
+    ch <- ans + sample(c(-5:-1, 1:5) * spacing[i, ], 5)
+    ch[sample(1:5, 1)] <- ans
+    options[i, ] <- as.character(ch)
+}
+
+# load list of items and their answers
+df <- data.frame(Question = questions, Option = options, Answer = answers, Type = "radio")
+```
+
+Next, we generate a possible response pattern and pass it to the `mirtCAT()` fuction. The first
+run ensures that all items are used by choosing a very small standard error criteria.
+
+```{r}
+set.seed(1)
+pat <- generate_pattern(mo = mod, Theta = c(-1, 1), df = df)
+head(pat)
+```
+
+The idea for setting up a multi-unidimesional item selection mechanism is to use the `customNextItem()`
+input so that the `subset` arguemnt to `findNextItem()` can be manipulated. Here we define two blocks to select
+from: a block from items 1:50, and 51:100. This means that when the first block is used only items 1:50 can
+be selected as the next item. Furthermore, we can do some manual checks to decide when the second block
+should begin. Here items will be selected until 20 items appear in each block.
+
+```{r}
+# standad MCAT
+# res <- mirtCAT(df = df, mo = mod, criteria = "Drule", local_pattern = pat)
+
+# custom. Often useful to set up a browser first for easier editing
+customNextItem <- function(design, person, test){
+    browser()
+    
+}
+
+#res <- mirtCAT(df = df, mo = mod, local_pattern = pat,
+#               design = list(customNextItem=customNextItem))
+
+customNextItem <- function(design, person, test){
+    block1 <- 1:50
+    block2 <- 51:100
+    if(sum(!is.na(person$items_answered)) < 20){ #first 20 items block1
+        block <- block1
+    } else if(sum(!is.na(person$items_answered)) < 40){ #next 20 block2
+        block <- block2
+    } else return(NA) # terminate when both item blocks have 20 items answered
+    ret <- findNextItem(person=person, design=design, test=test, 
+                        subset=block, criteria = 'Drule')
+    ret
+}
+
+res <- mirtCAT(df = df, mo = mod, local_pattern = pat,
+               design = list(customNextItem=customNextItem,
+                             min_SEM = 0, #disable other termination criteria
+                             min_items = 100))
+```
+
+
+Notice that the order of the results is correct, and that measurement of the second latent trait
+really only begins after the 20th item has been administered.
+
+```{r}
+print(res$items_answered[1:20])
+print(res$items_answered[21:40])
+plot(res)
+```
