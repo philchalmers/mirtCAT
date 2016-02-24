@@ -5,7 +5,7 @@
 \title{Find next CAT item}
 \usage{
 findNextItem(x, person = NULL, test = NULL, design = NULL,
-  criteria = NULL)
+  criteria = NULL, subset = NULL)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -22,6 +22,13 @@ defined}
 
 \item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
 To be used when \code{customNextItem} function has been defined}
+
+\item{subset}{an integer vector indicating which items should be included in the optimal search;
+the default \code{NULL} includes all possible items. To allow only the first 10 items to be 
+selected from this can be modified to \code{subset = 1:10}. This is useful when administering 
+a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
+for smoother presentation. Useful when using the \code{customNextItem} function in 
+\code{\link{mirtCAT}}}
 }
 \value{
 returns a numeric value indicating the index of the next item to be selected
