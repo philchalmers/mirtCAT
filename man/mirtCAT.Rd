@@ -216,12 +216,17 @@ decrease estimation times in simulation work}
     likely to be randomly discarded.}
     
   \item{\code{constraints}}{A named list declaring various item selection contraints for which
-    particular item, where each list element is a vector of item numbers. These include:
+    particular item, where each list element is a vector of item numbers. Unless otherwise stated,
+    multiple elements can be decalared (e.g., \code{list(ordered = c(1:5), ordered = c(7:9))} is
+    perfectly acceptable). These include:
     
     \describe{
          \item{\code{not_scored}}{declaring items that can be selected but will not be used in the 
            scoring of the CAT. This is primarily useful when including experimental items for
-           future CATs.}
+           future CATs. Only one vector of \code{not_scored} elements can be supplied}
+         \item{\code{excluded}}{items which should not actually appear in the session 
+           (useful when re-testing participants who have already seen some of the items). 
+           Only one vector of \code{excluded} elements can be supplied}
          \item{\code{independent}}{declaring which items should never appear in the same CAT session.
            Use this if, for example, item 1 and item 10 have very similar questions 
            types and therefore should not appear within the same session}
@@ -229,8 +234,6 @@ decrease estimation times in simulation work}
            particular group of items in order according to the specified sequence}
          \item{\code{unordered}}{same as ordered, except the items in the group will be selected at 
            random until the group is complete}
-         \item{\code{excluded}}{a vector of items which should not actually appear in the session 
-           (useful when re-testing participants who have already seen some of the items)}
     }
   }
   

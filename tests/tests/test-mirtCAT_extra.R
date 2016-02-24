@@ -48,11 +48,12 @@ test_that('extra', {
                        not_scored = c(1),
                        independent = c(2,5),
                        unordered = c(10:12),
-                       ordered = c(15:20)))
+                       ordered = c(15:17),
+                       ordered = c(18:20)))
     
     set.seed(1)
     res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = 1,
                    local_pattern = matrix(rep(0, 50), 1))
-    expect_equal(res$items_answered, c(1,15,16,17,18,19,20,24,50,7,25,9,43,10,12,11,44,49,48,35,36,37,46,42,6,29,13,26,34,32,30,38,39,21,45,23,22,28,5,8,4,14,47,40,31))
+    expect_equal(res$items_answered, c(1,18,19,20,24,15,16,17,50,7,25,9,43,10,12,11,44,49,48,35,36,37,46,42,6,29,13,26,34,32,30,38,39,21,45,23,22,28,5,8,4,14,47,40,31))
     
 })

@@ -129,14 +129,15 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@exposure <- exposure
                       .Object@exposure_type <- exposure_type
                   }
+                  if(!is.null(design$constraints))
+                      if(!all(names(design$constraints) %in% 
+                              c("independent", "unordered", "ordered", "not_scored", "excluded")))
+                          stop('Named element in constraints list not suppored', call.=FALSE)
                   if(!is.null(design$constraints$excluded)){
                       .Object@excluded <- design$constraints$excluded
                       design$constraints$excluded <- NULL
                   }
                   if(!is.null(design$constraints)){
-                      if(!all(names(design$constraints) %in% 
-                              c("independent", "unordered", "ordered", "not_scored")))
-                         stop('Named element in constraints list not suppored', call.=FALSE)
                       if(any(names(design$constraints) == 'not_scored')){
                           .Object@items_not_scored <- 
                               as.integer(design$constraints$not_scored)
