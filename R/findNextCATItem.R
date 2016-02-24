@@ -63,6 +63,8 @@ findNextCATItem <- function(person, test, design, criteria, start = TRUE){
     not_answered[!person$valid_item] <- FALSE
     not_answered[design@excluded] <- FALSE
     which_not_answered <- which(not_answered)
+    if(criteria == 'seq')
+        which_not_answered <- which_not_answered[which_not_answered > lastitem]
     if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
     K <- test@mo@Data$K
     if(criteria %in% c('MEI', 'MEPV', 'MLWI', 'MPWI', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
@@ -86,7 +88,6 @@ findNextCATItem <- function(person, test, design, criteria, start = TRUE){
     thetas <- person$thetas
     
     if(criteria == 'seq'){
-        which_not_answered <- which_not_answered[which_not_answered > lastitem]
         return(min(which_not_answered))
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
