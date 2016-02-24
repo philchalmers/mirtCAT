@@ -29,6 +29,7 @@ Design <- setClass(Class = "Design",
                              content_prop = 'numeric',
                              content_prop_empirical = 'numeric',
                              constraints = 'list',
+                             excluded = 'integer',
                              customNextItem = 'function'),
                    validity = function(object) return(TRUE)
 )
@@ -127,6 +128,10 @@ setMethod("initialize", signature(.Object = "Design"),
                                    values greater than or equal to 1', call.=FALSE)
                       .Object@exposure <- exposure
                       .Object@exposure_type <- exposure_type
+                  }
+                  if(!is.null(design$constraints$excluded)){
+                      .Object@excluded <- design$constraints$excluded
+                      design$constraints$excluded <- NULL
                   }
                   if(!is.null(design$constraints)){
                       if(!all(names(design$constraints) %in% 

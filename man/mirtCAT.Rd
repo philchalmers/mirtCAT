@@ -64,7 +64,7 @@ type of response format, questions, options, answers, and stems:
   \item{\code{...}}{ In cases where \code{'slider'} inputs are used instead only 
     the \code{Question} input is required along with (at minimum) a 
     \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
-    column names will correpond to the input arguments to \code{\link{sliderInput}}. 
+    column names will correspond to the input arguments to \code{\link{sliderInput}}. 
     Other input column options such as \code{step}, \code{round}, \code{pre}, \code{post}, 
     \code{ticks}, \code{inline}, \code{placeholder}, \code{width}, and \code{size} 
     are also supported for the respective inputs.} 
@@ -225,10 +225,12 @@ decrease estimation times in simulation work}
          \item{\code{independent}}{declaring which items should never appear in the same CAT session.
            Use this if, for example, item 1 and item 10 have very similar questions 
            types and therefore should not appear within the same session}
-         \item{\code{ordered}}{if one item is selected during the CAT, adminster this 
+         \item{\code{ordered}}{if one item is selected during the CAT, administer this 
            particular group of items in order according to the specified sequence}
          \item{\code{unordered}}{same as ordered, except the items in the group will be selected at 
            random until the group is complete}
+         \item{\code{excluded}}{a vector of items which should not actually appear in the session 
+           (useful when re-testing participants who have already seen some of the items)}
     }
   }
   
@@ -236,12 +238,12 @@ decrease estimation times in simulation work}
     \code{customNextItem <- function(design, person, test)} to use a customized item selection
     method. This requires more complex programming and understanding of \code{mirtCAT}s internal elements,
     and it's recommended to initially use a \code{\link{browser}} to understand the state 
-    of the input arguents. 
+    of the input arguments. 
     
     Use this if you wish to program your item selection techniques explicitly, though this 
-    can be combinded the internal \code{\link{findNextItem}} function with analogous inputs. 
+    can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
     Function must return a single integer value 
-    indicating the next item to adminster.
+    indicating the next item to administer.
   }
   
 }}
@@ -310,11 +312,11 @@ decrease estimation times in simulation work}
     
     If \code{NULL}, no temp file will be created. Upon completion of the test, the 
     temp file will be deleted. If a file already exists, however, then this will be used to 
-    resume the GUI at the last location where the session was interupted}
+    resume the GUI at the last location where the session was interrupted}
     
   \item{\code{lastpage}}{A function printing the last message, indicating that the test has been completed 
     (i.e., criteria has been met). The function requires exactly one argument (called \code{person}), where 
-    the input argument is the person object that has been updated throught the test. The default function is 
+    the input argument is the person object that has been updated throughout the test. The default function is 
   
     \preformatted{function(person){ 
                     return(list(h5("You have successfully completed the interface. 
@@ -435,7 +437,7 @@ a large \code{'min_items'} criteria to the \code{design} list input.
 \section{HTML help files, exercises, and examples}{
 
 
-To access examples, vignettes, and exercise files that have been generated with knitr please
+To access examples, vignettes, and exercise files that have been generated with \code{knitr} please
 visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 }
 \examples{

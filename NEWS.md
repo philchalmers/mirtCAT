@@ -1,5 +1,8 @@
 # Changes in mirtCAT 0.8
 
+- include `constraints` option for `excluded` items (useful for re-testing situations where 
+  item selection is from the same bank of items but previously answered items should not appear)
+
 - new `'none'` presentation Type to allow empty material with no responses (mainly for presenting 
   reading passages or other testlet-based items). Useful when used in conjunction with the 
   `constraints` input from the `design` list so that these items have predictible dependent 

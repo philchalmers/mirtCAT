@@ -192,6 +192,14 @@ test_that('unidimensional', {
     fs <- fscores(mod, response.pattern = responses)
     expect_equal(unname(fs[,'F1']), .6192153, tolerance = 1e-4)
     
+    # excluded set
+    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI', 
+                   design = list(max_items = 5, constraints = list(excluded = c(2:10))))
+    expect_true(all(res$items_answered == c(1, 20, 15, 24, 14)))
+    res <- mirtCAT(df2, mod, local_pattern=pat, criteria='seq', 
+                   design = list(max_items = 5, constraints = list(excluded = c(2:10))))
+    expect_true(all(res$items_answered == c(1, 11:14)))
+    
     ## example sim cell
     set.seed(1)
     Theta <- matrix(c(-1,0,1),3)

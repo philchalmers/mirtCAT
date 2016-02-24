@@ -61,6 +61,7 @@ findNextCATItem <- function(person, test, design, criteria, start = TRUE){
     lastitem <- sum(!is.na(person$items_answered))
     not_answered <- is.na(person$responses)
     not_answered[!person$valid_item] <- FALSE
+    not_answered[design@excluded] <- FALSE
     which_not_answered <- which(not_answered)
     if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
     K <- test@mo@Data$K
@@ -85,7 +86,8 @@ findNextCATItem <- function(person, test, design, criteria, start = TRUE){
     thetas <- person$thetas
     
     if(criteria == 'seq'){
-        return(as.integer(lastitem + 1L))
+        which_not_answered <- which_not_answered[which_not_answered > lastitem]
+        return(min(which_not_answered))
     } else if(criteria == 'random'){
         if(length(which_not_answered) == 1L) item <- which_not_answered
         else item <- sample(which_not_answered, 1L)
@@ -103,7 +105,8 @@ findNextCATItem <- function(person, test, design, criteria, start = TRUE){
         return(as.integer(item))
     } else if(criteria == 'custom'){
         return(as.integer(design@customNextItem(person=person, design=design, test=test)))
-    } else if(criteria == 'KL'){
+    }
+    if(criteria == 'KL'){
         crit <- KL(which_not_answered=which_not_answered, 
                    person=person, test=test, delta=design@KL_delta, thetas=thetas)
         index <- which_not_answered
