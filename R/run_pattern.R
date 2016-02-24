@@ -7,7 +7,10 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
                              thetas.start_in=thetas.start_in, score=score)
         item <- findNextCATItem(person=person, test=test, design=design, criteria=design@criteria)
-        if(is.na(item)) return(person)
+        if(is.na(item)){
+            design@stop_now <- TRUE
+            return(person)
+        }
         person$items_answered[1L] <- item
         
         for(i in 2L:(ncol(responses)+1L)){
@@ -30,6 +33,10 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             
             item <- findNextCATItem(person=person, test=test, design=design, 
                                     criteria=design@criteria)
+            if(is.na(item)){
+                design@stop_now <- TRUE
+                break
+            } 
             person$items_answered[i] <- item
         }
         return(person)
