@@ -160,6 +160,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   }
                   if(!is.null(design$customNextItem)){
                       .Object@customNextItem <- design$customNextItem
+                      .Object@CAT_criteria <- 'custom'
                       .Object@criteria <- 'custom'
                   }
               }
