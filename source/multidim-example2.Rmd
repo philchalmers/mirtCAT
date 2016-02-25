@@ -33,28 +33,12 @@ options <- matrix("", nitems, 5)
 spacing <- floor(d - min(d)) + 1  #easier items have more variation
 
 for (i in 1:nitems) {
-    if (i < 31) {
+    if (i < 50) {
         # addition
         n1 <- sample(1:100, 1)
         n2 <- sample(101:200, 1)
         ans <- n1 + n2
         questions[i] <- paste0(n1, " + ", n2, " = ?")
-    } else if (i < 61) {
-        # addition and multiplication
-        n1 <- sample(1:50, 1)
-        n2 <- sample(51:100, 1)
-        m1 <- sample(1:10, 1)
-        m2 <- sample(1:10, 1)
-        ans <- n1 + n2 + m1 * m2
-        questions[i] <- paste0(n1, " + ", n2, " + ", m1, " * ", m2, " = ?")
-    } else if (i < 91) {
-        # multiplication and addition
-        n1 <- sample(1:10, 1)
-        n2 <- sample(1:10, 1)
-        m1 <- sample(1:25, 1)
-        m2 <- sample(1:25, 1)
-        ans <- n1 + n2 + m1 * m2
-        questions[i] <- paste0(m1, " * ", m2, " + ", n1, " + ", n2, " = ?")
     } else {
         # multiplication
         m1 <- sample(1:50, 1)
@@ -70,12 +54,7 @@ for (i in 1:nitems) {
 
 # load list of items and their answers
 df <- data.frame(Question = questions, Option = options, Answer = answers, Type = "radio")
-```
 
-Next, we generate a possible response pattern and pass it to the `mirtCAT()` fuction. The first
-run ensures that all items are used by choosing a very small standard error criteria.
-
-```{r}
 set.seed(1)
 pat <- generate_pattern(mo = mod, Theta = c(-1, 1), df = df)
 head(pat)
@@ -115,8 +94,8 @@ customNextItem <- function(design, person, test){
 
 res <- mirtCAT(df = df, mo = mod, local_pattern = pat,
                design = list(customNextItem=customNextItem,
-                             min_SEM = 0, #disable other termination criteria
-                             min_items = 100))
+                             min_SEM = 0)) #disable other termination criteria
+                             
 ```
 
 
@@ -128,3 +107,13 @@ print(res$items_answered[1:20])
 print(res$items_answered[21:40])
 plot(res)
 ```
+
+To run the actual GUI, simply remove the `local_pattern` argument to let `mirtCAT()` know that the responses
+must be collected in real-time.
+
+```{r eval=FALSE}
+res <- mirtCAT(df = df, mo = mod, 
+               design = list(customNextItem=customNextItem,
+                             min_SEM = 0)) #disable other termination criteria
+```
+
