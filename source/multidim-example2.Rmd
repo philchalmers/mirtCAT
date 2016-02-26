@@ -15,10 +15,14 @@ options(stringsAsFactors = FALSE)
 
 # define population IRT parameters
 set.seed(1234)
-nitems <- 120
+nitems <- 100
 itemnames <- paste0("Item.", 1:nitems)
-a <- matrix(c(rlnorm(nitems/2, 0.2, 0.3), rnorm(nitems/4, 0, 0.3), numeric(nitems/2),
-    rnorm(nitems/4, 0, 0.3), rlnorm(nitems/2, 0.2, 0.3)), nitems)
+a <- matrix(c(rlnorm(nitems/2, 0.2, 0.3), numeric(nitems), rlnorm(nitems/2, 0.2, 0.3)), nitems)
+
+head(a) #first 6
+tail(a) #last 6 
+a[48:53, ] #middle
+
 d <- matrix(rnorm(nitems))
 pars <- data.frame(a, d)
 colnames(pars) <- c("a1", "a2", "d")
@@ -88,7 +92,7 @@ customNextItem <- function(design, person, test){
         block <- block2
     } else return(NA) # terminate when both item blocks have 20 items answered
     ret <- findNextItem(person=person, design=design, test=test, 
-                        subset=block, criteria = 'Drule')
+                        subset=block, criteria = 'Arule')
     ret
 }
 
