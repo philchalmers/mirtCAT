@@ -25,6 +25,13 @@
 #'   a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
 #'   for smoother presentation. Useful when using the \code{customNextItem} function in 
 #'   \code{\link{mirtCAT}}
+#'   
+#' @param all_index logical; return all items instead of just the most optimal? 
+#'   When \code{TRUE} a vector of items is returned instead of the most optimal, 
+#'   where the items are sorted according to how
+#'   well they fit the criteria (e.g., the first element is the most optimal, followed by the second
+#'   most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
+#'   'seq' or 'random')
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}
 #' @export findNextItem
@@ -38,11 +45,12 @@
 #' CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 #' 
 #' # returns number 1 in this case, since that's the starting item
-#' findNextItem(CATdesign) 
+#' findNextItem(CATdesign)
 #' 
 #' # detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 #' CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 #' findNextItem(CATdesign)
+#' findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most optimal
 #' 
 #' # alternatively, update the Theta using the internal ReferenceClass method
 #' Person$help('Update.thetas') # internal help file for class 'Person'
@@ -50,21 +58,22 @@
 #' findNextItem(CATdesign)
 #' }
 findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria = NULL,
-                         subset = NULL){
+                         subset = NULL, all_index = FALSE){
     if(missing(x)){
         if(any(is.null(person) || is.null(test) || is.null(design) || is.null(criteria)))
             stop('findNextItem has improper inputs', call.=FALSE)
         return(findNextCATItem(person=person, test=test, design=design, criteria=criteria,
-                               subset=subset))
+                               subset=subset, all_index=all_index))
     } else {
         if(class(x) != 'mirtCAT_design')
             stop('input is not the correct class', call.=FALSE)
         return(findNextCATItem(person=x$person, test=x$test, design=x$design, 
-                               criteria = x$design@criteria, subset=subset))
+                               criteria = x$design@criteria, subset=subset, all_index=all_index))
     }
 }
 
-findNextCATItem <- function(person, test, design, criteria, subset = NULL, start = TRUE){
+findNextCATItem <- function(person, test, design, criteria, subset = NULL, start = TRUE,
+                            all_index = FALSE){
     
     #heavy lifty CAT stuff just to find new item
     if(all(is.na(person$responses)) && start)
@@ -173,6 +182,7 @@ findNextCATItem <- function(person, test, design, criteria, subset = NULL, start
     } else {
         stop('Selection criteria does not exist', call.=FALSE)
     }
+    if(all_index) return(index[order(crit, decreasing = TRUE)])
     
     if(design@use_content){
         if(sum(!is.na(person$responses)) > 0){

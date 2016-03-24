@@ -5,7 +5,7 @@
 \title{Find next CAT item}
 \usage{
 findNextItem(x, person = NULL, test = NULL, design = NULL,
-  criteria = NULL, subset = NULL)
+  criteria = NULL, subset = NULL, all_index = FALSE)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -29,6 +29,13 @@ selected from this can be modified to \code{subset = 1:10}. This is useful when 
 a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
 for smoother presentation. Useful when using the \code{customNextItem} function in 
 \code{\link{mirtCAT}}}
+
+\item{all_index}{logical; return all items instead of just the most optimal? 
+When \code{TRUE} a vector of items is returned instead of the most optimal, 
+where the items are sorted according to how
+well they fit the criteria (e.g., the first element is the most optimal, followed by the second
+most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
+'seq' or 'random')}
 }
 \value{
 returns an integer value indicating the index of the next item to be selected or a
@@ -45,11 +52,12 @@ when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}.
 CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 
 # returns number 1 in this case, since that's the starting item
-findNextItem(CATdesign) 
+findNextItem(CATdesign)
 
 # detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 findNextItem(CATdesign)
+findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most optimal
 
 # alternatively, update the Theta using the internal ReferenceClass method
 Person$help('Update.thetas') # internal help file for class 'Person'
