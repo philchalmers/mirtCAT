@@ -35,55 +35,21 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, design, ro
     crit
 }
 
-MLWI <- function(which_not_answered, possible_patterns, person, test, row_loc, thetas){
+MLWI <- function(which_not_answered, person, test, thetas, prior = FALSE){
     Theta <- test@ThetaGrid
-    LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
-                                 Theta=Theta, 
-                                 itemloc = test@mo@Model$itemloc,
-                                 CUSTOM.IND=list()))
-    for(i in 1L:nrow(possible_patterns)){
-        pick <- !is.na(possible_patterns[i,])
-        tmp <- test@itemloc2[pick] + possible_patterns[i, pick]
-        LL[[i]] <- exp(rowSums(ll[,tmp, drop=FALSE]))
-    }
-    infostmp <- as.list(.Call('ComputeCriteria', test@EIs, person$thetas, 
-                              which_not_answered, 1, 0, person$info_thetas))
-    uniq <- unique(row_loc)
-    count <- 1L
-    for(i in uniq){
-        LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C)
-            return(x * C), C=infostmp[[count]])
-        count <- count + 1L
-    }
-    infos <- weighted_mat(mat=LL, row_loc=row_loc, which_not_answered=which_not_answered)
-    crit <- do.call(c, lapply(infos, function(y, x) integrate.xy(x, y), x=Theta))
-    crit
-}
-
-MPWI <- function(which_not_answered, possible_patterns, person, test, row_loc, thetas){
-    Theta <- test@ThetaGrid
-    LL <- vector('list', nrow(possible_patterns))
-    ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
-                                      Theta=Theta, 
-                                      itemloc = test@mo@Model$itemloc,
-                                      CUSTOM.IND=list()))
-    for(i in 1L:nrow(possible_patterns)){
-        pick <- !is.na(possible_patterns[i,])
-        tmp <- test@itemloc2[pick] + possible_patterns[i, pick]
-        LL[[i]] <- exp(rowSums(ll[,tmp, drop=FALSE]))
-    }
-    infostmp <- as.list(.Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-                      1, 0, person$info_thetas))
-    uniq <- unique(row_loc)
-    count <- 1L
-    for(i in uniq){
-        LL[i == row_loc] <- lapply(LL[i == row_loc], function(x, C, dd)
-            return(x * C * dd), C=infostmp[[count]], dd=test@density)
-        count <- count + 1L
-    }
-    infos <- weighted_mat(mat=LL, row_loc=row_loc, which_not_answered=which_not_answered)
-    crit <- do.call(c, lapply(infos, function(y, x) integrate.xy(x, y), x=Theta))
+    pick1 <- na.omit(person$items_answered)
+    pars <- test@mo@ParObjects$pars[c(pick1, test@length + 1)]
+    itemloc <- c(0, cumsum(test@mo@Data$K[pick1])) + 1L
+    ll <- log(mirt:::computeItemtrace(pars=pars, Theta=Theta, itemloc = itemloc, CUSTOM.IND=list()))
+    pick2 <- itemloc[-length(itemloc)] + person$responses[pick1]
+    LL <- rowSums(ll[ ,pick2, drop=FALSE])
+    Is <- matrix(NA, nrow(Theta), length(which_not_answered))
+    for(i in 1L:nrow(Theta))
+        Is[i, ] <- .Call('ComputeCriteria', test@EIs, Theta[i, ,drop=FALSE], which_not_answered, 
+                    1, 0, person$info_thetas)
+    Is <- Is * LL
+    if(prior) Is <- Is * test@density
+    crit <- apply(Is, 2, function(y, x) integrate.xy(x, y), x = Theta)
     crit
 }
 

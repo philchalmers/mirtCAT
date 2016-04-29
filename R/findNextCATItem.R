@@ -161,11 +161,10 @@ findNextCATItem <- function(person, test, design, criteria, subset = NULL, start
         -MEPV(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
               person=person, test=test, design=design, row_loc=row_loc, thetas=thetas)
     } else if(criteria == 'MLWI'){
-        MLWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-             person=person, test=test, row_loc=row_loc, thetas=thetas)
+        MLWI(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
     } else if(criteria == 'MPWI'){
-        MPWI(which_not_answered=which_not_answered, possible_patterns=possible_patterns,
-             person=person, test=test, row_loc=row_loc, thetas=thetas)
+        MLWI(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas, 
+             prior=TRUE)
     } else if(criteria == 'Drule' || criteria == 'DPrule'){
         Drule(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
     } else if(criteria == 'Erule' || criteria == 'EPrule'){

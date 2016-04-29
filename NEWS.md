@@ -1,3 +1,9 @@
+# mirtCAT 0.9
+
+- fix MLWI/MPWI selection criteria
+
+- `findNextItem()` is allowed to return all items given the selection criteria
+
 # Changes in mirtCAT 0.8
 
 - include `constraints` option for `excluded` items (useful for re-testing situations where 
