@@ -89,7 +89,7 @@ findNextCATItem <- function(person, test, design, criteria, subset = NULL, start
         which_not_answered <- which_not_answered[which_not_answered > lastitem]
     if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
     K <- test@mo@Data$K
-    if(criteria %in% c('MEI', 'MEPV', 'MLWI', 'MPWI', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
+    if(criteria %in% c('MEI', 'MEPV', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
         possible_patterns <- matrix(person$responses, sum(K[not_answered]), 
                                     length(not_answered), byrow=TRUE)
         row <- 1L
