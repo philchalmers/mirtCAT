@@ -11,8 +11,10 @@ MEI <- function(which_not_answered, possible_patterns, person, test, row_loc, th
         p <- probtrace(test@EIs[[i]], person$thetas)
         P[row_loc == i] <- p
     }
-    infostmp <- lapply(which_not_answered, function(x)
-        mirt:::ItemInfo2(test@EIs[[x]], Theta=person$thetas, total.info=FALSE))
+    new_thetas <- possible_pattern_thetas(possible_patterns=possible_patterns, test=test)[ ,'F1', drop=FALSE]
+    infostmp <- lapply(1:length(which_not_answered), function(x, wna, nt)
+        mirt:::ItemInfo2(test@EIs[[ wna[x] ]], Theta=nt[x, , drop=FALSE], total.info=FALSE), 
+        wna=which_not_answered, nt=new_thetas)
     infostmp <- as.list(do.call(c, infostmp))
     infos <- weighted_mat(P=P, mat=infostmp, row_loc=row_loc, 
                           which_not_answered=which_not_answered)
@@ -26,9 +28,7 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, design, ro
         p <- probtrace(test@EIs[[i]], person$thetas)
         P[row_loc == i] <- p
     }
-    pp2 <- possible_patterns
-    pp2[ ,which(possible_patterns[1L, ] == possible_patterns[2L,])] <- NA
-    acovstmp <- getAcovs(pp2, method = 'MAP', test=test, design=design)
+    acovstmp <- getAcovs(possible_patterns, method = 'EAP', test=test, design=design)
     acovs <- weighted_mat(P=P, mat=acovstmp, row_loc=row_loc, 
                           which_not_answered=which_not_answered)
     crit <- do.call(c, acovs)

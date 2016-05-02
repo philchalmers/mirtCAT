@@ -199,3 +199,13 @@ formatTime <- function(delta){
 }
 
 last_item <- function(items_answered) items_answered[max(which(!is.na(items_answered)))]
+
+# TODO this can be modified to accept other info 
+possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
+    suppressWarnings(tmp <- fscores(test@mo, method = method, 
+                                    response.pattern = possible_patterns, theta_lim = test@fscores_args$theta_lim, 
+                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
+                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov, 
+                                    QMC = test@fscores_args$QMC, custom_den = test@fscores_args$custom_den))
+    tmp
+}
