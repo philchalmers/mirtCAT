@@ -49,9 +49,9 @@ MLWI <- function(which_not_answered, person, test, thetas, prior = FALSE){
     for(i in 1L:nrow(Theta))
         Is[i, ] <- .Call('ComputeCriteria', test@EIs, Theta[i, ,drop=FALSE], which_not_answered, 
                     1, 0, person$info_thetas)
-    Is <- Is * LL
-    if(prior) Is <- Is * test@density
-    crit <- apply(Is, 2, function(y, x) integrate.xy(x, y), x = Theta)
+    Is <- log(Is) + LL
+    if(prior) Is <- Is + log(test@density)
+    crit <- apply(exp(Is), 2, function(y, x) integrate.xy(x, y), x = Theta)
     crit
 }
 

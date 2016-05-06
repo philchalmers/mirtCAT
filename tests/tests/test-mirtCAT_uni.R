@@ -127,15 +127,15 @@ test_that('unidimensional', {
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MLWI')
-    expect_equal(as.numeric(res$thetas), 0.4883237, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.2896893, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3847541, tolerance = 1e-4)
+                 0.39757, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MPWI')
-    expect_equal(as.numeric(res$thetas), 0.2035476, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.2896893, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3997892, tolerance = 1e-4)
+                 0.39757, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='KL')
