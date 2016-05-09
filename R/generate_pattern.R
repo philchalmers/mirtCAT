@@ -34,7 +34,6 @@
 #' 
 #' }
 generate_pattern <- function(mo, Theta, df = NULL){
-    fn <- function(p, ns) sample(1L:ns, 1L, prob = p) - 1
     nitems <- ncol(mo@Data$data)
     if(!is.matrix(Theta)) Theta <- matrix(Theta, 1L)
     if(nrow(Theta) > 1L && !is.null(df))
@@ -42,11 +41,10 @@ generate_pattern <- function(mo, Theta, df = NULL){
     N <- nrow(Theta)
     pattern <- matrix(0L, N, nitems)
     if(is.null(df)){
-        K <- mo@Data$K
         for(i in 1L:nitems){
             ii <- extract.item(mo, i)
             P <- probtrace(ii, Theta)
-            pattern[,i] <- apply(P, 1L, fn, ns = ncol(P))
+            pattern[,i] <- mirt:::respSample(P)
         }
         return(t(t(pattern) + mo@Data$mins))
     } else {

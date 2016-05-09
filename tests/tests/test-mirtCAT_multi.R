@@ -39,18 +39,15 @@ test_that('multidimensional', {
                      Type = 'radio', stringsAsFactors = FALSE)
     
     pat <- generate_pattern(mod2, Theta = c(0, 1), df)
-    expect_true(all(pat == as.character(c(96,60,86,81,120,82,89,97,124,81,80,126,101,131,108,89,
-                                          125,113,121,106,95,71,97,82,109,58,62,141,92,85,105,104,
-                                          120,107,115,111,107,108,119,105))))
+    expect_true(all(pat == as.character(c(96,60,86,81,120,82,89,97,124,81,80,126,101,131,108,89,125,113,121,106,95,71,97,82,109,58,62,141,92,85,105,104,120,107,115,111,107,108,119,105))))
     
     set.seed(1234)
     pat2 <- generate_pattern(mod2, Theta = c(0, 1))
-    expect_true(all(pat2 == c(1,1,1,0,1,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,1,1,0,
-                                 0,0,1,1,1,1,1,1,1,1,0,1)))
+    expect_true(all(pat2 == c(0,1,1,0,1,1,0,1,1,1,1,0,0,1,1,1,0,0,0,0,1,0,0,0,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,1)))
     
     ## test numeric input
     res <- mirtCAT(mo=mod2, local_pattern=pat2)
-    expect_equal(as.numeric(res$thetas), c(0.14631183, 0.70251940), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.1445553, 0.5474594), tolerance = 1e-4)
     
     #sequential
     res <- mirtCAT(df, mod2, local_pattern=pat)
@@ -84,7 +81,7 @@ test_that('multidimensional', {
                    design = list(min_SEM = .5), criteria = 'WPrule')
     expect_equal(as.numeric(res$thetas), c(0.6661044, 1.0048121), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4564089, 0.4913090), tolerance = 1e-4)
+                 c(0.4564088, 0.4913090), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'EPrule')

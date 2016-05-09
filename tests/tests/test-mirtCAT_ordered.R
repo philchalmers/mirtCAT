@@ -5,18 +5,18 @@ test_that('ordered', {
     itemnames <- colnames(Science)
     nitems <- ncol(Science)
     
-    set.seed(1234)
+    set.seed(1)
     pat <- generate_pattern(mod, Theta = 0)
-    expect_equal(c(3,2,3,2), pat[1,])
+    expect_equal(c(3,3,3,4), pat[1,])
     res <- mirtCAT(mo = mod, local_pattern = pat)
     so <- summary(res)
-    expect_equal(as.numeric(so$raw_responses), c(3,2,3,2))
-    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
+    expect_equal(as.numeric(so$raw_responses), c(3,3,3,4))
+    expect_equal(print(res)[2], .4418983, tolerance=1e-4)
     
     #fscores call
     responses <- res$scored_responses
     fs <- fscores(mod, response.pattern = responses)
-    expect_equal(unname(fs[,'F1']), -.675978, tolerance = 1e-4)
+    expect_equal(unname(fs[,'F1']), 0.4293075, tolerance = 1e-4)
     
     choices <- c('SD', 'D', 'A', 'SA')
     df <- data.frame(Type = 'radio', Question = as.character(1:nitems), stringsAsFactors = FALSE)
@@ -71,14 +71,14 @@ test_that('ordered', {
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule')
     so <- summary(res)
     expect_equal(nrow(so$thetas_history), 22)
-    expect_equal((so$items_answered), c(1,61,4,56,11,70,31,15,95,19,68,39,55,18,92,21,93,48,83,40,8))
+    expect_equal((so$items_answered), c(1,61,4,70,11,56,31,95,15,19,68,39,55,18,92,83,21,48,93,40,8))
     
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', start_item = 10,
                    preCAT = list(method = 'fixed', max_items = 5, criteria = 'KL'), 
                    design = list(thetas.start = c(-0.5, 0.5)))
     so <- summary(res)
-    expect_equal((so$items_answered), c(10,61,70,56,1,4,31,11,95,15,68,19,39,55,18,92,21,93,48,83,40))
-    expect_equal(head(so$thetas_history[,1]), c(-0.5,-0.5,-0.5,-0.5,-0.5,-0.2594008),
+    expect_equal((so$items_answered), c(10,61,70,56,1,4,31,11,95,15,68,19,39,55,18,92,83,21,48,93,40))
+    expect_equal(head(so$thetas_history[,1]), c(-0.5,-0.5,-0.5,-0.5,-0.5,-0.2594009),
                  tolerance = 1e-4)
 
     sv <- mirt(dat, model, itemtype = 'gpcm', pars='values')
@@ -92,9 +92,9 @@ test_that('ordered', {
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', 
                    design = list(min_SEM=0.2))
     so <- summary(res)
-    expect_equal((so$items_answered), c(1,61,11,70,4,31,56,39,83,50,92,95,15,68,21,55,18,93,43,40,48,96,19,59,44,25,87,20,89,90))
+    expect_equal((so$items_answered), c(1,61,4,56,11,70,31,95,39,68,15,55,50,21,93,18,83,43,92,40))
     expect_equal(as.numeric(so$thetas_history[nrow(so$thetas_history), ]), 
-                 c(-0.0649059, -0.2302821), tolerance = 1e-4)
+                 c(0.02524291, -0.09594028), tolerance = 1e-4)
     
     # generate.mirt_object tests
     set.seed(1)

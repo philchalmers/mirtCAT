@@ -19,7 +19,7 @@ test_that('classify', {
     out <- sapply(res, function(x) x$classification)
     expect_true(all(out == c("below cutoff", "no decision", "above cutoff")))
     out <- sapply(res, function(x) x$thetas)
-    expect_equal(out, c(-0.91889242, -0.00231641, 1.29913938), tolerance = 1e-4)
+    expect_equal(out, c(-0.9336809, -0.5006111, 1.2879748), tolerance = 1e-4)
     
     set.seed(1234)
     nitems <- 50
@@ -41,15 +41,15 @@ test_that('classify', {
                                            "no decision", "no decision", 
                                            "above cutoff", "above cutoff")))
     out <- sapply(res, function(x) x$thetas)
-    expect_equal(as.numeric(out), c(-1.048084,-1.948572,-0.04265088,0.5091915,1.016837,1.170242), tolerance = 1e-2)
+    expect_equal(as.numeric(out), c(-0.9285472, -1.6153565, -0.3266127, -0.0433436,  1.0499338,  1.0864347), tolerance = 1e-2)
     
     preCAT <- list(response_variance = TRUE, min_items = 1, max_items = 20, method = 'fixed')    
     res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
                    design = list(classify=0, classify_CI=.95), preCAT=preCAT)
-    expect_equal(summary(res[[1]])$thetas_history[1:6,1], c(0,0,0,-0.4076504,-0.5483628,-0.8057573), tolerance = 1e-4)
-    expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,0.487194,0.3061727,0.1235797), tolerance = 1e-4)
+    expect_equal(summary(res[[1]])$thetas_history[1:6,1], c(0,0,0,-0.1861817,-0.4680564,-0.5840835), tolerance = 1e-4)
+    expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,-0.09676312,0.05468066,-0.08034545), tolerance = 1e-4)
     scored <- summary(res[[3]], sort=FALSE)$scored_responses
     out <- fscores(mod, response.pattern = scored)
-    expect_equal(as.numeric(out[,'F1']), 1.763056, tolerance = 1e-4)
+    expect_equal(as.numeric(out[,'F1']), 1.008069, tolerance = 1e-4)
     
 })
