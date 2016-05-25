@@ -116,16 +116,14 @@ server <- function(input, output) {
         #last page
         if(!.MCE$STOP){
             .MCE$STOP <- TRUE
-            if(.MCE$shinyGUI$temp_file != '')
-                saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-            return(.MCE$shinyGUI$lastpage(person=.MCE$person))
-        } else {
             if(!is.null(.MCE$final_fun)){
                 ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design)
                 .MCE$final_fun(person = ret)
             }
             if(.MCE$shinyGUI$temp_file != '')
                 file.remove(.MCE$shinyGUI$temp_file)
+            return(.MCE$shinyGUI$lastpage(person=.MCE$person))
+        } else {
             stopApp()
             return(NULL)
         }
