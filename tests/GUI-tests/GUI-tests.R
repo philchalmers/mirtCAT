@@ -13,6 +13,7 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 
 # forced and unforced
 results <- mirtCAT(df = df)
+results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
 df$inline <- TRUE
 df$width <- "50%"

@@ -332,6 +332,11 @@
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'      
+#'    \item{\code{stopApp}}{logical; use a \code{stopApp()} call after the interface has been completed?
+#'      Default is \code{TRUE}. However, when hosting an application on a remote server this should be set
+#'      to \code{FALSE} to allow a more graceful completion (in which case the last page will be displayed
+#'      until the browser tab is closed)}
+#'      
 #'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the 
 #'      default one will be used. See \code{mirtCAT:::default_UI} for the internal code definition}
 #'   

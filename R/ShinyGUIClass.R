@@ -16,6 +16,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     height = 'numeric',
                                     forced_choice = 'logical',
                                     css = 'character',
+                                    stopApp = 'logical',
                                     ui = 'function'),
                       
                       methods = list(
@@ -25,6 +26,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               questions <<- questions
                               df <<- df
                               forced_choice <<- TRUE
+                              stopApp <<- TRUE
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else {
@@ -66,7 +68,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
-                                              'begin_message', 'ui')
+                                              'begin_message', 'stopApp', 'ui')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -88,6 +90,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   }
                                   if(!is.null(shinyGUI$forced_choice))
                                       forced_choice <<- shinyGUI$forced_choice
+                                  if(!is.null(shinyGUI$stopApp))
+                                      stopApp <<- shinyGUI$stopApp
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage
                                   if(!is.null(shinyGUI$temp_file))

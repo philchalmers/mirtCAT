@@ -124,7 +124,8 @@ server <- function(input, output) {
                 file.remove(.MCE$shinyGUI$temp_file)
             return(.MCE$shinyGUI$lastpage(person=.MCE$person))
         } else {
-            stopApp()
+            if(.MCE$shinyGUI$stopApp) stopApp()
+            else return(.MCE$shinyGUI$lastpage(person=.MCE$person))
             return(NULL)
         }
         
