@@ -60,6 +60,10 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               lastpage <<- function(person) 
                                             return(list(h5("You have successfully completed the interface.
                                                    Click the action button to terminate the application.")))
+                              if(!is.null(shinyGUI$stopApp) && !shinyGUI$stopApp)
+                                  lastpage <<- function(person) 
+                                      return(list(h5("You have successfully completed the interface.
+                                                   Please close the tab/web browser to terminate the application.")))
                               temp_file <<- ''
                               css <<- ''
                                                  
