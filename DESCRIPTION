@@ -1,6 +1,6 @@
 Package: mirtCAT
-Version: 0.8.3
-Date: 2016-02-24
+Version: 0.9
+Date: 2016-06-24
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
@@ -14,7 +14,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     for studying the behaviour of computerized adaptive test banks.
 Roxygen: list(wrap = FALSE)
 Depends:
-    mirt (>= 1.17.2),
+    mirt (>= 1.18),
     shiny (>= 0.13.0)
 Imports:
     lattice,
