@@ -100,6 +100,10 @@ df <- list(Question = questions,
 ## Run the mirtCAT web interface and store results
 results <- mirtCAT(df = df)
 
+questions <- c("Building CATs with mirtCAT is difficult.",
+               "mirtCAT requires a substantial amount of coding.",
+               "I would use mirtCAT in my research.")
+
 # none type
 df <- data.frame(Question = c('Empty Q', questions), 
                  Options=rbind(NA, options), Type = c('none', rep('radio', 3)))
