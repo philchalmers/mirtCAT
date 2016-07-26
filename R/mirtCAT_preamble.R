@@ -19,6 +19,12 @@
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{createShinyGUI}}, \code{\link{getPerson}} 
 #' 
+#' @references 
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. doi:10.18637/jss.v071.i05
+#' 
 #' @examples
 #' \dontrun{
 #' 

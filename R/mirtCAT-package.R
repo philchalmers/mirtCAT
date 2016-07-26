@@ -12,6 +12,12 @@
 #' Github can be found at \url{https://github.com/philchalmers/mirt}). 
 #' Questions regarding the package can be sent to the mirt-package Google Group, located at
 #' \url{https://groups.google.com/forum/#!forum/mirt-package}.
+#' 
+#' @references 
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. doi:10.18637/jss.v071.i05
 #'
 #' @name mirtCAT-package
 #' @docType package

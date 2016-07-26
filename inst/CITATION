@@ -1,0 +1,20 @@
+bibentry(bibtype = "Article",
+  title        = "Generating Adaptive and Non-Adaptive Test Interfaces for Multidimensional Item Response Theory Applications",
+  author       = person(given = c("R.", "Philip"),
+                        family = "Chalmers",
+                        email = "rphilip.chalmers@gmail.com"),
+  journal      = "Journal of Statistical Software",
+  year         = "2016",
+  volume       = "71",
+  number       = "5",
+  pages        = "1--39",
+  doi          = "10.18637/jss.v071.i05",
+
+  header       = "To cite mirtCAT in publications use:",
+  textVersion  =
+  paste("R. Philip Chalmers (2016).",
+        "Generating Adaptive and Non-Adaptive Test Interfaces for Multidimensional Item Response Theory Applications.",
+        "Journal of Statistical Software, 71(5), 1-39.",
+        "doi:10.18637/jss.v071.i05")
+)
+
