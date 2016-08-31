@@ -20,7 +20,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     ui = 'function'),
                       
                       methods = list(
-                          initialize = function(questions, df, shinyGUI){
+                          initialize = function(questions, df, shinyGUI, adaptive){
                               'Initialize the shiny GUI given questions, df, and shinyGUI list'
                               ui <<- default_UI
                               questions <<- questions
@@ -52,7 +52,9 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                  "To progress through the interface, click on the action button below.",
                                                  "Next")
                               demographic_inputIDs <<- character(0)
-                              begin_message <<- "Click the action button to begin."
+                              if(adaptive){
+                                begin_message <<- "Click the action button to begin."
+                              } else begin_message <<- ""
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
                                                  'The following interface was created using the mirtCAT package. 
                                                  To cite the package use citation(\'mirtCAT\') in R.')

@@ -41,6 +41,7 @@ mirtCAT_preamble_internal <-
              start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
              design = list(), shinyGUI = list(), preCAT = list(), final_fun = NULL, ...)
     {
+        is_adaptive <- !is.null(mo)
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
         if(is.null(df)){
             if(is.null(mo)) stop('No df or mo supplied', call.=FALSE)
@@ -98,7 +99,8 @@ mirtCAT_preamble_internal <-
         #setup objects
         if(!is.null(df)) shinyGUI$stem_locations <- df$Stem
         if(is.null(local_pattern)) 
-            shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI)
+            shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI,
+                                            adaptive=is_adaptive)
         test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
                            item_options=item_options, quadpts_in=design$quadpts,
                            theta_range_in=design$theta_range, dots=list(...))

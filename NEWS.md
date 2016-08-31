@@ -1,5 +1,9 @@
 # mirtCAT 1.1
 
+- mental preparation screen now disabled for non-scored tests when 
+  the `mo` object is ommited (i.e., equivalent to setting 
+  `shinyGUI = list(begin_message = "")`)
+
 - `'select'` Type input to `df` now uses a blank option as the default to avoid 
   clicking through accidently. Also works better with the `forced_choice` default
 

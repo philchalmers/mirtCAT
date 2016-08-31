@@ -282,8 +282,9 @@ decrease estimation times in simulation work}
      If an empty list is passed, this page will be skipped.
    }
    
-   \item{\code{begin_message}}{Text to display on the page prior to beginning the CAT. Default 
-     is \code{"Click the action button to begin."}}
+   \item{\code{begin_message}}{Text to display on the page prior to beginning the CAT. Default is 
+     \code{"Click the action button to begin."} for scored tests whereby a \code{mo} object has been include,
+     while the default is \code{""} for non-scored tests (which disables the page).}
 
   \item{\code{demographics}}{A person information page used in the GUI for collecting 
     demographic information, generated using tools from the shiny package. For example,
