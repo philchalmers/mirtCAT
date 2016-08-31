@@ -15,6 +15,10 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df)
 results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
+# css mod ('Readable' file downloaded from http://bootswatch.com/)
+css <- readLines('bootstrap.css')
+results <- mirtCAT(df = df, shinyGUI = list(css = css))
+
 df2 <- df
 df2$Type[1] <- 'select'
 results <- mirtCAT(df = df2)
