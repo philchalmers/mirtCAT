@@ -1,3 +1,12 @@
+# mirtCAT 1.1
+
+- `'select'` Type input to `df` now uses a blank option as the default to avoid 
+  clicking through accidently. Also works better with the `forced_choice` default
+
+# mirtCAT 1.0
+
+- released for JSS publication
+
 # mirtCAT 0.9
 
 - fix MLWI/MPWI selection criteria

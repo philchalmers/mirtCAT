@@ -53,6 +53,8 @@ server <- function(input, output) {
                 pick <- .MCE$person$items_answered[itemclick]
                 name <- .MCE$test@itemnames[pick]
                 ip <- unname(input[[name]])
+                if(.MCE$shinyGUI$df$Type[pick] == 'select' && .MCE$shinyGUI$forced_choice && ip == "")
+                    ip <- NULL
                 if(is.null(ip)) ip <- input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name)]]
                 if(!is.null(ip)){
                     ip <- as.character(ip)

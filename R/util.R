@@ -133,7 +133,7 @@ buildShinyElements <- function(questions, itemnames){
                                     inline = inline, width = width,
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
-            cs <- na.omit(choices[i,])
+            cs <- c('', na.omit(choices[i,]))
             choices_list[[i]] <- cs
             width <- questions$width[i]
             size <- questions$size[i]

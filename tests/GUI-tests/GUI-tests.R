@@ -15,6 +15,10 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df)
 results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
+df2 <- df
+df2$Type[1] <- 'select'
+results <- mirtCAT(df = df2)
+
 df$inline <- TRUE
 df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
@@ -41,7 +45,7 @@ person$raw_responses
 
 # custom UI
 myUI <- function(){
-    return(fluidPage(
+    fluidPage(
         
         mainPanel(
             htmlOutput("item_stem_html"),
@@ -52,7 +56,7 @@ myUI <- function(){
             actionButton("Next", 'Next')
         )
         
-    )) #end bootstrapPage
+    ) #end bootstrapPage
 }
 
 mirtCAT_preamble(df)
