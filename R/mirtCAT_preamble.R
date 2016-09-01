@@ -70,16 +70,9 @@ mirtCAT_preamble_internal <-
             if(!is.data.frame(df) && !is.list(df))
                 stop('df input must be a data.frame or list', call.=FALSE)
             if(is.data.frame(df)){
-                dfo <- df
                 df <- lapply(df, as.character)
-                df$Question <- lapply(1L:nrow(dfo), function(ind, df, dfo, fun){
-                    pick <- 'Question' == colnames(dfo) | grepl('Option.', colnames(dfo))
-                    x <- dfo[ind, pick, drop=FALSE]
-                    ret <- fun(df$Question[[ind]])
-                    if(any(grepl('\\\\\\(', x)) || grepl('\\$\\$', x))
-                        ret <- withMathJax(ret)
-                    ret
-                }, fun=shinyGUI$stem_default_format, df=df, dfo=dfo)
+                df$Question <- lapply(df$Question, function(x, fun) shiny::withMathJax(fun(x)),
+                                      fun=shinyGUI$stem_default_format)
             }
             obj <- buildShinyElements(df, itemnames = Names)
             questions <- obj$questions

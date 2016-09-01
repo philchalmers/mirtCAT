@@ -3,10 +3,10 @@
 - default `shiny` stem wrapper function for `df` when it is a `data.frame` is now exposed via the 
   `stem_default_format` input to `shinyGUI`
 
-- MathJax is now explicitly supported in the item stems. As before, users can provide a manual list 
-  explicilty defining the `shiny` functions, however if a `data.frame` object is included and either the
-  `$$` or `\\()` math breaking characters are detected then the stem will be automatically wrapped within a 
-  `shiny::withMathJax()` function
+- MathJax is now explicitly supported in the item stems and response options. 
+  As before, users can provide a manual list explicilty defining the `shiny` functions; 
+  jowever, if a `data.frame` object is used then the stems/responses
+  will be automatically wrapped within a suitable `shiny::withMathJax()` function to render the output
 
 - mental preparation screen now disabled for non-scored tests when 
   the `mo` object is ommited (i.e., equivalent to setting 

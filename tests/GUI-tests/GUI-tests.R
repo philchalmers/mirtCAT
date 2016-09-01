@@ -14,6 +14,7 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 # forced and unforced
 results <- mirtCAT(df = df)
 results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
+summary(results)
 
 # css mod ('Readable' file downloaded from http://bootswatch.com/)
 css <- readLines('bootstrap.css')
@@ -31,13 +32,15 @@ results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 df3 <- as.list(df)
 df3$Question <- as.list(df3$Question)
 df3$Question[[1]] <- withMathJax('Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$')
-results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
+results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = TRUE))
+summary(results)
 
 df3 <- df
 df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'
 df3$Option.1[1] <- '\\(\\alpha\\)'
 df3$Option.1[2] <- '\\(\\beta\\)'
 results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
+summary(results)
 
 # change final message
 lastpagefun <- function(person){

@@ -2,6 +2,8 @@ default_UI <- function(){
     
     fluidPage(
         
+        shiny::withMathJax(),
+        
         tags$head(
             tags$style(HTML(.MCE$shinyGUI$css))
         ),
