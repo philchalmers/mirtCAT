@@ -35,6 +35,8 @@ results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
 
 df3 <- df
 df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'
+df3$Option.1[1] <- '\\(\\alpha\\)'
+df3$Option.1[2] <- '\\(\\beta\\)'
 results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
 
 # change final message

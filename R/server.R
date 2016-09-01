@@ -34,10 +34,11 @@ server <- function(input, output) {
                 .MCE$person$demographics <- .MCE$last_demographics
             if(.MCE$shinyGUI$temp_file != '')
                 saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-            if(.MCE$shinyGUI$begin_message != ""){
-                return(list(h5(.MCE$shinyGUI$begin_message)))
-            } else click <- click + 1L
         }
+        
+        if(.MCE$shinyGUI$begin_message != ""){
+            return(list(h5(.MCE$shinyGUI$begin_message)))
+        } else click <- click + 1L
         
         if(click == 3L) .MCE$start_time <- proc.time()[3L]
         
