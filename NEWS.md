@@ -1,5 +1,8 @@
 # mirtCAT 1.1
 
+- default `shiny` stem wrapper function for `df` when it is a `data.frame` is now exposed via the 
+  `stem_default_format` input to `shinyGUI`
+
 - MathJax is now explicitly supported in the item stems. As before, users can provide a manual list 
   explicilty defining the `shiny` functions, however if a `data.frame` object is included and either the
   `$$` or `\\()` math breaking characters are detected then the stem will be automatically wrapped within a 

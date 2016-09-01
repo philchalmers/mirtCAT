@@ -43,6 +43,8 @@ mirtCAT_preamble_internal <-
     {
         is_adaptive <- !is.null(mo)
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
+        if(is.null(shinyGUI$stem_default_format)) 
+            shinyGUI$stem_default_format <- shiny::p
         if(is.null(df)){
             if(is.null(mo)) stop('No df or mo supplied', call.=FALSE)
             if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied', 
@@ -69,12 +71,12 @@ mirtCAT_preamble_internal <-
                 stop('df input must be a data.frame or list', call.=FALSE)
             if(is.data.frame(df)){
                 df <- lapply(df, as.character)
-                df$Question <- lapply(df$Question, function(x){
-                    ret <- shiny::p(x)
+                df$Question <- lapply(df$Question, function(x, fun){
+                    ret <- fun(x)
                     if(any(grepl('\\\\\\(', x)) || grepl('\\$\\$', x))
                         ret <- withMathJax(ret)
                     ret
-                })
+                }, fun=shinyGUI$stem_default_format)
             }
             obj <- buildShinyElements(df, itemnames = Names)
             questions <- obj$questions

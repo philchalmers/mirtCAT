@@ -305,6 +305,10 @@ decrease estimation times in simulation work}
     input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
     the \code{demographics} default}
     
+  \item{\code{stem_default_format}}{\code{shiny} function used for the stems of the items. Default uses the 
+    \code{\link{p}} wrapper. To change this to \code{\link{h5}}, for example, 
+    pass \code{stem_default_format = shiny::h5} to the \code{shinyGUI} list}
+    
   \item{\code{max_time}}{maximum time allowed for the generated GUI, measured
     in seconds. For instance, if the test should stop after 10 minutes then the number 
     600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}

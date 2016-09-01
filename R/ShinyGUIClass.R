@@ -74,7 +74,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
-                                              'begin_message', 'stopApp', 'ui')
+                                              'begin_message', 'stopApp', 'ui', 'stem_default_format')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
