@@ -1,5 +1,10 @@
 # mirtCAT 1.1
 
+- MathJax is now explicitly supported in the item stems. As before, users can provide a manual list 
+  explicilty defining the `shiny` functions, however if a `data.frame` object is included and either the
+  `$$` or `\\()` math breaking characters are detected then the stem will be automatically wrapped within a 
+  `shiny::withMathJax()` function
+
 - mental preparation screen now disabled for non-scored tests when 
   the `mo` object is ommited (i.e., equivalent to setting 
   `shinyGUI = list(begin_message = "")`)

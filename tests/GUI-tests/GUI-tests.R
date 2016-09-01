@@ -27,6 +27,16 @@ df$inline <- TRUE
 df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# mathJax test
+df3 <- as.list(df)
+df3$Question <- as.list(df3$Question)
+df3$Question[[1]] <- withMathJax('Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$')
+results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
+
+df3 <- df
+df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'
+results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = FALSE))
+
 # change final message
 lastpagefun <- function(person){
     #browser() ## browser can be helpful here to see the contents of 'person'

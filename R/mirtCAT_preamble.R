@@ -69,7 +69,12 @@ mirtCAT_preamble_internal <-
                 stop('df input must be a data.frame or list', call.=FALSE)
             if(is.data.frame(df)){
                 df <- lapply(df, as.character)
-                df$Question <- lapply(df$Question, shiny::p)
+                df$Question <- lapply(df$Question, function(x){
+                    ret <- shiny::p(x)
+                    if(any(grepl('\\\\\\(', x)) || grepl('\\$\\$', x))
+                        ret <- withMathJax(ret)
+                    ret
+                })
             }
             obj <- buildShinyElements(df, itemnames = Names)
             questions <- obj$questions
