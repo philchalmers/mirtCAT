@@ -1,5 +1,8 @@
 # mirtCAT 1.1
 
+- new `password` input to `shinyGUI` list to allow login and password gates. Useful when hosting 
+  CAT on a server with potentially sensitive items
+
 - default `shiny` stem wrapper function for `df` when it is a `data.frame` is now exposed via the 
   `stem_default_format` input to `shinyGUI`
 

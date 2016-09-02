@@ -340,6 +340,21 @@ decrease estimation times in simulation work}
    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}
      
+     
+   \item{\code{password}}{a \code{data.frame} object indicating the user name (optional) and password
+     required prior to beginning the CAT. Possible options are
+     \describe{
+       \item{No User Information}{a single row \code{data.frame}. Each column supplied in this case will be associated
+         with a suitable password for all individuals. Naturally, if only 1 column is defined then
+         there is only 1 global password for all users}
+       \item{User Information Pairing}{a multirow \code{data.frame} where the first column 
+         represents the user name and all other columns as the same as the first option. 
+         E.g., if two users ('name1' and 'name2') 
+         are given the same password '1234' then 
+         \code{password = data.frame(user = c('user1', 'user2'), password = rep('1234', 2))}}      
+     }
+   }
+     
    \item{\code{stopApp}}{logical; use a \code{stopApp()} call after the interface has been completed?
      Default is \code{TRUE}. However, when hosting an application on a remote server this should be set
      to \code{FALSE} to allow a more graceful completion (in which case the last page will be displayed

@@ -125,6 +125,7 @@ mirtCAT_preamble_internal <-
             design_object@criteria <- tmp
         }
         .MCE$resume_file <- FALSE
+        .MCE$verified <- TRUE
         if(is.null(local_pattern) && shinyGUI_object$temp_file != ''){
             if(file.exists(shinyGUI_object$temp_file)){
                 person_object <- readRDS(shinyGUI_object$temp_file)

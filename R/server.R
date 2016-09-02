@@ -8,39 +8,54 @@ server <- function(input, output) {
         
         click <- input$Next
         
-        #skip first page?
-        if(!length(.MCE$shinyGUI$firstpage)) click <- click + 1L
-        
-        #first page, ask for demographics, etc
-        if(click == 0L){
-            return(.MCE$shinyGUI$firstpage)
+        if(length(.MCE$shinyGUI$password)){
+            if(click == 0L){
+                if(nrow(.MCE$shinyGUI$password) > 1L)
+                    return(list(textInput('UsErNaMe', label = "Login Name:"),
+                                passwordInput('PaSsWoRd', 'Password:')))
+                else return(passwordInput('PaSsWoRd', 'Password:'))
+            } else if(click == 1L){
+                .MCE$verified <- verifyPassword(input, .MCE$shinyGUI$password)
+            }
+            click <- click - 1L
         }
         
-        #skip demographics page?
-        if(!length(.MCE$shinyGUI$demographics)) click <- click + 1L
+        if(!.MCE$verified)
+            stop('Incorrect Login Name/Password. Please restart the application and try again.', call.=FALSE)
         
-        if(click == 1L){
-            return(.MCE$shinyGUI$demographics)
-        }
+        if(.MCE$resume_file && click < 1L){
+            return(list(h5("Click the action button to continue with your session.")))
+        } else {
+            #skip first page? Demographics, etc
+            if(!length(.MCE$shinyGUI$firstpage)) click <- click + 1L
+            if(click == 0L)
+                return(.MCE$shinyGUI$firstpage)
+            
+            #skip demographics page?
+            if(!length(.MCE$shinyGUI$demographics)) click <- click + 1L
+            if(click == 1L)
+                return(.MCE$shinyGUI$demographics)
+            
+            #store demographic results
+            if(click == 2L){
+                tmp <- list()
+                for(tag in .MCE$shinyGUI$demographic_inputIDs)
+                    tmp[[length(tmp) + 1L]] <- input[[tag]]
+                names(tmp) <- .MCE$shinyGUI$demographic_inputIDs
+                .MCE$person$field("demographics", as.data.frame(tmp))
+                if(!is.null(.MCE$last_demographics))
+                    .MCE$person$demographics <- .MCE$last_demographics
+                if(.MCE$shinyGUI$temp_file != '')
+                    saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
+            }
+            
+            if(.MCE$shinyGUI$begin_message == "") click <- click + 1L
+            if(click == 2L)
+                return(list(h5(.MCE$shinyGUI$begin_message)))
+        } #end normal start
         
-        #store demographic results
-        if(click == 2L){
-            tmp <- list()
-            for(tag in .MCE$shinyGUI$demographic_inputIDs)
-                tmp[[length(tmp) + 1L]] <- input[[tag]]
-            names(tmp) <- .MCE$shinyGUI$demographic_inputIDs
-            .MCE$person$field("demographics", as.data.frame(tmp))
-            if(!is.null(.MCE$last_demographics))
-                .MCE$person$demographics <- .MCE$last_demographics
-            if(.MCE$shinyGUI$temp_file != '')
-                saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-        }
-        
-        if(.MCE$shinyGUI$begin_message != ""){
-            return(list(h5(.MCE$shinyGUI$begin_message)))
-        } else click <- click + 1L
-        
-        if(click == 3L) .MCE$start_time <- proc.time()[3L]
+        if(.MCE$resume_file || click == 3L)
+            .MCE$start_time <- proc.time()[3L]
         
         if(.MCE$resume_file){
             .MCE$resume_file <- FALSE
@@ -49,6 +64,11 @@ server <- function(input, output) {
         }
         
         itemclick <- sum(!is.na(.MCE$person$items_answered))
+        
+        if(FALSE){
+            cat('\nclick = ', click)
+            cat('\titemclick = ', itemclick)
+        }
         
         # run survey
         if(click > 2L && !.MCE$design@stop_now){
@@ -139,12 +159,13 @@ server <- function(input, output) {
     output$item_stem_html <- renderUI({
         
         click <- input$Next - .MCE$shift_back
-        if(click > 0L)
+        if(click > 0L){
             if(!length(.MCE$shinyGUI$demographics)) click <- click + 1L
-        
+            if(.MCE$shinyGUI$begin_message == "") click <- click + 1L
+        }
         if(!.MCE$STOP){
             if(click > 2L && (click-2L) < .MCE$test@length){
-                pick <- force(.MCE$person$items_answered[[click-2L]])
+                pick <- force(max(which(!is.na(.MCE$person$items_answered))))
                 file <- .MCE$shinyGUI$stem_locations[pick]
                 empty <- is.na(file)
                 if(!empty){

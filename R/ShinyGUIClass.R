@@ -15,6 +15,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
+                                    password='data.frame',
                                     css = 'character',
                                     stopApp = 'logical',
                                     ui = 'function'),
@@ -68,13 +69,14 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                    Please close the tab/web browser to terminate the application.")))
                               temp_file <<- ''
                               css <<- ''
+                              password <<- data.frame()
                                                  
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
-                                              'begin_message', 'stopApp', 'ui', 'stem_default_format')
+                                              'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -104,6 +106,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       temp_file <<- shinyGUI$temp_file
                                   if(!is.null(shinyGUI$css))
                                       css <<- shinyGUI$css
+                                  if(!is.null(shinyGUI$password))
+                                      password <<- shinyGUI$password
                               }
                           })
                       

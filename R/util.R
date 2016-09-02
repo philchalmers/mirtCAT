@@ -209,3 +209,14 @@ possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
                                     QMC = test@fscores_args$QMC, custom_den = test@fscores_args$custom_den))
     tmp
 }
+
+verifyPassword <- function(input, password){
+    nr <- nrow(password)
+    verified <- if(nr == 1L){
+        input$PaSsWoRd %in% password
+    } else {
+        tmp <- subset(password, password[,1L] == input$UsErNaMe)
+        input$PaSsWoRd %in% tmp[,-1L]
+    }
+    verified
+}

@@ -11,9 +11,15 @@ questions <- c("Building CATs with mirtCAT is difficult.",
                "I would use mirtCAT in my research.")
 df <- data.frame(Question = questions, Option = options, Type = "radio")
 
-# forced and unforced
+# forced
 results <- mirtCAT(df = df)
 results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
+summary(results)
+
+# password
+results <- mirtCAT(df = df, shinyGUI = list(password = data.frame('1234')))
+results <- mirtCAT(df = df, shinyGUI = 
+                list(password = data.frame(c('user1', 'user2'), c('1234', '1234'))))
 summary(results)
 
 # css mod ('Readable' file downloaded from http://bootswatch.com/)
@@ -29,12 +35,6 @@ df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # mathJax test
-df3 <- as.list(df)
-df3$Question <- as.list(df3$Question)
-df3$Question[[1]] <- withMathJax('Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$')
-results <- mirtCAT(df = df3, shinyGUI = list(forced_choice = TRUE))
-summary(results)
-
 df3 <- df
 df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'
 df3$Option.1[1] <- '\\(\\alpha\\)'
@@ -53,18 +53,21 @@ results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE, lastpage=las
 
 # save and resume temp file
 mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
-mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
+results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
+summary(results)
 
 ## two step hosting
 my_fun <- function(person) cat('Hello world\n')
 mirtCAT_preamble(df, final_fun = my_fun)
 runApp(createShinyGUI(), port = 8000)
 person <- getPerson()
-person$raw_responses
+summary(person)
 
 # custom UI
 myUI <- function(){
     fluidPage(
+        
+        shiny::withMathJax(), 
         
         mainPanel(
             htmlOutput("item_stem_html"),
@@ -80,7 +83,8 @@ myUI <- function(){
 
 mirtCAT_preamble(df)
 runApp(createShinyGUI(ui=myUI), port = 8000)
-mirtCAT(df=df, shinyGUI=list(ui=myUI))
+person2 <- mirtCAT(df=df, shinyGUI=list(ui=myUI))
+summary(person2)
 
 # slider input
 df$Option.5 <- NULL
@@ -103,9 +107,15 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                  Stem = c('Math-stem.html', 'Question.md', ''))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# save and resume temp file with HTMLs
+mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
+results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
+summary(results)
+
 # checkbox input
 df <- data.frame(Question = questions, Option=options, Type = 'checkbox')
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results)
 
 # shiny input questions
 questions <- list(h4("Building CATs with mirtCAT is difficult."),
@@ -215,4 +225,5 @@ shinyGUI_list <- list(title = title, authors = authors, demographics = demograph
 # run the customized GUI interface
 results <- mirtCAT(df = df, mo = mod, criteria = "Drule", start_item = "DPrule",
                    shinyGUI = shinyGUI_list, design = design_list, preCAT = preCAT_list)
+summary(results)
 
