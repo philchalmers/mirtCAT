@@ -79,6 +79,7 @@ mirtCAT_preamble_internal <-
             item_answers <- obj$item_answers
             item_options <- obj$item_options
             shinyGUI$stem_locations <- df$Stem
+            shinyGUI$stem_expressions <- df$StemExpression
         }
         if(is.null(mo)){
             dat <- matrix(c(0,1), 2L, length(questions))

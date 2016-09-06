@@ -10,6 +10,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     instructions = 'character',
                                     begin_message = 'character',
                                     stem_locations = 'character',
+                                    stem_expressions = 'character',
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
                                     width = 'numeric',
@@ -47,6 +48,13 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                         return(ret)
                                   }))
                               }
+                              if(is.null(shinyGUI$stem_expressions)){
+                                  stem_expressions <<- as.character(rep(NA, length(questions)))
+                              } else {
+                                  stem_expressions <<- as.character(ifelse(shinyGUI$stem_expressions == "",
+                                                                         NA, shinyGUI$stem_expressions))
+                              }
+                              
                               title <<- 'mirtCAT'
                               author <<- 'Author information'
                               instructions <<- c("Instructions:",
@@ -76,7 +84,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
-                                              'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format')
+                                              'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format',
+                                              'stem_expressions')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)

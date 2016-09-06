@@ -106,6 +106,12 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                  Stem = c('Math-stem.html', 'Question.md', ''))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# expressions
+df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
+                 Stem = c('Math-stem.html', '', ''),
+                 StemExpression = c('', 'tags$h1("My header")', 'tags$b("This text is bold.")'))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
 # save and resume temp file with HTMLs
 mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
 results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes

@@ -58,6 +58,14 @@
 #'       pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
 #'       \code{NA}s are used if the item has no corresponding file.} 
 #'       
+#'     \item{\code{StemExpression}}{(Optional) a character vector of arbitrary R expressions
+#'       to be evaluated as suitable item stems. These are rendered into suitable HTML code,
+#'       typically through shiny. E.g., the following would result in two 
+#'       bolded and italicized item stems: 
+#'       \code{StemExpression = c("tags$b('Stem 1')", "tags$em('Stem 2')")}. See 
+#'       \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
+#'       to use tags.}
+#'       
 #'     \item{\code{...}}{ In cases where \code{'slider'} inputs are used instead only 
 #'       the \code{Question} input is required along with (at minimum) a 
 #'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
