@@ -133,7 +133,10 @@ server <- function(input, output) {
                     .MCE$person$items_answered[itemclick+1L] <- item
                     if(.MCE$shinyGUI$temp_file != '')
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-                    return(list(.MCE$shinyGUI$df$Question[[item]], .MCE$shinyGUI$questions[[item]]))
+                    stemOutput <- stemContent(item)
+                    return(list(stemOutput, 
+                                .MCE$shinyGUI$df$Question[[item]], 
+                                .MCE$shinyGUI$questions[[item]]))
                 }
             }
         }
@@ -154,37 +157,5 @@ server <- function(input, output) {
             return(NULL)
         }
         
-    }) 
-        
-    output$item_stem_html <- renderUI({
-        
-        click <- input$Next - .MCE$shift_back
-        if(click > 0L){
-            if(!length(.MCE$shinyGUI$demographics)) click <- click + 1L
-            if(.MCE$shinyGUI$begin_message == "") click <- click + 1L
-        }
-        if(length(.MCE$shinyGUI$password)) click <- click - 1L
-        if(!.MCE$STOP){
-            if(click > 2L && (click-2L) < .MCE$test@length){
-                pick <- force(max(which(!is.na(.MCE$person$items_answered))))
-                file <- .MCE$shinyGUI$stem_locations[pick]
-                empty <- is.na(file)
-                if(!empty){
-                    if(grepl('\\.[mM][dD]$', file)){
-                        suppressWarnings(markdown::markdownToHTML(file=file, output=.MCE$outfile2, 
-                                                 fragment.only = TRUE))
-                        contents <- readLines(.MCE$outfile2, warn = FALSE)
-                        return(HTML(contents))
-                    } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
-                        contents <- readLines(file, warn = FALSE)
-                        return(HTML(contents))
-                    } else empty <- TRUE
-                }
-            } else empty <- TRUE
-        } else empty <- TRUE
-        
-        return(' ')
-        
     })
-    
 }

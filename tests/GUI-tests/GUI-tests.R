@@ -70,7 +70,6 @@ myUI <- function(){
         shiny::withMathJax(), 
         
         mainPanel(
-            htmlOutput("item_stem_html"),
             uiOutput("Main")    
         ),
         

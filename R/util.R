@@ -210,6 +210,23 @@ possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
     tmp
 }
 
+stemContent <- function(pick){
+    file <- .MCE$shinyGUI$stem_locations[pick]
+    empty <- is.na(file)
+    if(!empty){
+        if(grepl('\\.[mM][dD]$', file)){
+            suppressWarnings(markdown::markdownToHTML(file=file, output=.MCE$outfile2, 
+                                                      fragment.only = TRUE))
+            contents <- readLines(.MCE$outfile2, warn = FALSE)
+            return(HTML(contents))
+        } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
+            contents <- readLines(file, warn = FALSE)
+            return(HTML(contents))
+        } else empty <- TRUE
+    }
+    NULL
+}
+
 verifyPassword <- function(input, password){
     nr <- nrow(password)
     verified <- if(nr == 1L){
