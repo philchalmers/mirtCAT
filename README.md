@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) ![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)
+
 # mirtCAT
 
 Computerized Adaptive Testing with Multidimensional Item Response Theory
