@@ -163,6 +163,7 @@ server <- function(input, output) {
             if(!length(.MCE$shinyGUI$demographics)) click <- click + 1L
             if(.MCE$shinyGUI$begin_message == "") click <- click + 1L
         }
+        if(length(.MCE$shinyGUI$password)) click <- click - 1L
         if(!.MCE$STOP){
             if(click > 2L && (click-2L) < .MCE$test@length){
                 pick <- force(max(which(!is.na(.MCE$person$items_answered))))

@@ -34,13 +34,15 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
     } else 1L:length(object$raw_responses)
     raw_responses <- object$raw_responses[pick]
     scored_responses <- object$scored_responses[pick]
-    ret <- list(final_estimates=person,
+    ret <- list(login_name=object$login_name,
+                final_estimates=person,
                 raw_responses=raw_responses,
                 scored_responses=scored_responses,
                 items_answered=object$items_answered,
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
+    if(!length(object$login_name)) ret$login_name <- NULL
     if(is.null(person)) ret$final_estimates <- NULL
     if(all(is.na(scored_responses))) ret$scored_responses <- NULL
     if(sum(object$item_time) > 0)

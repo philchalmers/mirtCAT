@@ -216,6 +216,7 @@ verifyPassword <- function(input, password){
         input$PaSsWoRd %in% password
     } else {
         tmp <- subset(password, password[,1L] == input$UsErNaMe)
+        .MCE$person$login_name <- input$UsErNaMe
         input$PaSsWoRd %in% tmp[,-1L]
     }
     verified

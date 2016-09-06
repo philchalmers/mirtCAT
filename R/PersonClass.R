@@ -10,6 +10,7 @@ Person <- setRefClass("Person",
                                     demographics = 'data.frame',
                                     item_time = 'numeric',
                                     valid_item = 'logical',
+                                    login_name = 'character',
                                     score = 'logical'),
                       
                       methods = list(
@@ -24,6 +25,7 @@ Person <- setRefClass("Person",
                              thetas_SE_history <<- matrix(theta_SEs, 1L)
                              score <<- score
                              item_time <<- numeric(nitems)
+                             login_name <<- character(0L)
                              if(!is.null(thetas.start_in))
                                 thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
