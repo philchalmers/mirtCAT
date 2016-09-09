@@ -108,7 +108,9 @@ server <- function(input, output) {
                         .MCE$invalid_count <- .MCE$invalid_count + 1L
                         tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
                         tmp <- buildShinyElements(tmp, paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name))
-                        return(list(.MCE$shinyGUI$df$Question[[pick]], tmp$questions))
+                        stemOutput <- stemContent(pick)
+                        return(list(stemOutput, .MCE$shinyGUI$df$Question[[pick]], 
+                                    tmp$questions))
                     } else {
                         .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time - 
                             sum(.MCE$person$item_time)
