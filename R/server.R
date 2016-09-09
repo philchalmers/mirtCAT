@@ -21,7 +21,7 @@ server <- function(input, output) {
         }
         
         if(!.MCE$verified)
-            stop('Incorrect Login Name/Password. Please restart the application and try again.', call.=FALSE)
+            return(h3('Incorrect Login Name/Password. Please restart the application and try again.'))
         
         if(.MCE$resume_file && click < 1L){
             return(list(h5("Click the action button to continue with your session.")))
@@ -54,13 +54,15 @@ server <- function(input, output) {
                 return(list(h5(.MCE$shinyGUI$begin_message)))
         } #end normal start
         
-        if(.MCE$resume_file || click == 3L)
+        if(is.null(.MCE$start_time))
             .MCE$start_time <- proc.time()[3L]
         
         if(.MCE$resume_file){
             .MCE$resume_file <- FALSE
             item <- max(which(!is.na(.MCE$person$items_answered)))
-            return(list(.MCE$shinyGUI$df$Question[[item]], .MCE$shinyGUI$questions[[item]]))
+            stemOutput <- stemContent(item)
+            return(list(stemOutput,.MCE$shinyGUI$df$Question[[item]], 
+                        .MCE$shinyGUI$questions[[item]]))
         }
         
         itemclick <- sum(!is.na(.MCE$person$items_answered))
@@ -94,8 +96,8 @@ server <- function(input, output) {
                             .MCE$person$responses[pick] <- as.integer(sum(ip %in% .MCE$test@item_answers[[pick]]))
                         else .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
                     }
-                    .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time - 
-                        sum(.MCE$person$item_time)
+                    .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
+                    .MCE$start_time <- NULL
                     
                     #update Thetas
                     .MCE$person$Update.thetas(.MCE$design, .MCE$test)
@@ -112,8 +114,8 @@ server <- function(input, output) {
                         return(list(stemOutput, .MCE$shinyGUI$df$Question[[pick]], 
                                     tmp$questions))
                     } else {
-                        .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time - 
-                            sum(.MCE$person$item_time)
+                        .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
+                        .MCE$start_time <- NULL
                         #update Thetas (same as above)
                         .MCE$person$Update.thetas(.MCE$design, .MCE$test)
                         if(.MCE$shinyGUI$temp_file != '')
@@ -132,6 +134,8 @@ server <- function(input, output) {
                 if(is.na(item)){
                     .MCE$design@stop_now <- TRUE
                 } else {
+                    if(is.null(.MCE$start_time))
+                        .MCE$start_time <- proc.time()[3L]
                     .MCE$person$items_answered[itemclick+1L] <- item
                     if(.MCE$shinyGUI$temp_file != '')
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)

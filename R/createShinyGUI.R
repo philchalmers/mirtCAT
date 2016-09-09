@@ -31,7 +31,7 @@
 #' 
 #' } 
 createShinyGUI <- function(ui = NULL){
-    on.exit(.MCE$preamble_defined <- NULL)
+    on.exit(.MCE$preamble_defined <- .MCE$start_time <- NULL)
     if(is.null(.MCE$preamble_defined))
         stop('Please use a fresh mirtCAT_preamble() call prior to calling createShinyGUI().')
     if(is.null(ui)) ui <- default_UI

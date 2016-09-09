@@ -13,11 +13,12 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 
 # forced
 results <- mirtCAT(df = df)
-results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 summary(results)
+results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
 # password
 results <- mirtCAT(df = df, shinyGUI = list(password = data.frame('1234')))
+summary(results)
 results <- mirtCAT(df = df, shinyGUI = 
                 list(password = data.frame(c('user1', 'user2'), c('1234', '1234'))))
 summary(results)
@@ -26,13 +27,16 @@ summary(results)
 css <- readLines('bootstrap.css')
 results <- mirtCAT(df = df, shinyGUI = list(css = css))
 
+# select input
 df2 <- df
 df2$Type[1] <- 'select'
 results <- mirtCAT(df = df2)
 
+# width/inline change
 df$inline <- TRUE
 df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results2)
 
 # mathJax test
 df3 <- df
@@ -93,13 +97,16 @@ df$value <- c(3,NA,NA)
 df$step <- c(1, NA, NA)
 df$Type[1] <- 'slider'
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results)
 
 df <- data.frame(Question = questions, min=rep(1,3), max=rep(5,3), step=rep(1,3), Type = 'slider')
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results2)
 
 # text input
 df <- data.frame(Question = questions, Type = 'text')
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results)
 
 # HTML/markdown stems
 df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
@@ -121,7 +128,7 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                                     'tags$audio(src = "www/clip.mp3", type = "audio/mp3",
                                     autoplay = TRUE, controls = TRUE)', 
                                     'tags$video(src = "www/vid.mp4", type = "video/mp4",
-                                    autoplay = TRUE, controls = TRUE, height=260, width=260)'))
+                                    controls = TRUE, height=260, width=260)'))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # save and resume temp file with HTMLs
@@ -158,7 +165,9 @@ questions <- c("Building CATs with mirtCAT is difficult.",
 df <- data.frame(Question = c('Empty Q', questions), 
                  Options=rbind(NA, options), Type = c('none', rep('radio', 3)))
 results <- mirtCAT(df = df)
+summary(results)
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results)
 
 #------------------------------------------------------------
 ### more lower level tests
