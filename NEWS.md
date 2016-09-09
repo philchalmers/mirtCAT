@@ -1,8 +1,8 @@
 # mirtCAT 1.1
 
 - added `StemExpression` to `df` input to support arbitrary R expressions for stems to 
-  be rendered with standard R code. Should allow for inputs such as audio, video, etc, 
-  as well through the use of `tags$FUN(...)`
+  be rendered with standard R code. Allows for inputs such as audio, video, etc, 
+  as well through the use of a suitable `tags$FUN(...)`
 
 - new `password` input to `shinyGUI` list to allow login and password gates. Useful when hosting 
   CAT on a server with potentially sensitive items

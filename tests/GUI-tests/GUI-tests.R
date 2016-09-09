@@ -112,6 +112,18 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                  StemExpression = c('', 'tags$h1("My header")', 'tags$b("This text is bold.")'))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# audio/video
+dirname <- paste0(getwd(), '/www')
+shiny::addResourcePath('www', dirname)
+df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
+                 Stem = c('Math-stem.html', '', ''),
+                 StemExpression = c('', 
+                                    'tags$audio(src = "www/clip.mp3", type = "audio/mp3",
+                                    autoplay = TRUE, controls = TRUE)', 
+                                    'tags$video(src = "www/vid.mp4", type = "video/mp4",
+                                    autoplay = TRUE, controls = TRUE, height=260, width=260)'))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
 # save and resume temp file with HTMLs
 mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
 results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
