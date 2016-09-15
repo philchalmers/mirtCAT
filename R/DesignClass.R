@@ -171,6 +171,9 @@ setMethod("initialize", signature(.Object = "Design"),
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
                   stop('min_SEM criteria is not a suitable length', call.=FALSE)
               if(length(preCAT)){
+                  if(!is.null(design$customNextItem))
+                      stop('preCAT input not supported when customNextItem function supplied',
+                           call.=FALSE)
                   dnames <- names(preCAT)
                   gnames <- c('min_items', 'max_items', 'criteria', 'method', 'response_variance')
                   if(!all(dnames %in% gnames))
