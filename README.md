@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) ![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)
+[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](http://cran.rstudio.com/web/packages/mirtCAT/index.html)
 
 # mirtCAT
 
