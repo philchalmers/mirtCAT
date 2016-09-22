@@ -1,5 +1,5 @@
 run_local <- function(responses, nfact, start_item, nitems, thetas.start_in, 
-                      score, design, test, verbose = FALSE, cl = NULL){
+                      score, design, test, verbose = FALSE, cl = NULL, primeCluster = TRUE){
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test){
@@ -46,6 +46,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                       nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
                       design=design, test=test)
     } else {
+        if(primeCluster) parallel::parLapply(cl=cl, X=1L:(length(cl)*2), function(x) invisible())
         ret <- parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses, 
                                    nfact=nfact, start_item=start_item, design=design, test=test,
                                    nitems=nitems, thetas.start_in=thetas.start_in, score=score,

@@ -141,6 +141,10 @@
 #'   \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
 #'   decrease estimation times in simulation work
 #'   
+#' @param primeCluster logical; when a \code{cl} object is supplied, should the cluster be primed 
+#'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
+#'   using the cluster will be optimal everytime a new \code{cl} is defined. Default is \code{TRUE}
+#'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
@@ -538,7 +542,7 @@
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
-                    design = list(), shinyGUI = list(), preCAT = list(), ...)
+                    primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
              .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
@@ -557,7 +561,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         person <- .MCE$person
     } else {
         person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,
-                            nitems=length(.MCE$test@itemnames), cl=cl,
+                            nitems=length(.MCE$test@itemnames), cl=cl, primeCluster=primeCluster,
                             thetas.start_in=design$thetas.start, score=.MCE$score, 
                             design=.MCE$design, test=.MCE$test)
     }

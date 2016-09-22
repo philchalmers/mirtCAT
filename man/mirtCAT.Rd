@@ -9,7 +9,8 @@
 \usage{
 mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
   start_item = 1, local_pattern = NULL, design_elements = FALSE,
-  cl = NULL, design = list(), shinyGUI = list(), preCAT = list(), ...)
+  cl = NULL, primeCluster = TRUE, design = list(), shinyGUI = list(),
+  preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -146,6 +147,10 @@ elements? Primarily this is to be used with the \code{\link{findNextItem}} funct
 (see \code{?parallel::parLapply} for details). If defined, and if 
 \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
 decrease estimation times in simulation work}
+
+\item{primeCluster}{logical; when a \code{cl} object is supplied, should the cluster be primed 
+first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
+using the cluster will be optimal everytime a new \code{cl} is defined. Default is \code{TRUE}}
 
 \item{design}{a list of design based control parameters for adaptive and non-adaptive tests. 
   These can be
