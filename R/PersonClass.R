@@ -1,6 +1,7 @@
 Person <- setRefClass("Person", 
                       
-                      fields = list(raw_responses = 'character',
+                      fields = list(ID = 'integer',
+                                    raw_responses = 'character',
                                     responses = 'integer',
                                     items_answered = 'integer',
                                     thetas = 'matrix',
@@ -15,8 +16,9 @@ Person <- setRefClass("Person",
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
-                                               theta_SEs){
+                                               theta_SEs, ID = 0L){
                              'Initialize the person object given background information'
+                             ID <<- ID
                              raw_responses <<- as.character(rep(NA, nitems))
                              responses <<- as.integer(rep(NA, nitems))
                              valid_item <<- rep(TRUE, nitems)

@@ -5,7 +5,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                    score, verbose, design, test){
         if(is.na(start_item)) design@start_item <- sample(1L:ncol(responses), 1L)
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
-                             thetas.start_in=thetas.start_in, score=score)
+                             thetas.start_in=thetas.start_in, score=score, ID=n)
         item <- findNextCATItem(person=person, test=test, design=design, criteria=design@criteria)
         if(is.na(item)){
             design@stop_now <- TRUE
@@ -40,7 +40,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             person$items_answered[i] <- item
         }
         return(person)
-    }
+    }   
     if(is.null(cl) || nrow(responses) == 1L){
         ret <- lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
                       nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
