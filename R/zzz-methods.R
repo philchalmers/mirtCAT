@@ -11,10 +11,11 @@ print.mirtCAT <- function(x, ...){
                            paste0('SE.Theta_', 1:length(x$thetas)))
         ret <- t(as.data.frame(person))
         rownames(ret) <- ''
-        return(ret)
+        print(ret)
     } else {
-        return(data.frame('n.items.answered' = sum(!is.na(x$raw_responses))))
+        print(data.frame('n.items.answered' = sum(!is.na(x$raw_responses))))
     }
+    invisible()
 }
 
 #' @rdname mirtCAT
