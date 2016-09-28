@@ -48,6 +48,9 @@ test_that('unidimensional', {
     expect_true(all(!is.na(res$raw_responses)))
     
     # custom
+    customNextItem <- function(person, design, test, thetas){
+        sum(is.na(person$items_answered)) + 1L
+    }
     res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem))
     expect_is(res, 'mirtCAT')
     so <- summary(res)
