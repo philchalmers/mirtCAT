@@ -30,7 +30,9 @@ Design <- setClass(Class = "Design",
                              content_prop_empirical = 'numeric',
                              constraints = 'list',
                              excluded = 'integer',
-                             customNextItem = 'function'),
+                             customNextItem = 'function',
+                             test_properties = 'data.frame',
+                             person_properties = 'data.frame'),
                    validity = function(object) return(TRUE)
 )
 
@@ -76,12 +78,14 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@exposure_type <- 'none'
               .Object@constraints <- list()
               .Object@items_not_scored <- integer(0L)
+              .Object@test_properties <- data.frame()
+              .Object@person_properties <- data.frame()
               if(length(design)){
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
-                              'customNextItem')
+                              'customNextItem', 'test_properties', 'person_properties')
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -110,6 +114,14 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@max_items <- as.integer(design$max_items)
                   if(!is.null(design$classify))
                       .Object@classify <- design$classify
+                  if(!is.null(design$test_properties)){
+                      .Object@test_properties <- design$test_properties
+                      if(nrow(.Object@test_properties) != nitems)
+                          stop('test_properties input does not have the same number of rows as items', 
+                               call.=FALSE)
+                  }
+                  if(!is.null(design$person_properties))
+                      .Object@person_properties <- design$person_properties
                   if(!is.null(design$classify_CI)){
                       if(design$classify_CI > 1 || design$classify_CI < 0)
                           stop('classify_CI criteria must be between 0 and 1', call.=FALSE)

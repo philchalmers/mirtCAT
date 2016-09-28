@@ -40,7 +40,12 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             person$items_answered[i] <- item
         }
         return(person)
-    }   
+    }
+    if(length(design@person_properties)){
+        if(length(design@person_properties) != nrow(responses))
+            stop('person_properties does not have the same number of rows as the local_pattern input',
+                 call.=FALSE)
+    }
     if(is.null(cl) || nrow(responses) == 1L){
         ret <- lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
                       nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 

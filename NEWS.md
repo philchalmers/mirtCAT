@@ -1,3 +1,10 @@
+# mirtCAT 1.2
+
+- new `test_properties` and `person_properties` inputs to `design` element to allow for 
+  prior information about the test/persons (e.g., selecting particular items based on 
+  prior demographic information). Intended for use with a `customNextItem()` 
+  function definition
+
 # mirtCAT 1.1
 
 - added `StemExpression` to `df` input to support arbitrary R expressions for stems to 

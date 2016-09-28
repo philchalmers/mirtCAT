@@ -48,13 +48,31 @@ test_that('unidimensional', {
     expect_true(all(!is.na(res$raw_responses)))
     
     # custom
-    customNextItem <- function(person, design, test, thetas){
-        sum(is.na(person$items_answered)) + 1L
-    }
     res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem))
     expect_is(res, 'mirtCAT')
     so <- summary(res)
     expect_equal(c(1, 25:2), so$items_answered)
+    
+    test_properties <- data.frame(item_group = c(1, rep(c(1,2), each=12)))
+    person_properties <- data.frame(group = 1)
+    customNextItem <- function(person, design, test){
+        pp <- with(design, person_properties)
+        tp <- with(design, test_properties)
+        possible_items <- pp$group == tp$item_group & is.na(person$raw_responses)
+        ret <- if(sum(possible_items)) min(which(possible_items)) else NA
+        ret
+    }
+    res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem,
+                                                        test_properties=test_properties,
+                                                        person_properties=person_properties))
+    so <- summary(res)
+    expect_equal(1:13, so$items_answered)
+    person_properties <- data.frame(group = 2)
+    res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem,
+                                                        test_properties=test_properties,
+                                                        person_properties=person_properties))
+    so <- summary(res)
+    expect_equal(c(1, 14:25), so$items_answered)
     
     #sequential
     res <- mirtCAT(df2, mod, local_pattern=pat)

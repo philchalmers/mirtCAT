@@ -263,6 +263,24 @@ using the cluster will be optimal everytime a new \code{cl} is defined. Default 
     should be terminated.
   }
   
+  \item{\code{test_properties}}{a user-definded \code{data.frame} object to be used
+    with a supplied \code{customNextItem} function. This should be used to define particular
+    properties inherent to the test items (e.g., whether they are experimental, have a particular
+    weighting scheme, should only be used for one particular group of individuals, and so on). 
+    The number of rows must be equal to the number of items in the item bank, and each row 
+    corresponds to the respective item. This input appears within the internal \code{design} object
+    in a \code{test_properties} slot.
+  }
+  
+  \item{\code{person_properties}}{a user-definded \code{data.frame} object to be used
+    with a supplied \code{customNextItem} function. This should be used to define particular
+    properties inherent to the individuals participants (e.g., known grouping variable, age, 
+    whether they've taken the test before (and which items they took), and so on). 
+    In off-line simulations, the number of rows must be equal to the number of participants. 
+    This input appears within the internal \code{design} object in a \code{person_properties} slot; 
+    for Monte Carlo simulations, rows should be manually indexed using the \code{person$ID} slot.
+  }
+  
 }}
 
 \item{shinyGUI}{a list of GUI based parameters to be over-written. These can be
