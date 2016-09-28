@@ -11,7 +11,7 @@ test_that('ordered', {
     res <- mirtCAT(mo = mod, local_pattern = pat)
     so <- summary(res)
     expect_equal(as.numeric(so$raw_responses), c(3,3,3,4))
-    expect_equal(print(res)[2], .4418983, tolerance=1e-4)
+    expect_equal(so$final_estimates[1], .4418983, tolerance=1e-4)
     
     #fscores call
     responses <- res$scored_responses
@@ -32,7 +32,7 @@ test_that('ordered', {
     res <- mirtCAT(df, mod, local_pattern = pat)
     so <- summary(res)
     expect_equal(as.numeric(so$raw_responses), c(3,2,3,2))
-    expect_equal(print(res)[2], -0.694133, tolerance=1e-4)
+    expect_equal(so$final_estimates[1], -0.694133, tolerance=1e-4)
     
     res <- mirtCAT(df, local_pattern = pat)
     so <- summary(res)
@@ -116,7 +116,7 @@ test_that('ordered', {
     ret <- mirtCAT(mo=obj, local_pattern = pats, criteria = 'MI')
     ret2 <- mirtCAT(mo=obj, local_pattern = pats, criteria = 'MI', cl=cl)
     for(i in 1:4)
-        expect_true(as.numeric(ret[[i]]$thetas_SE_history[51,]) == 
-                         as.numeric(ret2[[i]]$thetas_SE_history[51,]))
+        expect_true(as.numeric(ret[[i]]$thetas_SE_history[43,]) == 
+                         as.numeric(ret2[[i]]$thetas_SE_history[43,]))
     stopCluster(cl)
 })
