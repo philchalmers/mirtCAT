@@ -1,0 +1,85 @@
+CAT simulation with customized item selection
+======================================
+
+Example of how to build a unidimensional CAT simulation using a customized item selection function. 
+This example also showcases some of the more low-level features of this approach by also supplying 
+person and test demographic information through the `person_properties` and `test_properties` inputs.
+
+This example attempts to select items which are less optimal, in the sense of maximally reducing measurement error,
+and instead selects items according to an expected probability of response rule. Namely, items are selected
+whereby their expected probability of answering any given item is some value --- hence, the items can be much easier/harder than what is typically desired in CATs (which generally aims for 0.5). 
+
+This kind of selection process might be better for younger children, for example, so that they do not get frustrated by seeing items that are too difficult approximately 50% of the time (e.g., by the end of the CAT they might have a 80% chance of answering any given item correctly). The simulation example below sets up different selection rules for 4 different age categories (ages 5:8), where the probability of correct endorsement decreases from .80 to .50 for older participants.
+
+```{r}
+library(mirtCAT)
+```
+
+```{r eval=FALSE}
+# custom next item function (start off with browser to inspect the objects via str() )
+customNextItem <- function(design, person, test){
+    browser()
+    str(person)
+}
+```
+
+```{r}
+# real definition
+customNextItem <- function(design, person, test){
+    theta <- person$thetas
+    mo <- test@mo
+    in_item_bank <- which(is.na(person$responses))
+    p <- rep(NA, extract.mirt(mo, 'nitems'))
+    for(i in in_item_bank){
+        item <- extract.item(mo, i)
+        p[i] <- probtrace(item, theta)[2L]
+    }
+    e <- switch(as.character(design@person_properties[person$ID, ]),
+                "5" = .80, "6" = .70, "7" = .60, "8" = .50)
+    diff <- (p - e)^2
+    ret <- which(min(diff, na.rm = TRUE) == diff)[1L] # always return the first element
+    ret
+}
+
+
+# simulation
+set.seed(1)
+nitems <- 300
+N <- 200
+Theta <- matrix(rnorm(N)) + rep(c(-0.75, -0.25, 0.25, 0.75), each = 50)
+a <- matrix(rlnorm(nitems, .2, .3), nitems)
+d <- rnorm(nitems)
+pars <- data.frame(a1 = a, d = d, g = 0.2)
+mirt_object <- generate.mirt_object(pars, '3PL')
+responses <- generate_pattern(mirt_object, Theta = Theta)
+
+# different age group information
+person_properties <- data.frame(age = rep(5:8, each = 50))
+
+library(parallel)
+cl <- makeCluster(detectCores())
+design <- list(min_SEM = .3, min_items = 10, max_items = 50,
+               customNextItem=customNextItem, person_properties=person_properties)
+mirtCAT_results <- mirtCAT(mo = mirt_object, local_pattern = responses,
+                           start_item = 1, design = design, cl = cl)
+stopCluster(cl)
+```
+
+```{r}
+# individual response pattern plot
+plot(mirtCAT_results[[1]]) 
+plot(mirtCAT_results[[200]])
+
+# average number of items answered correctly for each age group
+mean(sapply(1:50, function(x) mean(mirtCAT_results[[x]]$scored_responses, na.rm = TRUE)))
+mean(sapply(51:100, function(x) mean(mirtCAT_results[[x]]$scored_responses, na.rm = TRUE)))
+mean(sapply(101:150, function(x) mean(mirtCAT_results[[x]]$scored_responses, na.rm = TRUE)))
+mean(sapply(151:200, function(x) mean(mirtCAT_results[[x]]$scored_responses, na.rm = TRUE)))
+
+# ability estimates by age
+thetas <- sapply(mirtCAT_results, function(x) x$thetas)
+summary(lm(thetas ~ factor(person_properties$age)))
+boxplot(thetas ~ factor(person_properties$age), las=1)
+```
+
+Notice that although age group 5 had the lowest ability levels overall they answered the highest number of items correctly. This should seem contrary to what would be expected, because this group should have answered the fewest number of items correctly. However, given the customized item selection scheme these individuals were more likely to receive much easier items than they normally would have. The converse is true age group 8.
