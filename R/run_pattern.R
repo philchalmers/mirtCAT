@@ -42,7 +42,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
         return(person)
     }
     if(length(design@person_properties)){
-        if(length(design@person_properties) != nrow(responses))
+        if(nrow(design@person_properties) != nrow(responses))
             stop('person_properties does not have the same number of rows as the local_pattern input',
                  call.=FALSE)
     }
