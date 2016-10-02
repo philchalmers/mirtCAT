@@ -51,6 +51,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                       nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
                       design=design, test=test)
     } else {
+        parallel::clusterEvalQ(cl, library("mirtCAT"))
         if(primeCluster) parallel::parLapply(cl=cl, X=1L:(length(cl)*2), function(x) invisible())
         ret <- parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses, 
                                    nfact=nfact, start_item=start_item, design=design, test=test,
