@@ -158,17 +158,17 @@ extract.mirtCAT <- function(x, what){
                thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
                item_time = x$item_time)
     } else if(cls == 'Test'){
-        switch(what, mo = x$mo)
+        switch(what, mo = x@mo)
     } else if(cls == 'Design'){
         switch(what, 
-               items_not_scored = x$items_not_scored,
-               min_items = x$min_items,
-               max_items = x$max_items,
-               exposure = x$exposure,
-               content = x$content,
-               max_time = x$max_time,
-               test_properties = x$test_properties,
-               person_properties = x$person_properties)
+               items_not_scored = x@items_not_scored,
+               min_items = x@min_items,
+               max_items = x@max_items,
+               exposure = x@exposure,
+               content = x@content,
+               max_time = x@max_time,
+               test_properties = x@test_properties,
+               person_properties = x@person_properties)
     } else stop('supplied object type not supported by extract.mirtCAT()', call.=FALSE)
     if(is.null(ret)) 
         stop('Extracted element could not be found in extract.mirtCAT()', call.=FALSE)
