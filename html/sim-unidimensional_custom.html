@@ -120,7 +120,7 @@ $(document).ready(function () {
 
 <div id="cat-simulation-with-customized-item-selection" class="section level1">
 <h1>CAT simulation with customized item selection</h1>
-<p>Example of how to build a unidimensional CAT simulation using a customized item selection function. This example also showcases some of the more low-level features of this approach by also supplying person and test demographic information through the <code>person_properties</code> and <code>test_properties</code> inputs.</p>
+<p>Example of how to build a unidimensional CAT simulation using a customized item selection function. This example also showcases some of the more low-level features of this approach by also supplying person information through the <code>person_properties</code> input.</p>
 <p>This example attempts to select items which are less optimal, in the sense of maximally reducing measurement error, and instead selects items according to an expected probability of response rule. Namely, items are selected whereby their expected probability of answering any given item is some value — hence, the items can be much easier/harder than what is typically desired in CATs (which generally aims for 0.5).</p>
 <p>This kind of selection process might be better for younger children, for example, so that they do not get frustrated by seeing items that are too difficult approximately 50% of the time (e.g., by the end of the CAT they might have a 80% chance of answering any given item correctly). The simulation example below sets up different selection rules for 4 different age categories (ages 5:8), where the probability of correct endorsement decreases from .80 to .50 for older participants.</p>
 <pre class="r"><code>library(mirtCAT)</code></pre>
@@ -128,28 +128,29 @@ $(document).ready(function () {
 <pre><code>## Loading required package: stats4</code></pre>
 <pre><code>## Loading required package: lattice</code></pre>
 <pre><code>## Loading required package: shiny</code></pre>
-<pre class="r"><code># custom next item function (start off with browser to inspect the objects via str() )
+<pre class="r"><code># custom next item function (start off with browser to interact with internal objects)
 customNextItem &lt;- function(design, person, test){
     browser()
-    str(person)
+    extract.mirtCAT(person, 'items_answered') #vector of answered items and their order
 }</code></pre>
+<p>To safely extract elements from the defined objects see the <code>?extract.mirtCAT</code> help file. To further see how to safly extract elements from objects defined by <code>mirt</code>, see the <code>?extract.mirt</code> help file.</p>
 <pre class="r"><code># real definition
 customNextItem &lt;- function(design, person, test){
-    theta &lt;- person$thetas
-    mo &lt;- test@mo
-    in_item_bank &lt;- which(is.na(person$responses))
+    theta &lt;- extract.mirtCAT(person, 'thetas')
+    mo &lt;- extract.mirtCAT(test, 'mo')
+    items_in_bank &lt;- extract.mirtCAT(person, 'items_in_bank')
     p &lt;- rep(NA, extract.mirt(mo, 'nitems'))
-    for(i in in_item_bank){
+    for(i in items_in_bank){
         item &lt;- extract.item(mo, i)
         p[i] &lt;- probtrace(item, theta)[2L]
     }
-    e &lt;- switch(as.character(design@person_properties[person$ID, ]),
-                &quot;5&quot; = .80, &quot;6&quot; = .70, &quot;7&quot; = .60, &quot;8&quot; = .50)
+    pp &lt;- extract.mirtCAT(design, &quot;person_properties&quot;)
+    ID &lt;- extract.mirtCAT(person, &quot;ID&quot;) #row associated with person_properties
+    e &lt;- switch(as.character(pp[ID, ]), &quot;5&quot; = .80, &quot;6&quot; = .70, &quot;7&quot; = .60, &quot;8&quot; = .50)
     diff &lt;- (p - e)^2
     ret &lt;- which(min(diff, na.rm = TRUE) == diff)[1L] # always return the first element
     ret
 }
-
 
 # simulation
 set.seed(1)

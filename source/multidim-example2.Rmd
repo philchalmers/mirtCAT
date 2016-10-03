@@ -86,9 +86,10 @@ customNextItem <- function(design, person, test){
 customNextItem <- function(design, person, test){
     block1 <- 1:50
     block2 <- 51:100
-    if(sum(!is.na(person$items_answered)) < 20){ #first 20 items block1
+    total_answered <- sum(!is.na(extract.mirtCAT(person, 'items_answered')))
+    if(total_answered < 20){ #first 20 items block1
         block <- block1
-    } else if(sum(!is.na(person$items_answered)) < 40){ #next 20 block2
+    } else if(total_answered < 40){ #next 20 block2
         block <- block2
     } else return(NA) # terminate when both item blocks have 20 items answered
     ret <- findNextItem(person=person, design=design, test=test, 

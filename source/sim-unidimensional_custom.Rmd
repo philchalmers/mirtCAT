@@ -3,7 +3,7 @@ CAT simulation with customized item selection
 
 Example of how to build a unidimensional CAT simulation using a customized item selection function. 
 This example also showcases some of the more low-level features of this approach by also supplying 
-person and test demographic information through the `person_properties` and `test_properties` inputs.
+person information through the `person_properties` input.
 
 This example attempts to select items which are less optimal, in the sense of maximally reducing measurement error,
 and instead selects items according to an expected probability of response rule. Namely, items are selected
@@ -37,13 +37,13 @@ customNextItem <- function(design, person, test){
         item <- extract.item(mo, i)
         p[i] <- probtrace(item, theta)[2L]
     }
-    e <- switch(as.character(design@person_properties[person$ID, ]),
-                "5" = .80, "6" = .70, "7" = .60, "8" = .50)
+    pp <- extract.mirtCAT(design, "person_properties")
+    ID <- extract.mirtCAT(person, "ID") #row associated with person_properties
+    e <- switch(as.character(pp[ID, ]), "5" = .80, "6" = .70, "7" = .60, "8" = .50)
     diff <- (p - e)^2
     ret <- which(min(diff, na.rm = TRUE) == diff)[1L] # always return the first element
     ret
 }
-
 
 # simulation
 set.seed(1)
