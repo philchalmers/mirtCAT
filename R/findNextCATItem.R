@@ -127,7 +127,13 @@ findNextCATItem <- function(person, test, design, criteria, subset = NULL, start
         }
         return(as.integer(item))
     } else if(criteria == 'custom'){
-        return(as.integer(design@customNextItem(person=person, design=design, test=test)))
+        tmp <- try(design@customNextItem(person=person, design=design, test=test), TRUE)
+        if(is(tmp, 'try-error'))
+            stop(paste0('customNextItem() returned the following error message:\n\n\t', tmp[1L]))
+        if(length(tmp) != 1L)
+            stop('customNextItem() must return a single item index or NA to terminate the CAT',
+                 call.=FALSE)
+        return(as.integer(tmp))
     }
     index <- which_not_answered
     crit <- if(criteria == 'KL'){
