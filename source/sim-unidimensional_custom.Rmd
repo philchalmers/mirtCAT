@@ -16,21 +16,24 @@ library(mirtCAT)
 ```
 
 ```{r eval=FALSE}
-# custom next item function (start off with browser to inspect the objects via str() )
+# custom next item function (start off with browser to interact with internal objects)
 customNextItem <- function(design, person, test){
     browser()
-    str(person)
+    extract.mirtCAT(person, 'items_answered') #vector of answered items and their order
 }
 ```
+
+To safely extract elements from the defined objects see the `?extract.mirtCAT` help file. To further see 
+how to safly extract elements from objects defined by `mirt`, see the `?extract.mirt` help file.
 
 ```{r}
 # real definition
 customNextItem <- function(design, person, test){
-    theta <- person$thetas
-    mo <- test@mo
-    in_item_bank <- which(is.na(person$responses))
+    theta <- extract.mirtCAT(person, 'thetas')
+    mo <- extract.mirtCAT(test, 'mo')
+    items_in_bank <- extract.mirtCAT(person, 'items_in_bank')
     p <- rep(NA, extract.mirt(mo, 'nitems'))
-    for(i in in_item_bank){
+    for(i in items_in_bank){
         item <- extract.item(mo, i)
         p[i] <- probtrace(item, theta)[2L]
     }
