@@ -12,14 +12,14 @@
 #' \describe{
 #'   \item{\code{ID}}{a scalar value indicating the ID of the participant 
 #'     (generally only needed in Monte Carlo simulations)}
-#'  \item{\code{items_answered}}{an integer vector indicating items that have been responded to,
-#'    and in which order. For example, if \code{items_answered[1L]} is equal to 5 then this indicates that first 
-#'    item has been answered, and was if the 5th item which the person saw. If \code{items_answered[1L]} is NA, 
-#'    then the first item has not been seen by the participant}
-#'   \item{\code{raw_responses}}{of the same form as \code{items_answered}, pertaining to the observed responses
+#'  \item{\code{responses}}{an integer vector indicating how items that have been responded to. 
+#'    Each element pertains to the associated item location (e.g., \code{responses[100]} is associated with the 
+#'    100th item), and is \code{NA} if the item has not been responded to}
+#'   \item{\code{raw_responses}}{of the same form as \code{responses}, pertaining to the observed responses
 #'     in a character vector}
 #'   \item{\code{items_in_bank}}{an integer vector indicating items which have not been administered yet and 
 #'     are also valid candidates for administration}
+#'  \item{\code{items_answered}}{an integer vector indicating the order in which items have been responded to}
 #'   \item{\code{thetas}}{the current ability/latent trait estimates given the previously administered items}
 #'   \item{\code{thetas_SE}}{the current ability/latent trait standard error estimates given the 
 #'     previously administered items}
@@ -35,7 +35,7 @@
 #'    \item{\code{min_items}}{minimum number of items to administer}
 #'    \item{\code{max_items}}{maximum number of items to administer}
 #'    \item{\code{max_time}}{maximum amount of time alloted to the GUI}
-#'    \item{\code{exposure}}{exposure control elements of the same form as \code{items_answered}}
+#'    \item{\code{exposure}}{exposure control elements of the same form as \code{responses}}
 #'    \item{\code{content}}{content constraint information}
 #'    \item{\code{content_prop}}{content proportions}
 #'    \item{\code{test_properties}}{user-defined \code{data.frame} of test-based properties}
@@ -152,8 +152,9 @@ extract.mirtCAT <- function(x, what){
         switch(what,
                ID = x$ID,
                raw_responses = x$raw_responses,
+               responses = x$responses,
                items_answered = x$items_answered,
-               items_in_bank = which(is.na(x$items_answered)[x$valid_item]),
+               items_in_bank = which(is.na(x$responses)[x$valid_item]),
                thetas = x$thetas,
                thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
                item_time = x$item_time)
