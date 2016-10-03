@@ -129,8 +129,8 @@ server <- function(input, output) {
             .MCE$design <- Next.stage(.MCE$design, person=.MCE$person, test=.MCE$test, item=itemclick)
             
             if(!.MCE$design@stop_now){
-                item <- findNextCATItem(person=.MCE$person, test=.MCE$test, design=.MCE$design,
-                                        criteria=.MCE$design@criteria, start=FALSE)
+                item <- findNextCATItem(person=.MCE$person, test=.MCE$test, 
+                                        design=.MCE$design, start=FALSE)
                 if(is.na(item)){
                     .MCE$design@stop_now <- TRUE
                 } else {

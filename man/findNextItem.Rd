@@ -21,7 +21,7 @@ defined}
 defined}
 
 \item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
-To be used when \code{customNextItem} function has been defined}
+If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used}
 
 \item{subset}{an integer vector indicating which items should be included in the optimal search;
 the default \code{NULL} includes all possible items. To allow only the first 10 items to be 

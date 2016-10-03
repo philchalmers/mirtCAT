@@ -6,7 +6,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
         if(is.na(start_item)) design@start_item <- sample(1L:ncol(responses), 1L)
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
                              thetas.start_in=thetas.start_in, score=score, ID=n)
-        item <- findNextCATItem(person=person, test=test, design=design, criteria=design@criteria)
+        item <- findNextCATItem(person=person, test=test, design=design)
         if(is.na(item)){
             design@stop_now <- TRUE
             return(person)
@@ -31,8 +31,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             
             design <- Next.stage(design, person=person, test=test, item=i)
             
-            item <- findNextCATItem(person=person, test=test, design=design, 
-                                    criteria=design@criteria)
+            item <- findNextCATItem(person=person, test=test, design=design)
             if(is.na(item)){
                 design@stop_now <- TRUE
                 break

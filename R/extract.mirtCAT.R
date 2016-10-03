@@ -97,6 +97,7 @@
 #' #------------------------------------------------
 #' # administer items in sequence
 #' customNextItem <- function(person, design, test){
+#'    # browser()
 #'    items_left_2_choose_from <- extract.mirtCAT(person, 'items_in_bank')
 #'    min(items_left_2_choose_from)
 #' }
@@ -119,6 +120,27 @@
 #' res <- mirtCAT(df, local_pattern=pat, 
 #'   design = list(customNextItem=customNextItem))
 #' summary(res)
+#' 
+#' #------------------------------------------------
+#' # using findNextItem() and stopping after 10 items
+#' 
+#' customNextItem <- function(person, design, test){
+#'    items_answered <- extract.mirtCAT(person, 'items_answered')
+#'    total <- sum(!is.na(items_answered))
+#'    ret <- NA
+#'    if(total < 10) 
+#'      ret <- findNextItem(person=person, test=test, design=design, criteria = 'MI')
+#'    ret
+#' }
+#' 
+#' res <- mirtCAT(df, mod, local_pattern=pat, start_item = 'MI',
+#'   design = list(customNextItem=customNextItem))
+#' summary(res)
+#' 
+#' # equivalent to the following
+#' res2 <- mirtCAT(df, mod, local_pattern=pat, start_item = 'MI', 
+#'   criteria = 'MI', design = list(max_items = 10))
+#' summary(res2)
 #' 
 extract.mirtCAT <- function(x, what){
     if(missing(x))

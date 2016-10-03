@@ -120,8 +120,7 @@ mirtCAT_preamble_internal <-
             tmp <- design_object@criteria
             design_object@criteria <- start_item
             start_item <- findNextCATItem(person=person_object, test=test_object, 
-                                          design=design_object, criteria=design_object@criteria,
-                                          start=FALSE)
+                                          design=design_object, start=FALSE)
             design_object@start_item <- start_item
             design_object@criteria <- tmp
         }

@@ -17,7 +17,7 @@
 #'   defined 
 #' 
 #' @param criteria item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
-#'   To be used when \code{customNextItem} function has been defined 
+#'   If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used
 #'   
 #' @param subset an integer vector indicating which items should be included in the optimal search;
 #'   the default \code{NULL} includes all possible items. To allow only the first 10 items to be 
@@ -59,20 +59,22 @@
 #' }
 findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria = NULL,
                          subset = NULL, all_index = FALSE){
-    if(missing(x)){
-        if(any(is.null(person) || is.null(test) || is.null(design) || is.null(criteria)))
-            stop('findNextItem has improper inputs', call.=FALSE)
-        return(findNextCATItem(person=person, test=test, design=design, criteria=criteria,
-                               subset=subset, all_index=all_index))
-    } else {
-        if(class(x) != 'mirtCAT_design')
-            stop('input is not the correct class', call.=FALSE)
-        return(findNextCATItem(person=x$person, test=x$test, design=x$design, 
-                               criteria = x$design@criteria, subset=subset, all_index=all_index))
+    if(!missing(x)){
+        design <- x$design
+        person <- x$person
+        test <- x$test
     }
+    if(any(is.null(person) || is.null(test) || is.null(design)))
+        stop('findNextItem has improper inputs', call.=FALSE)
+    if(!is.null(criteria))
+        design@criteria <- criteria
+    if(design@criteria == 'custom')
+        stop('Please specify a valid selection criteria in findNextItem()', call.=FALSE)
+    return(findNextCATItem(person=person, test=test, design=design,
+                           subset=subset, all_index=all_index))
 }
 
-findNextCATItem <- function(person, test, design, criteria, subset = NULL, start = TRUE,
+findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
                             all_index = FALSE){
     
     #heavy lifty CAT stuff just to find new item
@@ -85,6 +87,7 @@ findNextCATItem <- function(person, test, design, criteria, subset = NULL, start
     which_not_answered <- which(not_answered)
     if(is.null(subset)) subset <- 1L:test@length
     which_not_answered <- which_not_answered[which_not_answered %in% subset]
+    criteria <- design@criteria
     if(criteria == 'seq')
         which_not_answered <- which_not_answered[which_not_answered > lastitem]
     if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
