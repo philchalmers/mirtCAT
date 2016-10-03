@@ -33,7 +33,7 @@
 #'   most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
 #'   'seq' or 'random')
 #' 
-#' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}
+#' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
 #' @export findNextItem
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
 #' @return returns an integer value indicating the index of the next item to be selected or a

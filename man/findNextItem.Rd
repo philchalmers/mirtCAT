@@ -69,6 +69,6 @@ findNextItem(CATdesign)
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
 \seealso{
-\code{\link{mirtCAT}}, \code{\link{updateDesign}}
+\code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
 }
 

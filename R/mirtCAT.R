@@ -256,7 +256,8 @@
 #'     can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
 #'     Function must return a single integer value 
 #'     indicating the next item to administer or an \code{NA} value to indicate that the test
-#'     should be terminated.
+#'     should be terminated. See \code{\link{extract.mirtCAT}} for details on how to extract and manipulate
+#'     various internal elements from the required functional arguments
 #'   }
 #'   
 #'   \item{\code{test_properties}}{a user-definded \code{data.frame} object to be used
@@ -422,7 +423,7 @@
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
-#' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}
+#' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, \code{\link{extract.mirtCAT}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   
