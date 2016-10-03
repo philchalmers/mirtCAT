@@ -1,31 +1,52 @@
 #' Extract elements from the internal person, test, and design objects
 #' 
-#' This function extracts elements, as well as builds a few convienient elements, 
+#' This function extracts elements, as well as builds a few convenient elements, 
 #' from the three internal \code{person}, \code{design}, or \code{test}
 #' objects that are accessible through a \code{customNextItem} function 
 #' definition (see \code{\link{mirtCAT}} for details).
 #' 
 #' Depending on which object is supplied, the following elements can be extracted.
 #' 
-#' @section person:
+#' @section The 'person' argument:
 #' 
 #' \describe{
-#'    \item{\code{something}}{}
-#'    
+#'   \item{\code{ID}}{a scalar value indicating the ID of the participant 
+#'     (generally only needed in Monte Carlo simulations)}
+#'  \item{\code{items_answered}}{an integer vector indicating items that have been responded to,
+#'    and in which order. For example, if \code{items_answered[1L]} is equal to 5 then this indicates that first 
+#'    item has been answered, and was if the 5th item which the person saw. If \code{items_answered[1L]} is NA, 
+#'    then the first item has not been seen by the participant}
+#'   \item{\code{raw_responses}}{of the same form as \code{items_answered}, pertaining to the observed responses
+#'     in a character vector}
+#'   \item{\code{items_in_bank}}{an integer vector indicating items which have not been administered yet and 
+#'     are also valid candidates for administration}
+#'   \item{\code{thetas}}{the current ability/latent trait estimates given the previously administered items}
+#'   \item{\code{thetas_SE}}{the current ability/latent trait standard error estimates given the 
+#'     previously administered items}
+#'   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
+#'     participant to response to the item}
 #' }
 #' 
-#' @section test:
+#' @section The 'design' argument:
 #' 
 #' \describe{
-#'    \item{\code{something}}{}
-#'    
+#'    \item{\code{items_not_scored}}{an integer vector indicating items which should be included but not 
+#'      scored in the test (these are experimental items)}
+#'    \item{\code{min_items}}{minimum number of items to administer}
+#'    \item{\code{max_items}}{maximum number of items to administer}
+#'    \item{\code{max_time}}{maximum amount of time alloted to the GUI}
+#'    \item{\code{exposure}}{exposure control elements of the same form as \code{items_answered}}
+#'    \item{\code{content}}{content constraint information}
+#'    \item{\code{content_prop}}{content proportions}
+#'    \item{\code{test_properties}}{user-defined \code{data.frame} of test-based properties}
+#'    \item{\code{person_properties}}{user-defined \code{data.frame} of person-based properties}
 #' }
 #' 
-#' @section design:
+#' @section The 'test' argument:
 #' 
 #' \describe{
-#'    \item{\code{something}}{}
-#'    
+#'    \item{\code{mo}}{extract the defined model from the \code{mirt} package. Afterward, users can use the 
+#'      \code{\link{extract.mirt}} function to pull out a large number of internal elements for easy use}
 #' }
 #' 
 #' @param x either the \code{person}, \code{design}, or \code{test} object defined through a 
@@ -35,24 +56,99 @@
 #' 
 #' @export 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
-#' @seealso \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{extract.mirt}}
+#' @seealso \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{extract.mirt}}, 
+#'   \code{\link{findNextItem}}
+#'   
 #' 
 #' @examples
-#' \dontrun{
+#'
+#'  #example test
+#' set.seed(1234)
+#' nitems <- 25
+#' itemnames <- paste0('Item.', 1:nitems)
+#' a <- matrix(rlnorm(nitems, .2, .3))
+#' d <- matrix(rnorm(nitems))
+#' dat <- simdata(a, d, 500, itemtype = 'dich')
+#' colnames(dat) <- itemnames
+#' mod <- mirt(dat, 1, verbose = FALSE, TOL = .01)
 #' 
+#' # simple math items
+#' questions <- answers <- character(nitems)
+#' choices <- matrix(NA, nitems, 5)
+#' spacing <- floor(d - min(d)) + 1 #easier items have more variation in the options
+#' 
+#' for(i in 1:nitems){
+#'   n1 <- sample(1:50, 1)
+#'   n2 <- sample(51:100, 1)
+#'   ans <- n1 + n2
+#'   questions[i] <- paste0(n1, ' + ', n2, ' = ?')
+#'   answers[i] <- as.character(ans)
+#'   ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+#'   ch[sample(1:5, 1)] <- ans
+#'   choices[i, ] <- as.character(ch)
+#' }
+#' 
+#' df <- data.frame(Question=questions, Option=choices, 
+#'   Type = 'radio', stringsAsFactors = FALSE)
+#' df$Answer <- answers
+#' 
+#' pat <- generate_pattern(mod, Theta = 0, df)
+#' 
+#' #------------------------------------------------
+#' # administer items in sequence
 #' customNextItem <- function(person, design, test){
-#'      # browser()
-#'      
-#'      sum(is.na(person$items_answered)) + 1L
+#'    items_left_2_choose_from <- extract.mirtCAT(person, 'items_in_bank')
+#'    min(items_left_2_choose_from)
 #' }
 #' 
+#' res <- mirtCAT(df, local_pattern=pat, 
+#'   design = list(customNextItem=customNextItem))
+#' summary(res)
+#' 
+#' #------------------------------------------------
+#' # administer items in order, but stop after 10 items
+#' customNextItem <- function(person, design, test){
+#'    items_left_2_choose_from <- extract.mirtCAT(person, 'items_in_bank')
+#'    items_answered <- extract.mirtCAT(person, 'items_answered')
+#'    total <- sum(!is.na(items_answered))
+#'    ret <- if(total < 10) min(items_left_2_choose_from)
+#'      else return(NA)
+#'    ret
 #' }
+#' 
+#' res <- mirtCAT(df, local_pattern=pat, 
+#'   design = list(customNextItem=customNextItem))
+#' summary(res)
+#' 
 extract.mirtCAT <- function(x, what){
     if(missing(x))
         stop('No person, test, or design input supplied', call.=FALSE)
     if(missing(what) || length(what) != 1L || !is.character(what))
         stop('Must supply a component to be extracted', call.=FALSE)
-    
-    ret <- 1
+    cls <- class(x)
+    ret <- if(cls == 'Person'){
+        switch(what,
+               ID = x$ID,
+               raw_responses = x$raw_responses,
+               items_answered = x$items_answered,
+               items_in_bank = which(is.na(x$items_answered)[x$valid_item]),
+               thetas = x$thetas,
+               thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
+               item_time = x$item_time)
+    } else if(cls == 'Test'){
+        switch(what, mo = x$mo)
+    } else if(cls == 'Design'){
+        switch(what, 
+               items_not_scored = x$items_not_scored,
+               min_items = x$min_items,
+               max_items = x$max_items,
+               exposure = x$exposure,
+               content = x$content,
+               max_time = x$max_time,
+               test_properties = x$test_properties,
+               person_properties = x$person_properties)
+    } else stop('supplied object type not supported by extract.mirtCAT()', call.=FALSE)
+    if(is.null(ret)) 
+        stop('Extracted element could not be found in extract.mirtCAT()', call.=FALSE)
     ret
 }

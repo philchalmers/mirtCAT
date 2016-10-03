@@ -1,5 +1,9 @@
 # mirtCAT 1.2
 
+- added an `extract.mirtCAT()` function to better document and extract the components
+  of the `person`, `design`, and `test` objects in `customNextItem()`. Allows for safter 
+  customization of item selection maps
+
 - new `test_properties` and `person_properties` inputs to `design` element to allow for 
   prior information about the test/persons (e.g., selecting particular items based on 
   prior demographic information). Intended for use with a `customNextItem()` 
