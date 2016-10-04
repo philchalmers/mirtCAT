@@ -131,12 +131,13 @@ server <- function(input, output) {
             if(!.MCE$design@stop_now){
                 item <- findNextCATItem(person=.MCE$person, test=.MCE$test, 
                                         design=.MCE$design, start=FALSE)
+                if(!is.null(attr(item, 'design'))) .MCE$design <- attr(item, 'design')
                 if(is.na(item)){
                     .MCE$design@stop_now <- TRUE
                 } else {
                     if(is.null(.MCE$start_time))
                         .MCE$start_time <- proc.time()[3L]
-                    .MCE$person$items_answered[itemclick+1L] <- item
+                    .MCE$person$items_answered[itemclick+1L] <- as.integer(item)
                     if(.MCE$shinyGUI$temp_file != '')
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
                     stemOutput <- stemContent(item)

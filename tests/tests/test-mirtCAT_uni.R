@@ -76,6 +76,14 @@ test_that('unidimensional', {
                                                         person_properties=person_properties))
     so <- summary(res)
     expect_equal(c(1, 14:25), so$items_answered)
+    customNextItem <- function(person, design, test){
+        design@max_items <- 5L
+        ret <- sum(is.na(person$items_answered)) + 1L
+        attr(ret, 'design') <- design
+        ret
+    }
+    res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem))
+    expect_equal(length(res$items_answered), 5L)
     
     #sequential
     res <- mirtCAT(df2, mod, local_pattern=pat)

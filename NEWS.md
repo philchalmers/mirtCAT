@@ -1,5 +1,7 @@
 # mirtCAT 1.2
 
+- allow the internal `design` object to be modified through the `customNextItem()` function 
+
 - added an `extract.mirtCAT()` function to better document and extract the components
   of the `person`, `design`, and `test` objects in `customNextItem()`. Allows for safter 
   customization of item selection maps

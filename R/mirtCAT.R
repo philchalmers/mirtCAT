@@ -460,6 +460,33 @@
 #'     
 #' }
 #' 
+#' @section Modifying the \code{design} object directly through \code{customNextItem()} (advanced):
+#' 
+#' In addition to providing a completely defined item-selection map via the \code{customNextItem()} function, 
+#' users may also wish to control some of the more fine-grained elements of the \code{design} object to adjust 
+#' the general control parameteres of the CAT (e.g., modifying the maximum number of items to administer, stoping
+#' the CAT if something peculiar has been detected in the response patterns, etc). Note that 
+#' this feature is rarely required for most applications, though more advanced users may wish to 
+#' modify these various low-level elements of the \code{design} object directly to change the flow of the CAT
+#' to suit their specific needs. 
+#' 
+#' While the \code{person} object is defined as a \code{Reference Class} (see \code{\link{setRefClass}}) 
+#' the design object is generally considered a fixed S4 class, meaning that, unlike the \code{person} object, 
+#' it's elements are not mutable. Therefore, in order to make changes directly to the 
+#' \code{design} object the users should follow these steps:
+#' 
+#' \enumerate{
+#'   \item Within the defined \code{customNextItem} function, the \code{design} object slots are first modified (e.g.,
+#'     \code{design@@max_items <- 20L}).
+#'   \item Along with the desired next item scalar value from \code{customNextItem()}, the scalar object should also 
+#'     contain an attribute with the name \code{'design'} which holds the newly defined \code{design} object
+#'     (e.g., \code{attr(ret, 'design') <- design; return(ret)}).
+#'  }
+#'  
+#' Following the above process the work-flow in \code{\link{mirtCAT}} will use the new \code{design} object in place of the
+#' old one, even in Monte Carlo simulations.
+#'
+#' 
 #' @references 
 #' 
 #' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 

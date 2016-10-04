@@ -35,8 +35,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             if(is.na(item)){
                 design@stop_now <- TRUE
                 break
-            } 
-            person$items_answered[i] <- item
+            }
+            if(!is.null(attr(item, 'design'))) design <- attr(item, 'design')
+            person$items_answered[i] <- as.integer(item)
         }
         return(person)
     }
