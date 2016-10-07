@@ -219,7 +219,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
             }
         } else if(design@exposure_type == 'SH'){
             while(TRUE){
-                item <- index[which.max(crit))][1L]
+                item <- index[which.max(crit)][1L]
                 comp <- runif(1, 0, 1)
                 if(design@exposure[item] >= comp && person$valid_item[item]) break
                 if(length(crit) == 1L) break 
