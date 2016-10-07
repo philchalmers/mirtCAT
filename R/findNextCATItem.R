@@ -119,7 +119,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         else item <- sample(which_not_answered, 1L)
         if(design@use_content){
             dif <- design@content_prop - design@content_prop_empirical
-            tmp <- names(dif)[max(dif) == dif]
+            tmp <- names(dif)[which.max(dif)]
             if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
             cpick <- design@content[which_not_answered]
             if(sum(cpick == tmp) > 1L)
@@ -198,7 +198,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
             design@content_prop_empirical <- as.numeric(tmp/sum(tmp))
         }
         dif <- design@content_prop - design@content_prop_empirical
-        tmp <- names(dif)[max(dif) == dif]
+        tmp <- names(dif)[which.max(dif)]
         if(length(tmp) > 1L) tmp <- tmp[sample(1L:length(tmp), 1L)]
         cpick <- design@content[which_not_answered]
         pick <- cpick == tmp
@@ -211,7 +211,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         if(design@exposure_type == 'sample'){
             exposure <- design@exposure[lastitem+1L]
             if(exposure == 1L){
-                item <- index[which(max(crit) == crit)][1L]
+                item <- index[which.max(crit)][1L]
             } else {
                 rnk <- rank(crit, ties.method = 'random')
                 pick <- which(rnk %in% 1L:exposure)
@@ -219,7 +219,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
             }
         } else if(design@exposure_type == 'SH'){
             while(TRUE){
-                item <- index[which(max(crit) == crit)][1L]
+                item <- index[which.max(crit))][1L]
                 comp <- runif(1, 0, 1)
                 if(design@exposure[item] >= comp && person$valid_item[item]) break
                 if(length(crit) == 1L) break 
@@ -229,7 +229,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
                 crit <- crit[pick]
             }
         }
-    } else item <- index[which(max(crit) == crit)][1L]
+    } else item <- index[which.max(crit)][1L]
     if(length(design@constraints)){
         pick <- sapply(design@constraints, function(x, item){
             any(item == x)
