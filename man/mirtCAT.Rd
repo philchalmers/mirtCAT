@@ -16,9 +16,10 @@ mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
 
 \method{summary}{mirtCAT}(object, sort = TRUE, ...)
 
-\method{plot}{mirtCAT}(x, pick_theta = NULL, SE = 1, main = NULL,
-  par.strip.text = list(cex = 0.7), par.settings = list(strip.background =
-  list(col = "#9ECAE1"), strip.border = list(col = "black")), ...)
+\method{plot}{mirtCAT}(x, pick_theta = NULL, true_thetas = TRUE, SE = 1,
+  main = NULL, par.strip.text = list(cex = 0.7),
+  par.settings = list(strip.background = list(col = "#9ECAE1"), strip.border =
+  list(col = "black")), ...)
 }
 \arguments{
 \item{df}{a \code{data.frame} or \code{list} object 
@@ -138,7 +139,9 @@ This option requires complete response pattern(s) to be supplied. \code{local_pa
 is required to be numeric if no \code{questions} are supplied, and the responses must be 
 within a valid range of the defined \code{mo} object.
 Otherwise, it must contain character values of plausible responses which corresponds to the
-answer key and/or options supplied in \code{df}}
+answer key and/or options supplied in \code{df}. If the object contains an attribute \code{'Theta'} 
+then these values will be stored within the respective returned objects. 
+See \code{\link{generate_pattern}} to generate response patterns for Monte Carlo simulations}
 
 \item{design_elements}{logical; return an object containing the test, person, and design 
 elements? Primarily this is to be used with the \code{\link{findNextItem}} function}
@@ -434,6 +437,10 @@ for items that were not administered}
 \item{pick_theta}{a number indicating which theta to plot (only applicable for multidimensional 
 tests). The default is to facet each theta on one plot, but to plot only the first factor pass
 \code{pick_theta = 1}}
+
+\item{true_thetas}{logical; include a horizontal line indicating where the population-level 
+theta values are? Only applicable to Monte Carlo simulations because this value would not 
+be known otherwise}
 
 \item{SE}{size of the standard errors to plot. The default is 1, and therefore plots the
 standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)}

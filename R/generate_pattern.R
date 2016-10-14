@@ -4,7 +4,9 @@
 #' (depending on whether a \code{df} input was supplied) with columns equal to the test size and
 #' rows equal to the number of rows in \code{Theta}. For simulation studies, supplying a 
 #' \code{Theta} input with more than 1 row will generate a matrix of responses for
-#' running independent CAT session when passed to \code{mirtCAT(..., local_pattern)}.
+#' running independent CAT session when passed to \code{mirtCAT(..., local_pattern)}. When
+#' the returned object is an integer vector then the \code{Theta} values will be stored 
+#' as an attribute \code{'Theta'} to be automatically used in Monte Carlo simulations.
 #' 
 #' @param mo single group object defined by the \code{mirt} package
 #'
@@ -46,7 +48,9 @@ generate_pattern <- function(mo, Theta, df = NULL){
             P <- probtrace(ii, Theta)
             pattern[,i] <- mirt:::respSample(P)
         }
-        return(t(t(pattern) + mo@Data$mins))
+        ret <- t(t(pattern) + mo@Data$mins)
+        attr(ret, 'Theta') <- Theta
+        return(ret)
     } else {
         if(!is.data.frame(df))
             stop('df input must be a data.frame', call.=FALSE)

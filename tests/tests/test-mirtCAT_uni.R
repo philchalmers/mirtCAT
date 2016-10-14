@@ -105,6 +105,11 @@ test_that('unidimensional', {
     expect_true(sum(!is.na(res$raw_responses)) == 9L && sum(!is.na(res$scored_responses)) == 9L)
     expect_true(nrow(!is.na(res$thetas_history)) == 10L && nrow(!is.na(res$thetas_SE_history)) == 10L)
     
+    res <- mirtCAT(mo = mod, local_pattern=generate_pattern(mod, matrix(c(0,1))), criteria='MI',
+                   design = list(min_SEM = .4))
+    so <- summary(res[[1]])
+    expect_equal(so$true_thetas, 0)
+    
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI', start_item = 'MI',
                    design = list(min_SEM = .4))
     expect_true(summary(res)$items_answered[1] == 20)

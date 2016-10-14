@@ -134,7 +134,9 @@
 #'   is required to be numeric if no \code{questions} are supplied, and the responses must be 
 #'   within a valid range of the defined \code{mo} object.
 #'   Otherwise, it must contain character values of plausible responses which corresponds to the
-#'   answer key and/or options supplied in \code{df}
+#'   answer key and/or options supplied in \code{df}. If the object contains an attribute \code{'Theta'} 
+#'   then these values will be stored within the respective returned objects. 
+#'   See \code{\link{generate_pattern}} to generate response patterns for Monte Carlo simulations
 #'   
 #' @param cl an object definition to be passed to the parallel package 
 #'   (see \code{?parallel::parLapply} for details). If defined, and if 
@@ -587,7 +589,8 @@
 #' 
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
-                    start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
+                    start_item = 1, local_pattern = NULL, 
+                    design_elements=FALSE, cl=NULL,
                     primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
@@ -610,6 +613,13 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                             nitems=length(.MCE$test@itemnames), cl=cl, primeCluster=primeCluster,
                             thetas.start_in=design$thetas.start, score=.MCE$score, 
                             design=.MCE$design, test=.MCE$test)
+        if(!is.null(attr(local_pattern, 'Theta'))){
+            local_Thetas <- attr(local_pattern, 'Theta')
+            if(length(person) == 1L) 
+                local_Thetas <- matrix(as.numeric(local_Thetas), nrow=1L)
+            for(i in 1L:length(person))
+                person[[i]]$true_thetas <- local_Thetas[i, ]
+        }
     }
     ret <- mirtCAT_post_internal(person=person, design=.MCE$design)
     return(ret)

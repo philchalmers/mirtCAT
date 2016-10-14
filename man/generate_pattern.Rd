@@ -19,7 +19,9 @@ Generate a CAT pattern given various inputs. Returns a character vector or numer
 (depending on whether a \code{df} input was supplied) with columns equal to the test size and
 rows equal to the number of rows in \code{Theta}. For simulation studies, supplying a 
 \code{Theta} input with more than 1 row will generate a matrix of responses for
-running independent CAT session when passed to \code{mirtCAT(..., local_pattern)}.
+running independent CAT session when passed to \code{mirtCAT(..., local_pattern)}. When
+the returned object is an integer vector then the \code{Theta} values will be stored 
+as an attribute \code{'Theta'} to be automatically used in Monte Carlo simulations.
 }
 \examples{
 \dontrun{

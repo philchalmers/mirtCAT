@@ -176,6 +176,8 @@ mirtCAT_post_internal <- function(person, design){
                     thetas_SE_history=person[[i]]$thetas_SE_history,
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics)
+        if(length(person[[i]]$true_thetas))
+            ret$true_thetas <- person[[i]]$true_thetas
         if(!is.nan(design@classify[1L])){
             z <- -abs(ret$thetas - design@classify) / ret$SE_thetas
             sig <- z < qnorm(design@classify_alpha)

@@ -1,5 +1,9 @@
 # mirtCAT 1.2
 
+- population-level Theta terms tracked internally for Monte Carlo simulations because
+  `generate_pattern()` now stores the respective population values as a silent attribute. 
+  Will now be displayed in summary/print/plot outputs, where applicable
+
 - allow the internal `design` object to be modified through the `customNextItem()` function 
 
 - added an `extract.mirtCAT()` function to better document and extract the components
