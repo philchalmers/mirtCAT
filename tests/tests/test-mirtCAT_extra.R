@@ -45,6 +45,14 @@ test_that('extra', {
     vals <- findNextItem(CATdesign, values = TRUE)
     expect_equal(vals[1:4], c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
+    # shadow test (less than 20 items, items 31+41 not in same test)
+    person <- CATdesign$person
+    mat <- rbind(rep(1, 50), 
+                 numeric(50))
+    mat[2,c(31,41)] <- 1
+    constraints <- data.frame(mat, c('<=', '=='), c(20, 1))
+    item <- findNextItem.lp(vals, constraints, person)
+    
     design <- list(min_items = 10, max_items = 45,
                    constraints = list(
                        not_scored = c(1),

@@ -148,7 +148,8 @@
 #'   using the cluster will be optimal everytime a new \code{cl} is defined. Default is \code{TRUE}
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
-#'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
+#'   elements? Primarily this is to be used with the \code{\link{findNextItem}} and 
+#'   \code{\link{findNextItem.lp}} functions
 #'   
 #' @param design a list of design based control parameters for adaptive and non-adaptive tests. 
 #'   These can be
@@ -255,7 +256,8 @@
 #'     of the input arguments. 
 #'     
 #'     Use this if you wish to program your item selection techniques explicitly, though this 
-#'     can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
+#'     can be combined the internal \code{\link{findNextItem}} function (as well as 
+#'     \code{\link{findNextItem.lp}}) with analogous inputs. 
 #'     Function must return a single integer value 
 #'     indicating the next item to administer or an \code{NA} value to indicate that the test
 #'     should be terminated. See \code{\link{extract.mirtCAT}} for details on how to extract and manipulate
@@ -425,7 +427,8 @@
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
-#' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, \code{\link{extract.mirtCAT}}
+#' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, 
+#'   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}, \code{\link{findNextItem.lp}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   

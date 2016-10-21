@@ -144,7 +144,8 @@ then these values will be stored within the respective returned objects.
 See \code{\link{generate_pattern}} to generate response patterns for Monte Carlo simulations}
 
 \item{design_elements}{logical; return an object containing the test, person, and design 
-elements? Primarily this is to be used with the \code{\link{findNextItem}} function}
+elements? Primarily this is to be used with the \code{\link{findNextItem}} and 
+\code{\link{findNextItem.lp}} functions}
 
 \item{cl}{an object definition to be passed to the parallel package 
 (see \code{?parallel::parLapply} for details). If defined, and if 
@@ -260,7 +261,8 @@ using the cluster will be optimal everytime a new \code{cl} is defined. Default 
     of the input arguments. 
     
     Use this if you wish to program your item selection techniques explicitly, though this 
-    can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
+    can be combined the internal \code{\link{findNextItem}} function (as well as 
+    \code{\link{findNextItem.lp}}) with analogous inputs. 
     Function must return a single integer value 
     indicating the next item to administer or an \code{NA} value to indicate that the test
     should be terminated. See \code{\link{extract.mirtCAT}} for details on how to extract and manipulate
@@ -637,7 +639,8 @@ Multidimensional Item Response Theory Applications. \emph{Journal of Statistical
 1-39. doi:10.18637/jss.v071.i05
 }
 \seealso{
-\code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, \code{\link{extract.mirtCAT}}
+\code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, 
+  \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}, \code{\link{findNextItem.lp}}
 }
 \keyword{CAT,}
 \keyword{MCAT,}

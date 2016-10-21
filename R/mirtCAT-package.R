@@ -26,5 +26,6 @@
 #' @useDynLib mirtCAT
 #' @import mirt shiny methods lattice Rcpp
 #' @importFrom stats approx na.omit pnorm qnorm reshape runif spline
+#' @importFrom lpSolve lp
 #' @keywords package
 NULL

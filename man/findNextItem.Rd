@@ -11,14 +11,14 @@ findNextItem(x, person = NULL, test = NULL, design = NULL,
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 when passing \code{design_elements = TRUE}}
 
-\item{person}{internal person object. To be used when \code{customNextItem} function has been 
-defined}
+\item{person}{(required when \code{x} is missing) internal person object. To be 
+used when \code{customNextItem} function has been defined}
 
-\item{test}{internal test object. To be used when \code{customNextItem} function has been 
-defined}
+\item{test}{(required when \code{x} is missing) internal test object. To be 
+used when \code{customNextItem} function has been defined}
 
-\item{design}{internal design object. To be used when \code{customNextItem} function has been 
-defined}
+\item{design}{(required when \code{x} is missing) internal design object. To be 
+used when \code{customNextItem} function has been defined}
 
 \item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
 If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used}
@@ -46,8 +46,9 @@ problem. Note that this over-rides all values from
 \code{all_index} and \code{subset}}
 }
 \value{
-returns an integer value indicating the index of the next item to be selected or a
-  value of \code{NA} to indicate that the test should be terminated
+typically returns an integer value indicating the index of the next item to be selected or a
+  value of \code{NA} to indicate that the test should be terminated. However, see the arguments for 
+  further returned object descriptions
 }
 \description{
 A function that returns the next item in the computerized adaptive test. This should be used
@@ -62,7 +63,7 @@ CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 # returns number 1 in this case, since that's the starting item
 findNextItem(CATdesign)
 
-# detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
+# determine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 findNextItem(CATdesign)
 findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most optimal
