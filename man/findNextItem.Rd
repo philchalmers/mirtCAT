@@ -5,7 +5,7 @@
 \title{Find next CAT item}
 \usage{
 findNextItem(x, person = NULL, test = NULL, design = NULL,
-  criteria = NULL, subset = NULL, all_index = FALSE)
+  criteria = NULL, subset = NULL, all_index = FALSE, values = FALSE)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -36,6 +36,14 @@ where the items are sorted according to how
 well they fit the criteria (e.g., the first element is the most optimal, followed by the second
 most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
 'seq' or 'random')}
+
+\item{values}{logical; return the raw values associated with each item 
+instead of the rank ordering of the items (or the default most optimal item) when an adaptive 
+criteria is selected? Note that criteria values are returned such that the maximum value always 
+represents the most optimal item (e.g., maximum information). In cases where the minimum value is 
+typically selected (e.g., minimum variance) all values are multiplied by -1 to turn it into a maximization
+problem. Note that this over-rides all values from
+\code{all_index} and \code{subset}}
 }
 \value{
 returns an integer value indicating the index of the next item to be selected or a
@@ -63,6 +71,9 @@ findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most opti
 Person$help('Update.thetas') # internal help file for class 'Person'
 CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
 findNextItem(CATdesign)
+
+# criteria value associated with each item
+findNextItem(CATdesign, values = TRUE)
 }
 }
 \author{

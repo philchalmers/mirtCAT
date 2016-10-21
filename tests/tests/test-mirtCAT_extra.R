@@ -42,6 +42,8 @@ test_that('extra', {
     expect_equal(20, findNextItem(CATdesign))
     CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
     expect_equal(3, findNextItem(CATdesign))
+    vals <- findNextItem(CATdesign, values = TRUE)
+    expect_equal(vals[1:4], c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
     design <- list(min_items = 10, max_items = 45,
                    constraints = list(

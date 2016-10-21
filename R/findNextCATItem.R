@@ -32,6 +32,14 @@
 #'   well they fit the criteria (e.g., the first element is the most optimal, followed by the second
 #'   most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
 #'   'seq' or 'random')
+#'   
+#' @param values logical; return the raw values associated with each item 
+#'   instead of the rank ordering of the items (or the default most optimal item) when an adaptive 
+#'   criteria is selected? Note that criteria values are returned such that the maximum value always 
+#'   represents the most optimal item (e.g., maximum information). In cases where the minimum value is 
+#'   typically selected (e.g., minimum variance) all values are multiplied by -1 to turn it into a maximization
+#'   problem. Note that this over-rides all values from
+#'   \code{all_index} and \code{subset}
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
 #' @export findNextItem
@@ -56,9 +64,12 @@
 #' Person$help('Update.thetas') # internal help file for class 'Person'
 #' CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
 #' findNextItem(CATdesign)
+#' 
+#' # criteria value associated with each item
+#' findNextItem(CATdesign, values = TRUE)
 #' }
 findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria = NULL,
-                         subset = NULL, all_index = FALSE){
+                         subset = NULL, all_index = FALSE, values = FALSE){
     if(!missing(x)){
         design <- x$design
         person <- x$person
@@ -71,11 +82,11 @@ findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria 
     if(design@criteria == 'custom')
         stop('Please specify a valid selection criteria in findNextItem()', call.=FALSE)
     return(findNextCATItem(person=person, test=test, design=design,
-                           subset=subset, all_index=all_index))
+                           subset=subset, all_index=all_index, values=values))
 }
 
 findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
-                            all_index = FALSE){
+                            all_index = FALSE, values = FALSE){
     
     #heavy lifty CAT stuff just to find new item
     if(all(is.na(person$responses)) && start)
@@ -92,6 +103,12 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         which_not_answered <- which_not_answered[which_not_answered > lastitem]
     if(!length(which_not_answered)) stop('Ran out of items to administer.', call.=FALSE)
     K <- test@mo@Data$K
+    if(values){
+        if(criteria %in% c('seq', 'random')) 
+            stop('criteria makes no sense with values=TRUE', call.=FALSE)
+        which_not_answered <- 1L:test@length
+        not_answered <- rep(TRUE, length(not_answered))
+    }
     if(criteria %in% c('MEI', 'MEPV', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){
         possible_patterns <- matrix(person$responses, sum(K[not_answered]), 
                                     length(not_answered), byrow=TRUE)
@@ -190,6 +207,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
     } else {
         stop('Selection criteria does not exist', call.=FALSE)
     }
+    if(values) return(crit)
     if(all_index) return(index[order(crit, decreasing = TRUE)])
     
     if(design@use_content){

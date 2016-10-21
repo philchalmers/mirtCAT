@@ -1,5 +1,8 @@
 # mirtCAT 1.2
 
+- `values = TRUE` input added to `findNextItem()` to return all the criteria values (e.g.,
+  maximum information) associated with each respective item
+
 - population-level Theta terms tracked internally for Monte Carlo simulations because
   `generate_pattern()` now stores the respective population values as a silent attribute. 
   Will now be displayed in summary/print/plot outputs, where applicable
