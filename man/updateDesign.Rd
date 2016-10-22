@@ -12,7 +12,7 @@ when passing \code{design_elements = TRUE}}
 
 \item{items}{a numeric vector indicating which items to select}
 
-\item{responses}{a numeric vector indiciating the responses the the selected items}
+\item{responses}{a numeric vector indicating the responses the the selected items}
 
 \item{Theta}{(optional) vector indicating the value of Theta/latent traits to be set}
 }
@@ -30,7 +30,7 @@ CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 # returns number 1 in this case, since that's the starting item
 findNextItem(CATdesign) 
 
-# detemine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
+# determine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
 CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 findNextItem(CATdesign) 
 

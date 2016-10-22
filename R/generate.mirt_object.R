@@ -4,14 +4,14 @@
 #' then passed to \code{\link{mirtCAT}} function for running CAT applications.
 #' 
 #' @param parameters a matrix or data.frame of parameters corresponding to the model definitions
-#'   listed in \code{\link{mirt}}. Each row represents a unqiue item, while the 
-#'   column names correspond to the respective parameter names. If a parameter is not relavent
+#'   listed in \code{\link{mirt}}. Each row represents a unique item, while the 
+#'   column names correspond to the respective parameter names. If a parameter is not relevant
 #'   for a particular item/row then use \code{NA}'s as placeholders
 #'   
-#' @param itemtype a character vector indiciating the type of item to which the parameters 
-#'   refer. See the \code{itemtype} arguement in \code{\link{mirt}}. Note that this input 
-#'   is only used to determine the relavent item class for the rows in \code{parameters}, 
-#'   therefore many inputs are interchangable (e.g., '2PL' generates the same model as '3PL').
+#' @param itemtype a character vector indicating the type of item to which the parameters 
+#'   refer. See the \code{itemtype} argument in \code{\link{mirt}}. Note that this input 
+#'   is only used to determine the relevant item class for the rows in \code{parameters}, 
+#'   therefore many inputs are interchangeable (e.g., '2PL' generates the same model as '3PL').
 #'   If only a single value is provided then all items types will be assumed identical
 #'   
 #' @param latent_means (optional) a numeric vector used to define the population latent mean
@@ -66,7 +66,7 @@
 #' ### unidimensional mixed-item test
 #' 
 #' library(plyr)
-#' pars3 <- rbind.fill(pars, pars2) #notice the NA's where parmeters do not exist
+#' pars3 <- rbind.fill(pars, pars2) #notice the NA's where parameters do not exist
 #' obj <- generate.mirt_object(pars3, itemtype = c(rep('2PL', 50), rep('graded', 30)))
 #' coef(obj)
 #' itemplot(obj, 51)

@@ -145,7 +145,7 @@
 #'   
 #' @param primeCluster logical; when a \code{cl} object is supplied, should the cluster be primed 
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
-#'   using the cluster will be optimal everytime a new \code{cl} is defined. Default is \code{TRUE}
+#'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
@@ -215,7 +215,7 @@
 #'     The default uses no exposure control. If the item exposure 
 #'     is greater than 1 then the \code{n} most optimal
 #'     criteria will be randomly sampled from. For instance, if 
-#'     \code{exposure[5] == 3}, and \code{critiera = 'MI'}, then when the fifth item is to be 
+#'     \code{exposure[5] == 3}, and \code{criteria = 'MI'}, then when the fifth item is to be 
 #'     selected from the remaining pool of items the top 3 candidate items demonstrating 
 #'     the largest information criteria will be sampled from. Naturally, the first and last 
 #'     elements of \code{exposure} are ignored since exposure control will be meaningless.
@@ -226,9 +226,9 @@
 #'     Values closer to 1 are more likely to appear in the test, while value closer to 0 are more
 #'     likely to be randomly discarded.}
 #'     
-#'   \item{\code{constraints}}{A named list declaring various item selection contraints for which
+#'   \item{\code{constraints}}{A named list declaring various item selection constraints for which
 #'     particular item, where each list element is a vector of item numbers. Unless otherwise stated,
-#'     multiple elements can be decalared (e.g., \code{list(ordered = c(1:5), ordered = c(7:9))} is
+#'     multiple elements can be declared (e.g., \code{list(ordered = c(1:5), ordered = c(7:9))} is
 #'     perfectly acceptable). These include:
 #'     
 #'     \describe{
@@ -286,12 +286,13 @@
 #'     the \code{x} terms represent binary indicators for each respective item which the optimizer 
 #'     is searching through. Given some objective vector supplied to \code{\link{findNextItem}},
 #'     the most optimal 10 items will be selected which satisfy these two constraints, meaning that
-#'     exactly 10 items wil be administered and if either item 1 or 2 were
-#'     selected these two items would never appear in the same test form. 
+#'     1) exactly 10 items will be administered, and 2) if either item 1 or 2 were
+#'     selected these two items would never appear in the same test form (though neither is forced to
+#'     appear in any given test). 
 #'     See \code{\link{findNextItem}} for further details and examples
 #'   }
 #'   
-#'   \item{\code{test_properties}}{a user-definded \code{data.frame} object to be used
+#'   \item{\code{test_properties}}{a user-defined \code{data.frame} object to be used
 #'     with a supplied \code{customNextItem} function. This should be used to define particular
 #'     properties inherent to the test items (e.g., whether they are experimental, have a particular
 #'     weighting scheme, should only be used for one particular group of individuals, and so on). 
@@ -300,7 +301,7 @@
 #'     in a \code{test_properties} slot.
 #'   }
 #'   
-#'   \item{\code{person_properties}}{a user-definded \code{data.frame} object to be used
+#'   \item{\code{person_properties}}{a user-defined \code{data.frame} object to be used
 #'     with a supplied \code{customNextItem} function. This should be used to define particular
 #'     properties inherent to the individuals participants (e.g., known grouping variable, age, 
 #'     whether they've taken the test before (and which items they took), and so on). 
@@ -406,7 +407,7 @@
 #'        \item{No User Information}{a single row \code{data.frame}. Each column supplied in this case will be associated
 #'          with a suitable password for all individuals. Naturally, if only 1 column is defined then
 #'          there is only 1 global password for all users}
-#'        \item{User Information Pairing}{a multirow \code{data.frame} where the first column 
+#'        \item{User Information Pairing}{a multi-row \code{data.frame} where the first column 
 #'          represents the user name and all other columns as the same as the first option. 
 #'          E.g., if two users ('name1' and 'name2') 
 #'          are given the same password '1234' then 
@@ -496,7 +497,7 @@
 #' 
 #' In addition to providing a completely defined item-selection map via the \code{customNextItem()} function, 
 #' users may also wish to control some of the more fine-grained elements of the \code{design} object to adjust 
-#' the general control parameteres of the CAT (e.g., modifying the maximum number of items to administer, stoping
+#' the general control parameters of the CAT (e.g., modifying the maximum number of items to administer, stopping
 #' the CAT if something peculiar has been detected in the response patterns, etc). Note that 
 #' this feature is rarely required for most applications, though more advanced users may wish to 
 #' modify these various low-level elements of the \code{design} object directly to change the flow of the CAT
