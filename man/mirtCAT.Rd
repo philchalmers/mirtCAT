@@ -269,20 +269,31 @@ using the cluster will be optimal everytime a new \code{cl} is defined. Default 
   }
   
   \item{\code{constr_fun}}{a user-defined function of the form \code{function(person, test, design)} 
-  that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
-  of the constraints for \code{\link{lp}}. 
-  Each row corresponds to a constraint, while the number of columns should be 
-  equal to the number of items plus 2. 
+    that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
+    of the constraints for \code{\link{lp}}. 
+    Each row corresponds to a constraint, while the number of columns should be 
+    equal to the number of items plus 2. Note that the column names of the 
+    returned \code{data.frame} object do not matter. 
   
-  For example, in a test with the constraint that exactly 10 items 
-  should be administered to all participants, the input should be defined as 
-  \preformatted{const_fun <- function(person, test, design){
-     nitems <- extract.mirt(test@mo, 'nitems')
-     data.frame(item=t(rep(1, nitems)), relation="==", value=10)
-   }}
-   Note that the column names of the returned \code{data.frame} object do not matter. If missing,
-   the function will be extracted from the \code{design@constr_fun} slot (if it was initially 
-   supplied to \code{\link{mirtCAT}}). See \code{\link{findNextItem}} for details and examples
+    For example, say that for a given test the user wants to add 
+    the constraint that exactly 10 items 
+    should be administered to all participants, and that items 1 and 2 should not 
+    be included in the same test. The input would then be defined as 
+    \preformatted{const_fun <- function(person, test, design){
+       nitems <- extract.mirt(test@mo, 'nitems')
+       lhs <- matrix(0, 2, nitems)
+       lhs[1, ] <- 1
+       lhs[2, c(1,2)] <- 1
+       data.frame(item=lhs, relation=c("==", "<="), value=c(10, 1))
+     }}
+    The definition above corresponds to the constraints \code{1 * x1 + 1 * x2 + ... + 1 * xn = 10} 
+    and \code{1 * x1 + 1 * x2 + 0 * x3 + ... + 0 * xn <= 1} , where 
+    the \code{x} terms represent binary indicators for each respective item which the optimizer 
+    is searching through. Given some objective vector supplied to \code{\link{findNextItem}},
+    the most optimal 10 items will be selected which satisfy these two constraints, meaning that
+    exactly 10 items wil be administered and if either item 1 or 2 were
+    selected these two items would never appear in the same test form. 
+    See \code{\link{findNextItem}} for further details and examples
   }
   
   \item{\code{test_properties}}{a user-definded \code{data.frame} object to be used

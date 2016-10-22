@@ -1,16 +1,16 @@
 #' Find next CAT item
 #' 
 #' A function that returns the next item in the computerized adaptive, optimal assembly, or shadow test. 
-#' This should be used
-#' in conjunction with the \code{\link{updateDesign}} function and \code{customNextItem}. 
+#' This should be used in conjunction with the \code{\link{updateDesign}} function and \code{customNextItem}. 
 #' The raw input forms can be used when a \code{customNextItem} function has been 
 #' defined in \code{\link{mirtCAT}}.
 #' 
 #' When a numeric \code{objective} is supplied the next item in the computerized adaptive test is found via 
 #' an integer solver through searching for a maximum. The raw input forms can be used
 #' when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}, and requires 
-#' the definition of a \code{constr_fun} (see the associated element in \code{\link{mirtCAT}} for details). 
-#' Can be used to for 'Optimal Test Assembly', as well as 'Shadow Testing' designs (van der Linden, 2005),
+#' the definition of a \code{constr_fun} (see the associated element in \code{\link{mirtCAT}} for details,
+#' as well as the examples below). Can be used to for 'Optimal Test Assembly', 
+#' as well as 'Shadow Testing' designs (van der Linden, 2005),
 #' by using the \code{\link{lp}} function. When \code{objective} is not supplied the result follows the 
 #' typical maximum criteria of more standard adaptive tests.
 #' 
@@ -81,10 +81,13 @@
 #' 
 #' 
 #' #-------------------------------------------------------------
+#' ## Integer programming example (e.g., shadow testing)
+#' 
 #' # find maximum information subject to constraints
-#' #  sum(xi) <= 5              ### 5 or fewer items
-#' #  x1 + x2 <= 1              ### items 1 and 2 can't be together
-#' #  x4 == 0                   ### item 4 not included
+#' #  sum(xi) <= 5               ### 5 or fewer items
+#' #  x1 + x2 <= 1               ### items 1 and 2 can't be together
+#' #  x4 == 0                    ### item 4 not included
+#' #  x5 + x6 == 1               ### item 5 or 6 must be included, but not both
 #' 
 #' # constraint function
 #' constr_fun <- function(person, test, design){
@@ -92,16 +95,17 @@
 #'   # left hand side constrains 
 #'   #    - 1 row per constraint, and ncol must equal number of items
 #'   nitems <- extract.mirt(test@mo, 'nitems')
-#'   lhs <- matrix(0, 3, nitems)
+#'   lhs <- matrix(0, 4, nitems)
 #'   lhs[1,] <- 1
 #'   lhs[2,c(1,2)] <- 1
 #'   lhs[3, 4] <- 1
+#'   lhs[4, c(5,6)] <- 1
 #'   
 #'   # relationship direction
-#'   dirs <- c("<=", "<=", '==')
+#'   dirs <- c("<=", "<=", '==', '==')
 #'   
 #'   #right hand side
-#'   rhs <- c(5, 1, 0)
+#'   rhs <- c(5, 1, 0, 1)
 #' 
 #'   #all together
 #'   constraints <- data.frame(lhs, dirs, rhs)
