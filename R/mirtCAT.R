@@ -148,8 +148,7 @@
 #'   using the cluster will be optimal everytime a new \code{cl} is defined. Default is \code{TRUE}
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
-#'   elements? Primarily this is to be used with the \code{\link{findNextItem}} and 
-#'   \code{\link{findNextItem.lp}} functions
+#'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
 #' @param design a list of design based control parameters for adaptive and non-adaptive tests. 
 #'   These can be
@@ -253,15 +252,32 @@
 #'     \code{customNextItem <- function(design, person, test)} to use a customized item selection
 #'     method. This requires more complex programming and understanding of \code{mirtCAT}s internal elements,
 #'     and it's recommended to initially use a \code{\link{browser}} to understand the state 
-#'     of the input arguments. 
+#'     of the input arguments. When defined, all but the \code{not_scored} input 
+#'     to the optional \code{constraints} list will be ignored.
 #'     
 #'     Use this if you wish to program your item selection techniques explicitly, though this 
-#'     can be combined the internal \code{\link{findNextItem}} function (as well as 
-#'     \code{\link{findNextItem.lp}}) with analogous inputs. 
+#'     can be combined the internal \code{\link{findNextItem}} function with analogous inputs. 
 #'     Function must return a single integer value 
 #'     indicating the next item to administer or an \code{NA} value to indicate that the test
 #'     should be terminated. See \code{\link{extract.mirtCAT}} for details on how to extract and manipulate
 #'     various internal elements from the required functional arguments
+#'   }
+#'   
+#'   \item{\code{constr_fun}}{a user-defined function of the form \code{function(person, test, design)} 
+#'   that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
+#'   of the constraints for \code{\link{lp}}. 
+#'   Each row corresponds to a constraint, while the number of columns should be 
+#'   equal to the number of items plus 2. 
+#'   
+#'   For example, in a test with the constraint that exactly 10 items 
+#'   should be administered to all participants, the input should be defined as 
+#'   \preformatted{const_fun <- function(person, test, design){
+#'      nitems <- extract.mirt(test@@mo, 'nitems')
+#'      data.frame(item=t(rep(1, nitems)), relation="==", value=10)
+#'    }}
+#'    Note that the column names of the returned \code{data.frame} object do not matter. If missing,
+#'    the function will be extracted from the \code{design@@constr_fun} slot (if it was initially 
+#'    supplied to \code{\link{mirtCAT}}). See \code{\link{findNextItem}} for details and examples
 #'   }
 #'   
 #'   \item{\code{test_properties}}{a user-definded \code{data.frame} object to be used
@@ -428,7 +444,7 @@
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
 #' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, 
-#'   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}, \code{\link{findNextItem.lp}}
+#'   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   
@@ -593,7 +609,7 @@
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, local_pattern = NULL, 
-                    design_elements=FALSE, cl=NULL,
+                    design_elements = FALSE, cl = NULL,
                     primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 

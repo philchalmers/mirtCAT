@@ -32,7 +32,8 @@ Design <- setClass(Class = "Design",
                              excluded = 'integer',
                              customNextItem = 'function',
                              test_properties = 'data.frame',
-                             person_properties = 'data.frame'),
+                             person_properties = 'data.frame',
+                             constr_fun = 'function'),
                    validity = function(object) return(TRUE)
 )
 
@@ -85,7 +86,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
-                              'customNextItem', 'test_properties', 'person_properties')
+                              'customNextItem', 'test_properties', 'person_properties', 'constr_fun')
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -114,6 +115,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@max_items <- as.integer(design$max_items)
                   if(!is.null(design$classify))
                       .Object@classify <- design$classify
+                  if(!is.null(design$constr_fun))
+                      .Object@constr_fun <- design$constr_fun
                   if(!is.null(design$test_properties)){
                       .Object@test_properties <- design$test_properties
                       if(nrow(.Object@test_properties) != nitems)

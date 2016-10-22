@@ -1,8 +1,18 @@
 #' Find next CAT item
 #' 
-#' A function that returns the next item in the computerized adaptive test. This should be used
-#' in conjunction with the \code{\link{updateDesign}} function. The raw input forms can be used
-#' when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}.
+#' A function that returns the next item in the computerized adaptive, optimal assembly, or shadow test. 
+#' This should be used
+#' in conjunction with the \code{\link{updateDesign}} function and \code{customNextItem}. 
+#' The raw input forms can be used when a \code{customNextItem} function has been 
+#' defined in \code{\link{mirtCAT}}.
+#' 
+#' When a numeric \code{objective} is supplied the next item in the computerized adaptive test is found via 
+#' an integer solver through searching for a maximum. The raw input forms can be used
+#' when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}, and requires 
+#' the definition of a \code{constr_fun} (see the associated element in \code{\link{mirtCAT}} for details). 
+#' Can be used to for 'Optimal Test Assembly', as well as 'Shadow Testing' designs (van der Linden, 2005),
+#' by using the \code{\link{lp}} function. When \code{objective} is not supplied the result follows the 
+#' typical maximum criteria of more standard adaptive tests.
 #' 
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 #'   when passing \code{design_elements = TRUE}
@@ -19,6 +29,12 @@
 #' @param criteria item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
 #'   If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used
 #'   
+#' @param objective a vector of values used as the optimization criteria to be passed to 
+#'   \code{lp(objective.in)}. This is typically the vector of criteria values returned from
+#'   \code{\link{computeCriteria}}, however supplying other
+#'   criteria are possible (e.g., to minimize the number of items administered simply pass a vector
+#'   of -1's) 
+#'   
 #' @param subset an integer vector indicating which items should be included in the optimal search;
 #'   the default \code{NULL} includes all possible items. To allow only the first 10 items to be 
 #'   selected from this can be modified to \code{subset = 1:10}. This is useful when administering 
@@ -32,21 +48,18 @@
 #'   well they fit the criteria (e.g., the first element is the most optimal, followed by the second
 #'   most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
 #'   'seq' or 'random')
-#'   
-#' @param values logical; return the raw values associated with each item 
-#'   instead of the rank ordering of the items (or the default most optimal item) when an adaptive 
-#'   criteria is selected? Note that criteria values are returned such that the maximum value always 
-#'   represents the most optimal item (e.g., maximum information). In cases where the minimum value is 
-#'   typically selected (e.g., minimum variance) all values are multiplied by -1 to turn it into a maximization
-#'   problem. Note that this over-rides all values from
-#'   \code{all_index} and \code{subset}
+#'
+#' @param ... additional arguments to be passed to \code{\link{lp}}
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
-#' @export findNextItem
+#' @export 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
 #' @return typically returns an integer value indicating the index of the next item to be selected or a
 #'   value of \code{NA} to indicate that the test should be terminated. However, see the arguments for 
 #'   further returned object descriptions
+#'   
+#' @references 
+#' van der Linden, W. J. (2005). Linear models for optimal test design. Springer.
 #'   
 #' @examples
 #' \dontrun{
@@ -66,11 +79,59 @@
 #' CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
 #' findNextItem(CATdesign)
 #' 
-#' # criteria value associated with each item
-#' findNextItem(CATdesign, values = TRUE)
+#' 
+#' #-------------------------------------------------------------
+#' # find maximum information subject to constraints
+#' #  sum(xi) <= 5              ### 5 or fewer items
+#' #  x1 + x2 <= 1              ### items 1 and 2 can't be together
+#' #  x4 == 0                   ### item 4 not included
+#' 
+#' # constraint function
+#' constr_fun <- function(person, test, design){
+#'
+#'   # left hand side constrains 
+#'   #    - 1 row per constraint, and ncol must equal number of items
+#'   nitems <- extract.mirt(test@mo, 'nitems')
+#'   lhs <- matrix(0, 3, nitems)
+#'   lhs[1,] <- 1
+#'   lhs[2,c(1,2)] <- 1
+#'   lhs[3, 4] <- 1
+#'   
+#'   # relationship direction
+#'   dirs <- c("<=", "<=", '==')
+#'   
+#'   #right hand side
+#'   rhs <- c(5, 1, 0)
+#' 
+#'   #all together
+#'   constraints <- data.frame(lhs, dirs, rhs)
+#'   constraints
+#' }
+#' 
+#' #### CATdesign <- mirtCAT(..., design_elements = TRUE, 
+#' ###                       design = list(constr_fun=constr_fun))
+#' 
+#' #' # MI criteria value associated with each respective item
+#' objective <- computeCriteria(CATdesign, criteria = 'MI')
+#' 
+#' # most optimal item, given constraints
+#' findNextItem(CATdesign, objective=objective)
+#' 
+#' # all the items which solve the problem
+#' findNextItemp(CATdesign, objective=objective, all_index = TRUE)
+#' 
+#' ## within a customNextItem() definition the above code would look like
+#' # customNextItem <- function(person, design, test){
+#' #   objective <- computeCriteria(person=person, design=design, test=test, 
+#' #                                criteria = 'MI') 
+#' #   item <- findNextItem(person=person, design=design, test=test,
+#' #                        objective=objective)
+#' #   item
+#' # }
+#' 
 #' }
 findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria = NULL,
-                         subset = NULL, all_index = FALSE, values = FALSE){
+                         objective = NULL, subset = NULL, all_index = FALSE, ...){
     if(!missing(x)){
         design <- x$design
         person <- x$person
@@ -80,10 +141,16 @@ findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria 
         stop('findNextItem has improper inputs', call.=FALSE)
     if(!is.null(criteria))
         design@criteria <- criteria
-    if(design@criteria == 'custom')
+    if(design@criteria == 'custom' && is.null(objective))
         stop('Please specify a valid selection criteria in findNextItem()', call.=FALSE)
-    return(findNextCATItem(person=person, test=test, design=design,
-                           subset=subset, all_index=all_index, values=values))
+    ret <- if(!is.null(objective)){
+        findNextItem.lp(objective, person=person, design=design, 
+                        test=test, ...)
+    } else {
+       findNextCATItem(person=person, test=test, design=design,
+                       subset=subset, all_index=all_index)
+    }
+    ret
 }
 
 findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
@@ -276,123 +343,9 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
     return(as.integer(item))
 }
 
-#' Find next CAT item with linear (or integer) solver
-#' 
-#' A function that returns the next item in the computerized adaptive test which is found via 
-#' an integer solver through searching for a maximum. The raw input forms can be used
-#' when a \code{customNextItem} function has been defined in \code{\link{mirtCAT}}. This function
-#' can be used to for 'Optimal Test Assembly', as well as 'Shadow Testing' designs (van der Linden, 2005),
-#' by using the \code{\link{lp}} function.
-#'
-#' @param objective a vector of values used as the optimization criteria to be passed to 
-#'   \code{lp(objective.in)}. This is typically the vector of criteria values returned from
-#'   \code{\link{findNextItem}} (with the \code{values = TRUE} input), however supplying other
-#'   criteria are possible (e.g., to minimize the number of items administered simply pass a vector
-#'   of -1's) 
-#'   
-#' @param constr_fun a user-defined function of the form \code{function(person, test, design){...}} 
-#'   that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
-#'   of the constraints. Each row corresponds to a constraint, while the number of columns should be 
-#'   equal to the number of items plus 2. 
-#'   
-#'   For example, in a test with the constraint that exactly 10 items 
-#'   should be administered to all participants, the input should be defined as 
-#'   \preformatted{const_fun <- function(person, test, design){
-#'      nitems <- extract.mirt(test@@mo, 'nitems')
-#'      data.frame(item=t(rep(1, nitems)), relation="==", value=10)
-#'    }}
-#'    Note that the column names of the returned \code{data.frame} object do not matter.
-#'   
-#' @param CATdesign an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
-#'   when passing \code{design_elements = TRUE}
-#'
-#' @param person (required when \code{x} is missing) internal person object. To be 
-#'   used when \code{customNextItem} function has been defined
-#' 
-#' @param design (required when \code{x} is missing) internal design object. To be 
-#'   used when \code{customNextItem} function has been defined
-#' 
-#' @param test (required when \code{x} is missing) internal test object. To be 
-#'   used when \code{customNextItem} function has been defined
-#'   
-#' @param all_index logical; return all the items which solve the optimization problem? Note that 
-#'   this also includes items which have previously been responsed to
-#'   
-#' @param ... additional arguments to be passed to \code{\link{lp}}
-#' 
-#' @seealso \code{\link{mirtCAT}}, \code{\link{findNextItem}}, 
-#'   \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
-#' @export 
-#' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
-#' @references 
-#' van der Linden, W. J. (2005). Linear models for optimal test design. Springer.
-#' 
-#' @return typically returns an integer value indicating the index of the next item to be selected or a
-#'   value of \code{NA} to indicate that the test should be terminated. However, see the arguments for 
-#'   further returned object descriptions
-#'   
-#' @examples
-#' \dontrun{
-#' 
-#' #-------------------------------------------------------------
-#' # find maximum information subject to constraints
-#' #  sum(xi) <= 5              ### 5 or fewer items
-#' #  x1 + x2 <= 1              ### items 1 and 2 can't be together
-#' #  x4 == 0                   ### item 4 not included
-#' 
-#' # MI criteria value associated with each respective item
-#' objective <- findNextItem(CATdesign, criteria = 'MI', values = TRUE)
-#' 
-#' # constraint function
-#' constr_fun <- function(person, test, design){
-#'
-#'   # left hand side constrains 
-#'   #    - 1 row per constraint, and ncol must equal number of items
-#'   nitems <- extract.mirt(test@mo, 'nitems')
-#'   lhs <- matrix(0, 3, nitems)
-#'   lhs[1,] <- 1
-#'   lhs[2,c(1,2)] <- 1
-#'   lhs[3, 4] <- 1
-#'   
-#'   # relationship direction
-#'   dirs <- c("<=", "<=", '==')
-#'   
-#'   #right hand side
-#'   rhs <- c(5, 1, 0)
-#' 
-#'   #all together
-#'   constraints <- data.frame(lhs, dirs, rhs)
-#'   constraints
-#' }
-#' 
-#' 
-#' # most optimal item, given constraints
-#' findNextItem.lp(objective, constr_fun, CATdesign)
-#' 
-#' # all the items which solve the problem
-#' findNextItem.lp(objective, constr_fun, CATdesign, all_index = TRUE)
-#' 
-#' ## within a customNextItem() definition the above code would look like
-#' # customNextItem <- function(person, design, test){
-#' #   objective <- findNextItem(person=person, design=design, test=test, 
-#' #                             values=TRUE) 
-#' #   item <- findNextItem.lp(objective, constr_fun, 
-#' #                           person=person, design=design, test=test)
-#' #   item
-#' # }
-#' 
-#' }
-findNextItem.lp <- function(objective, constr_fun, CATdesign, person = NULL, 
-                            design = NULL, test = NULL, all_index = FALSE, ...){
-    if(!missing(CATdesign)){
-        design <- CATdesign$design
-        person <- CATdesign$person
-        test <- CATdesign$test
-    }
-    if(any(is.null(person) || is.null(test) || is.null(design)))
-        stop('findNextItem.lp has improper inputs', call.=FALSE)
+findNextItem.lp <- function(objective, person, design, test, all_index = FALSE, ...){
     stopifnot(is.numeric(objective))
-    stopifnot(is.function(constr_fun))
+    constr_fun <- design@constr_fun
     nitems <- extract.mirt(test@mo, 'nitems')
     constraints <- constr_fun(person=person, test=test, design=design)
     if(ncol(constraints) != nitems + 2) 

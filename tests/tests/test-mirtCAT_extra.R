@@ -42,7 +42,7 @@ test_that('extra', {
     expect_equal(20, findNextItem(CATdesign))
     CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
     expect_equal(3, findNextItem(CATdesign))
-    vals <- findNextItem(CATdesign, values = TRUE)
+    vals <- computeCriteria(CATdesign)
     expect_equal(vals[1:4], c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
     # shadow test (less than 20 items, items 31+41 not in same test, item 3 not answered)
@@ -65,7 +65,23 @@ test_that('extra', {
       constraints <- data.frame(lhs, dirs, rhs)
       constraints
     }
-    item <- findNextItem.lp(vals, constr_fun, CATdesign)
+    CATdesign <- mirtCAT(df, mod2, design_elements = TRUE,
+                         design = list(constr_fun=constr_fun))
+    item <- findNextItem(CATdesign, objective=vals)
+    expect_equal(item, 27)
+    
+    customNextItem <- function(person, design, test){
+        objective <- computeCriteria(person=person, design=design, test=test, 
+                                     criteria = 'MI') 
+        item <- findNextItem(person=person, design=design, test=test, 
+                             objective=objective)
+        item
+    }
+    set.seed(1)
+    res <- mirtCAT(mo = mod2, criteria = 'MI', start_item = 1, 
+                   local_pattern = matrix(sample(c(0,1), 50, TRUE), 1), 
+                   design = list(customNextItem=customNextItem, constr_fun=constr_fun))
+    expect_equal(res$items_answered, c(1,20,41,15,27,2,5,6,21,14,24,29,39,23,22,32,34,8,40,17))
     
     design <- list(min_items = 10, max_items = 45,
                    constraints = list(

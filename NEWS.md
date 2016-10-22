@@ -1,6 +1,9 @@
 # mirtCAT 1.2
 
-- `values = TRUE` input added to `findNextItem()` to return all the criteria values (e.g.,
+- Shadow testing and optimal test assembly designs supported by adding `constr_fun` input to 
+  `mirtCAT()` and `objective` input to `findNextItem()`
+
+- `computeCriteria()` function added to return all the criteria values (e.g.,
   maximum information) associated with each respective item
 
 - population-level Theta terms tracked internally for Monte Carlo simulations because

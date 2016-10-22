@@ -1,5 +1,5 @@
 Package: mirtCAT
-Version: 1.1.5
+Version: 1.1.6
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
@@ -9,7 +9,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     package. Suitable for applying unidimensional and multidimensional
     computerized adaptive tests (CAT) using item response theory methodology and for
     creating simple questionnaires forms to collect response data directly in R.
-    Additionally, Optimal test designs (e.g., "shadow testing") are supported
+    Additionally, optimal test designs (e.g., "shadow testing") are supported
     for tests which contain a large number of item selection constraints.
     Finally, package contains tools useful for performing Monte Carlo simulations 
     for studying the behaviour of computerized adaptive test banks.

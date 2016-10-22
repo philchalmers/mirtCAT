@@ -37,7 +37,7 @@ mirtCAT_preamble <- function(..., final_fun = NULL){
 
 # set this up to avoid double documentation
 mirtCAT_preamble_internal <- 
-    function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
+    function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
              start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
              design = list(), shinyGUI = list(), preCAT = list(), final_fun = NULL, ...)
     {
