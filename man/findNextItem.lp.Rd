@@ -4,13 +4,10 @@
 \alias{findNextItem.lp}
 \title{Find next CAT item with linear (or integer) solver}
 \usage{
-findNextItem.lp(x, objective, constr_fun, person = NULL, design = NULL,
-  test = NULL, all_index = FALSE, ...)
+findNextItem.lp(objective, constr_fun, CATdesign, person = NULL,
+  design = NULL, test = NULL, all_index = FALSE, ...)
 }
 \arguments{
-\item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
-when passing \code{design_elements = TRUE}}
-
 \item{objective}{a vector of values used as the optimization criteria to be passed to 
 \code{lp(objective.in)}. This is typically the vector of criteria values returned from
 \code{\link{findNextItem}} (with the \code{values = TRUE} input), however supplying other
@@ -30,6 +27,9 @@ should be administered to all participants, the input should be defined as
  }}
  Note that the column names of the returned \code{data.frame} object do not matter.}
 
+\item{CATdesign}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
+when passing \code{design_elements = TRUE}}
+
 \item{person}{(required when \code{x} is missing) internal person object. To be 
 used when \code{customNextItem} function has been defined}
 
@@ -39,8 +39,8 @@ used when \code{customNextItem} function has been defined}
 \item{test}{(required when \code{x} is missing) internal test object. To be 
 used when \code{customNextItem} function has been defined}
 
-\item{all_index}{logical; return all the items which solve the optimization problem 
-(in no particular order)?}
+\item{all_index}{logical; return all the items which solve the optimization problem? Note that 
+this also includes items which have previously been responsed to}
 
 \item{...}{additional arguments to be passed to \code{\link{lp}}}
 }
@@ -66,10 +66,10 @@ by using the \code{\link{lp}} function.
 #  x4 == 0                   ### item 4 not included
 
 # MI criteria value associated with each respective item
-objective <- findNextItem(CATdesign, values = TRUE)
+objective <- findNextItem(CATdesign, criteria = 'MI', values = TRUE)
 
 # constraint function
-const_fun <- function(person, test, design){
+constr_fun <- function(person, test, design){
 
   # left hand side constrains 
   #    - 1 row per constraint, and ncol must equal number of items
@@ -77,7 +77,7 @@ const_fun <- function(person, test, design){
   lhs <- matrix(0, 3, nitems)
   lhs[1,] <- 1
   lhs[2,c(1,2)] <- 1
-  lsh[3, 4] <- 1
+  lhs[3, 4] <- 1
   
   # relationship direction
   dirs <- c("<=", "<=", '==')
@@ -92,17 +92,17 @@ const_fun <- function(person, test, design){
 
 
 # most optimal item, given constraints
-findNextItem.lp(CATdesign, objective, constr_fun)
+findNextItem.lp(objective, constr_fun, CATdesign)
 
 # all the items which solve the problem
-findNextItem.lp(CATdesign, objective, constr_fun, all_index = TRUE)
+findNextItem.lp(objective, constr_fun, CATdesign, all_index = TRUE)
 
 ## within a customNextItem() definition the above code would look like
 # customNextItem <- function(person, design, test){
 #   objective <- findNextItem(person=person, design=design, test=test, 
 #                             values=TRUE) 
-#   item <- findNextItem.lp(person=person, design=design, test=test, 
-#                           objective=objective, constr_fun=constr_fun)
+#   item <- findNextItem.lp(objective, constr_fun, 
+#                           person=person, design=design, test=test)
 #   item
 # }
 

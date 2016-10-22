@@ -45,13 +45,27 @@ test_that('extra', {
     vals <- findNextItem(CATdesign, values = TRUE)
     expect_equal(vals[1:4], c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
-    # shadow test (less than 20 items, items 31+41 not in same test)
-    person <- CATdesign$person
-    mat <- rbind(rep(1, 50), 
-                 numeric(50))
-    mat[2,c(31,41)] <- 1
-    constraints <- data.frame(mat, c('<=', '=='), c(20, 1))
-    item <- findNextItem.lp(vals, constraints, person)
+    # shadow test (less than 20 items, items 31+41 not in same test, item 3 not answered)
+    constr_fun <- function(person, test, design){
+      # left hand side constrains 
+      #    - 1 row per constraint, and ncol must equal number of items
+      nitems <- extract.mirt(test@mo, 'nitems')
+      lhs <- matrix(0, 3, nitems)
+      lhs[1,] <- 1
+      lhs[2,c(31,41)] <- 1
+      lhs[3,3] <- 1
+      
+      # relationship direction
+      dirs <- c("<=", "<=", '==')
+      
+      #right hand side
+      rhs <- c(20, 1, 0)
+    
+      #all together
+      constraints <- data.frame(lhs, dirs, rhs)
+      constraints
+    }
+    item <- findNextItem.lp(vals, constr_fun, CATdesign)
     
     design <- list(min_items = 10, max_items = 45,
                    constraints = list(

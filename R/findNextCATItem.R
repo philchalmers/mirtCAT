@@ -284,9 +284,6 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
 #' can be used to for 'Optimal Test Assembly', as well as 'Shadow Testing' designs (van der Linden, 2005),
 #' by using the \code{\link{lp}} function.
 #'
-#' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
-#'   when passing \code{design_elements = TRUE}
-#'
 #' @param objective a vector of values used as the optimization criteria to be passed to 
 #'   \code{lp(objective.in)}. This is typically the vector of criteria values returned from
 #'   \code{\link{findNextItem}} (with the \code{values = TRUE} input), however supplying other
@@ -306,6 +303,9 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
 #'    }}
 #'    Note that the column names of the returned \code{data.frame} object do not matter.
 #'   
+#' @param CATdesign an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
+#'   when passing \code{design_elements = TRUE}
+#'
 #' @param person (required when \code{x} is missing) internal person object. To be 
 #'   used when \code{customNextItem} function has been defined
 #' 
@@ -315,8 +315,8 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
 #' @param test (required when \code{x} is missing) internal test object. To be 
 #'   used when \code{customNextItem} function has been defined
 #'   
-#' @param all_index logical; return all the items which solve the optimization problem 
-#'   (in no particular order)? 
+#' @param all_index logical; return all the items which solve the optimization problem? Note that 
+#'   this also includes items which have previously been responsed to
 #'   
 #' @param ... additional arguments to be passed to \code{\link{lp}}
 #' 
@@ -341,18 +341,18 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
 #' #  x4 == 0                   ### item 4 not included
 #' 
 #' # MI criteria value associated with each respective item
-#' objective <- findNextItem(CATdesign, values = TRUE)
+#' objective <- findNextItem(CATdesign, criteria = 'MI', values = TRUE)
 #' 
 #' # constraint function
-#' const_fun <- function(person, test, design){
+#' constr_fun <- function(person, test, design){
 #'
 #'   # left hand side constrains 
 #'   #    - 1 row per constraint, and ncol must equal number of items
-#'   nitems <- extract.mirt(test@@mo, 'nitems')
+#'   nitems <- extract.mirt(test@mo, 'nitems')
 #'   lhs <- matrix(0, 3, nitems)
 #'   lhs[1,] <- 1
 #'   lhs[2,c(1,2)] <- 1
-#'   lsh[3, 4] <- 1
+#'   lhs[3, 4] <- 1
 #'   
 #'   # relationship direction
 #'   dirs <- c("<=", "<=", '==')
@@ -367,29 +367,56 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
 #' 
 #' 
 #' # most optimal item, given constraints
-#' findNextItem.lp(CATdesign, objective, constr_fun)
+#' findNextItem.lp(objective, constr_fun, CATdesign)
 #' 
 #' # all the items which solve the problem
-#' findNextItem.lp(CATdesign, objective, constr_fun, all_index = TRUE)
+#' findNextItem.lp(objective, constr_fun, CATdesign, all_index = TRUE)
 #' 
 #' ## within a customNextItem() definition the above code would look like
 #' # customNextItem <- function(person, design, test){
 #' #   objective <- findNextItem(person=person, design=design, test=test, 
 #' #                             values=TRUE) 
-#' #   item <- findNextItem.lp(person=person, design=design, test=test, 
-#' #                           objective=objective, constr_fun=constr_fun)
+#' #   item <- findNextItem.lp(objective, constr_fun, 
+#' #                           person=person, design=design, test=test)
 #' #   item
 #' # }
 #' 
 #' }
-findNextItem.lp <- function(x, objective, constr_fun, person = NULL, 
+findNextItem.lp <- function(objective, constr_fun, CATdesign, person = NULL, 
                             design = NULL, test = NULL, all_index = FALSE, ...){
-    if(!missing(x)){
-        design <- x$design
-        person <- x$person
-        test <- x$test
+    if(!missing(CATdesign)){
+        design <- CATdesign$design
+        person <- CATdesign$person
+        test <- CATdesign$test
     }
     if(any(is.null(person) || is.null(test) || is.null(design)))
-        stop('findNextItem has improper inputs', call.=FALSE)
-    
+        stop('findNextItem.lp has improper inputs', call.=FALSE)
+    stopifnot(is.numeric(objective))
+    stopifnot(is.function(constr_fun))
+    nitems <- extract.mirt(test@mo, 'nitems')
+    constraints <- constr_fun(person=person, test=test, design=design)
+    if(ncol(constraints) != nitems + 2) 
+        stop('constr_fun() does not have nitem + 2 columns')
+    lhs <- as.matrix(constraints[,1L:nitems, drop=FALSE])
+    dirs <- as.character(constraints[,nitems+1L])
+    rhs <- constraints[,nitems+2L]
+    resp <- as.numeric(!is.na(person$responses))
+    items_answered <- person$items_answered[1L:sum(resp)]
+    objective2 <- objective
+    objective[items_answered] <- objective[items_answered] * resp[items_answered]
+    lhs <- rbind(lhs, resp)
+    dirs <- c(dirs, "==")
+    rhs <- c(rhs, sum(resp))
+    out <- lp(direction = 'max', objective, const.mat=lhs,
+              const.dir=dirs, const.rhs=rhs, all.bin = TRUE)
+    if(out$status != 0L)
+        stop('lp() solver could not find solution', call.=FALSE)
+    solution <- out$solution
+    if(all_index){
+        return(which(solution == 1L))
+    } else {
+        solution[items_answered] <- 0
+        ret <- if(sum(solution) == 0) NA else which.max(solution * objective2)
+        return(ret)
+    }
 }
