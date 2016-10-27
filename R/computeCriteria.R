@@ -9,8 +9,7 @@
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 #'   when passing \code{design_elements = TRUE}
 #'   
-#' @param criteria item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
-#'   If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used
+#' @param criteria item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input)
 #'   
 #' @param person (required when \code{x} is missing) internal person object. To be 
 #'   used when \code{customNextItem} function has been defined
@@ -30,13 +29,13 @@
 #' @examples
 #' \dontrun{
 #' # test defined in mirtCAT help file, first example
-#' CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
+#' CATdesign <- mirtCAT(df, mod, design_elements = TRUE)
 #' 
-#' computeCriteria(CATdesign)
+#' computeCriteria(CATdesign, criteria = 'MI')
 #' computeCriteria(CATdesign, criteria = 'MEI')
 #' 
 #' }
-computeCriteria <- function(x, criteria = NULL, person = NULL, 
+computeCriteria <- function(x, criteria, person = NULL, 
                             test = NULL, design = NULL){
     if(!missing(x)){
         design <- x$design
@@ -45,10 +44,9 @@ computeCriteria <- function(x, criteria = NULL, person = NULL,
     }
     if(any(is.null(person) || is.null(test) || is.null(design)))
         stop('computeCriteria has improper inputs', call.=FALSE)
-    if(!is.null(criteria))
-        design@criteria <- criteria
-    if(design@criteria == 'custom')
+    if(missing(criteria))
         stop('Please specify a valid selection criteria', call.=FALSE)
+    design@criteria <- criteria
     return(findNextCATItem(person=person, test=test, design=design,
                            subset=NULL, all_index=FALSE, values=TRUE))
 }

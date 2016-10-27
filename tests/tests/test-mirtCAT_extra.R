@@ -42,7 +42,7 @@ test_that('extra', {
     expect_equal(20, findNextItem(CATdesign))
     CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
     expect_equal(3, findNextItem(CATdesign))
-    vals <- computeCriteria(CATdesign)
+    vals <- computeCriteria(CATdesign, criteria = 'MI')
     expect_equal(vals[1:4], c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
     # shadow test (less than 20 items, items 31+41 not in same test, item 3 not answered)

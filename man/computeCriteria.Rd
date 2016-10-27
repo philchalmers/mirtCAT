@@ -4,15 +4,13 @@
 \alias{computeCriteria}
 \title{Compute the values given the criteria and internal objects}
 \usage{
-computeCriteria(x, criteria = NULL, person = NULL, test = NULL,
-  design = NULL)
+computeCriteria(x, criteria, person = NULL, test = NULL, design = NULL)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 when passing \code{design_elements = TRUE}}
 
-\item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input). 
-If not specified the value from \code{extract.mirtCAT(design, 'criteria')} will be used}
+\item{criteria}{item selection criteria (see \code{\link{mirtCAT}}'s \code{criteria} input)}
 
 \item{person}{(required when \code{x} is missing) internal person object. To be 
 used when \code{customNextItem} function has been defined}
@@ -36,9 +34,9 @@ problem.
 \examples{
 \dontrun{
 # test defined in mirtCAT help file, first example
-CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
+CATdesign <- mirtCAT(df, mod, design_elements = TRUE)
 
-computeCriteria(CATdesign)
+computeCriteria(CATdesign, criteria = 'MI')
 computeCriteria(CATdesign, criteria = 'MEI')
 
 }
