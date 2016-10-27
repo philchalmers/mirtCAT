@@ -1,0 +1,110 @@
+Offline run with a shadow CAT design
+======================================
+
+The following code sets up a shadow CAT design (i.e., a CAT where a number of constraints must be satistified
+throughout the test adminstration). This uses integer programming methods to find the most optimal 
+solution given a (potentially large) number of constraints. The following is a relatively simple in its
+inception, but demonstrates the generality of the setup and the use of the `test_properties` input. 
+
+```{r}
+library('mirtCAT')
+
+set.seed(1)
+bank <- 300 #bank size
+N <- 500 #calibration sample size
+
+a <- rlnorm(bank, .2,.3)
+d <- rnorm(bank)
+pars <- data.frame(a1=a, d=d)
+mod <- generate.mirt_object(pars, itemtype = '2PL')
+head(coef(mod, simplify=TRUE)$items)
+```
+
+This next section defines a number of test-level properties, such as 
+
+1) The type of item response stimuli (e.g., true-false, multiple-choice, fill-in-the-blank, etc),
+1) The content category (e.g., addition or subtraction), and
+1) Number of words in each item stem
+
+The purpose of this shadow CAT is to find an optimal measurment test, according to the maximum information criteria,
+subject to the following constraints:
+
+- exactly 40 total items administered
+- between 3 to 5 fill-in-the-blank items only
+- items 5 and 6, as well as 10 and 11, should not appear in the same test
+- item 17 and 18 should appear in the test no matter what
+- item 15 should not appear
+- the same number of addition and subtraction questions should be included
+- the average number of words in the item stems should be less than 20
+
+```{r}
+## generate random response pattern
+set.seed(1)
+pattern <- generate_pattern(mod, Theta = matrix(-2:2))
+pattern[, 1:6]
+
+test_properties <- data.frame(stimuli=rep(c('TF', 'MC', 'fill'), each=bank/3),
+                              content=rep(c('add', 'sub'), times=150),
+                              words=sample(10:30, bank, TRUE))
+head(test_properties)
+
+# constraint generating function
+constr_fun <- function(person, test, design){
+  nitems <- extract.mirt(test@mo, 'nitems')
+  tp <- design@test_properties
+  
+  lhs <- matrix(0, 9, nitems)
+  lhs[1,] <- 1
+  lhs[2,tp$stimuli == 'fill'] <- 1
+  lhs[3,tp$stimuli == 'fill'] <- 1
+  lhs[4, c(5, 6)] <- 1
+  lhs[5, c(10,11)] <- 1
+  lhs[6, c(17,18)] <- 1
+  lhs[7, 15] <- 1
+  lhs[8, tp$content == 'add'] <- 1
+  lhs[8, tp$content == 'sub'] <- -1
+  lhs[9, ] <- tp$words
+  
+  # relationship direction
+  dirs <- c("==", ">=", '<=', '==', '==', '==', '==', '==', '<=')
+  
+  #right hand side
+  rhs <- c(40, 3, 5, 1, 1, 2, 0, 0, 40*20)
+
+  #all together
+  constraints <- data.frame(lhs, dirs, rhs)
+  constraints
+}
+
+# next item selection function
+customNextItem <- function(person, design, test){
+    objective <- computeCriteria(person=person, design=design, test=test,
+    							 criteria = 'MI') 
+    item <- findNextItem(person=person, design=design, test=test,
+                         objective=objective)
+    item
+}
+
+result <- mirtCAT(mo=mod, start_item = 30, local_pattern = pattern, 
+				  design = list(customNextItem=customNextItem, 
+				  			  constr_fun=constr_fun, 
+				  			  test_properties=test_properties,
+				  			  min_SEM=0))
+plot(result[[1]])
+(items <- summary(result[[1]])$items_answered)
+head(test_properties[items, ]) #items answered
+table(test_properties[items, 1:2])
+colSums(table(test_properties[items, 1:2]))
+mean(test_properties[items, 3])
+
+plot(result[[3]])
+(items <- summary(result[[3]])$items_answered)
+head(test_properties[items, ]) #items answered
+table(test_properties[items, 1:2])
+colSums(table(test_properties[items, 1:2]))
+mean(test_properties[items, 3])
+```
+
+Notice that each of these response patterns satisfy all of the proposed constraints. This is the 
+general benifit of shadow CATs: optimal item selection (according to the item selection critiera) while
+simultaneously considering a wide and complicated set of item-design constraints.
