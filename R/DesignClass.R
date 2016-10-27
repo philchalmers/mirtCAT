@@ -52,7 +52,8 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@CAT_criteria <- criteria
               .Object@CAT_method <- method
               .Object@start_item <- as.integer(start_item)
-              if(!is.nan(start_item) && .Object@start_item != 1 && criteria == 'seq')
+              if(!is.nan(start_item) && .Object@start_item != 1 && criteria == 'seq' && 
+                 is.null(design$customNextItem))
                   stop('start_item must equal 1 with seq criteria', call.=FALSE)
               if(nfact > 1L && 
                      !any(criteria %in% c('Drule', 'Trule', 'Wrule', 'KL', 'KLn',
