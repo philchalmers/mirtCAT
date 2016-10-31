@@ -1,8 +1,8 @@
-Offline run with a shadow CAT design
+Off-line run with a shadow CAT design
 ======================================
 
-The following code sets up a shadow CAT design (i.e., a CAT where a number of constraints must be satistified
-throughout the test adminstration). This uses integer programming methods to find the most optimal 
+The following code sets up a shadow CAT design (i.e., a CAT where a number of constraints must be satisfied
+throughout the test administration). This uses integer programming methods to find the most optimal 
 solution given a (potentially large) number of constraints. The following is a relatively simple in its
 inception, but demonstrates the generality of the setup and the use of the `test_properties` input. 
 
@@ -26,7 +26,7 @@ This next section defines a number of test-level properties, such as
 1) The content category (e.g., addition or subtraction), and
 1) Number of words in each item stem
 
-The purpose of this shadow CAT is to find an optimal measurment test, according to the maximum information criteria,
+The purpose of this shadow CAT is to find an optimal measurement test, according to the maximum information criteria,
 subject to the following constraints:
 
 - exactly 40 total items administered
@@ -106,5 +106,5 @@ mean(test_properties[items, 3])
 ```
 
 Notice that each of these response patterns satisfy all of the proposed constraints. This is the 
-general benifit of shadow CATs: optimal item selection (according to the item selection critiera) while
+general benefit of shadow CATs: optimal item selection (according to the item selection criteria) while
 simultaneously considering a wide and complicated set of item-design constraints.

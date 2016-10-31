@@ -24,7 +24,7 @@ customNextItem <- function(design, person, test){
 ```
 
 To safely extract elements from the defined objects see the `?extract.mirtCAT` help file. To further see 
-how to safly extract elements from objects defined by `mirt`, see the `?extract.mirt` help file.
+how to safely extract elements from objects defined by `mirt`, see the `?extract.mirt` help file.
 
 ```{r}
 # real definition

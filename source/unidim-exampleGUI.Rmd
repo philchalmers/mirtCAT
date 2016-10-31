@@ -1,10 +1,10 @@
 Unidimensional Example
 ======================================
 
-This example demonstrates how a unidimensional IRT test can be scored and modified for offline 
-and online use. 
+This example demonstrates how a unidimensional IRT test can be scored and modified for off-line 
+and on-line use. 
 
-The following codeblock defines 100 items for a math test measuring addition skills.
+The following code-block defines 100 items for a math test measuring addition skills.
 
 ```{r}
 library('mirtCAT')

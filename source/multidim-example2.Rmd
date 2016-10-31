@@ -3,10 +3,10 @@ Multi-unidimensional Example
 
 This example demonstrates how a multi-unidimensional IRT test can be presented in blocks of items
 at a time. This generally makes presentation more smooth, however you still will get the general 
-benifits of using a MIRT model as opposed to seperate unidimensional models (especially after 
+benefits of using a MIRT model as opposed to separate unidimensional models (especially after 
 one block has been completed). 
 
-The following codeblock defines 100 items for a two factor math test measuring 
+The following code-block defines 100 items for a two factor math test measuring 
 addition and multiplication.
 
 ```{r}
@@ -64,14 +64,14 @@ pat <- generate_pattern(mo = mod, Theta = c(-1, 1), df = df)
 head(pat)
 ```
 
-The idea for setting up a multi-unidimesional item selection mechanism is to use the `customNextItem()`
-input so that the `subset` arguemnt to `findNextItem()` can be manipulated. Here we define two blocks to select
+The idea for setting up a multi-unidimensional item selection mechanism is to use the `customNextItem()`
+input so that the `subset` argument to `findNextItem()` can be manipulated. Here we define two blocks to select
 from: a block from items 1:50, and 51:100. This means that when the first block is used only items 1:50 can
 be selected as the next item. Furthermore, we can do some manual checks to decide when the second block
 should begin. Here items will be selected until 20 items appear in each block.
 
 ```{r}
-# standad MCAT
+# standard MCAT
 # res <- mirtCAT(df = df, mo = mod, criteria = "Drule", local_pattern = pat)
 
 # custom. Often useful to set up a browser first for easier editing

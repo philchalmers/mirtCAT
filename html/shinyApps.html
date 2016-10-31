@@ -227,7 +227,7 @@ to your Dropbox.</p>
 <h2>mirtCAT files</h2>
 
 <p>The standard <code>mirtCAT()</code> function cannot be run on <code>shinyApps.io</code>, therefore the process must be 
-broken into two seperate functions and placed in an external source file (i.e., no <code>server.R</code> or 
+broken into two separate functions and placed in an external source file (i.e., no <code>server.R</code> or 
 <code>ui.R</code> files are required). The two functions are: <code>mirtCAT_preamble()</code>, which is essentially
 equivalent to <code>mirtCAT()</code> and accepts all the arguments, and <code>createShinyApp()</code> which generates 
 the required GUI. Three things are important here:</p>
@@ -246,7 +246,7 @@ in the <code>app.R</code> file.</p>
 
 <h2>Setup</h2>
 
-<p>Before you can upload R objects to your dropbox folder you must first setup Dropbox to be accessed. After doing this
+<p>Before you can upload R objects to your Dropbox folder you must first setup Dropbox to be accessed. After doing this
 you can save your token to a file and read this in later once it has been uploaded to the <code>shinyApp.io</code> server.</p>
 
 <pre><code class="r">token &lt;- drop_auth()
@@ -309,7 +309,7 @@ createShinyGUI()
 <li>The <code>app.R</code> file, containing the above instructions,</li>
 <li>A <code>questions.csv</code> containing text-based questions, and</li>
 <li>An R binary file called <code>&#39;droptoken.rds&#39;</code>, containing the object 
-dropbox credentials for authenticating the personal Dropbox folder</li>
+Dropbox credentials for authenticating the personal Dropbox folder</li>
 </ul>
 
 <p>Modifying the arguments in <code>mirtCAT_preamble()</code> will change how the session is organized, 

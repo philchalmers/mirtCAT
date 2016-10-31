@@ -1,9 +1,9 @@
-Offline run
+Off-line run
 ======================================
 
 The following code block uses `mirt` to define population parameters for ten 3PL IRT models. This
-will be used to set up a CAT interface that can be used for online use (with the shiny GUI) or 
-offline use (for testing or Monte Carlo simulation research).
+will be used to set up a CAT interface that can be used for on-line use (with the shiny GUI) or 
+off-line use (for testing or Monte Carlo simulation research).
 
 ```{r}
 library('mirtCAT')
@@ -37,7 +37,7 @@ fscores(mirt_object, response.pattern = responses, method = "ML")
 ```
 
 This next section generates a plausible response vector given $\theta = 1$, and passes
-the response vector to `mirtCAT()` for offline use. 
+the response vector to `mirtCAT()` for off-line use. 
 
 ```{r}
 ## generate random response pattern

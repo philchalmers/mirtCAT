@@ -28,7 +28,7 @@ mirtCAT files
 --------------------------------------
 
 The standard `mirtCAT()` function cannot be run on `shinyApps.io`, therefore the process must be 
-broken into two seperate functions and placed in an external source file (i.e., no `server.R` or 
+broken into two separate functions and placed in an external source file (i.e., no `server.R` or 
 `ui.R` files are required). The two functions are: `mirtCAT_preamble()`, which is essentially
 equivalent to `mirtCAT()` and accepts all the arguments, and `createShinyApp()` which generates 
 the required GUI. Three things are important here:
@@ -46,7 +46,7 @@ in the `app.R` file.
 Setup
 --------------------------------------
 
-Before you can upload R objects to your dropbox folder you must first setup Dropbox to be accessed. After doing this
+Before you can upload R objects to your Dropbox folder you must first setup Dropbox to be accessed. After doing this
 you can save your token to a file and read this in later once it has been uploaded to the `shinyApp.io` server.
 
 ```{r eval=FALSE}
@@ -111,7 +111,7 @@ In the example above, three files were uploaded to `shinyApps.io`:
 - The `app.R` file, containing the above instructions,
 - A `questions.csv` containing text-based questions, and
 - An R binary file called `'droptoken.rds'`, containing the object 
-  dropbox credentials for authenticating the personal Dropbox folder
+  Dropbox credentials for authenticating the personal Dropbox folder
   
 
 Modifying the arguments in `mirtCAT_preamble()` will change how the session is organized, 
