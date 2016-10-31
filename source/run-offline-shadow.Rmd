@@ -50,8 +50,9 @@ head(test_properties)
 
 # constraint generating function
 constr_fun <- function(person, test, design){
-  nitems <- extract.mirt(test@mo, 'nitems')
-  tp <- design@test_properties
+  mo <- extract.mirtCAT(test, 'mo')
+  nitems <- extract.mirt(mo, 'nitems')
+  tp <- extract.mirtCAT(design, 'test_properties')
   
   lhs <- matrix(0, 9, nitems)
   lhs[1,] <- 1

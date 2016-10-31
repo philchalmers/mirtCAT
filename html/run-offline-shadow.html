@@ -280,8 +280,9 @@ head(test_properties)
 
 <pre><code class="r"># constraint generating function
 constr_fun &lt;- function(person, test, design){
-  nitems &lt;- extract.mirt(test@mo, &#39;nitems&#39;)
-  tp &lt;- design@test_properties
+  mo &lt;- extract.mirtCAT(test, &#39;mo&#39;)
+  nitems &lt;- extract.mirt(mo, &#39;nitems&#39;)
+  tp &lt;- extract.mirtCAT(design, &#39;test_properties&#39;)
 
   lhs &lt;- matrix(0, 9, nitems)
   lhs[1,] &lt;- 1

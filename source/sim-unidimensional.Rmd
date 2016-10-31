@@ -1,7 +1,9 @@
 Unidimensional CAT simulation
 ======================================
 
-Example of how to build a unidimensional CAT simulation.
+Example of how to build a unidimensional CAT simulation with 1000 3PL items and 5000 participants. Sessions are terminated if the standard error of measurement is less than .25, and must contain a minimum of 10 items and a maximum of 50. Item selection
+is done via the maximum information criteria, while ability estimates are updated with the EAP estimator.
+Code is executed in parallel to save computation time.
 
 ```{r eval=FALSE}
 nitems <- 1000
