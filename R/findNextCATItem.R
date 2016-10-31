@@ -94,7 +94,8 @@
 #'
 #'   # left hand side constrains 
 #'   #    - 1 row per constraint, and ncol must equal number of items
-#'   nitems <- extract.mirt(test@mo, 'nitems')
+#'   mo <- extract.mirtCAT(test, 'mo')
+#'   nitems <- extract.mirt(mo, 'nitems')
 #'   lhs <- matrix(0, 4, nitems)
 #'   lhs[1,] <- 1
 #'   lhs[2,c(1,2)] <- 1
