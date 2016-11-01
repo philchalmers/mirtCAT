@@ -1,5 +1,6 @@
 run_local <- function(responses, nfact, start_item, nitems, thetas.start_in, 
-                      score, design, test, verbose = FALSE, cl = NULL, primeCluster = TRUE){
+                      score, design, test, progress, verbose = FALSE, cl = NULL, 
+                      primeCluster = TRUE){
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test){
@@ -47,16 +48,29 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                  call.=FALSE)
     }
     if(is.null(cl) || nrow(responses) == 1L){
-        ret <- lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
-                      nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
-                      design=design, test=test)
+        ret <- if(progress){
+            pbapply::pblapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
+                              nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
+                              design=design, test=test)
+        } else {
+            lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
+                   nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
+                   design=design, test=test)
+        }    
     } else {
         parallel::clusterEvalQ(cl, library("mirtCAT"))
         if(primeCluster) parallel::parLapply(cl=cl, X=1L:(length(cl)*2), function(x) invisible())
-        ret <- parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses, 
-                                   nfact=nfact, start_item=start_item, design=design, test=test,
-                                   nitems=nitems, thetas.start_in=thetas.start_in, score=score,
-                                   verbose=verbose)
+        ret <- if(progress){
+            pbapply::pblapply(cl=cl, X=1L:nrow(responses), FUN=fn, responses=responses,
+                              nfact=nfact, start_item=start_item, design=design, test=test,
+                              nitems=nitems, thetas.start_in=thetas.start_in, score=score,
+                              verbose=verbose)
+        } else {
+            parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses,
+                                nfact=nfact, start_item=start_item, design=design, test=test,
+                                nitems=nitems, thetas.start_in=thetas.start_in, score=score,
+                                verbose=verbose)
+        }
     }
     if(verbose) cat('\n')
     ret

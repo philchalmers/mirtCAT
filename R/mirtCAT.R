@@ -150,6 +150,10 @@
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
+#' @param progress logical; print a progress bar to the console 
+#'   with the \code{pbapply} package for given response patterns? Useful for 
+#'   guaging how long Monte Carlo simulations will take to finish
+#'   
 #' @param design a list of design based control parameters for adaptive and non-adaptive tests. 
 #'   These can be
 #' 
@@ -621,7 +625,7 @@
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, local_pattern = NULL, 
-                    design_elements = FALSE, cl = NULL,
+                    design_elements = FALSE, cl = NULL, progress = FALSE, 
                     primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
@@ -643,7 +647,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,
                             nitems=length(.MCE$test@itemnames), cl=cl, primeCluster=primeCluster,
                             thetas.start_in=design$thetas.start, score=.MCE$score, 
-                            design=.MCE$design, test=.MCE$test)
+                            design=.MCE$design, test=.MCE$test, progress=progress)
         if(!is.null(attr(local_pattern, 'Theta'))){
             local_Thetas <- attr(local_pattern, 'Theta')
             if(length(person) == 1L) 

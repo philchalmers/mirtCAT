@@ -1,5 +1,8 @@
 # mirtCAT 1.2
 
+- `progress` logical added to `mirtCAT()` to print the progress of Monte Carlo simulations
+  with the `pbapply` package
+
 - Shadow testing and optimal test assembly designs supported by adding `constr_fun` input to 
   `mirtCAT()` and `objective` input to `findNextItem()`
 

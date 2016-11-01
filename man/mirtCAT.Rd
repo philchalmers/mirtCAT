@@ -9,8 +9,8 @@
 \usage{
 mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
   start_item = 1, local_pattern = NULL, design_elements = FALSE,
-  cl = NULL, primeCluster = TRUE, design = list(), shinyGUI = list(),
-  preCAT = list(), ...)
+  cl = NULL, progress = FALSE, primeCluster = TRUE, design = list(),
+  shinyGUI = list(), preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -150,6 +150,10 @@ elements? Primarily this is to be used with the \code{\link{findNextItem}} funct
 (see \code{?parallel::parLapply} for details). If defined, and if 
 \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
 decrease estimation times in simulation work}
+
+\item{progress}{logical; print a progress bar to the console 
+with the \code{pbapply} package for given response patterns? Useful for 
+guaging how long Monte Carlo simulations will take to finish}
 
 \item{primeCluster}{logical; when a \code{cl} object is supplied, should the cluster be primed 
 first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 

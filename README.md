@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](http://cran.rstudio.com/web/packages/mirtCAT/index.html)
+[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](https://CRAN.R-project.org/package=mirtCAT)
 
 # mirtCAT
 
@@ -24,7 +24,7 @@ User contributions are welcome!
 
 # Installing from Github
 
-To install the developement version of this package, use the following code.
+To install the development version of this package, use the following code.
 
 ```r
 #if not installed already on your computer, install devtools
