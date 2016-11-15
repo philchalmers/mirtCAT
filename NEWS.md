@@ -4,7 +4,8 @@
   with the `pbapply` package
 
 - Shadow testing and optimal test assembly designs supported by adding `constr_fun` input to 
-  `mirtCAT()` and `objective` input to `findNextItem()`
+  `mirtCAT()` and `objective` input to `findNextItem()`. See the `findNextItem()` documentation
+  for details and examples
 
 - `computeCriteria()` function added to return all the criteria values (e.g.,
   maximum information) associated with each respective item
@@ -16,8 +17,8 @@
 - allow the internal `design` object to be modified through the `customNextItem()` function 
 
 - added an `extract.mirtCAT()` function to better document and extract the components
-  of the `person`, `design`, and `test` objects in `customNextItem()`. Allows for safter 
-  customization of item selection maps
+  of the `person`, `design`, and `test` objects in `customNextItem()`. Allows for safer 
+  and easier customization of item selection maps
 
 - new `test_properties` and `person_properties` inputs to `design` element to allow for 
   prior information about the test/persons (e.g., selecting particular items based on 

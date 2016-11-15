@@ -1,5 +1,5 @@
 Package: mirtCAT
-Version: 1.1.7
+Version: 1.2
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
@@ -12,7 +12,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     Additionally, optimal test designs (e.g., "shadow testing") are supported
     for tests which contain a large number of item selection constraints.
     Finally, package contains tools useful for performing Monte Carlo simulations 
-    for studying the behaviour of computerized adaptive test banks.
+    for studying the behavior of computerized adaptive test banks.
 Roxygen: list(wrap = FALSE)
 Depends:
     mirt (>= 1.18),
