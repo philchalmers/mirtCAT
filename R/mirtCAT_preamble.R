@@ -85,7 +85,7 @@ mirtCAT_preamble_internal <-
         if(is.null(mo)){
             dat <- matrix(c(0,1), 2L, length(questions))
             colnames(dat) <- if(!is.null(names(questions))) 
-                names(questions) else paste0('Item_', 1L:ncol(dat))
+                names(questions) else paste0('Item.', 1L:ncol(dat))
             mo <- mirt(dat, 1L, TOL=NaN)
             score <- FALSE
             if(!(criteria %in% c('seq', 'random')))
