@@ -131,11 +131,6 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                                     controls = TRUE, height=260, width=260)'))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
-# save and resume temp file with HTMLs
-mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #stop early
-results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this resumes and deletes
-summary(results)
-
 # checkbox input
 df <- data.frame(Question = questions, Option=options, Type = 'checkbox')
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
