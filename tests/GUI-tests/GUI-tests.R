@@ -16,6 +16,9 @@ results <- mirtCAT(df = df)
 summary(results)
 results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
+#theme
+results <- mirtCAT(df = df, shinyGUI = list(theme = 'journal'))
+
 # password
 results <- mirtCAT(df = df, shinyGUI = list(password = data.frame('1234')))
 summary(results)

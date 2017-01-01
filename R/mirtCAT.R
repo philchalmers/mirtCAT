@@ -400,6 +400,9 @@
 #'    \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation 
 #'      elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
 #'      prior to constructing the user interface}
+#'  
+#'    \item{\code{theme}}{a character definition for the \code{shinytheme} package to globally change 
+#'      the GUI theme}
 #'      
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}

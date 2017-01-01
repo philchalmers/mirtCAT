@@ -1,5 +1,5 @@
 Package: mirtCAT
-Version: 1.2.1
+Version: 1.2.2
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
@@ -26,6 +26,7 @@ Imports:
     pbapply,
     lpSolve
 Suggests:
+    shinythemes,
     parallel,
     SimDesign,
     knitr

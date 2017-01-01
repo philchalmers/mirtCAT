@@ -19,7 +19,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     password='data.frame',
                                     css = 'character',
                                     stopApp = 'logical',
-                                    ui = 'function'),
+                                    ui = 'function',
+                                    theme = 'character'),
                       
                       methods = list(
                           initialize = function(questions, df, shinyGUI, adaptive){
@@ -29,6 +30,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               df <<- df
                               forced_choice <<- TRUE
                               stopApp <<- TRUE
+                              theme <<- ''
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else {
@@ -85,12 +87,14 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
                                               'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format',
-                                              'stem_expressions')
+                                              'stem_expressions', 'theme')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
                                   if(!is.null(shinyGUI$ui))
                                       ui <<- shinyGUI$ui
+                                  if(!is.null(shinyGUI$theme))
+                                      theme <<- shinyGUI$theme
                                   if(!is.null(shinyGUI$instructions))
                                       instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$begin_message))

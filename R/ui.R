@@ -1,6 +1,9 @@
 default_UI <- function(){
     
-    fluidPage(
+    fluidPage(theme = if(.MCE$shinyGUI$theme != '') 
+        if(requireNamespace("shinythemes", quietly = TRUE)){
+            shinythemes::shinytheme(.MCE$shinyGUI$theme)
+        } else NULL, 
         
         shiny::withMathJax(),
         
