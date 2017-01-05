@@ -172,7 +172,11 @@ buildShinyElements <- function(questions, itemnames){
     pick <- as.data.frame(questions[grepl('Answer', names),drop=FALSE], stringsAsFactors = FALSE)
     if(length(pick)){
         item_answers <- split(pick, 1:nrow(pick))
-        item_answers <- lapply(item_answers, na.omit)
+        item_answers <- lapply(item_answers, function(x){
+            out <- na.omit(as.character(x))
+            if(!length(out)) out <- NA
+            out
+        })
     } else item_answers <- NULL
     if(length(Qs) != J) stop('Questions have not been properly defined!', call.=FALSE)
     ret <- list(questions=Qs, item_answers=item_answers, item_options=choices_list)

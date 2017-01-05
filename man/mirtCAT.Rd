@@ -8,9 +8,10 @@
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
-  start_item = 1, local_pattern = NULL, design_elements = FALSE,
-  cl = NULL, progress = FALSE, primeCluster = TRUE, design = list(),
-  shinyGUI = list(), preCAT = list(), ...)
+  start_item = 1, local_pattern = NULL, AnswerFuns = list(),
+  design_elements = FALSE, cl = NULL, progress = FALSE,
+  primeCluster = TRUE, design = list(), shinyGUI = list(),
+  preCAT = list(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -142,6 +143,20 @@ Otherwise, it must contain character values of plausible responses which corresp
 answer key and/or options supplied in \code{df}. If the object contains an attribute \code{'Theta'} 
 then these values will be stored within the respective returned objects. 
 See \code{\link{generate_pattern}} to generate response patterns for Monte Carlo simulations}
+
+\item{AnswerFuns}{a list with the length equal to the number of items in the item bank consisting 
+of user-defined functions. These functions are used to determine whether a given
+response obtained from the GUI is 'correct' or 'incorrect' by returning a logical scalar value, 
+while \code{NA}'s must be used to indicate \code{AnswerFuns} should not be used for a given item. To avoid
+any issues with the \code{Answer} columns in the \code{df} input, all answers provided within \code{df}
+must also be set to \code{NA} so that only \code{AnswerFuns} is used.
+
+For example, the following provides a customized response function for the first item.
+\preformatted{
+   AnswerFuns <- as.list(rep(NA, nrow(df)))
+   df$Answer[1] <- NA
+   AnswerFuns[[1]] <- function(input) input == '10' || to.lower(input) == 'ten'
+}}
 
 \item{design_elements}{logical; return an object containing the test, person, and design 
 elements? Primarily this is to be used with the \code{\link{findNextItem}} function}

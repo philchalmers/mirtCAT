@@ -90,11 +90,14 @@ server <- function(input, output) {
                             .MCE$person$responses[pick] <- sum(.MCE$test@item_options[[pick]] %in% ip)
                         else .MCE$person$responses[pick] <- which(.MCE$test@item_options[[pick]] %in% ip) - 1L
                     }
-                    if(!is.na(.MCE$test@item_answers[[pick]]) && 
-                           .MCE$test@item_class[pick] != 'nestlogit'){
-                        if(nanswers > 1L)
-                            .MCE$person$responses[pick] <- as.integer(sum(ip %in% .MCE$test@item_answers[[pick]]))
-                        else .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
+                    if(.MCE$test@item_class[pick] != 'nestlogit'){
+                        if(is.function(.MCE$test@AnswerFuns[[pick]])){
+                            .MCE$person$responses[pick] <- as.integer(.MCE$test@AnswerFuns[[pick]](ip))
+                        } else if(!is.na(.MCE$test@item_answers[[pick]])){
+                            if(nanswers > 1L)
+                                .MCE$person$responses[pick] <- as.integer(sum(ip %in% .MCE$test@item_answers[[pick]]))
+                            else .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
+                        } 
                     }
                     .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
                     .MCE$start_time <- NULL
@@ -129,7 +132,8 @@ server <- function(input, output) {
             .MCE$design <- Next.stage(.MCE$design, person=.MCE$person, test=.MCE$test, item=itemclick)
             
             if(!.MCE$design@stop_now){
-                item <- findNextCATItem(person=.MCE$person, test=.MCE$test, 
+                item <- if(all(is.na(.MCE$person$items_answered))) .MCE$design@start_item
+                    else findNextCATItem(person=.MCE$person, test=.MCE$test, 
                                         design=.MCE$design, start=FALSE)
                 if(!is.null(attr(item, 'design'))) .MCE$design <- attr(item, 'design')
                 if(is.na(item)){

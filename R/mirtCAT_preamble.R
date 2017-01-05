@@ -38,7 +38,7 @@ mirtCAT_preamble <- function(..., final_fun = NULL){
 
 # set this up to avoid double documentation
 mirtCAT_preamble_internal <- 
-    function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
+    function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', AnswerFuns = list(),
              start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
              design = list(), shinyGUI = list(), preCAT = list(), final_fun = NULL, ...)
     {
@@ -107,7 +107,7 @@ mirtCAT_preamble_internal <-
         if(is.null(local_pattern)) 
             shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI,
                                             adaptive=is_adaptive)
-        test_object <- new('Test', mo=mo, item_answers_in=item_answers, 
+        test_object <- new('Test', mo=mo, item_answers_in=item_answers, AnswerFuns=AnswerFuns,
                            item_options=item_options, quadpts_in=design$quadpts,
                            theta_range_in=design$theta_range, dots=list(...))
         design_object <- new('Design', method=method, criteria=criteria, 

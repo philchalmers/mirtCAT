@@ -1,3 +1,10 @@
+# mirtCAT 1.3
+
+- added `AnswerFun` input to allow for user-defined functions for each respective item to 
+  determine whether the answer provided is correct or incorrect. Mainly useful for text-based 
+  items (suggested by Anna Mikolajetz)
+   
+
 # mirtCAT 1.2
 
 - `progress` logical added to `mirtCAT()` to print the progress of Monte Carlo simulations

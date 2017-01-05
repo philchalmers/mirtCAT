@@ -138,6 +138,20 @@
 #'   then these values will be stored within the respective returned objects. 
 #'   See \code{\link{generate_pattern}} to generate response patterns for Monte Carlo simulations
 #'   
+#' @param AnswerFuns a list with the length equal to the number of items in the item bank consisting 
+#'   of user-defined functions. These functions are used to determine whether a given
+#'   response obtained from the GUI is 'correct' or 'incorrect' by returning a logical scalar value, 
+#'   while \code{NA}'s must be used to indicate \code{AnswerFuns} should not be used for a given item. To avoid
+#'   any issues with the \code{Answer} columns in the \code{df} input, all answers provided within \code{df}
+#'   must also be set to \code{NA} so that only \code{AnswerFuns} is used.
+#'   
+#'   For example, the following provides a customized response function for the first item.
+#'   \preformatted{
+#'      AnswerFuns <- as.list(rep(NA, nrow(df)))
+#'      df$Answer[1] <- NA
+#'      AnswerFuns[[1]] <- function(input) input == '10' || to.lower(input) == 'ten'
+#'   }
+#'   
 #' @param cl an object definition to be passed to the parallel package 
 #'   (see \code{?parallel::parLapply} for details). If defined, and if 
 #'   \code{nrow(local_pattern) > 1}, then each row will be run in parallel to help 
@@ -627,7 +641,7 @@
 #' 
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
-                    start_item = 1, local_pattern = NULL, 
+                    start_item = 1, local_pattern = NULL, AnswerFuns = list(), 
                     design_elements = FALSE, cl = NULL, progress = FALSE, 
                     primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
@@ -636,7 +650,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
              .MCE$preamble_defined <- NULL})
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
-                     design_elements=design_elements, cl=cl,
+                     design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, ...)
     if(design_elements){
         ret <- list(person=.MCE$person, test=.MCE$test, design=.MCE$design)
@@ -647,6 +661,8 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         runApp(createShinyGUI(ui=.MCE$shinyGUI$ui), launch.browser=TRUE, ...)
         person <- .MCE$person
     } else {
+        if(length(AnswerFuns)) 
+            stop('AnswerFuns cannot be used for off-line runs', call.=FALSE)
         person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,
                             nitems=length(.MCE$test@itemnames), cl=cl, primeCluster=primeCluster,
                             thetas.start_in=design$thetas.start, score=.MCE$score, 

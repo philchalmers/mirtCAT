@@ -260,3 +260,10 @@ results <- mirtCAT(df = df, mo = mod, criteria = "Drule", start_item = "DPrule",
                    shinyGUI = shinyGUI_list, design = design_list, preCAT = preCAT_list)
 summary(results)
 
+# customized answer function
+AnswerFuns <- as.list(rep(NA, nrow(df)))
+AnswerFuns[[1]] <- function(text) text == '147'
+df$Answer[1] <- NA
+results2 <- mirtCAT(df = df, mo = mod, criteria = "Drule", start_item = 1, AnswerFuns=AnswerFuns,
+                   shinyGUI = shinyGUI_list, design = design_list, preCAT = preCAT_list)
+summary(results2)

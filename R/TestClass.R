@@ -7,6 +7,7 @@ Test <- setClass(Class = "Test",
                         quadpts = 'numeric',
                         theta_range = 'numeric',
                         item_answers = 'list',
+                        AnswerFuns = 'list',
                         item_options = 'list',
                         item_class = 'character',
                         itemnames = 'character',
@@ -19,7 +20,7 @@ Test <- setClass(Class = "Test",
 )
 
 setMethod("initialize", signature(.Object = "Test"),
-          function(.Object, mo, item_answers_in, item_options,
+          function(.Object, mo, item_answers_in, AnswerFuns, item_options,
                    quadpts_in, theta_range_in, dots){
               mo@Options$exploratory <- FALSE
               .Object@itemnames <- colnames(mo@Data$data)
@@ -28,8 +29,17 @@ setMethod("initialize", signature(.Object = "Test"),
               .Object@item_class <- sapply(mo@ParObjects$pars, class)
               if(is.null(item_answers_in))
                   item_answers_in <- as.character(rep(NA, length(.Object@itemnames)))
-              
-              .Object@item_answers <- as.list(item_answers_in)
+              item_answers_in <- as.list(item_answers_in)
+              if(!length(AnswerFuns))
+                  AnswerFuns <- as.list(rep(NA, length(item_answers_in)))
+              if(length(item_answers_in) != length(AnswerFuns))
+                  stop('AnswerFuns does not have the correct number of elements', call.=FALSE)
+              for(i in 1L:length(item_answers_in))
+                  if(sum(!is.na(item_answers_in[[i]]), is.function(AnswerFuns[[i]])) == 2L)
+                      stop(sprintf('Item %i contains both a function and explicit answers; please fix', i),
+                           call.=FALSE)
+              .Object@item_answers <- item_answers_in
+              .Object@AnswerFuns <- AnswerFuns
               .Object@item_options <- item_options
               .Object@length <- length(.Object@item_answers)
               .Object@nfact <- mo@Model$nfact
