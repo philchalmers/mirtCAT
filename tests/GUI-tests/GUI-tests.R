@@ -122,6 +122,15 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
                  StemExpression = c('', 'tags$h1("My header")', 'tags$b("This text is bold.")'))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+df <- data.frame(Question = c("", "", ""), Option = options, Type = "radio",
+                 Stem = c('', '', ''),
+                 StemExpression = c('div(HTML("Here is <strong>one</strong> way to insert <em>arbitrary</em> HTML."))', 
+                                    'div(tags$style("#text { font-size: 35px; height: 200px; overflow: auto; }"), 
+                                         div(id = "text", paste(names(tags), collapse = ", ")))', 
+                                    'div(tags$style("#text { font-size: 20px; height: 65px; overflow: auto; }"), 
+                                         div(id = "text", paste(names(tags), collapse = ", ")))'))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
 # audio/video
 dirname <- paste0(getwd(), '/www')
 shiny::addResourcePath('www', dirname)
