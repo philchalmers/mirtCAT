@@ -47,7 +47,21 @@ type of response format, questions, options, answers, and stems:
   \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
     character vector containing all the questions or stems to be generated.
     If \code{df} is a \code{list}, then the commands must be suitable for output with 
-    \code{shiny} (e.g., \code{Question <- list(h6('Item 1'), list(h6('Nested', h4(' item 2'))))})} 
+    \code{shiny} (e.g., \code{Question <- list(h6('Item 1'), list(h6('Nested', h4(' item 2'))))})
+    
+    Alternatively, when paired with the \code{StemExpression} logical value, 
+    each element may represent a character vector of arbitrary R expressions
+    to be evaluated as suitable item stems. These are rendered into suitable HTML code,
+    typically through shiny. This approach is much more verbose, however it provides a large variety 
+    of customization through the use of \code{div()} and other helpful tags. 
+    
+    E.g., the following would result in two bolded and italicized item stems: 
+    \code{c("tags$b('Stem 1')", "tags$em('Stem 2')")}, along with associated \code{TRUE} values
+    in \code{StemExpression}. See 
+    \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
+    to use tags and HTML generating functions.
+    
+    } 
     
   \item{\code{Option.#}}{Names pertaining to the possible response
     options for each item, where the # corresponds to the specific category. For
@@ -64,13 +78,8 @@ type of response format, questions, options, answers, and stems:
     pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
     \code{NA}s are used if the item has no corresponding file.} 
     
-  \item{\code{StemExpression}}{(Optional) a character vector of arbitrary R expressions
-    to be evaluated as suitable item stems. These are rendered into suitable HTML code,
-    typically through shiny. E.g., the following would result in two 
-    bolded and italicized item stems: 
-    \code{StemExpression = c("tags$b('Stem 1')", "tags$em('Stem 2')")}. See 
-    \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
-    to use tags.}
+  \item{\code{StemExpression}}{(Optional) a logical vector indicating which \code{Question}
+    elements should be evaluated first in R. }
     
   \item{\code{...}}{ In cases where \code{'slider'} inputs are used instead only 
     the \code{Question} input is required along with (at minimum) a 

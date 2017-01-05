@@ -1,5 +1,8 @@
 # mirtCAT 1.3
 
+- `df$StemExpression` is now instead a logical vector used to indicate whether 
+  the questions definition should be evaulated in R first
+
 - added `AnswerFun` input to allow for user-defined functions for each respective item to 
   determine whether the answer provided is correct or incorrect. Mainly useful for text-based 
   items (suggested by Anna Mikolajetz)

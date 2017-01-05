@@ -70,8 +70,14 @@ mirtCAT_preamble_internal <-
         } else {
             if(!is.data.frame(df) && !is.list(df))
                 stop('df input must be a data.frame or list', call.=FALSE)
+            df$StemExpression <- if(is.null(df$StemExpression)) logical(length(df$Type))
+            else as.logical(df$StemExpression)
+            stem_expressions <- rep(NA, length(df$Type))
+            stem_expressions[df$StemExpression] <- df$Question[df$StemExpression]
             if(is.data.frame(df)){
                 df <- lapply(df, as.character)
+                for(i in 1L:length(df$Type))
+                    if(df$StemExpression[i]) df$Question[i] <- ''
                 df$Question <- lapply(df$Question, function(x, fun) shiny::withMathJax(fun(x)),
                                       fun=shinyGUI$stem_default_format)
             }
@@ -80,7 +86,7 @@ mirtCAT_preamble_internal <-
             item_answers <- obj$item_answers
             item_options <- obj$item_options
             shinyGUI$stem_locations <- df$Stem
-            shinyGUI$stem_expressions <- df$StemExpression
+            shinyGUI$stem_expressions <- stem_expressions
         }
         if(is.null(mo)){
             dat <- matrix(c(0,1), 2L, length(questions))
