@@ -3,7 +3,8 @@
 - added `AnswerFun` input to allow for user-defined functions for each respective item to 
   determine whether the answer provided is correct or incorrect. Mainly useful for text-based 
   items (suggested by Anna Mikolajetz)
-   
+  
+- added a `theme` input to `shinyGUI` to support predefined themes from the "shinythemes"" package
 
 # mirtCAT 1.2
 
