@@ -141,14 +141,13 @@
 #' @param AnswerFuns a list with the length equal to the number of items in the item bank consisting 
 #'   of user-defined functions. These functions are used to determine whether a given
 #'   response obtained from the GUI is 'correct' or 'incorrect' by returning a logical scalar value, 
-#'   while \code{NA}'s must be used to indicate \code{AnswerFuns} should not be used for a given item. To avoid
-#'   any issues with the \code{Answer} columns in the \code{df} input, all answers provided within \code{df}
-#'   must also be set to \code{NA} so that only \code{AnswerFuns} is used.
+#'   while \code{NA}'s must be used to indicate \code{AnswerFuns} should not be used for a given item. Note 
+#'   that \code{AnswerFuns} is given priority over the answers provided by \code{df}, therefore any answers
+#'   provided by \code{df} will be entirely ignored.
 #'   
 #'   For example, the following provides a customized response function for the first item.
 #'   \preformatted{
 #'      AnswerFuns <- as.list(rep(NA, nrow(df)))
-#'      df$Answer[1] <- NA
 #'      AnswerFuns[[1]] <- function(input) input == '10' || to.lower(input) == 'ten'
 #'   }
 #'   

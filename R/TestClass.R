@@ -34,10 +34,6 @@ setMethod("initialize", signature(.Object = "Test"),
                   AnswerFuns <- as.list(rep(NA, length(item_answers_in)))
               if(length(item_answers_in) != length(AnswerFuns))
                   stop('AnswerFuns does not have the correct number of elements', call.=FALSE)
-              for(i in 1L:length(item_answers_in))
-                  if(sum(!is.na(item_answers_in[[i]]), is.function(AnswerFuns[[i]])) == 2L)
-                      stop(sprintf('Item %i contains both a function and explicit answers; please fix', i),
-                           call.=FALSE)
               .Object@item_answers <- item_answers_in
               .Object@AnswerFuns <- AnswerFuns
               .Object@item_options <- item_options
