@@ -85,7 +85,7 @@ mirtCAT_preamble_internal <-
             questions <- obj$questions
             item_answers <- obj$item_answers
             item_options <- obj$item_options
-            shinyGUI$stem_locations <- df$Stem
+            shinyGUI$stem_locations <- df[["Stem"]]
             shinyGUI$stem_expressions <- stem_expressions
         }
         if(is.null(mo)){
@@ -109,7 +109,7 @@ mirtCAT_preamble_internal <-
         }
         
         #setup objects
-        if(!is.null(df)) shinyGUI$stem_locations <- df$Stem
+        if(!is.null(df)) shinyGUI$stem_locations <- df[['Stem']]
         if(is.null(local_pattern)) 
             shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI,
                                             adaptive=is_adaptive)

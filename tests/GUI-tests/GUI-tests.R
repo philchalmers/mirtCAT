@@ -123,6 +123,7 @@ df <- data.frame(Question = c('', 'tags$h1("My header")', 'tags$b("This text is 
                  StemExpression = c(FALSE, TRUE, TRUE))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# divs
 df <- data.frame(Question = c('div(HTML("Here is <strong>one</strong> way to insert <em>arbitrary</em> HTML."))', 
                               'div(tags$style("#text { font-size: 35px; height: 200px; overflow: auto; }"), 
                                          div(id = "text", paste(names(tags), collapse = ", ")))', 
@@ -131,6 +132,13 @@ df <- data.frame(Question = c('div(HTML("Here is <strong>one</strong> way to ins
                  Option = options, Type = "radio",
                  Stem = c('', '', ''),
                  StemExpression = rep(TRUE, 3))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+
+# table panels
+df <- data.frame(Question = c('tabsetPanel(tabPanel("Panel 1", "some text"), tabPanel("Panel 2", "some more text"))', 
+                              'tags$h1("My header")', 'tags$b("This text is bold.")'), 
+                 Option = options, Type = "radio",
+                 StemExpression = c(TRUE, TRUE, TRUE))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # audio/video
