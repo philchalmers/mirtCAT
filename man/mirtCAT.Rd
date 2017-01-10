@@ -99,7 +99,10 @@ including a calibrated model estimated from the \code{\link{mirt}} function with
 
 \item{method}{argument passed to \code{mirt::fscores()} for computing new scores in the CAT 
 stage, with the addition of a \code{'fixed'} input to keep the latent trait estimates
-fixed at the previous values. Default is 'MAP'}
+fixed at the previous values. When \code{method = 'ML'}, if there is no variability 
+in the given response pattern during the CAT (i.e., the participant is responding completely
+correctly or completely incorrectly) then the method will temporarily be set to MAP until 
+sufficient response variability is present. Default is 'MAP'}
 
 \item{criteria}{adaptive criteria used, default is to administer each item sequentially 
   using \code{criteria = 'seq'}. 
