@@ -31,8 +31,9 @@
 #'     \item{\code{Type}}{Indicates the type of response input 
 #'       to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
 #'       (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
-#'       inputs (\code{\link{selectInput}}), \code{'text'} for requiring 
-#'       typed user input (\code{\link{textInput}}), \code{'checkbox'} for allowing multiple 
+#'       inputs (\code{\link{selectInput}}), \code{'text'} and \code{'textArea'} for requiring 
+#'       typed user input (\code{\link{textInput}} and \code{\link{textAreaInput}}), 
+#'       \code{'checkbox'} for allowing multiple 
 #'       responses to be checked off (\code{\link{checkboxGroupInput}}),
 #'       \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}), or
 #'       \code{'none'} for presenting only an item stem with no selection options. Note that slider

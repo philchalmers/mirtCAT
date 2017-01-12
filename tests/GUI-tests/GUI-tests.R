@@ -111,6 +111,12 @@ df <- data.frame(Question = questions, Type = 'text')
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 summary(results)
 
+# textArea input
+df <- data.frame(Question = questions, Type = 'textArea')
+df$height = '50%'
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
+summary(results)
+
 # HTML/markdown stems
 df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options, Type = "radio",
                  Stem = c('Math-stem.html', 'Question.md', ''))

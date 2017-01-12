@@ -117,7 +117,7 @@ buildShinyElements <- function(questions, itemnames){
     if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
         stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'select', 'text', 'slider', 'checkbox', 'none')))
+    if(!all(Type %in% c('radio', 'select', 'text', 'textArea', 'slider', 'checkbox', 'none')))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
@@ -144,6 +144,16 @@ buildShinyElements <- function(questions, itemnames){
             placeholder <- questions$placeholder[i]
             Qs[[i]] <- textInput(inputId = itemnames[i], label='', value = '',
                                  width=width, placeholder=placeholder)
+        } else if(Type[i] == 'textArea'){
+            width <- questions$width[i]
+            height <- questions$height[i]
+            cols <- questions$cols[i] 
+            rows <- questions$rows[i]
+            resize <- questions$resize[i]
+            placeholder <- questions$placeholder[i]
+            Qs[[i]] <- textAreaInput(inputId = itemnames[i], label='', value = '',
+                                 width=width, height=height, placeholder=placeholder,
+                                 cols=cols, rows=rows, resize=resize)
         } else if(Type[i] == 'slider'){
             VALUE <- as.numeric(ifelse(is.null(questions$value[i]), questions$min[i], questions$value[i]))
             MIN <- as.numeric(questions$min[i])

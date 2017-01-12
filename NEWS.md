@@ -1,5 +1,7 @@
 # mirtCAT 1.3
 
+- add `textAreaInput` support to GUI for include text-boxes as possible inputs
+
 - `df$StemExpression` is now instead a logical vector used to indicate whether 
   the questions definition should be evaulated in R first
 
