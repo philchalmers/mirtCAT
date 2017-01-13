@@ -108,7 +108,8 @@ server <- function(input, output) {
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
                     .MCE$design <- Update.stop_now(.MCE$design, .MCE$person)
                 } else {
-                    if(.MCE$shinyGUI$forced_choice && df$Type[pick] != 'none'){
+                    if(.MCE$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE$start_time) || 
+                       (.MCE$shinyGUI$forced_choice && df$Type[pick] != 'none')){
                         .MCE$shift_back <- .MCE$shift_back + 1L
                         .MCE$invalid_count <- .MCE$invalid_count + 1L
                         tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)

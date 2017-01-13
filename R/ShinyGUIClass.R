@@ -16,6 +16,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
+                                    time_before_answer = 'numeric',
                                     password='data.frame',
                                     css = 'character',
                                     stopApp = 'logical',
@@ -80,6 +81,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               temp_file <<- ''
                               css <<- ''
                               password <<- data.frame()
+                              time_before_answer <<- 1
                                                  
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
@@ -87,7 +89,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                               'demographics_inputIDs', 'max_time', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
                                               'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format',
-                                              'stem_expressions', 'theme')
+                                              'stem_expressions', 'theme', 'time_before_answer')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -121,6 +123,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       css <<- shinyGUI$css
                                   if(!is.null(shinyGUI$password))
                                       password <<- shinyGUI$password
+                                  if(!is.null(shinyGUI$time_before_answer))
+                                      time_before_answer <<- shinyGUI$time_before_answer
                               }
                           })
                       

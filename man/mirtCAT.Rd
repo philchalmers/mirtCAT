@@ -37,8 +37,9 @@ type of response format, questions, options, answers, and stems:
   \item{\code{Type}}{Indicates the type of response input 
     to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
     (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
-    inputs (\code{\link{selectInput}}), \code{'text'} for requiring 
-    typed user input (\code{\link{textInput}}), \code{'checkbox'} for allowing multiple 
+    inputs (\code{\link{selectInput}}), \code{'text'} and \code{'textArea'} for requiring 
+    typed user input (\code{\link{textInput}} and \code{\link{textAreaInput}}), 
+    \code{'checkbox'} for allowing multiple 
     responses to be checked off (\code{\link{checkboxGroupInput}}),
     \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}), or
     \code{'none'} for presenting only an item stem with no selection options. Note that slider
@@ -438,6 +439,10 @@ using the cluster will be optimal every time a new \code{cl} is defined. Default
    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}
      
+   \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have ellapsed
+     when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
+     to control accidental skips over items when responses are not forced. Default is 1, indicating
+     one full second}
      
    \item{\code{password}}{a \code{data.frame} object indicating the user name (optional) and password
      required prior to beginning the CAT. Possible options are

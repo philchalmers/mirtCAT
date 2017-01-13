@@ -433,6 +433,10 @@
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'      
+#'    \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have ellapsed
+#'      when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
+#'      to control accidental skips over items when responses are not forced. Default is 1, indicating
+#'      one full second}
 #'      
 #'    \item{\code{password}}{a \code{data.frame} object indicating the user name (optional) and password
 #'      required prior to beginning the CAT. Possible options are

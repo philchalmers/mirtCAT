@@ -1,5 +1,8 @@
 # mirtCAT 1.3
 
+- added `time_before_answer` to `shinyGUI` list to include a require number of seconds to wait 
+  before a valid/ommited response can be accepted
+
 - add `textAreaInput` support to GUI for include text-boxes as possible inputs
 
 - `df$StemExpression` is now instead a logical vector used to indicate whether 
