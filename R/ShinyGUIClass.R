@@ -13,6 +13,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     stem_expressions = 'character',
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
+                                    customTypes = 'list',
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
@@ -24,7 +25,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     theme = 'character'),
                       
                       methods = list(
-                          initialize = function(questions, df, shinyGUI, adaptive){
+                          initialize = function(questions, df, shinyGUI, adaptive, CustomTypes){
                               'Initialize the shiny GUI given questions, df, and shinyGUI list'
                               ui <<- default_UI
                               questions <<- questions
@@ -32,6 +33,11 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               forced_choice <<- TRUE
                               stopApp <<- TRUE
                               theme <<- ''
+                              if(length(CustomTypes)){
+                                  if(length(CustomTypes) != length(unique(names(CustomTypes))))
+                                      stop('customTypes list requires unique names for each function', call.=FALSE)
+                              }
+                              customTypes <<- CustomTypes
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else {

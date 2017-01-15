@@ -147,6 +147,25 @@ df <- data.frame(Question = c('tabsetPanel(tabPanel("Panel 1", "some text"), tab
                  StemExpression = c(TRUE, TRUE, TRUE))
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
+# custom choices
+myfun <- function(inputId, df_row){
+    tabsetPanel(tabPanel("Panel 1", "some text"), 
+                tabPanel("Panel 2", "some more text"), 
+                tabPanel("Response", "Final Text", 
+                         radioButtons(inputId = inputId, label='', 
+                                      choices = c('True', 'False'), selected = '')))
+}
+
+options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+                  nrow = 3, ncol = 5, byrow = TRUE)
+questions <- c("",
+               "mirtCAT requires a substantial amount of coding.",
+               "I would use mirtCAT in my research.")
+df <- data.frame(Question = questions, Option = options, Type = "radio")
+df$Type[1] <- 'myQ'
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE),
+                   customTypes=list(myQ=myfun))
+
 # audio/video
 dirname <- paste0(getwd(), '/www')
 shiny::addResourcePath('www', dirname)
@@ -164,26 +183,6 @@ results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 df <- data.frame(Question = questions, Option=options, Type = 'checkbox')
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 summary(results)
-
-# shiny input questions
-questions <- list(h4("Building CATs with mirtCAT is difficult."),
-                  h4("mirtCAT requires a substantial amount of coding."),
-                  list(h4("I would use mirtCAT in my"), h2("research.")))
-
-df <- list(Question = questions, 
-           Option.1 = options[,1], 
-           Option.2 = options[,2], 
-           Option.3 = options[,3], 
-           Option.4 = options[,4], 
-           Option.5 = options[,5], 
-           Type = rep("radio", 3))
-
-## Run the mirtCAT web interface and store results
-results <- mirtCAT(df = df)
-
-questions <- c("Building CATs with mirtCAT is difficult.",
-               "mirtCAT requires a substantial amount of coding.",
-               "I would use mirtCAT in my research.")
 
 # none type
 df <- data.frame(Question = c('Empty Q', questions), 

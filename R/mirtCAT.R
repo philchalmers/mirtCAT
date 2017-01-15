@@ -17,8 +17,7 @@
 #' To access examples, vignettes, and exercise files that have been generated with \code{knitr} please
 #' visit \url{https://github.com/philchalmers/mirtCAT/wiki}.
 #' 
-#' @param df a \code{data.frame} or \code{list} object 
-#'   containing the \code{character} vector inputs required to generate 
+#' @param df a \code{data.frame} containing the \code{character} vector inputs required to generate 
 #'   GUI questions through shiny. If \code{factor}s are supplied instead of \code{character} vectors 
 #'   then the inputs will be coerced using the \code{as.character()} function (set 
 #'   \code{stringsAsFactors = FALSE} when defining a \code{data.frame} to avoid this). 
@@ -37,7 +36,18 @@
 #'       responses to be checked off (\code{\link{checkboxGroupInput}}),
 #'       \code{'slider'} for generating slider inputs (\code{\link{sliderInput}}), or
 #'       \code{'none'} for presenting only an item stem with no selection options. Note that slider
-#'       inputs require additional arguments to be passed; see \code{...} instructions below).} 
+#'       inputs require additional arguments to be passed; see \code{...} instructions below).
+#'       
+#'       Additionally, if the above types are not sufficient for the desired output then users 
+#'       can create their own response formats and inputs via the \code{customTypes} list input 
+#'       (see below). E.g., if a function with the name \code{'MyTableQuestion'} is supplied 
+#'       to \code{customTypes} then supplying this type to the \code{df} will use this function for
+#'       the respective item. Note that this is more advanced and requires a working knowledge of shiny's 
+#'       design, inputs, and specifications. Moreover, the functions cannot be checked internally, 
+#'       therefore it is up to the user to ensure that the functions work well (e.g., if the associated 
+#'       IRT model requires two response options, yet three are defined by the user, 
+#'       then this can cause some difficult to locate problems). This is generally for advanced users
+#'       to use on an as-per-needed basis.} 
 #'     
 #'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
 #'       character vector containing all the questions or stems to be generated.
@@ -172,6 +182,30 @@
 #' @param primeCluster logical; when a \code{cl} object is supplied, should the cluster be primed 
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 #'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
+#'   
+#' @param customTypes an optional list input containing user-defined item formatting generating functions.
+#'   Each element supplied must contain a unique name, and the item with which it is associated must be
+#'   declared in the a \code{df$Type} input. The functions defined must be of the form
+#'   
+#'   \preformatted{myfun <- function(inputId, df_row) ...}
+#'   
+#'   and must return, at the very minimum, an associated \code{shiny} input object that makes use of the
+#'   \code{inputId} argument (e.g., \code{\link{radioButtons}}). Any valid shiny object can be returned,
+#'   including lists of shiny objects. As well, the \code{df_row} argument contains
+#'   any extra information the users wishes to obtain from the associated row in the \code{df} object. 
+#'   
+#'   The following is a simple example of a custom-defined true-false question and how it is passed:   
+#'   \preformatted{
+#'   myfun <- function(inputId, df_row){
+#'      return(list(h2('This statement is false'),
+#'                  radioButtons(inputId = inputId, label='', 
+#'                               choices = c('True', 'False'), selected = '') 
+#'           ))
+#'      }
+#'      
+#'   df <- data.frame(Question = '', ..., Type = 'myQuestion') 
+#'   results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
+#'   }
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
@@ -659,7 +693,8 @@
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
                     start_item = 1, local_pattern = NULL, AnswerFuns = list(), 
                     design_elements = FALSE, cl = NULL, progress = FALSE, 
-                    primeCluster = TRUE, design = list(), shinyGUI = list(), preCAT = list(), ...)
+                    primeCluster = TRUE, customTypes = list(), 
+                    design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
              .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
@@ -667,7 +702,8 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
-                     design=design, shinyGUI=shinyGUI, preCAT=preCAT, ...)
+                     design=design, shinyGUI=shinyGUI, preCAT=preCAT, 
+                     customTypes=customTypes, ...)
     if(design_elements){
         ret <- list(person=.MCE$person, test=.MCE$test, design=.MCE$design)
         class(ret) <- "mirtCAT_design"

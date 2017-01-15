@@ -61,7 +61,7 @@ server <- function(input, output) {
             .MCE$resume_file <- FALSE
             item <- max(which(!is.na(.MCE$person$items_answered)))
             stemOutput <- stemContent(item)
-            return(list(stemOutput,.MCE$shinyGUI$df$Question[[item]], 
+            return(list(stemOutput,.MCE$shinyGUI$df$Rendered_Question[[item]], 
                         .MCE$shinyGUI$questions[[item]]))
         }
         
@@ -113,9 +113,10 @@ server <- function(input, output) {
                         .MCE$shift_back <- .MCE$shift_back + 1L
                         .MCE$invalid_count <- .MCE$invalid_count + 1L
                         tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
-                        tmp <- buildShinyElements(tmp, paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name))
+                        tmp <- buildShinyElements(questions=tmp, customTypes=.MCE$shinyGUI$customTypes, 
+                                                  itemnames=paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name))
                         stemOutput <- stemContent(pick)
-                        return(list(stemOutput, .MCE$shinyGUI$df$Question[[pick]], 
+                        return(list(stemOutput, .MCE$shinyGUI$df$Rendered_Question[[pick]], 
                                     tmp$questions))
                     } else {
                         .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
@@ -147,7 +148,7 @@ server <- function(input, output) {
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
                     stemOutput <- stemContent(item)
                     return(list(stemOutput, 
-                                .MCE$shinyGUI$df$Question[[item]], 
+                                .MCE$shinyGUI$df$Rendered_Question[[item]], 
                                 .MCE$shinyGUI$questions[[item]]))
                 }
             }

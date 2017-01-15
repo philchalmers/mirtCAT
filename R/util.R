@@ -106,18 +106,19 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
     r/2
 }
 
-buildShinyElements <- function(questions, itemnames){
+buildShinyElements <- function(questions, itemnames, customTypes){
     J <- length(questions$Type)
-    if(!all(sapply(questions[names(questions) != 'Question'], is.character))) 
+    if(!all(sapply(questions[names(questions) != 'Rendered_Question'], is.character))) 
         stop('Only character classes are supported in questions input', call.=FALSE)
     if(is.null(itemnames)) itemnames <- paste0('Item.', 1L:J)
     names <- names(questions)
-    Qs_char <- questions$Question
+    Qs_char <- questions$Rendered_Question
     Type <- questions$Type
     if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
         stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'select', 'text', 'textArea', 'slider', 'checkbox', 'none')))
+    if(!all(Type %in% c('radio', 'select', 'text', 'textArea', 'slider', 'checkbox', 'none',
+                        names(customTypes))))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
@@ -175,6 +176,10 @@ buildShinyElements <- function(questions, itemnames){
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             Qs[[i]] <- checkboxGroupInput(inputId = itemnames[i], label='', choices = cs,
                                           width=width, inline=inline)
+        } else if(Type[i] %in% names(customTypes)){
+            nm <- names(customTypes)[names(customTypes) == Type[i]]
+            df_row <- as.data.frame(lapply(questions, function(x) x[[1L]]), stringsAsFactors = FALSE)
+            Qs[[i]] <- customTypes[[nm]](inputId = itemnames[i], df_row=df_row)
         } else if(Type[i] == 'none'){
             next
         }

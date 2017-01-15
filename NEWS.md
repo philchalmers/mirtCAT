@@ -1,5 +1,9 @@
 # mirtCAT 1.3
 
+- removed support for a list input for `df` object in place of a more flexible format which supports
+  the artibrary creation of user-defined item formats through the new `customTypes` argument. This 
+  is to be used in conjunction with the `df$Type` input to pair the respective inputs
+
 - added `time_before_answer` to `shinyGUI` list to include a require number of seconds to wait 
   before a valid/ommited response can be accepted
 
