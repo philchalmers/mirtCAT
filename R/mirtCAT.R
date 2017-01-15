@@ -49,11 +49,7 @@
 #'       then this can cause some difficult to locate problems). This is generally for advanced users
 #'       to use on an as-per-needed basis.} 
 #'     
-#'     \item{\code{Question}}{If \code{df} is a \code{data.frame}, a 
-#'       character vector containing all the questions or stems to be generated.
-#'       If \code{df} is a \code{list}, then the commands must be suitable for output with 
-#'       \code{shiny} (e.g., \code{Question <- list(h6('Item 1'), list(h6('Nested', h4(' item 2'))))})
-#'       
+#'     \item{\code{Question}}{A character vector containing all the questions or stems to be generated.
 #'       Alternatively, when paired with the \code{StemExpression} logical value, 
 #'       each element may represent a character vector of arbitrary R expressions
 #'       to be evaluated as suitable item stems. These are rendered into suitable HTML code,
@@ -86,13 +82,13 @@
 #'     \item{\code{StemExpression}}{(Optional) a logical vector indicating which \code{Question}
 #'       elements should be evaluated first in R. }
 #'       
-#'     \item{\code{...}}{ In cases where \code{'slider'} inputs are used instead only 
+#'     \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
 #'       the \code{Question} input is required along with (at minimum) a 
 #'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
 #'       column names will correspond to the input arguments to \code{\link{sliderInput}}. 
 #'       Other input column options such as \code{step}, \code{round}, \code{pre}, \code{post}, 
 #'       \code{ticks}, \code{inline}, \code{placeholder}, \code{width}, and \code{size} 
-#'       are also supported for the respective inputs.} 
+#'       are also supported for the respective input types.} 
 #'       
 #'   }
 #'   
@@ -467,7 +463,7 @@
 #'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'      
-#'    \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have ellapsed
+#'    \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have elapsed
 #'      when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
 #'      to control accidental skips over items when responses are not forced. Default is 1, indicating
 #'      one full second}
