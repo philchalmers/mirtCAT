@@ -49,10 +49,7 @@ type of response format, questions, options, answers, and stems:
     (see below). E.g., if a function with the name \code{'MyTableQuestion'} is supplied 
     to \code{customTypes} then supplying this type to the \code{df} will use this function for
     the respective item. Note that this is more advanced and requires a working knowledge of shiny's 
-    design, inputs, and specifications. Moreover, the functions cannot be checked internally, 
-    therefore it is up to the user to ensure that the functions work well (e.g., if the associated 
-    IRT model requires two response options, yet three are defined by the user, 
-    then this can cause some difficult to locate problems). This is generally for advanced users
+    design, inputs, and specifications. This is generally for advanced users
     to use on an as-per-needed basis.} 
   
   \item{\code{Question}}{A character vector containing all the questions or stems to be generated.
