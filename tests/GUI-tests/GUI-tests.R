@@ -286,22 +286,19 @@ summary(results2)
 #------------------------------------------------------------
 # reused custom choices
 myfun <- function(inputId, df_row){
-    text <- strsplit(df_row$Question, '\\|')[[1]]
-    tabsetPanel(tabPanel("Panel 1", text[1]), 
-                tabPanel("Panel 2", text[2]), 
-                tabPanel("Response", text[3], 
+    tabsetPanel(tabPanel("Panel 1", df_row$tab.1), 
+                tabPanel("Panel 2", df_row$tab.2), 
+                tabPanel("Response", df_row$Question, 
                          radioButtons(inputId = inputId, label='', 
                                       choices = c('True', 'False'), selected = '')))
 }
 
-questions <- c(sprintf("Question 1: %s | %s | %s", 
-                       'Text for tab1', 'Text for tab1', 'Text for response'), 
-               'Normal stem',
-               sprintf("Question 2: %s | %s | %s", 
-                       'Different text for tab1', 'Different for tab1', 'Text for response'))
+questions <- c('1) Text for response','2) Text for response','3) Text for response')
+tabs <- rbind(c('Text for tab1', 'Text for tab1'), 
+             NA, c('Different text for tab1', 'Different for tab1'))
 options <- matrix(c('True', 'False'), 3, 2, byrow=TRUE)
 
 df <- data.frame(Question = questions, Options=options, Type = c("myQ", 'radio', 'myQ'), 
-                 stringsAsFactors = FALSE)
+                 tab=tabs, stringsAsFactors = FALSE)
 results <- mirtCAT(df = df, customTypes=list(myQ=myfun))
 summary(results)
