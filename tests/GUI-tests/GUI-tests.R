@@ -286,11 +286,12 @@ summary(results2)
 #------------------------------------------------------------
 # reused custom choices
 myfun <- function(inputId, df_row){
-    tabsetPanel(tabPanel("Panel 1", df_row$tab.1), 
-                tabPanel("Panel 2", df_row$tab.2), 
-                tabPanel("Response", df_row$Question, 
-                         radioButtons(inputId = inputId, label='', 
-                                      choices = c('True', 'False'), selected = '')))
+    with(df_row, 
+         tabsetPanel(tabPanel("Panel 1", tab.1), 
+                     tabPanel("Panel 2", tab.2), 
+                     tabPanel("Response", Question, 
+                              radioButtons(inputId = inputId, label='', 
+                                           choices = c(Options.1, Options.2), selected = ''))))
 }
 
 questions <- c('1) Text for response','2) Text for response','3) Text for response')
