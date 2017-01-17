@@ -282,3 +282,26 @@ AnswerFuns[[1]] <- function(text) text == '147'
 results2 <- mirtCAT(df = df, mo = mod, criteria = "Drule", start_item = 1, AnswerFuns=AnswerFuns,
                    shinyGUI = shinyGUI_list, design = design_list, preCAT = preCAT_list)
 summary(results2)
+
+#------------------------------------------------------------
+# reused custom choices
+myfun <- function(inputId, df_row){
+    text <- strsplit(df_row$Question, '\\|')[[1]]
+    tabsetPanel(tabPanel("Panel 1", text[1]), 
+                tabPanel("Panel 2", text[2]), 
+                tabPanel("Response", text[3], 
+                         radioButtons(inputId = inputId, label='', 
+                                      choices = c('True', 'False'), selected = '')))
+}
+
+questions <- c(sprintf("Question 1: %s | %s | %s", 
+                       'Text for tab1', 'Text for tab1', 'Text for response'), 
+               'Normal stem',
+               sprintf("Question 2: %s | %s | %s", 
+                       'Different text for tab1', 'Different for tab1', 'Text for response'))
+options <- matrix(c('True', 'False'), 3, 2, byrow=TRUE)
+
+df <- data.frame(Question = questions, Options=options, Type = c("myQ", 'radio', 'myQ'), 
+                 stringsAsFactors = FALSE)
+results <- mirtCAT(df = df, customTypes=list(myQ=myfun))
+summary(results)

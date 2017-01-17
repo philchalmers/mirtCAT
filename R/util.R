@@ -178,7 +178,9 @@ buildShinyElements <- function(questions, itemnames, customTypes){
                                           width=width, inline=inline)
         } else if(Type[i] %in% names(customTypes)){
             nm <- names(customTypes)[names(customTypes) == Type[i]]
-            df_row <- as.data.frame(lapply(questions, function(x) x[[1L]]), stringsAsFactors = FALSE)
+            df_row <- as.data.frame(lapply(questions, function(x, ind) x[[ind]], ind=i), 
+                                    stringsAsFactors = FALSE)
+            df_row$Rendered_Question <- NULL
             Qs[[i]] <- customTypes[[nm]](inputId = itemnames[i], df_row=df_row)
         } else if(Type[i] == 'none'){
             next
