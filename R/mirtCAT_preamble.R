@@ -95,7 +95,9 @@ mirtCAT_preamble_internal <-
             dat <- matrix(c(0,1), 2L, length(questions))
             colnames(dat) <- if(!is.null(names(questions))) 
                 names(questions) else paste0('Item.', 1L:ncol(dat))
-            mo <- mirt(dat, 1L, TOL=NaN)
+            sv <- mirt(dat, 1L, pars = 'values')
+            sv$est <- FALSE
+            mo <- mirt(dat, 1L, TOL=NaN, pars=sv)
             score <- FALSE
             if(!(criteria %in% c('seq', 'random')))
                 stop('Only random and seq criteria are available if no mo was defined', call.=FALSE)
