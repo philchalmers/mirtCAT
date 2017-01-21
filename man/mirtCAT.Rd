@@ -385,12 +385,13 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
     \code{'Author of survey'}. If the input is an empty string (\code{''}) then the author 
     information will be omitted in the GUI}
     
-  \item{\code{instructions}}{A three part character vector indicating how to use the GUI. 
+  \item{\code{instructions}}{A two part character vector indicating how to use the GUI. 
     Default is: 
   
-    \preformatted{c("Instructions:", 
-       "To progress through the interface, click on the action button below.",
+    \preformatted{c("To progress through the interface, click on the action button below.",
        "Next")}
+       
+    The second part of the character vector provides the name for the action button.
   }
 
   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title

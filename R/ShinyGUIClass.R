@@ -66,8 +66,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               
                               title <<- 'mirtCAT'
                               author <<- 'Author information'
-                              instructions <<- c("Instructions:",
-                                                 "To progress through the interface, click on the action button below.",
+                              instructions <<- c("To progress through the interface, click on the action button below.",
                                                  "Next")
                               demographic_inputIDs <<- character(0)
                               if(adaptive){
