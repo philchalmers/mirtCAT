@@ -68,7 +68,7 @@ Person$methods(
             }
             thetas_history <<- rbind(thetas_history, thetas)
             set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
-                     'DPrule', 'TPrule', 'EPrule', 'WPrule')
+                     'DPrule', 'TPrule', 'EPrule', 'WPrule', 'custom')
             if(test@nfact > 1L && design@criteria %in% set){
                 pick <- which(!is.na(responses2))
                 infos <- lapply(pick, function(x, thetas)
