@@ -52,6 +52,9 @@ Depending on which object is supplied, the following elements can be extracted.
    \item{\code{min_items}}{minimum number of items to administer}
    \item{\code{max_items}}{maximum number of items to administer}
    \item{\code{max_time}}{maximum amount of time alloted to the GUI}
+   \item{\code{met_SEM}}{logical vector indicating whether the SEM criteria has been met}
+   \item{\code{met_delta_thetas}}{logical vector indicating whether the delta_thetas criteria has been met}
+   \item{\code{met_classify}}{logical vector indicating whether the classify criteria has been met}
    \item{\code{exposure}}{exposure control elements of the same form as \code{responses}}
    \item{\code{content}}{content constraint information}
    \item{\code{content_prop}}{content proportions}

@@ -7,6 +7,8 @@ Design <- setClass(Class = "Design",
                              delta_thetas = 'numeric',
                              min_SEM = 'numeric',
                              met_SEM = 'logical',
+                             met_delta_thetas = 'logical',
+                             met_classify = 'logical',
                              min_items = 'integer',
                              max_items = 'integer',
                              items_not_scored = 'integer',
@@ -62,6 +64,8 @@ setMethod("initialize", signature(.Object = "Design"),
                   stop('Selected criteria not valid for multidimensional tests', call.=FALSE)
               .Object@min_SEM <- .3
               .Object@met_SEM <- rep(FALSE, nfact)
+              .Object@met_delta_thetas <- rep(FALSE, nfact)
+              .Object@met_classify <- rep(FALSE, nfact)
               .Object@weights <- rep(1/nfact, nfact)
               .Object@min_items <- 1L
               .Object@max_items <- nitems
@@ -229,19 +233,20 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                       diff <- person$thetas_SE_history[nrow(person$thetas_SE_history), ]
                       if(!is.nan(.Object@classify[1L])){
                           z <- -abs(person$thetas - .Object@classify) / diff
-                          if(all(z < qnorm(.Object@classify_alpha))) .Object@stop_now <- TRUE
+                          .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
+                          if(all(.Object@met_classify)) .Object@stop_now <- TRUE
                       } else {
                           .Object@met_SEM <- diff < .Object@min_SEM
                           if(!any(is.nan(diff)) && all(.Object@met_SEM)) .Object@stop_now <- TRUE
                       }
                       diff2 <- abs(person$thetas_history[nrow(person$thetas_history),] - 
                                        person$thetas_history[nrow(person$thetas_history)-1L,])
-                      if(all(diff2 < .Object@delta_thetas))
-                          .Object@stop_now <- TRUE
+                      .Object@met_delta_thetas <- as.vector(diff2 < .Object@delta_thetas)
+                      if(all(.Object@met_delta_thetas)) .Object@stop_now <- TRUE
                   }
               }
               if(nanswered == .Object@max_items) .Object@stop_now <- TRUE
-              if(.Object@max_time <= sum(person$item_time)) stop_now <- TRUE
+              if(.Object@max_time <= sum(person$item_time)) .Object@stop_now <- TRUE
               .Object
           }
 )
