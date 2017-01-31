@@ -244,26 +244,6 @@ results &lt;- mirtCAT(df, shinyGUI = list(demographics = demographics,
 summary(results)
 </code></pre>
 
-<h2>Version 0.5</h2>
-
-<p>As of version 0.5, you can specify <code>df</code> to be a list of inputs for more fine tuned control with <code>shiny</code>. For example,</p>
-
-<pre><code class="r">questions &lt;- list(h4(&quot;Building CATs with mirtCAT is difficult.&quot;),
-               h4(&quot;mirtCAT requires a substantial amount of coding.&quot;),
-               list(h4(&quot;I would use mirtCAT in my&quot;), h2(&quot;research.&quot;)))
-
-df &lt;- list(Question = questions, 
-           Option.1 = options[,1], 
-           Option.2 = options[,2], 
-           Option.3 = options[,3], 
-           Option.4 = options[,4], 
-           Option.5 = options[,5], 
-           Type = rep(&quot;radio&quot;, 3))
-
-## Run the mirtCAT web interface and store results
-results &lt;- mirtCAT(df = df)
-</code></pre>
-
 </body>
 
 </html>

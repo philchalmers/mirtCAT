@@ -73,10 +73,11 @@ df <- data.frame(Question = questions, Option = options, Answer = answers, Type 
 ```
 
 Run the GUI using Drule selection, MAP estimation, and stopping when $SE(\hat{\theta}) < 0.4$ OR
-50 items have been administered. 
+50 items have been administered, and start item is the T-rule (because the D-rule does not work when
+no items have previously been answered). 
 
 ```{r, eval=FALSE}
-result <- mirtCAT(df, mod, criteria = 'Drule', 
+result <- mirtCAT(df, mod, criteria = 'Drule', start_item = 'Trule',
                   design = list(min_SEM = 0.4, max_items = 50))
 print(result)
 plot(result)

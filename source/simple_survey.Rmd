@@ -43,24 +43,3 @@ results <- mirtCAT(df, shinyGUI = list(demographics = demographics,
                                               demographics_inputIDs = c('occupation', 'gender')))
 summary(results)
 ```
-
-## Version 0.5
-
-As of version 0.5, you can specify `df` to be a list of inputs for more fine tuned control with `shiny`. For example,
-
-```{r, eval=FALSE}
-questions <- list(h4("Building CATs with mirtCAT is difficult."),
-               h4("mirtCAT requires a substantial amount of coding."),
-               list(h4("I would use mirtCAT in my"), h2("research.")))
-
-df <- list(Question = questions, 
-           Option.1 = options[,1], 
-           Option.2 = options[,2], 
-           Option.3 = options[,3], 
-           Option.4 = options[,4], 
-           Option.5 = options[,5], 
-           Type = rep("radio", 3))
-
-## Run the mirtCAT web interface and store results
-results <- mirtCAT(df = df)
-```
