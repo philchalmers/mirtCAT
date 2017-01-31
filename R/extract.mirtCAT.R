@@ -64,7 +64,8 @@
 #'   
 #' 
 #' @examples
-#'
+#' 
+#' \dontrun{
 #'  #example test
 #' set.seed(1234)
 #' nitems <- 25
@@ -145,6 +146,7 @@
 #'   criteria = 'MI', design = list(max_items = 10))
 #' summary(res2)
 #' 
+#' }
 extract.mirtCAT <- function(x, what){
     if(missing(x))
         stop('No person, test, or design input supplied', call.=FALSE)

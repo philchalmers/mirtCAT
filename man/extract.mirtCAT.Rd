@@ -73,6 +73,7 @@ Depending on which object is supplied, the following elements can be extracted.
 }
 \examples{
 
+\dontrun{
  #example test
 set.seed(1234)
 nitems <- 25
@@ -153,6 +154,7 @@ res2 <- mirtCAT(df, mod, local_pattern=pat, start_item = 'MI',
   criteria = 'MI', design = list(max_items = 10))
 summary(res2)
 
+}
 }
 \author{
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
