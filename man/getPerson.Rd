@@ -20,10 +20,9 @@ person <- getPerson()
 summary(person)
 } 
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \seealso{
 \code{\link{mirtCAT}}, \code{\link{mirtCAT_preamble}}, \code{\link{createShinyGUI}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

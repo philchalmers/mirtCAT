@@ -80,10 +80,9 @@ itemplot(obj, 1, drop.zeros=TRUE)
 
 }
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \seealso{
 \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{generate_pattern}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

@@ -41,10 +41,9 @@ findNextItem(CATdesign)
 }
 
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \seealso{
 \code{\link{mirtCAT}}, \code{\link{findNextItem}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

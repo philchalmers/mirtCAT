@@ -71,6 +71,7 @@ Depending on which object is supplied, the following elements can be extracted.
      \code{\link{extract.mirt}} function to pull out a large number of internal elements for easy use}
 }
 }
+
 \examples{
 
 \dontrun{
@@ -156,11 +157,10 @@ summary(res2)
 
 }
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \seealso{
 \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{extract.mirt}}, 
   \code{\link{findNextItem}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

@@ -2,9 +2,9 @@
 % Please edit documentation in R/mirtCAT.R, R/zzz-methods.R
 \name{mirtCAT}
 \alias{mirtCAT}
-\alias{plot.mirtCAT}
 \alias{print.mirtCAT}
 \alias{summary.mirtCAT}
+\alias{plot.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
 mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
@@ -632,6 +632,7 @@ it's elements are not mutable. Therefore, in order to make changes directly to t
 Following the above process the work-flow in \code{\link{mirtCAT}} will use the new \code{design} object in place of the
 old one, even in Monte Carlo simulations.
 }
+
 \examples{
 \dontrun{
 
@@ -724,9 +725,6 @@ print(res)
 
 }
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \references{
 Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
 Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
@@ -736,9 +734,11 @@ Multidimensional Item Response Theory Applications. \emph{Journal of Statistical
 \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, 
   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}
 }
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}
 \keyword{CAT,}
 \keyword{MCAT,}
 \keyword{adaptive}
 \keyword{computerized}
 \keyword{testing}
-

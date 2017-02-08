@@ -142,13 +142,12 @@ findNextItemp(CATdesign, objective=objective, all_index = TRUE)
 
 }
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \references{
 van der Linden, W. J. (2005). Linear models for optimal test design. Springer.
 }
 \seealso{
 \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

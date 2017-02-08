@@ -40,10 +40,9 @@ pat3 <- generate_pattern(mod, Theta = matrix(c(0, 2, -2), 3))
 
 }
 }
-\author{
-Phil Chalmers \email{rphilip.chalmers@gmail.com}
-}
 \seealso{
 \code{\link{mirtCAT}}
 }
-
+\author{
+Phil Chalmers \email{rphilip.chalmers@gmail.com}
+}

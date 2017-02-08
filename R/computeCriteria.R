@@ -19,6 +19,13 @@
 #' 
 #' @param test (required when \code{x} is missing) internal test object. To be 
 #'   used when \code{customNextItem} function has been defined
+#'   
+#' @param subset an integer vector indicating which items should be included in the optimal search;
+#'   the default \code{NULL} includes all possible items. To allow only the first 10 items to be 
+#'   selected from this can be modified to \code{subset = 1:10}. This is useful when administering 
+#'   a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
+#'   for smoother presentation. Useful when using the \code{customNextItem} function in 
+#'   \code{\link{mirtCAT}}
 #'
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}},
 #'   \code{\link{findNextItem}}
@@ -36,7 +43,7 @@
 #' 
 #' }
 computeCriteria <- function(x, criteria, person = NULL, 
-                            test = NULL, design = NULL){
+                            test = NULL, design = NULL, subset = NULL){
     if(!missing(x)){
         design <- x$design
         person <- x$person
@@ -47,6 +54,6 @@ computeCriteria <- function(x, criteria, person = NULL,
     if(missing(criteria))
         stop('Please specify a valid selection criteria', call.=FALSE)
     design@criteria <- criteria
-    return(findNextCATItem(person=person, test=test, design=design,
-                           subset=NULL, all_index=FALSE, values=TRUE))
+    return(findNextCATItem(person=person, test=test, design=design, start=FALSE,
+                           subset=subset, all_index=FALSE, values=TRUE))
 }
