@@ -5,7 +5,7 @@
 \title{Compute the values given the criteria and internal objects}
 \usage{
 computeCriteria(x, criteria, person = NULL, test = NULL, design = NULL,
-  subset = NULL)
+  subset = NULL, info_mats = FALSE)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -28,6 +28,10 @@ selected from this can be modified to \code{subset = 1:10}. This is useful when 
 a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
 for smoother presentation. Useful when using the \code{customNextItem} function in 
 \code{\link{mirtCAT}}}
+
+\item{info_mats}{logical; if more than one trait is present in the test, should the repective information
+matricies be returned instead of the scalar summary statistics (e.g., D-rule). When TRUE will 
+return a list of matricies associated with each respective item}
 }
 \value{
 a vector of criteria values for each respective item

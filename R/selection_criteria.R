@@ -55,6 +55,11 @@ MLWI <- function(which_not_answered, person, test, thetas, prior = FALSE){
     crit
 }
 
+InfoMats <- function(which_not_answered, person, test, thetas){
+    .Call('ComputeCriteriaMats', test@EIs, person$thetas, which_not_answered, 
+          person$info_thetas)
+}
+
 Drule <- function(which_not_answered, person, test, thetas){
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
                               2, 0, person$info_thetas)

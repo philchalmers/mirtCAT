@@ -1,3 +1,9 @@
+# mirtCAT 1.4
+
+- added `subset` and `info_mats` to `computeCriteria()` to compute the desired criteria on item subsets only
+  and to return the information matricies used to compute criteria such as Drule, Trule, etc 
+  (requested by Johan Braeken)
+
 # mirtCAT 1.3
 
 - removed support for a list input for `df` object in place of a more flexible format which supports

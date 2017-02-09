@@ -58,6 +58,13 @@ test_that('multidimensional', {
     expect_is(oo, 'trellis')
     oo <- plot(res, pick_theta=1)
     
+    DE <- mirtCAT(df, mod2, design_elements = TRUE)
+    res <- computeCriteria(DE, criteria = 'Trule')
+    expect_equal(res[1:4], c(0.08130270, 0.05923792, 0.35733595, 0.04088760), tolerance=1e-4)
+    res <- computeCriteria(DE, criteria = 'Trule', info_mats = TRUE)
+    expect_is(res[[1]], 'matrix')
+    expect_equal(diag(res[[1]]), c(0.1626054, 0.0000000), tolerance = 1e-4)
+    
     res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .4))
     expect_equal(res$items_answered, c(1,20,21,37,3,5,35,30,24,36,16,11,39,14,29,7,13,23,32,18,17,22,12,15,28,19,10,26,27,38,31,6,25,9,8,34,4,33,2,40))

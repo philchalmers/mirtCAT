@@ -26,6 +26,10 @@
 #'   a multi-unidimensional CAT session where unidimensional blocks should be clustered together 
 #'   for smoother presentation. Useful when using the \code{customNextItem} function in 
 #'   \code{\link{mirtCAT}}
+#' 
+#' @param info_mats logical; if more than one trait is present in the test, should the repective information
+#'   matricies be returned instead of the scalar summary statistics (e.g., D-rule). When TRUE will 
+#'   return a list of matricies associated with each respective item
 #'
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}},
 #'   \code{\link{findNextItem}}
@@ -43,7 +47,8 @@
 #' 
 #' }
 computeCriteria <- function(x, criteria, person = NULL, 
-                            test = NULL, design = NULL, subset = NULL){
+                            test = NULL, design = NULL, subset = NULL,
+                            info_mats = FALSE){
     if(!missing(x)){
         design <- x$design
         person <- x$person
@@ -53,6 +58,7 @@ computeCriteria <- function(x, criteria, person = NULL,
         stop('computeCriteria has improper inputs', call.=FALSE)
     if(missing(criteria))
         stop('Please specify a valid selection criteria', call.=FALSE)
+    if(info_mats) criteria <- 'info_mats'
     design@criteria <- criteria
     return(findNextCATItem(person=person, test=test, design=design, start=FALSE,
                            subset=subset, all_index=FALSE, values=TRUE))

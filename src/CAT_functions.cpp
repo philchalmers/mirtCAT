@@ -1,5 +1,13 @@
 #include "item_functions.h"
 
+arma::mat info_crits_mats(const S4 &item, const vector<double> &Theta, 
+	const arma::mat &inv_priorvar)
+{
+   	arma::mat info_mat = Info(item, Theta);
+    info_mat = info_mat + inv_priorvar;
+    return(info_mat);
+}
+
 void info_crits(double &val, const S4 &item, const vector<double> &Theta, const int &criteria, 
 	const arma::colvec &w, const arma::mat &inv_priorvar)
 {
@@ -63,5 +71,31 @@ RcppExport SEXP ComputeCriteria(SEXP Rpars, SEXP RTheta, SEXP Rwhich_not_answere
     }
 
     return(wrap(crit));
+    END_RCPP
+}
+
+
+RcppExport SEXP ComputeCriteriaMats(SEXP Rpars, SEXP RTheta, SEXP Rwhich_not_answered, 
+	SEXP Rinv_priorvar)
+{
+    BEGIN_RCPP
+
+    const List pars(Rpars);
+    const vector<double> Theta = as< vector<double> >(RTheta);
+    const vector<int> which_not_answered = as< vector<int> >(Rwhich_not_answered);
+    const int len = which_not_answered.size();
+    const int nfact = Theta.size();
+    NumericMatrix rinv_priorvar(Rinv_priorvar);
+    arma::mat inv_priorvar(rinv_priorvar.begin(), nfact, nfact, false);
+    List crit(len);
+
+    for(int pick = 0; pick < len; ++pick){
+    	const int whc = which_not_answered[pick];
+    	const S4 item = pars[whc-1];
+    	arma::mat tmp = info_crits_mats(item, Theta, inv_priorvar);
+    	crit[pick] = wrap(tmp);
+    }
+
+    return(crit);
     END_RCPP
 }

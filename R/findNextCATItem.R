@@ -277,6 +277,8 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         Wrule(which_not_answered=which_not_answered, person=person, test=test,
               design=design, thetas=thetas)
+    } else if(criteria == 'info_mats'){
+        InfoMats(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
     } else {
         stop('Selection criteria does not exist', call.=FALSE)
     }
