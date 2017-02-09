@@ -155,7 +155,7 @@ findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria 
        findNextCATItem(person=person, test=test, design=design,
                        subset=subset, all_index=all_index)
     }
-    ret
+    unname(ret)
 }
 
 findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
@@ -282,7 +282,10 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
     } else {
         stop('Selection criteria does not exist', call.=FALSE)
     }
-    if(values) return(crit)
+    if(values){
+        names(crit) <- which_not_answered
+        return(crit)
+    }
     if(all_index) return(index[order(crit, decreasing = TRUE)])
     
     if(design@use_content){

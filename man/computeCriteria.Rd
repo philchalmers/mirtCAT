@@ -37,8 +37,9 @@ return a list of matricies associated with each respective item}
 a vector of criteria values for each respective item
 }
 \description{
-A function that returns a vector of evaluated criteria for each respective item in the 
-test bank. Note that criteria values are returned such that the maximum value always 
+A function that returns a named vector of evaluated criteria for each respective item in the 
+test bank. The names are associated with the item number in the bank. 
+Note that criteria values are returned such that the maximum value always 
 represents the most optimal item (e.g., maximum information). In cases where the minimum value is 
 typically selected (e.g., minimum variance) all values are multiplied by -1 to turn it into a maximization
 problem.
