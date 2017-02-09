@@ -66,7 +66,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@met_SEM <- rep(FALSE, nfact)
               .Object@met_delta_thetas <- rep(FALSE, nfact)
               .Object@met_classify <- rep(FALSE, nfact)
-              .Object@weights <- rep(1/nfact, nfact)
+              .Object@weights <- rep(1, nfact)
               .Object@min_items <- 1L
               .Object@max_items <- nitems
               .Object@stop_now <- FALSE
@@ -186,8 +186,6 @@ setMethod("initialize", signature(.Object = "Design"),
               }
               if(.Object@use_content && criteria == 'seq')
                   stop('content designs are not supported for seq criteria', call.=FALSE)
-              if(!mirt:::closeEnough(sum(.Object@weights)-1, -1e-6, 1e-6))
-                  stop('weights does not sum to 1', call.=FALSE)
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
                   stop('min_SEM criteria is not a suitable length', call.=FALSE)
               if(length(preCAT)){

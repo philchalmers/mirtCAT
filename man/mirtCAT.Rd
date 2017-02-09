@@ -244,7 +244,7 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
 
   \item{\code{weights}}{weights used when \code{criteria == 'Wrule'}, but also 
     will be applied for weighted trace functions in the T- and A-rules. The default 
-    weights the latent dimensions equally. Default is \code{rep(1/nfact), nfact)}, 
+    weights the latent dimensions equally. Default is \code{rep(1, nfact)}, 
     where \code{nfact} is the number of test dimensions}
     
   \item{\code{KL_delta}}{interval range used when \code{criteria = 'KL'}

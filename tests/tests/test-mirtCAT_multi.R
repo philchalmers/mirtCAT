@@ -60,7 +60,7 @@ test_that('multidimensional', {
     
     DE <- mirtCAT(df, mod2, design_elements = TRUE)
     res <- computeCriteria(DE, criteria = 'Trule')
-    expect_equal(unname(res[1:4]), c(0.08130270, 0.05923792, 0.35733595, 0.04088760), tolerance=1e-4)
+    expect_equal(unname(res[1:4]), c(0.16260541, 0.11847584, 0.71467191, 0.08177519 ), tolerance=1e-4)
     res <- computeCriteria(DE, criteria = 'Trule', info_mats = TRUE)
     expect_is(res[[1]], 'matrix')
     expect_equal(diag(res[[1]]), c(0.1626054, 0.0000000), tolerance = 1e-4)
