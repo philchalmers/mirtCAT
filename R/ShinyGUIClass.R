@@ -91,7 +91,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
                                   gnames <- c('title', 'authors', 'instructions', 'firstpage', 'demographics',
-                                              'demographics_inputIDs', 'max_time', 'temp_file', 
+                                              'demographics_inputIDs', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
                                               'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format',
                                               'stem_expressions', 'theme', 'time_before_answer')

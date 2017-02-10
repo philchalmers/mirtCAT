@@ -41,7 +41,7 @@ Design <- setClass(Class = "Design",
 
 setMethod("initialize", signature(.Object = "Design"),
           function(.Object, method, criteria, nfact, design,
-                   start_item, preCAT, nitems, max_time){
+                   start_item, preCAT, nitems){
               .Object@method <- method
               .Object@criteria <- criteria
               .Object@criteria_estimator <- 'MAP'
@@ -69,13 +69,13 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@weights <- rep(1, nfact)
               .Object@min_items <- 1L
               .Object@max_items <- nitems
+              .Object@max_time <- Inf
               .Object@stop_now <- FALSE
               .Object@delta_thetas <- rep(0, nfact)
               .Object@preCAT_min_items <- 0L
               .Object@preCAT_max_items <- 0L
               .Object@preCAT_response_var <- FALSE
               .Object@KL_delta <- 0.1
-              .Object@max_time <- if(is.null(max_time)) Inf else max_time
               .Object@use_content <- FALSE
               .Object@content_prop_empirical <- 1
               .Object@classify <- NaN
@@ -88,7 +88,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@person_properties <- data.frame()
               if(length(design)){
                   dnames <- names(design)
-                  gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 
+                  gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
                               'customNextItem', 'test_properties', 'person_properties', 'constr_fun')
@@ -122,6 +122,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@classify <- design$classify
                   if(!is.null(design$constr_fun))
                       .Object@constr_fun <- design$constr_fun
+                  if(!is.null(design$max_time))
+                      .Object@max_time <- design$max_time
                   if(!is.null(design$test_properties)){
                       .Object@test_properties <- design$test_properties
                       if(nrow(.Object@test_properties) != nitems)

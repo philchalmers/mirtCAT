@@ -229,6 +229,10 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
   
   \item{\code{max_items}}{maximum number of items that 
     can be answered. Default is the length of the item bank}
+    
+  \item{\code{max_time}}{maximum time allowed for the generated GUI, measured
+    in seconds. For instance, if the test should stop after 10 minutes then the number 
+    600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}
   
   \item{\code{quadpts}}{Number of quadrature points used per dimension 
     for integration (if required). Default is identical to scheme in \code{\link{fscores}}}
@@ -427,10 +431,6 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
   \item{\code{stem_default_format}}{\code{shiny} function used for the stems of the items. Default uses the 
     \code{\link{p}} wrapper. To change this to \code{\link{h5}}, for example, 
     pass \code{stem_default_format = shiny::h5} to the \code{shinyGUI} list}
-    
-  \item{\code{max_time}}{maximum time allowed for the generated GUI, measured
-    in seconds. For instance, if the test should stop after 10 minutes then the number 
-    600 should be passed (10 * 60). Default is \code{Inf}, therefore no time limit}
     
   \item{\code{temp_file}}{a character vector indicating where a temporary .rds file 
     containing the response information should be saved while the GUI is running. 

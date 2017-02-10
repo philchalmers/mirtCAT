@@ -122,8 +122,7 @@ mirtCAT_preamble_internal <-
                            item_options=item_options, quadpts_in=design$quadpts,
                            theta_range_in=design$theta_range, dots=list(...))
         design_object <- new('Design', method=method, criteria=criteria, 
-                             start_item=if(is.numeric(start_item)) start_item else NaN,
-                             max_time=shinyGUI$max_time, 
+                             start_item=if(is.numeric(start_item)) start_item else NaN, 
                              nfact=test_object@nfact, design=design, 
                              preCAT=preCAT, nitems=test_object@length)
         person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
