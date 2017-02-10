@@ -122,11 +122,6 @@
 #'   the weighted information criteria. For each of these rules, the posterior weight for 
 #'   the latent trait scores can also be included with the \code{'DPrule'}, \code{'TPrule'},
 #'   \code{'APrule'}, \code{'EPrule'}, and \code{'WPrule'}, respectively. 
-#'   As a safety precaution, if the 
-#'   selected criteria do not weight by the posterior (and therefore do not exist for 
-#'   extreme response styles) and less than 5 items have been administered then 
-#'   the method is temporarily switched to the posterior weighting
-#'   until a variable response pattern is observed.
 #'   
 #'   Applicable to both unidimensional and multidimensional tests are the
 #'   \code{'KL'} and \code{'KLn'} for point-wise Kullback-Leibler divergence and 
@@ -134,7 +129,7 @@
 #'   where \code{n} is the number of items previous answered), respectively. 
 #'   The \code{delta} criteria is defined in the \code{design} object
 #'   
-#'   Non-adaptive methods applicable even when no \code{mo} is passed 
+#'   Non-adaptive methods applicable even when no \code{mo} object is passed 
 #'   are: \code{'random'} to randomly select items, and \code{'seq'} for selecting 
 #'   items sequentially.
 #'   
@@ -505,8 +500,8 @@
 #'     \item{\code{criteria}}{selection criteria (see above). Default is 'random'}
 #'     
 #'     \item{\code{method}}{estimation criteria (see above). It is generally recommended to 
-#'       select a method which can deal with all-or-none response patterns, such as 'EAP'
-#'       or 'MAP', or in the multidimensional case 'DPrule' or 'TPrule'. Default is 'MAP'}
+#'       select a method which can deal with all-or-none response patterns, such as 'EAP',
+#'       'MAP', or 'WLE'. Default is 'MAP'}
 #'       
 #'     \item{\code{response_variance}}{logical; terminate the preCAT stage when there is variability in the 
 #'       response pattern (i.e., when maximum-likelihood estimation contains a potential optimum)?
@@ -521,7 +516,7 @@
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' 
 #' @seealso \code{\link{generate_pattern}}, \code{\link{generate.mirt_object}}, 
-#'   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}
+#'   \code{\link{extract.mirtCAT}}, \code{\link{findNextItem}}, \code{\link{computeCriteria}}
 #' 
 #' @return Returns a list object of class \code{'Person'} containing the following elements:
 #'   
