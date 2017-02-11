@@ -39,6 +39,7 @@ License: GPL (>= 3)
 Repository: CRAN
 Maintainer: Phil Chalmers <rphilip.chalmers@gmail.com>
 URL: https://github.com/philchalmers/mirtCAT,
-    https://github.com/philchalmers/mirtCAT/wiki
+    https://github.com/philchalmers/mirtCAT/wiki,
+    https://groups.google.com/forum/#!forum/mirt-package
 BugReports: https://github.com/philchalmers/mirtCAT/issues?state=open
 RoxygenNote: 6.0.0
