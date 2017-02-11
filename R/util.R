@@ -126,7 +126,7 @@ buildShinyElements <- function(questions, itemnames, customTypes){
     names(choices) <- NULL
     for(i in 1L:length(Qs)){
         if(Type[i] == 'radio'){
-            cs <- na.omit(choices[i, ])
+            cs <- choices[i, !is.na(choices[i, ])]
             choices_list[[i]] <- cs
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             width <- questions$width[i]
@@ -134,7 +134,7 @@ buildShinyElements <- function(questions, itemnames, customTypes){
                                     inline = inline, width = width,
                                     choices = cs, selected = '')
         } else if(Type[i] == 'select'){
-            cs <- c('', na.omit(choices[i,]))
+            cs <- c('', choices[i, !is.na(choices[i, ])])
             choices_list[[i]] <- cs
             width <- questions$width[i]
             size <- questions$size[i]
@@ -170,7 +170,7 @@ buildShinyElements <- function(questions, itemnames, customTypes){
                                    ticks = TICKS, pre = PRE, post = POST)
             choices_list[[i]] <- as.character(seq(from=MIN, to=MAX, by=STEP))
         } else if(Type[i] == 'checkbox'){
-            cs <- na.omit(choices[i,])
+            cs <- choices[i, !is.na(choices[i, ])]
             choices_list[[i]] <- cs
             width <- questions$width[i]
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
