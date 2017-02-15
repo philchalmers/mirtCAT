@@ -310,6 +310,21 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
     }
   }
   
+  \item{\code{customUpdateThetas}}{a more advanced function of the form 
+    \code{customUpdateThetas <- function(responses, thetas0, design, test, state)}      
+    to update the ability/latent trait estimates throughout the CAT (or more generally, scoring) session.
+    The \code{state} object is by default an empty list, but can be used to store and modify various 
+    data elements useful to the front-end user, \code{design} and \code{test} are the same as in 
+    \code{customNextItem}, \code{thetas0} is the current estimate of the ability parameters, and 
+    \code{responses} is the scored response pattern. Note that the \code{fscores()} function can be useful here
+    to capitalize on the estimation algorithms implemented in \code{mirt}.
+    
+    The function must return a list with three named elements: a \code{thetas}
+    vector containing the point-wise estimates, a \code{thetas_SE} vector containing the respective
+    standard error estimates, and the original or modified \code{state} object (must be a list).
+  
+  }
+  
   \item{\code{customNextItem}}{a more advanced function of the form 
     \code{customNextItem <- function(design, person, test)} to use a customized item selection
     method. This requires more complex programming and understanding of \code{mirtCAT}s internal elements,

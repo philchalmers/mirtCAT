@@ -91,7 +91,8 @@ setMethod("initialize", signature(.Object = "Design"),
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
-                              'customNextItem', 'test_properties', 'person_properties', 'constr_fun')
+                              'customNextItem', 'test_properties', 'person_properties', 'constr_fun',
+                              'customUpdateThetas')
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)

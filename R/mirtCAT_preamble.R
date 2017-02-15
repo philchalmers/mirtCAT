@@ -127,7 +127,8 @@ mirtCAT_preamble_internal <-
                              preCAT=preCAT, nitems=test_object@length)
         person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                                     thetas.start_in=design$thetas.start, score=score, 
-                                    theta_SEs=sqrt(diag(test_object@gp$gcov)))
+                                    theta_SEs=sqrt(diag(test_object@gp$gcov)),
+                                    CustomUpdateThetas=design$customUpdateThetas)
         if(is.character(start_item)){
             tmp <- design_object@criteria
             design_object@criteria <- start_item

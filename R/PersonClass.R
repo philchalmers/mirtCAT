@@ -11,13 +11,16 @@ Person <- setRefClass("Person",
                                     demographics = 'data.frame',
                                     item_time = 'numeric',
                                     valid_item = 'logical',
+                                    use_custom_Update.thetas = 'logical',
+                                    customUpdateThetas = 'function',
+                                    state = 'list',
                                     login_name = 'character',
                                     score = 'logical',
                                     true_thetas = 'numeric'),
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
-                                               theta_SEs, ID = 0L){
+                                               theta_SEs, CustomUpdateThetas, ID = 0L){
                              'Initialize the person object given background information'
                              ID <<- ID
                              true_thetas <<- numeric(0L)
@@ -34,6 +37,13 @@ Person <- setRefClass("Person",
                                 thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
                              info_thetas <<- matrix(0, nfact, nfact)
+                             if(is.null(CustomUpdateThetas)){
+                                 use_custom_Update.thetas <<- FALSE
+                                 customUpdateThetas <<- function(design, test) 1
+                             } else {
+                                 use_custom_Update.thetas <<- TRUE
+                                 customUpdateThetas <<- CustomUpdateThetas
+                             }
                          })
                       
 )
@@ -47,24 +57,35 @@ Person$methods(
         responses2 <- responses
         responses2[design@items_not_scored] <- NA
         if(score){
-            method <- design@method
-            if(last_item(items_answered) %in% design@items_not_scored)
-                method <- 'fixed'
-            if(method == 'ML'){
-                if(length(unique(na.omit(responses2))) < 2L) method <- 'MAP'
-            }
-            if(method != 'fixed'){
-                suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
-                                   theta_lim=test@fscores_args$theta_lim,
-                                   MI = test@fscores_args$MI, quadpts = test@quadpts, 
-                                   mean = test@fscores_args$mean, cov = test@fscores_args$cov,
-                                   QMC=test@fscores_args$QMC, custom_den=test@fscores_args$custom_den))
-                thetas <<- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
-                thetas_SE_history <<- rbind(thetas_SE_history, 
-                                            tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+            if(use_custom_Update.thetas){
+                tmp <- try(customUpdateThetas(responses=responses2, thetas0=thetas, 
+                                              design=design, test=test, state=state), TRUE)
+                if(!all(names(tmp) %in% c("thetas", "thetas_SE", "state")))
+                    stop('customUpdateThetas must return a list with elements thetas, thetas_SE, and state',
+                         call.=FALSE)
+                thetas <<- matrix(tmp$thetas, 1L)
+                thetas_SE_history <<- rbind(thetas_SE_history, as.vector(tmp$thetas_SE))
+                state <<- tmp$state
             } else {
-                thetas_SE_history <<- rbind(thetas_SE_history, 
-                                            thetas_SE_history[nrow(thetas_SE_history),])
+                method <- design@method
+                if(last_item(items_answered) %in% design@items_not_scored)
+                    method <- 'fixed'
+                if(method == 'ML'){
+                    if(length(unique(na.omit(responses2))) < 2L) method <- 'MAP'
+                }
+                if(method != 'fixed'){
+                    suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
+                                                    theta_lim=test@fscores_args$theta_lim,
+                                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
+                                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov,
+                                                    QMC=test@fscores_args$QMC, custom_den=test@fscores_args$custom_den))
+                    thetas <<- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
+                    thetas_SE_history <<- rbind(thetas_SE_history, 
+                                                tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                } else {
+                    thetas_SE_history <<- rbind(thetas_SE_history, 
+                                                thetas_SE_history[nrow(thetas_SE_history),])
+                }
             }
             thetas_history <<- rbind(thetas_history, thetas)
             set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
@@ -80,6 +101,6 @@ Person$methods(
                     tmp <- tmp + solve(test@gp$gcov)
                 info_thetas <<- tmp
             }
-        }
+        }   
     }
 )
