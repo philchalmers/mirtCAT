@@ -74,9 +74,8 @@
 #' findNextItem(CATdesign)
 #' findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most optimal
 #' 
-#' # alternatively, update the Theta using the internal ReferenceClass method
-#' Person$help('Update.thetas') # internal help file for class 'Person'
-#' CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
+#' # alternatively, update the Theta using the Update.thetas definition in design
+#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
 #' findNextItem(CATdesign)
 #' 
 #' 
@@ -123,7 +122,7 @@
 #' findNextItem(CATdesign, objective=objective)
 #' 
 #' # all the items which solve the problem
-#' findNextItemp(CATdesign, objective=objective, all_index = TRUE)
+#' findNextItem(CATdesign, objective=objective, all_index = TRUE)
 #' 
 #' ## within a customNextItem() definition the above code would look like
 #' # customNextItem <- function(person, design, test){

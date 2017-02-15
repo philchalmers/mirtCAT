@@ -19,12 +19,18 @@ test_that('ordered', {
     expect_equal(unname(fs[,'F1']), 0.4293075, tolerance = 1e-4)
     
     #customUpdateThetas test
-    myfun <- function(responses, thetas0, design, test, state){
-        tmp <- fscores(test@mo, response.pattern = responses)
-        list(thetas = tmp[,'F1'], thetas_SE = tmp[,'SE_F1'], state=state)
+    myfun <- function(design, person, test){
+        tmp <- fscores(test@mo, response.pattern = person$responses)
+        person$thetas <- matrix(tmp[,'F1'], 1L) + 1
+        person$thetas_SE_history <- rbind(person$thetas_SE_history, 
+                                          tmp[,'SE_F1', drop=FALSE])
+        person$thetas_history <- rbind(person$thetas_history, person$thetas)
+        invisible()
     }
     res <- mirtCAT(mo = mod, local_pattern = pat, 
                    design = list(customUpdateThetas=myfun))
+    expect_equal(as.vector(res$thetas_history), c(0.0000000, 0.9087657, 1.0427067, 1.0238240, 1.4293075), 
+                 tolerance=1e-4)
     
     choices <- c('SD', 'D', 'A', 'SA')
     df <- data.frame(Type = 'radio', Question = as.character(1:nitems), stringsAsFactors = FALSE)

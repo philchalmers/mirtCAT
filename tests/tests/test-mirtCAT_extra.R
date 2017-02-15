@@ -40,7 +40,7 @@ test_that('extra', {
     expect_equal(1, findNextItem(CATdesign))
     CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
     expect_equal(20, findNextItem(CATdesign))
-    CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test)
+    CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test)
     expect_equal(3, findNextItem(CATdesign))
     vals <- computeCriteria(CATdesign, criteria = 'MI')
     expect_equal(unname(vals[1:4]), c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)

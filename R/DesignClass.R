@@ -35,6 +35,7 @@ Design <- setClass(Class = "Design",
                              customNextItem = 'function',
                              test_properties = 'data.frame',
                              person_properties = 'data.frame',
+                             Update.thetas = 'function',
                              constr_fun = 'function'),
                    validity = function(object) return(TRUE)
 )
@@ -42,6 +43,35 @@ Design <- setClass(Class = "Design",
 setMethod("initialize", signature(.Object = "Design"),
           function(.Object, method, criteria, nfact, design,
                    start_item, preCAT, nitems){
+              Update_thetas <- function(design, person, test){
+                  responses2 <- person$responses
+                  responses2[design@items_not_scored] <- NA
+                  if(person$score){
+                      method <- design@method
+                      if(last_item(person$items_answered) %in% design@items_not_scored)
+                          method <- 'fixed'
+                      if(method == 'ML')
+                          if(length(unique(na.omit(responses2))) < 2L) 
+                              method <- 'MAP'
+                      if(method != 'fixed'){
+                          suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
+                                                          theta_lim=test@fscores_args$theta_lim,
+                                                          MI = test@fscores_args$MI, quadpts = test@quadpts, 
+                                                          mean = test@fscores_args$mean, cov = test@fscores_args$cov,
+                                                          QMC=test@fscores_args$QMC, 
+                                                          custom_den=test@fscores_args$custom_den))
+                          person$thetas <- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
+                          person$thetas_SE_history <- rbind(person$thetas_SE_history, 
+                                                      tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                          } else {
+                              person$thetas_SE_history <- rbind(person$thetas_SE_history, 
+                                                                person$thetas_SE_history[nrow(person$thetas_SE_history),])
+                          }
+                  }
+                  person$thetas_history <- rbind(person$thetas_history, person$thetas)
+                  invisible()
+              }
+              
               .Object@method <- method
               .Object@criteria <- criteria
               .Object@criteria_estimator <- 'MAP'
@@ -86,6 +116,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@items_not_scored <- integer(0L)
               .Object@test_properties <- data.frame()
               .Object@person_properties <- data.frame()
+              .Object@Update.thetas <- Update_thetas
               if(length(design)){
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
@@ -125,6 +156,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@constr_fun <- design$constr_fun
                   if(!is.null(design$max_time))
                       .Object@max_time <- design$max_time
+                  if(!is.null(design$customUpdateThetas))
+                      .Object@Update.thetas <- design$customUpdateThetas
                   if(!is.null(design$test_properties)){
                       .Object@test_properties <- design$test_properties
                       if(nrow(.Object@test_properties) != nitems)
@@ -224,8 +257,6 @@ setMethod("initialize", signature(.Object = "Design"),
 
 setGeneric('Update.stop_now', function(.Object, ...) standardGeneric("Update.stop_now"))
 
-setGeneric('Next.stage', function(.Object, ...) standardGeneric("Next.stage"))
-
 setMethod("Update.stop_now", signature(.Object = "Design"),
           function(.Object, person){
               nanswered <- sum(!is.na(person$items_answered))
@@ -252,6 +283,8 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
           }
 )
 
+setGeneric('Next.stage', function(.Object, ...) standardGeneric("Next.stage"))
+
 setMethod("Next.stage", signature(.Object = "Design"),
           function(.Object, person, test, item){
               if(item >= .Object@preCAT_min_items){
@@ -271,5 +304,4 @@ setMethod("Next.stage", signature(.Object = "Design"),
               }
               .Object
           }
-          
 )

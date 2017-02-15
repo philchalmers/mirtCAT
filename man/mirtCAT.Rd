@@ -311,17 +311,29 @@ results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
   }
   
   \item{\code{customUpdateThetas}}{a more advanced function of the form 
-    \code{customUpdateThetas <- function(responses, thetas0, design, test, state)}      
+    \code{customUpdateThetas <- function(design, person, test)}      
     to update the ability/latent trait estimates throughout the CAT (or more generally, scoring) session.
-    The \code{state} object is by default an empty list, but can be used to store and modify various 
-    data elements useful to the front-end user, \code{design} and \code{test} are the same as in 
-    \code{customNextItem}, \code{thetas0} is the current estimate of the ability parameters, and 
-    \code{responses} is the scored response pattern. Note that the \code{fscores()} function can be useful here
+    The \code{design}, \code{person}, and \code{test} are the same as in 
+    \code{customNextItem}. 
+    The latent trait terms are updated directly in the \code{person} object, which is a 
+    \code{\link{ReferenceClasses}} type, and therefore direct assignment to the object will modify the internal
+    elements. The function should return \code{invisible()} as well, because the purpose is only to update 
+    the reference-class object. Note that the \code{fscores()} function can be useful here
     to capitalize on the estimation algorithms implemented in \code{mirt}.
     
-    The function must return a list with three named elements: a \code{thetas}
-    vector containing the point-wise estimates, a \code{thetas_SE} vector containing the respective
-    standard error estimates, and the original or modified \code{state} object (must be a list).
+    For example, a minimal working function would look like the following (not the use of \code{rbind()} to
+    append the history terms in the \code{person} object):
+    
+    \preformatted{
+       myfun <- function(design, person, test){
+           tmp <- fscores(test@mo, response.pattern = person$responses)
+           person$thetas <- matrix(tmp[,'F1'], 1L)
+           person$thetas_SE_history <- rbind(person$thetas_SE_history, 
+                                             tmp[,'SE_F1', drop=FALSE])
+           person$thetas_history <- rbind(person$thetas_history, person$thetas)
+           invisible()
+        }
+    }
   
   }
   

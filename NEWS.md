@@ -1,7 +1,8 @@
 # mirtCAT 1.4
 
 - new `customUpdateThetas` function input to `design` to create a map of how the latent trait estimates should
-  be updated throughout the session
+  be updated throughout the session. To better expose the internals, the previous `Update.thetas()` function
+  associated with a `person` class is now available as a slot in the `design` internal object
 
 - added `subset` and `info_mats` to `computeCriteria()` to compute the desired criteria on item subsets only
   and to return the information matricies used to compute criteria such as Drule, Trule, etc 

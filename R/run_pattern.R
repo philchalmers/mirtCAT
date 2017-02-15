@@ -1,13 +1,12 @@
 run_local <- function(responses, nfact, start_item, nitems, thetas.start_in, 
-                      score, design, test, CustomUpdateThetas, progress, 
+                      score, design, test, progress, 
                       verbose = FALSE, cl = NULL, primeCluster = TRUE){
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test){
         if(is.na(start_item)) design@start_item <- sample(1L:ncol(responses), 1L)
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
-                             thetas.start_in=thetas.start_in, score=score, ID=n,
-                             CustomUpdateThetas=CustomUpdateThetas)
+                             thetas.start_in=thetas.start_in, score=score, ID=n)
         item <- findNextCATItem(person=person, test=test, design=design)
         if(is.na(item)){
             design@stop_now <- TRUE
@@ -27,8 +26,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                 person$responses[pick] <- as.integer(ip == test@item_answers[[pick]])
             
             #update Thetas
-            person$Update.thetas(design, test)
-            design <- Update.stop_now(design, person)
+            design@Update.thetas(design=design, person=person, test=test)
+            person$Update.info_mats(design=design, test=test)
+            design <- Update.stop_now(design, person=person)
             if(design@stop_now) break
             
             design <- Next.stage(design, person=person, test=test, item=i)

@@ -24,9 +24,8 @@
 #' CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
 #' findNextItem(CATdesign) 
 #' 
-#' # alternatively, update the Theta using the internal ReferenceClass method
-#' Person$help('Update.thetas') # internal help file for class 'Person'
-#' CATdesign$person$Update.thetas(CATdesign$design, CATdesign$test) 
+#' # alternatively, update the Theta using the Update.thetas definition in design
+#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
 #' findNextItem(CATdesign)
 #' }
 #' 

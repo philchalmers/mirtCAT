@@ -103,10 +103,11 @@ server <- function(input, output) {
                     .MCE$start_time <- NULL
                     
                     #update Thetas
-                    .MCE$person$Update.thetas(.MCE$design, .MCE$test)
+                    .MCE$design@Update.thetas(design=.MCE$design, person=.MCE$person, test=.MCE$test)
+                    .MCE$person$Update.info_mats(design=.MCE$design, test=.MCE$test)
                     if(.MCE$shinyGUI$temp_file != '')
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-                    .MCE$design <- Update.stop_now(.MCE$design, .MCE$person)
+                    .MCE$design <- Update.stop_now(.MCE$design, person=.MCE$person)
                 } else {
                     if(.MCE$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE$start_time) || 
                        (.MCE$shinyGUI$forced_choice && df$Type[pick] != 'none')){
@@ -122,10 +123,11 @@ server <- function(input, output) {
                         .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
                         .MCE$start_time <- NULL
                         #update Thetas (same as above)
-                        .MCE$person$Update.thetas(.MCE$design, .MCE$test)
+                        .MCE$design@Update.thetas(design=.MCE$design, person=.MCE$person, test=.MCE$test)
+                        .MCE$person$Update.info_mats(design=.MCE$design, test=.MCE$test)
                         if(.MCE$shinyGUI$temp_file != '')
                             saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
-                        .MCE$design <- Update.stop_now(.MCE$design, .MCE$person)
+                        .MCE$design <- Update.stop_now(.MCE$design, person=.MCE$person)
                         .MCE$person$valid_item[pick] <- FALSE
                     }
                 }

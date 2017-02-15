@@ -11,8 +11,6 @@ Person <- setRefClass("Person",
                                     demographics = 'data.frame',
                                     item_time = 'numeric',
                                     valid_item = 'logical',
-                                    use_custom_Update.thetas = 'logical',
-                                    customUpdateThetas = 'function',
                                     state = 'list',
                                     login_name = 'character',
                                     score = 'logical',
@@ -37,13 +35,6 @@ Person <- setRefClass("Person",
                                 thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
                              info_thetas <<- matrix(0, nfact, nfact)
-                             if(is.null(CustomUpdateThetas)){
-                                 use_custom_Update.thetas <<- FALSE
-                                 customUpdateThetas <<- function(design, test) 1
-                             } else {
-                                 use_custom_Update.thetas <<- TRUE
-                                 customUpdateThetas <<- CustomUpdateThetas
-                             }
                          })
                       
 )
@@ -51,56 +42,22 @@ Person <- setRefClass("Person",
 Person$methods(
     
     # Update thetas
-    Update.thetas = function(design, test){
-        'Update the latent trait (theta) values using information 
-        from the design and test objects'
-        responses2 <- responses
-        responses2[design@items_not_scored] <- NA
-        if(score){
-            if(use_custom_Update.thetas){
-                tmp <- try(customUpdateThetas(responses=responses2, thetas0=thetas, 
-                                              design=design, test=test, state=state), TRUE)
-                if(!all(names(tmp) %in% c("thetas", "thetas_SE", "state")))
-                    stop('customUpdateThetas must return a list with elements thetas, thetas_SE, and state',
-                         call.=FALSE)
-                thetas <<- matrix(tmp$thetas, 1L)
-                thetas_SE_history <<- rbind(thetas_SE_history, as.vector(tmp$thetas_SE))
-                state <<- tmp$state
-            } else {
-                method <- design@method
-                if(last_item(items_answered) %in% design@items_not_scored)
-                    method <- 'fixed'
-                if(method == 'ML'){
-                    if(length(unique(na.omit(responses2))) < 2L) method <- 'MAP'
-                }
-                if(method != 'fixed'){
-                    suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
-                                                    theta_lim=test@fscores_args$theta_lim,
-                                                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
-                                                    mean = test@fscores_args$mean, cov = test@fscores_args$cov,
-                                                    QMC=test@fscores_args$QMC, custom_den=test@fscores_args$custom_den))
-                    thetas <<- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
-                    thetas_SE_history <<- rbind(thetas_SE_history, 
-                                                tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
-                } else {
-                    thetas_SE_history <<- rbind(thetas_SE_history, 
-                                                thetas_SE_history[nrow(thetas_SE_history),])
-                }
-            }
-            thetas_history <<- rbind(thetas_history, thetas)
-            set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
-                     'DPrule', 'TPrule', 'EPrule', 'WPrule', 'custom')
-            if(test@nfact > 1L && design@criteria %in% set){
-                pick <- which(!is.na(responses2))
-                infos <- lapply(pick, function(x, thetas)
-                    FI(extract.item(test@mo, x), Theta=thetas), thetas=thetas)
-                tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
-                for(i in 1L:length(infos))
-                    tmp <- tmp + infos[[i]]
-                if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule', 'APrule'))
-                    tmp <- tmp + solve(test@gp$gcov)
-                info_thetas <<- tmp
-            }
-        }   
-    }
+    Update.info_mats = function(design, test){
+        'Update the information matricies for previous answered multidimensional IRT models'
+        set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
+                 'DPrule', 'TPrule', 'EPrule', 'WPrule', 'custom')
+        if(test@nfact > 1L && design@criteria %in% set){
+            responses2 <- responses
+            responses2[design@items_not_scored] <- NA
+            pick <- which(!is.na(responses2))
+            infos <- lapply(pick, function(x, thetas)
+                FI(extract.item(test@mo, x), Theta=thetas), thetas=thetas)
+            tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
+            for(i in 1L:length(infos))
+                tmp <- tmp + infos[[i]]
+            if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule', 'APrule'))
+                tmp <- tmp + solve(test@gp$gcov)
+            info_thetas <<- tmp
+        }
+    }   
 )
