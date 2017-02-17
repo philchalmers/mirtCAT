@@ -89,7 +89,7 @@
 #' #  x5 + x6 == 1               ### item 5 or 6 must be included, but not both
 #' 
 #' # constraint function
-#' constr_fun <- function(person, test, design){
+#' constr_fun <- function(design, person, test){
 #'
 #'   # left hand side constrains 
 #'   #    - 1 row per constraint, and ncol must equal number of items
@@ -125,7 +125,7 @@
 #' findNextItem(CATdesign, objective=objective, all_index = TRUE)
 #' 
 #' ## within a customNextItem() definition the above code would look like
-#' # customNextItem <- function(person, design, test){
+#' # customNextItem <- function(design, person, test){
 #' #   objective <- computeCriteria(person=person, design=design, test=test, 
 #' #                                criteria = 'MI') 
 #' #   item <- findNextItem(person=person, design=design, test=test,

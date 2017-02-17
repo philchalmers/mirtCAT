@@ -346,7 +346,7 @@
 #'     various internal elements from the required functional arguments
 #'   }
 #'   
-#'   \item{\code{constr_fun}}{a user-defined function of the form \code{function(person, test, design)} 
+#'   \item{\code{constr_fun}}{a user-defined function of the form \code{function(design, person, test)} 
 #'     that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
 #'     of the constraints for \code{\link{lp}}. 
 #'     Each row corresponds to a constraint, while the number of columns should be 
@@ -357,7 +357,7 @@
 #'     the constraint that exactly 10 items 
 #'     should be administered to all participants, and that items 1 and 2 should not 
 #'     be included in the same test. The input would then be defined as 
-#'     \preformatted{const_fun <- function(person, test, design){
+#'     \preformatted{const_fun <- function(design, person, test){
 #'        nitems <- extract.mirt(test@@mo, 'nitems')
 #'        lhs <- matrix(0, 2, nitems)
 #'        lhs[1, ] <- 1

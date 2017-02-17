@@ -46,7 +46,7 @@ test_that('extra', {
     expect_equal(unname(vals[1:4]), c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
     
     # shadow test (less than 20 items, items 31+41 not in same test, item 3 not answered)
-    constr_fun <- function(person, test, design){
+    constr_fun <- function(design, person, test){
       # left hand side constrains 
       #    - 1 row per constraint, and ncol must equal number of items
       nitems <- extract.mirt(test@mo, 'nitems')
