@@ -71,6 +71,10 @@ mirtCAT_preamble_internal <-
         } else {
             if(!is.data.frame(df))
                 stop('df input must be a data.frame', call.=FALSE)
+            if(any(sapply(df, class) == 'factor'))
+                stop('data.frame requires characters instead of factors. 
+                        To avoid, use stringsAsFactors = FALSE in your data.frame',
+                        call.=FALSE)
             StemExpression <- if(is.null(df$StemExpression)) logical(length(df$Type))
             else as.logical(df$StemExpression)
             stem_expressions <- rep(NA, length(df$Type))
