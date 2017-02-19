@@ -171,28 +171,28 @@
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 #'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
 #'   
-#' @param customTypes an optional list input containing user-defined item formatting generating functions.
-#'   Each element supplied must contain a unique name, and the item with which it is associated must be
+#' @param customTypes an optional list input contaning functions for Designing Original Graphical Stimuli (DOGS).
+#'   DOGS elements in the input list must contain a unique name, and the item with which it is associated must be
 #'   declared in the a \code{df$Type} input. The functions defined must be of the form
 #'   
-#'   \preformatted{myfun <- function(inputId, df_row) ...}
+#'   \preformatted{myDOGS <- function(inputId, df_row) ...}
 #'   
 #'   and must return, at the very minimum, an associated \code{shiny} input object that makes use of the
 #'   \code{inputId} argument (e.g., \code{\link{radioButtons}}). Any valid shiny object can be returned,
 #'   including lists of shiny objects. As well, the \code{df_row} argument contains
 #'   any extra information the users wishes to obtain from the associated row in the \code{df} object. 
 #'   
-#'   The following is a simple example of a custom-defined true-false question and how it is passed:   
+#'   The following is a simple example of DOGS for a true-false question and how it is passed:   
 #'   \preformatted{
-#'   myfun <- function(inputId, df_row){
+#'   good_dogs <- function(inputId, df_row){
 #'      return(list(h2('This statement is false'),
 #'                  radioButtons(inputId = inputId, label='', 
 #'                               choices = c('True', 'False'), selected = '') 
 #'           ))
 #'      }
 #'      
-#'   df <- data.frame(Question = '', ..., Type = 'myQuestion') 
-#'   results <- mirtCAT(df=df, customTypes = list(myQuestion = myfun))
+#'   df <- data.frame(Question = '', ..., Type = 'Doug') 
+#'   results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
 #'   }
 #'   
 #' @param design_elements logical; return an object containing the test, person, and design 
