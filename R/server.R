@@ -1,4 +1,8 @@
-server <- function(input, output) {    
+server <- function(input, output, session) {    
+    
+    session$onSessionEnded(function() {
+        stopApp()
+    })
     
     output$Main <- renderUI({
         dynamicUi()
