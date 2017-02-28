@@ -1,5 +1,7 @@
 # mirtCAT 1.4
 
+- when a tab is closed early in the GUI the session now calls `stopApp()`
+
 - new `customUpdateThetas` function input to `design` to create a map of how the latent trait estimates should
   be updated throughout the session. To better expose the internals, the previous `Update.thetas()` function
   associated with a `person` class is now available as a slot in the `design` internal object
