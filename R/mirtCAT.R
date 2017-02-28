@@ -419,8 +419,9 @@
 #'     
 #'     \preformatted{ 
 #'          list(h1('Welcome to the mirtCAT interface'),
-#'               The following interface was created using the mirtCAT package. 
-#'               To cite the package use citation(\\'mirtCATd\\') in R.')
+#'               sprintf('The following interface was created using the mirtCAT package v%s. 
+#'               To cite the package use citation(\\'mirtCAT\\') in R.', 
+#'                  packageVersion("mirtCAT")))
 #'          }
 #'          
 #'      If an empty list is passed, this page will be skipped.

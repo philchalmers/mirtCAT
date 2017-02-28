@@ -73,8 +73,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                 begin_message <<- "Click the action button to begin."
                               } else begin_message <<- ""
                               firstpage <<- list(h1('Welcome to the mirtCAT interface'),
-                                                 'The following interface was created using the mirtCAT package. 
-                                                 To cite the package use citation(\'mirtCAT\') in R.')
+                                                 sprintf('The following interface was created using the mirtCAT package v%s. 
+                                                 To cite the package use citation(\'mirtCAT\') in R.', packageVersion("mirtCAT")))
                               demographics <<- list()
                               lastpage <<- function(person) 
                                             return(list(h5("You have successfully completed the interface.
