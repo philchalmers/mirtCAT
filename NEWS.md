@@ -1,5 +1,7 @@
 # mirtCAT 1.4
 
+- fix scoping bug when hosting GUI on server (reported by Murat Doğan ŞAHİN)
+
 - when a tab is closed early in the GUI the session now calls `stopApp()`
 
 - new `customUpdateThetas` function input to `design` to create a map of how the latent trait estimates should
