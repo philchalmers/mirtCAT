@@ -50,6 +50,6 @@ test_that('classify', {
     expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,-0.09676312,0.05468066,-0.08034545), tolerance = 1e-4)
     scored <- summary(res[[3]], sort=FALSE)$scored_responses
     out <- fscores(mod, response.pattern = scored)
-    expect_equal(as.numeric(out[,'F1']), 1.008069, tolerance = 1e-4)
+    expect_equal(as.numeric(out[,'F1']), 1.19834, tolerance = 1e-4)
     
 })

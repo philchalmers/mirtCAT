@@ -36,7 +36,8 @@ Design <- setClass(Class = "Design",
                              test_properties = 'data.frame',
                              person_properties = 'data.frame',
                              Update.thetas = 'function',
-                             constr_fun = 'function'),
+                             constr_fun = 'function',
+                             stage = 'integer'),
                    validity = function(object) return(TRUE)
 )
 
@@ -117,6 +118,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@test_properties <- data.frame()
               .Object@person_properties <- data.frame()
               .Object@Update.thetas <- Update_thetas
+              .Object@stage <- 2L
               if(length(design)){
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
@@ -250,6 +252,7 @@ setMethod("initialize", signature(.Object = "Design"),
                       stop('preCAT_min_items > preCAT_max_items', call.=FALSE)
                   .Object@criteria <- .Object@preCAT_criteria
                   .Object@method <- .Object@preCAT_method
+                  .Object@stage <- 1L
               }
               .Object@min_items <- .Object@min_items + .Object@preCAT_min_items
               .Object
@@ -288,21 +291,31 @@ setGeneric('Next.stage', function(.Object, ...) standardGeneric("Next.stage"))
 
 setMethod("Next.stage", signature(.Object = "Design"),
           function(.Object, person, test, item){
-              if(item >= .Object@preCAT_min_items){
-                  if(.Object@preCAT_response_var){
-                      suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
-                                                          response.pattern=person$responses), 
-                                                  silent=TRUE))
-                      if(all(is.finite(na.omit(tmp[1L, ])))){
+              if(.Object@stage < 2L){
+                  if(item >= .Object@preCAT_min_items){
+                      if(.Object@preCAT_response_var){
+                          suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
+                                                              response.pattern=person$responses), 
+                                                      silent=TRUE))
+                          if(all(is.finite(na.omit(tmp[1L, ])))){
+                              .Object@criteria <- .Object@CAT_criteria
+                              .Object@method <- .Object@CAT_method
+                              .Object@min_items <- .Object@min_items + item
+                              .Object@max_items <- min(c(.Object@max_items + item, test@length))
+                              .Object@stage <- 2L
+                              return(.Object)
+                          }
+                      }
+                      if(item == .Object@preCAT_max_items){
                           .Object@criteria <- .Object@CAT_criteria
                           .Object@method <- .Object@CAT_method
+                          .Object@min_items <- .Object@min_items + item
+                          .Object@max_items <- min(c(.Object@max_items + item, test@length))
+                          .Object@stage <- 2L
+                          return(.Object)
                       }
                   }
-                  if(item == .Object@preCAT_max_items){
-                      .Object@criteria <- .Object@CAT_criteria
-                      .Object@method <- .Object@CAT_method
-                  }
-              }
-              .Object
-          }
+            }
+        .Object
+        }
 )
