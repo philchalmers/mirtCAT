@@ -1,0 +1,74 @@
+Ubuntu Server Configuration 
+======================================
+
+This document contains some information regarding how to configure an Ubuntu server to host **mirtCAT** applications. For more information visit https://www.rstudio.com/products/shiny/download-server/
+and http://docs.rstudio.com/shiny-server/
+
+# Installation
+
+The following commands should be executed in the termal.
+
+### install R + shiny + mirtCAT
+
+- `sudo apt-get install r-base`
+- `sudo su - -c "R -e \"install.packages('shiny', repos='https://cran.rstudio.com/')\""`
+- `sudo su - -c "R -e \"install.packages('mirtCAT', repos='https://cran.rstudio.com/')\""`
+
+### install gdebi
+
+- `sudo apt-get install gdebi-core`
+- `sudo gdebi shiny-server-1.5.1.deb`
+
+### edit default config file
+
+- `cd /etc/shiny-server/`
+- `ls`
+
+### applications are hosted in 
+
+- `cd /srv/shiny-server/`
+- `mkdir app_name`
+- `cd app_name/`
+- `touch app.R`
+
+### application publically available with
+
+- `http://your_server_ip:3838/app_name/`
+
+### some useful commands
+
+- `sudo systemctl start shiny-server`
+- `sudo systemctl stop shiny-server`
+- `sudo systemctl restart shiny-server`
+- `status shiny-server`
+
+# Example application
+
+The following is an example of how to host an application with **mirtCAT** on your server. Note that the last line must be `createShinyGUI()` in order for the application to properly execute.
+
+```{r eval=FALSE}
+library("mirtCAT")
+options(stringsAsFactors = FALSE)
+
+### Create simple non-adaptive interface ###
+
+## Potential options for each item
+options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+				  nrow = 3, ncol = 5, byrow = TRUE)
+
+questions <- c("Building CATs with mirtCAT is difficult.",
+			   "Building tests with mirtCAT requires a lot of coding.",
+			   "I would use mirtCAT in my research.")
+
+df <- data.frame(Question = questions, Option = options, Type = "radio")
+
+final_fun <- function(person){
+	time <- paste0('/shared/', gsub(' ', '_', as.character(Sys.time())), '.rds')
+	saveRDS(person, time)
+}
+
+mirtCAT_preamble(df = df, final_fun = final_fun, shinyGUI = list(stopApp=FALSE,
+                                                 forced_choice=TRUE))
+createShinyGUI()
+```
+
