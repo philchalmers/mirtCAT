@@ -252,7 +252,6 @@ setMethod("initialize", signature(.Object = "Design"),
                   .Object@method <- .Object@preCAT_method
               }
               .Object@min_items <- .Object@min_items + .Object@preCAT_min_items
-              .Object@max_items <- .Object@max_items + .Object@preCAT_max_items
               .Object
           }
 )

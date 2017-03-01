@@ -1,6 +1,6 @@
 # mirtCAT 1.4
 
-- fix min/max items combintaion when using a `preCAT` list input (total items is now the sum of both stages)
+- fix min items combintaion when using a `preCAT` list input (total min items is now the sum of both stages)
 
 - fix scoping bug when hosting GUI on server (reported by Murat Doğan ŞAHİN)
 
