@@ -2,6 +2,12 @@
 // The majority of these functions are modification of code from the 
 // mirt package, version 1.7.1. December 22, 2014
 
+// hack fix
+void R_init_mirtCAT(DllInfo* info) {
+    R_registerRoutines(info, NULL, NULL, NULL, NULL);
+    R_useDynamicSymbols(info, TRUE);
+}
+
 double antilogit(const double *x)
 {
     double ret;
