@@ -2,7 +2,7 @@
 
 - warning message and slot included in GUI results when session terminated unexpectedly
 
-- fix min items combintaion when using a `preCAT` list input (total min items is now the sum of both stages)
+- fix min items combination when using a `preCAT` list input (total min items is now the sum of both stages)
 
 - fix scoping bug when hosting GUI on server (reported by Murat Doğan ŞAHİN)
 
@@ -13,28 +13,28 @@
   associated with a `person` class is now available as a slot in the `design` internal object
 
 - added `subset` and `info_mats` to `computeCriteria()` to compute the desired criteria on item subsets only
-  and to return the information matricies used to compute criteria such as Drule, Trule, etc 
+  and to return the information matrices used to compute criteria such as Drule, Trule, etc 
   (requested by Johan Braeken)
 
 # mirtCAT 1.3
 
 - removed support for a list input for `df` object in place of a more flexible format which supports
-  the artibrary creation of user-defined item formats through the new `customTypes` argument. This 
+  the arbitrary creation of user-defined item formats through the new `customTypes` argument. This 
   is to be used in conjunction with the `df$Type` input to pair the respective inputs
 
 - added `time_before_answer` to `shinyGUI` list to include a require number of seconds to wait 
-  before a valid/ommited response can be accepted
+  before a valid/omitted response can be accepted
 
 - add `textAreaInput` support to GUI for include text-boxes as possible inputs
 
 - `df$StemExpression` is now instead a logical vector used to indicate whether 
-  the questions definition should be evaulated in R first
+  the questions definition should be evaluated in R first
 
 - added `AnswerFun` input to allow for user-defined functions for each respective item to 
   determine whether the answer provided is correct or incorrect. Mainly useful for text-based 
   items (suggested by Anna Mikolajetz)
   
-- added a `theme` input to `shinyGUI` to support predefined themes from the "shinythemes"" package
+- added a `theme` input to `shinyGUI` to support predefined themes from the "shinythemes" package
 
 # mirtCAT 1.2
 
@@ -76,16 +76,16 @@
   `stem_default_format` input to `shinyGUI`
 
 - MathJax is now explicitly supported in the item stems and response options. 
-  As before, users can provide a manual list explicilty defining the `shiny` functions; 
-  jowever, if a `data.frame` object is used then the stems/responses
+  As before, users can provide a manual list explicitly defining the `shiny` functions; 
+  however, if a `data.frame` object is used then the stems/responses
   will be automatically wrapped within a suitable `shiny::withMathJax()` function to render the output
 
 - mental preparation screen now disabled for non-scored tests when 
-  the `mo` object is ommited (i.e., equivalent to setting 
+  the `mo` object is omitted (i.e., equivalent to setting 
   `shinyGUI = list(begin_message = "")`)
 
 - `'select'` Type input to `df` now uses a blank option as the default to avoid 
-  clicking through accidently. Also works better with the `forced_choice` default
+  clicking through accidentally. Also works better with the `forced_choice` default
 
 # mirtCAT 1.0
 
@@ -104,7 +104,7 @@
 
 - new `'none'` presentation Type to allow empty material with no responses (mainly for presenting 
   reading passages or other testlet-based items). Useful when used in conjunction with the 
-  `constraints` input from the `design` list so that these items have predictible dependent 
+  `constraints` input from the `design` list so that these items have predictable dependent 
   pairings (or can be used with the `customNextItem` form as well for explicit dependencies)
 
 - `shinyGUI` input gained a `ui` element to allow users to completely customize the graphical UI 
@@ -117,7 +117,7 @@
   answers will score the items in a partial credit style
 
 - include missing input options in `df` input for `shiny` (e.g., width, placeholder, inline). 
-  Removed `'radio_inline'` input because this can now be acomplishied by passing 
+  Removed `'radio_inline'` input because this can now be accomplished by passing 
   `Type = 'radio'` and `inline = TRUE`
 
 # Changes in mirtCAT 0.6
@@ -147,14 +147,14 @@
 - include more functions to allow easier web hosting in locations such as `shinyapps.io`. Namely,
   `mirtCAT_preamble()` and `createShinyGUI()`
 
-- graphical images (png, gif, and jpeg) no logner supported. Stems preferably should in HTML 
+- graphical images (png, gif, and jpeg) no longer supported. Stems preferably should in HTML 
   for best results and control
 
 - Stem paths can now point to and render HTML and markdown files in the GUI
 
 - `df` input can now be a list for including more fine tuned shiny inputs
 
-- check for the existance of graphical item stems, and allow relative or absolute paths
+- check for the existence of graphical item stems, and allow relative or absolute paths
 
 ## BUGFIX
 
@@ -168,10 +168,10 @@
 
 # Changes in mirtCAT 0.4.2
 
-- `forced_choice` argument for shinyGUI input to state whether respones for each item are 
+- `forced_choice` argument for shinyGUI input to state whether response for each item are 
   required (for CATs, this should always be TRUE)
 
-- respones in GUI now are blank by default
+- response in GUI now are blank by default
 
 - in `preCAT` list input change `nitems` to `min_items` and `max_items` for better control. Also 
   include a `response_variance` logical to terminate the preCAT stage when variability in the 
@@ -214,7 +214,7 @@
 - Fisher information matrix added for remaining multidimensional models supported by `mirt`,
   including custom item types
 
-- add 'Arule' and 'APrule' for minimum trace criteria of asymtotic covariance matrix
+- add 'Arule' and 'APrule' for minimum trace criteria of asymptotic covariance matrix
 
 # Changes in mirtCAT 0.2
 

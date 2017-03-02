@@ -315,7 +315,7 @@
 #'     the reference-class object. Note that the \code{fscores()} function can be useful here
 #'     to capitalize on the estimation algorithms implemented in \code{mirt}.
 #'     
-#'     For example, a minimal working function would look like the following (not the use of \code{rbind()} to
+#'     For example, a minimal working function would look like the following (note the use of \code{rbind()} to
 #'     append the history terms in the \code{person} object):
 #'     
 #'     \preformatted{

@@ -270,18 +270,22 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                       if(!is.nan(.Object@classify[1L])){
                           z <- -abs(person$thetas - .Object@classify) / diff
                           .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
-                          if(all(.Object@met_classify)) .Object@stop_now <- TRUE
+                          if(.Object@stage > 1L && all(.Object@met_classify)) 
+                              .Object@stop_now <- TRUE
                       } else {
                           .Object@met_SEM <- diff < .Object@min_SEM
-                          if(!any(is.nan(diff)) && all(.Object@met_SEM)) .Object@stop_now <- TRUE
+                          if(.Object@stage > 1L && !any(is.nan(diff)) && all(.Object@met_SEM)) 
+                              .Object@stop_now <- TRUE
                       }
                       diff2 <- abs(person$thetas_history[nrow(person$thetas_history),] - 
                                        person$thetas_history[nrow(person$thetas_history)-1L,])
                       .Object@met_delta_thetas <- as.vector(diff2 < .Object@delta_thetas)
-                      if(all(.Object@met_delta_thetas)) .Object@stop_now <- TRUE
+                      if(.Object@stage > 1L && all(.Object@met_delta_thetas)) 
+                          .Object@stop_now <- TRUE
                   }
               }
-              if(nanswered == .Object@max_items) .Object@stop_now <- TRUE
+              if(.Object@stage > 1L && nanswered == .Object@max_items) 
+                  .Object@stop_now <- TRUE
               if(.Object@max_time <= sum(person$item_time)) .Object@stop_now <- TRUE
               .Object
           }
