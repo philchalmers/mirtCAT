@@ -1,9 +1,10 @@
 server <- function(input, output, session) {    
     
     session$onSessionEnded(function() {
-        if(!.MCE$design@stop_now)
-            warning('Application was terminated early', call.=FALSE)
-        .MCE$person$terminated_sucessfully <- FALSE
+        if(!.MCE$design@stop_now){
+            warning('Session unexpectedly terminated early', call.=FALSE)
+            .MCE$person$terminated_sucessfully <- FALSE
+        } else .MCE$person$terminated_sucessfully <- TRUE
         stopApp()
     })
     
@@ -168,7 +169,7 @@ server <- function(input, output, session) {
             .MCE$STOP <- TRUE
             if(!is.null(.MCE$final_fun)){
                 ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design,
-                                             has_answers=.MCE$test@has_answers)
+                                             has_answers=.MCE$test@has_answers, GUI=TRUE)
                 .MCE$final_fun(person = ret)
             }
             if(.MCE$shinyGUI$temp_file != '')

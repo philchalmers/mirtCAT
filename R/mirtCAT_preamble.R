@@ -174,7 +174,7 @@ mirtCAT_preamble_internal <-
     }
 
 
-mirtCAT_post_internal <- function(person, design, has_answers = FALSE){
+mirtCAT_post_internal <- function(person, design, has_answers = FALSE, GUI = FALSE){
     if(!is.list(person)) person <- list(person)
     ret.out <- vector('list', length(person))
     for(i in 1L:length(person)){
@@ -192,7 +192,8 @@ mirtCAT_post_internal <- function(person, design, has_answers = FALSE){
                     thetas_SE_history=person[[i]]$thetas_SE_history,
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics,
-                    terminated_sucessfully=person[[i]]$terminated_sucessfully)
+                    terminated_sucessfully=person[[i]]$terminated_sucessfully,
+                    GUI=GUI)
         if(length(person[[i]]$true_thetas))
             ret$true_thetas <- person[[i]]$true_thetas
         if(!is.nan(design@classify[1L])){

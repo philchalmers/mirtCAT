@@ -48,7 +48,7 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
                 thetas_history=object$thetas_history, 
                 thetas_SE_history=object$thetas_SE_history,
                 demographics=object$demographics)
-    if(!object$terminated_sucessfully) ret$terminated_sucessfully <- FALSE
+    if(object$GUI) ret$terminated_sucessfully <- object$terminated_sucessfully
     if(!is.null(object$true_thetas)) ret$true_thetas <- object$true_thetas
     if(!length(object$login_name)) ret$login_name <- NULL
     if(is.null(person)) ret$final_estimates <- NULL

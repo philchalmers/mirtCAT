@@ -36,6 +36,7 @@ Person <- setRefClass("Person",
                                 thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
                              info_thetas <<- matrix(0, nfact, nfact)
+                             terminated_sucessfully <<- FALSE
                          })
                       
 )
@@ -59,7 +60,6 @@ Person$methods(
             if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule', 'APrule'))
                 tmp <- tmp + solve(test@gp$gcov)
             info_thetas <<- tmp
-            terminated_sucessfully <<- TRUE
         }
     }   
 )

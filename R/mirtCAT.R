@@ -729,6 +729,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
     if(is.null(local_pattern)){
         runApp(createShinyGUI(ui=.MCE$shinyGUI$ui), launch.browser=TRUE, ...)
         person <- .MCE$person
+        GUI <- TRUE
     } else {
         if(length(AnswerFuns)) 
             stop('AnswerFuns cannot be used for off-line runs', call.=FALSE)
@@ -743,7 +744,9 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
             for(i in 1L:length(person))
                 person[[i]]$true_thetas <- local_Thetas[i, ]
         }
+        GUI <- FALSE
     }
-    ret <- mirtCAT_post_internal(person=person, design=.MCE$design, has_answers=.MCE$test@has_answers)
+    ret <- mirtCAT_post_internal(person=person, design=.MCE$design, 
+                                 has_answers=.MCE$test@has_answers, GUI=GUI)
     return(ret)
 }

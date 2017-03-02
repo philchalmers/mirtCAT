@@ -1,5 +1,7 @@
 # mirtCAT 1.4
 
+- warning message and slot included in GUI results when session terminated unexpectedly
+
 - fix min items combintaion when using a `preCAT` list input (total min items is now the sum of both stages)
 
 - fix scoping bug when hosting GUI on server (reported by Murat Doğan ŞAHİN)
