@@ -14,7 +14,8 @@ Person <- setRefClass("Person",
                                     state = 'list',
                                     login_name = 'character',
                                     score = 'logical',
-                                    true_thetas = 'numeric'),
+                                    true_thetas = 'numeric',
+                                    terminated_sucessfully = 'logical'),
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
@@ -58,6 +59,7 @@ Person$methods(
             if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule', 'APrule'))
                 tmp <- tmp + solve(test@gp$gcov)
             info_thetas <<- tmp
+            terminated_sucessfully <<- TRUE
         }
     }   
 )

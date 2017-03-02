@@ -1,6 +1,9 @@
 server <- function(input, output, session) {    
     
     session$onSessionEnded(function() {
+        if(!.MCE$design@stop_now)
+            warning('Application was terminated early', call.=FALSE)
+        .MCE$person$terminated_sucessfully <- FALSE
         stopApp()
     })
     
