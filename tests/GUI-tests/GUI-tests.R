@@ -10,6 +10,8 @@ questions <- c("Building CATs with mirtCAT is difficult.",
                "mirtCAT requires a substantial amount of coding.",
                "I would use mirtCAT in my research.")
 df <- data.frame(Question = questions, Option = options, Type = "radio")
+# df$Answer <- NA
+# df$Answer[1] <- 'Agree'
 
 # forced
 results <- mirtCAT(df = df)

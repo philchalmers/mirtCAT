@@ -19,6 +19,7 @@
 #' summary(person)
 #' } 
 getPerson <- function(){
-    ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design)
+    ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design,
+                                 has_answers=.MCE$test@has_answers)
     ret
 }

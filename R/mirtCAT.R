@@ -744,6 +744,6 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                 person[[i]]$true_thetas <- local_Thetas[i, ]
         }
     }
-    ret <- mirtCAT_post_internal(person=person, design=.MCE$design)
+    ret <- mirtCAT_post_internal(person=person, design=.MCE$design, has_answers=.MCE$test@has_answers)
     return(ret)
 }

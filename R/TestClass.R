@@ -7,6 +7,7 @@ Test <- setClass(Class = "Test",
                         quadpts = 'numeric',
                         theta_range = 'numeric',
                         item_answers = 'list',
+                        has_answers = 'logical',
                         AnswerFuns = 'list',
                         item_options = 'list',
                         item_class = 'character',
@@ -22,6 +23,8 @@ Test <- setClass(Class = "Test",
 setMethod("initialize", signature(.Object = "Test"),
           function(.Object, mo, item_answers_in, AnswerFuns, item_options,
                    quadpts_in, theta_range_in, dots){
+              .Object@has_answers <- ifelse(is.null(item_answers_in) && length(AnswerFuns) == 0L,
+                                            FALSE, TRUE)
               mo@Options$exploratory <- FALSE
               .Object@itemnames <- colnames(mo@Data$data)
               mo@Data$mins <- rep(0L, length(mo@Data$min))

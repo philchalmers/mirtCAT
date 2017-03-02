@@ -174,15 +174,15 @@ mirtCAT_preamble_internal <-
     }
 
 
-mirtCAT_post_internal <- function(person, design){
+mirtCAT_post_internal <- function(person, design, has_answers = FALSE){
     if(!is.list(person)) person <- list(person)
     ret.out <- vector('list', length(person))
     for(i in 1L:length(person)){
         person[[i]]$items_answered <- person[[i]]$items_answered[!is.na(person[[i]]$items_answered)]
         ret <- list(login_name=person[[i]]$login_name,
                     raw_responses=person[[i]]$raw_responses,
-                    scored_responses=if(person[[1L]]$score) as.integer(person[[i]]$responses + 
-                                                                           .MCE$mirt_mins) 
+                    scored_responses=if(person[[1L]]$score || has_answers) 
+                        as.integer(person[[i]]$responses + .MCE$mirt_mins) 
                     else rep(NA, length(person[[i]]$raw_responses)),
                     items_answered=person[[i]]$items_answered,
                     thetas=person[[i]]$thetas,

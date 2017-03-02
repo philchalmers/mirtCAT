@@ -164,7 +164,8 @@ server <- function(input, output, session) {
         if(!.MCE$STOP){
             .MCE$STOP <- TRUE
             if(!is.null(.MCE$final_fun)){
-                ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design)
+                ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design,
+                                             has_answers=.MCE$test@has_answers)
                 .MCE$final_fun(person = ret)
             }
             if(.MCE$shinyGUI$temp_file != '')
