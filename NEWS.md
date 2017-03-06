@@ -1,3 +1,7 @@
+# mirtCAT 1.5
+
+- internal updating function for `person` class to avoid direct assignment in `customUpdateThetas()` function
+
 # mirtCAT 1.4
 
 - warning message and slot included in GUI results when session terminated unexpectedly

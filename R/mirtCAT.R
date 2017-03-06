@@ -311,8 +311,9 @@
 #'     \code{customNextItem}. 
 #'     The latent trait terms are updated directly in the \code{person} object, which is a 
 #'     \code{\link{ReferenceClasses}} type, and therefore direct assignment to the object will modify the internal
-#'     elements. The function should return \code{invisible()} as well, because the purpose is only to update 
-#'     the reference-class object. Note that the \code{fscores()} function can be useful here
+#'     elements. Hence, to avoid manual modification users can pass the latent trait estimates and their 
+#'     respective standard errors to the associated \code{person$Update_thetas(theta, theta_SE)} function.
+#'     Note that the \code{fscores()} function can be useful here
 #'     to capitalize on the estimation algorithms implemented in \code{mirt}.
 #'     
 #'     For example, a minimal working function would look like the following (note the use of \code{rbind()} to
@@ -320,11 +321,11 @@
 #'     
 #'     \preformatted{
 #'        myfun <- function(design, person, test){
-#'            tmp <- fscores(test@mo, response.pattern = person$responses)
-#'            person$thetas <- matrix(tmp[,'F1'], 1L)
-#'            person$thetas_SE_history <- rbind(person$thetas_SE_history, 
-#'                                              tmp[,'SE_F1', drop=FALSE])
-#'            person$thetas_history <- rbind(person$thetas_history, person$thetas)
+#'            mo <- extract.mirtCAT(test, 'mo')
+#'            responses <- extract.mirtCAT(person, 'responses')
+#'            tmp <- fscores(mo, response.pattern = responses)
+#'            person$Update_thetas(tmp[,'F1'],
+#'                                 tmp[,'SE_F1', drop=FALSE])
 #'            invisible()
 #'         }
 #'     }

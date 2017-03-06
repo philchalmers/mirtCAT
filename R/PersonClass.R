@@ -61,5 +61,12 @@ Person$methods(
                 tmp <- tmp + solve(test@gp$gcov)
             info_thetas <<- tmp
         }
-    }   
+    },
+    
+    Update_thetas = function(theta, theta_SE){
+        if(!is.matrix(theta)) theta <- matrix(theta, 1L)
+        thetas <<- theta
+        thetas_SE_history <<- rbind(thetas_SE_history, theta_SE)
+        thetas_history <<- rbind(thetas_history, thetas)
+    }
 )

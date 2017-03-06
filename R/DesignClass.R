@@ -61,15 +61,13 @@ setMethod("initialize", signature(.Object = "Design"),
                                                           mean = test@fscores_args$mean, cov = test@fscores_args$cov,
                                                           QMC=test@fscores_args$QMC, 
                                                           custom_den=test@fscores_args$custom_den))
-                          person$thetas <- tmp[,paste0('F', 1L:test@nfact), drop=FALSE]
-                          person$thetas_SE_history <- rbind(person$thetas_SE_history, 
-                                                      tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                          person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
+                                               tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
                           } else {
-                              person$thetas_SE_history <- rbind(person$thetas_SE_history, 
-                                                                person$thetas_SE_history[nrow(person$thetas_SE_history),])
+                              person$Update_thetas(person$thetas,
+                                                   person$thetas_SE_history[nrow(person$thetas_SE_history),])
                           }
                   }
-                  person$thetas_history <- rbind(person$thetas_history, person$thetas)
                   invisible()
               }
               
