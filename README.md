@@ -4,7 +4,7 @@
 
 Computerized Adaptive Testing with Multidimensional Item Response Theory
 
-![Welcome](extras/01-Welcome.jpg)
+![Welcome](vignettes/01-Welcome.jpg)
 
 ## Description
 
@@ -19,8 +19,8 @@ Various examples and worked help files have been compiled using the `knitr` pack
 HTML output, and are available on the [wiki](https://github.com/philchalmers/mirtCAT/wiki).
 User contributions are welcome!
 
-![Math](extras/04-Math_stem_Question.jpg)
-![Table](extras/05-Table_stem_question.jpg)
+![Math](vignettes/04-Math_stem_Question.jpg)
+![Table](vignettes/05-Table_stem_question.jpg)
 
 # Installing from Github
 
