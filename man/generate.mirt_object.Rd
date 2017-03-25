@@ -14,28 +14,28 @@ listed in \code{\link{mirt}}. Each row represents a unique item, while the
 column names correspond to the respective parameter names. If a parameter is not relevant
 for a particular item/row then use \code{NA}'s as placeholders}
 
-\item{itemtype}{a character vector indicating the type of item to which the parameters 
+\item{itemtype}{a character vector indicating the type of item with which the parameters 
 refer. See the \code{itemtype} argument in \code{\link{mirt}}. Note that this input 
 is only used to determine the relevant item class for the rows in \code{parameters}, 
-therefore many inputs are interchangeable (e.g., '2PL' generates the same model as '3PL').
+therefore many inputs are interchangeable (e.g., '2PL' generates the same internal model object as '3PL').
 If only a single value is provided then all items types will be assumed identical}
 
 \item{latent_means}{(optional) a numeric vector used to define the population latent mean
-structure. By default the mean structure is centered at a 0 centroid}
+structure. By default the mean structure is centered at a 0 vector}
 
-\item{latent_covariance}{(optional) a covariance matrix used to define the population 
+\item{latent_covariance}{(optional) a matrix used to define the population 
 variance-covariance structure between the latent traits. By default the relationship is 
-assumed to be standard normal (i.e., and identity matrix)}
+assumed to be orthogonal standard normal (i.e., an identity matrix)}
 
 \item{key}{scoring key required for nested-logit models. See \code{\link{mirt}} for details}
 
 \item{min_category}{the value representing the lowest category index. By default this is 0,
-therefore the respond suitable for the first category is 0, second is 1, and so on up to 
+therefore the response suitable for the first category is 0, second is 1, and so on up to 
 \code{K - 1}}
 }
 \description{
-This function generate a \code{mirt} object from known population parameters, which is  
-then passed to \code{\link{mirtCAT}} function for running CAT applications.
+This function generates a \code{mirt} object from known population parameters, which is  
+then passed to \code{\link{mirtCAT}} for running CAT applications.
 }
 \examples{
 \dontrun{
