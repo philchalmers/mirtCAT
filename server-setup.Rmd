@@ -35,6 +35,8 @@ The following commands should be executed in the termal.
 
 - `http://your_server_ip:3838/app_name/`
 
+You may want to purchase a domain name so that your IP address is not publically advertised.
+
 ### some useful commands
 
 - `sudo systemctl start shiny-server`
@@ -44,7 +46,7 @@ The following commands should be executed in the termal.
 
 # Example application
 
-The following is an example of how to host an application with **mirtCAT** on your server. Note that the last line must be `createShinyGUI()` in order for the application to properly execute.
+The following is an example of how to host an application with **mirtCAT** on your server. Note that the last line must be `createShinyGUI()` in order for the application to properly execute. As well, you'll likely want to save the results of the test directly to the server, which can be done by creating a `final_fun` function input. 
 
 ```{r eval=FALSE}
 library("mirtCAT")
@@ -62,13 +64,17 @@ questions <- c("Building CATs with mirtCAT is difficult.",
 
 df <- data.frame(Question = questions, Option = options, Type = "radio")
 
+# save person results to a folder to /shared/ directory where objects are named based on the system time
 final_fun <- function(person){
 	time <- paste0('/shared/', gsub(' ', '_', as.character(Sys.time())), '.rds')
 	saveRDS(person, time)
 }
 
+# setup internal objects (placed in hidden mirtCAT enviroment)
 mirtCAT_preamble(df = df, final_fun = final_fun, shinyGUI = list(stopApp=FALSE,
                                                  forced_choice=TRUE))
+
+# this must be the last line (implicitly wrapped in runApp() by shinyserver)
 createShinyGUI()
 ```
 
