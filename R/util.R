@@ -156,6 +156,8 @@ buildShinyElements <- function(questions, itemnames, customTypes){
                                  width=width, height=height, placeholder=placeholder,
                                  cols=cols, rows=rows, resize=resize)
         } else if(Type[i] == 'slider'){
+            if(is.null(questions$min) || is.null(questions$max) || is.null(questions$step))
+                stop('slider Type requires a min, max, and step column element in the df object', call.=FALSE)
             VALUE <- as.numeric(ifelse(is.null(questions$value[i]), questions$min[i], questions$value[i]))
             MIN <- as.numeric(questions$min[i])
             MAX <- as.numeric(questions$max[i])
