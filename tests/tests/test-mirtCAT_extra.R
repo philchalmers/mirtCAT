@@ -96,4 +96,20 @@ test_that('extra', {
                    local_pattern = matrix(rep(0, 50), 1))
     expect_equal(res$items_answered, c(1,18,19,20,24,15,16,17,50,7,25,9,43,10,12,11,44,49,48,35,36,37,46,42,6,29,13,26,34,32,30,38,39,21,45,23,22,28,5,8,4,14,47,40,31))
     
+    res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = c(1, 3),
+                   local_pattern = matrix(rep(c(0,1), 50), 2))
+    expect_equal(res[[1]]$items_answered[1], 1)
+    expect_equal(res[[2]]$items_answered[1], 3)
+    
+    set.seed(1)
+    res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = 'random',
+                   local_pattern = matrix(rep(c(0,1), 50), 2))
+    expect_equal(res[[1]]$items_answered[1], 46)
+    expect_equal(res[[2]]$items_answered[1], 11)
+    
+    res <- mirtCAT(mo = mod2, criteria = 'MI', start_item = c('MI', 'random'),
+                   local_pattern = matrix(rep(c(0,1), 50), 2))
+    expect_equal(res[[1]]$items_answered[1], 20)
+    expect_equal(res[[2]]$items_answered[1], 45)
+    
 })

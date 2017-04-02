@@ -134,10 +134,12 @@
 #'   items sequentially.
 #'   
 #' @param start_item two possible inputs to determine the starting item are available. 
-#'   Passing a single number will indicate the specific item to be used as the start item;
+#'   Passing a number will indicate the specific item to be used as the start item;
 #'   default is 1, which selects the first item in the defined test/survey. 
 #'   If a character string is passed then the item will be selected from one of 
-#'   the item selections criteria available (see the \code{criteria} argument)
+#'   the item selections criteria available (see the \code{criteria} argument). For off-line 
+#'   runs where a \code{local_pattern} input is used then a vector of numbers/characters
+#'   may be supplied and will be associated with each row response vector
 #'   
 #' @param local_pattern a character/numeric matrix of response patterns 
 #'   used to run the CAT application without generating the GUI interface. 

@@ -206,13 +206,16 @@ setMethod("initialize", signature(.Object = "Design"),
                       nms[nms == 'unordered'] <- 'ordered'
                       names(design$constraints) <- nms
                       .Object@constraints <- design$constraints
-                      pick <- sapply(design$constraints, 
-                                     function(x, start_item) any(x == start_item),
-                                     start_item=start_item)
-                      if((any(pick) && names(pick)[pick]) == 'independent')
-                        stop('The first item can not be used in an \'independent\' constraint. 
+                      for(i in 1L:length(start_item)){
+                          if(is.nan(start_item[i])) next
+                          pick <- sapply(design$constraints, 
+                                         function(x, si) any(x == si),
+                                         si=start_item[i])
+                          if(any(pick) && names(pick)[pick] == 'independent')
+                              stop('The first item can not be used in an \'independent\' constraint. 
                               Consider removing the items that will not be used from the test.', 
-                             call.=FALSE)
+                                   call.=FALSE)
+                      }
                   }
                   if(!is.null(design$customNextItem)){
                       .Object@customNextItem <- design$customNextItem

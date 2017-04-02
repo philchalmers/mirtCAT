@@ -132,12 +132,21 @@ mirtCAT_preamble_internal <-
         person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                                     thetas.start_in=design$thetas.start, score=score, 
                                     theta_SEs=sqrt(diag(test_object@gp$gcov)))
+        if(!is.null(local_pattern)){
+            design_object@start_item <- rep(design_object@start_item, nrow(local_pattern))
+            if(length(start_item) == 1L)
+                start_item <- rep(start_item, nrow(local_pattern))
+            stopifnot(length(start_item) == nrow(local_pattern))
+        }
         if(is.character(start_item)){
             tmp <- design_object@criteria
-            design_object@criteria <- start_item
-            start_item <- findNextCATItem(person=person_object, test=test_object, 
-                                          design=design_object, start=FALSE)
-            design_object@start_item <- start_item
+            tmp2 <- integer(length(design_object@start_item))
+            for(i in 1L:length(design_object@start_item)){
+                design_object@criteria <- start_item[i]
+                tmp2[i] <- findNextCATItem(person=person_object, test=test_object, 
+                                          design=design_object, start=FALSE) 
+            }
+            design_object@start_item <- tmp2
             design_object@criteria <- tmp
         }
         .MCE$resume_file <- FALSE
