@@ -1,5 +1,7 @@
 # mirtCAT 1.5
 
+- rotate x-axis 90 degrees in `plot()` generic by default
+
 - `start_item` can now be a vector to change the starting item for each off-line response pattern input in Monte 
   Carlo simulations
 

@@ -80,12 +80,13 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
 #' @param par.strip.text plotting argument passed to \code{\link{lattice}}
 #' @param par.settings plotting argument passed to \code{\link{lattice}}
+#' @param scales plotting argument passed to \code{\link{lattice}}
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, true_thetas = TRUE, SE = 1, main = NULL, 
                          par.strip.text = list(cex = 0.7),
                          par.settings = list(strip.background = list(col = '#9ECAE1'),
                                              strip.border = list(col = "black")),
-                         ...){
+                         scales=list(x = list(rot=90)), ...){
     if(length(x$thetas_SE_history) == 1L || is.na(x$thetas_SE_history))
         stop('plot not available for non-adaptive tests', call.=FALSE)
     p <- ceiling((1-(pnorm(-abs(SE))*2))*100)
@@ -142,7 +143,7 @@ plot.mirtCAT <- function(x, pick_theta = NULL, true_thetas = TRUE, SE = 1, main 
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
                       xlab = 'Item', par.strip.text=par.strip.text,
-                      par.settings=par.settings, 
+                      par.settings=par.settings, scales=scales,
                       true_theta_values = rep(x$true_thetas, each=nrow(thetaslong)/nfact), 
                       true_thetas=true_thetas, ...))
         
@@ -165,7 +166,7 @@ plot.mirtCAT <- function(x, pick_theta = NULL, true_thetas = TRUE, SE = 1, main 
                       ylim=c(min(thetasSElowlong$F1)-.1, max(thetasSEhighlong$F1)+.1),
                       ylab = expression(theta), 
                       xlab = 'Item', par.strip.text=par.strip.text,
-                      par.settings=par.settings, 
+                      par.settings=par.settings, scales=scales,
                       true_theta_values = x$true_thetas, true_thetas=true_thetas, ...))
     }
 }
