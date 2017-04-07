@@ -91,9 +91,9 @@ mirtCAT_preamble_internal <-
             }
             if(is.null(shinyGUI$choiceNames))
                 shinyGUI$choiceNames <- shinyGUI$choiceValues <- vector('list', nitems)
-            if(length(shinyGUI$choiceNames) != length(questions))
+            if(length(shinyGUI$choiceNames) != nitems)
                 stop('choiceNames input is not the correct length', call.=FALSE)
-            if(length(shinyGUI$choiceValues) != length(questions))
+            if(length(shinyGUI$choiceValues) != nitems)
                 stop('choiceValues input is not the correct length', call.=FALSE)
             obj <- buildShinyElements(df, itemnames = Names, customTypes=customTypes,
                                       choiceNames=shinyGUI$choiceNames, 
