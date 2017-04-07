@@ -106,7 +106,7 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
     r/2
 }
 
-buildShinyElements <- function(questions, itemnames, customTypes){
+buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, choiceValues){
     J <- length(questions$Type)
     if(!all(sapply(questions[names(questions) != 'Rendered_Question'], is.character))) 
         stop('Only character classes are supported in questions input', call.=FALSE)
@@ -126,13 +126,21 @@ buildShinyElements <- function(questions, itemnames, customTypes){
     names(choices) <- NULL
     for(i in 1L:length(Qs)){
         if(Type[i] == 'radio'){
-            cs <- choices[i, !is.na(choices[i, ])]
-            choices_list[[i]] <- cs
+            cNs <- cVs <- cs <- NULL 
+            if(length(choiceNames[[i]]) && is.list(choiceNames[[i]])){
+                cNs <- choiceNames[[i]]
+                cVs <- choiceValues[[i]]
+                choices_list[[i]] <- as.character(cVs)
+            } else {
+                cs <- choices[i, !is.na(choices[i, ])]
+                choices_list[[i]] <- cs
+            }
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             width <- questions$width[i]
             Qs[[i]] <- radioButtons(inputId = itemnames[i], label='',
                                     inline = inline, width = width,
-                                    choices = cs, selected = '')
+                                    choices = cs, selected = '', 
+                                    choiceNames=cNs, choiceValues=cVs)
         } else if(Type[i] == 'select'){
             cs <- c('', choices[i, !is.na(choices[i, ])])
             choices_list[[i]] <- cs
@@ -172,12 +180,19 @@ buildShinyElements <- function(questions, itemnames, customTypes){
                                    ticks = TICKS, pre = PRE, post = POST)
             choices_list[[i]] <- as.character(seq(from=MIN, to=MAX, by=STEP))
         } else if(Type[i] == 'checkbox'){
-            cs <- choices[i, !is.na(choices[i, ])]
-            choices_list[[i]] <- cs
+            cNs <- cVs <- cs <- NULL 
+            if(length(choiceNames[[i]]) && is.list(choiceNames[[i]])){
+                cNs <- choiceNames[[i]]
+                cVs <- choiceValues[[i]]
+                choices_list[[i]] <- as.character(cVs)
+            } else {
+                cs <- choices[i, !is.na(choices[i, ])]
+                choices_list[[i]] <- cs
+            }
             width <- questions$width[i]
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             Qs[[i]] <- checkboxGroupInput(inputId = itemnames[i], label='', choices = cs,
-                                          width=width, inline=inline)
+                                          width=width, inline=inline, choiceNames=cNs, choiceValues=cVs)
         } else if(Type[i] %in% names(customTypes)){
             nm <- names(customTypes)[names(customTypes) == Type[i]]
             df_row <- as.data.frame(lapply(questions, function(x, ind) x[[ind]], ind=i), 

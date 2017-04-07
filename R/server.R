@@ -123,7 +123,9 @@ server <- function(input, output, session) {
                         .MCE$invalid_count <- .MCE$invalid_count + 1L
                         tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
                         tmp <- buildShinyElements(questions=tmp, customTypes=.MCE$shinyGUI$customTypes, 
-                                                  itemnames=paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name))
+                                                  itemnames=paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name),
+                                                  choiceNames=.MCE$shinyGUI$choiceNames[pick],
+                                                  choiceValues=.MCE$shinyGUI$choiceValues[pick])
                         stemOutput <- stemContent(pick)
                         return(list(stemOutput, .MCE$shinyGUI$df$Rendered_Question[[pick]], 
                                     tmp$questions))

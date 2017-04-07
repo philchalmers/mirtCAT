@@ -1,5 +1,8 @@
 # mirtCAT 1.5
 
+- new `choiceNames` and `choiceValues` inputs to `shinyGUI` list to allow HTML stems for radio buttons and checkboxes
+  (e.g., see the new arguments in `help(radioButtons)`)
+
 - rotate x-axis 90 degrees in `plot()` generic by default
 
 - `start_item` can now be a vector to change the starting item for each off-line response pattern input in Monte 

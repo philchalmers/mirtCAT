@@ -75,6 +75,7 @@ mirtCAT_preamble_internal <-
                 stop('data.frame requires characters instead of factors. 
                         To avoid, use stringsAsFactors = FALSE in your data.frame',
                         call.=FALSE)
+            nitems <- nrow(df)
             StemExpression <- if(is.null(df$StemExpression)) logical(length(df$Type))
             else as.logical(df$StemExpression)
             stem_expressions <- rep(NA, length(df$Type))
@@ -88,7 +89,15 @@ mirtCAT_preamble_internal <-
                 pick <- df$Type %in% names(customTypes)
                 df$Rendered_Question[pick] <- ''
             }
-            obj <- buildShinyElements(df, itemnames = Names, customTypes=customTypes)
+            if(is.null(shinyGUI$choiceNames))
+                shinyGUI$choiceNames <- shinyGUI$choiceValues <- vector('list', nitems)
+            if(length(shinyGUI$choiceNames) != length(questions))
+                stop('choiceNames input is not the correct length', call.=FALSE)
+            if(length(shinyGUI$choiceValues) != length(questions))
+                stop('choiceValues input is not the correct length', call.=FALSE)
+            obj <- buildShinyElements(df, itemnames = Names, customTypes=customTypes,
+                                      choiceNames=shinyGUI$choiceNames, 
+                                      choiceValues=shinyGUI$choiceValues)
             questions <- obj$questions
             item_answers <- obj$item_answers
             item_options <- obj$item_options

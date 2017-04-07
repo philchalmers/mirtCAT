@@ -493,6 +493,14 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
      This should only be set to \code{FALSE} for surveys (not CATs)}
      
+   \item{\code{choiceNames}}{a list containing the \code{choiceNames} input for each respective item when
+     the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}). 
+     This is used to modify the output of the controllers using 
+     suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
+     the value \code{NA} in the associated list element will use the standard inputs instead}
+     
+   \item{\code{choiceValues}}{associated values to be used along with \code{choiceNames} (see above)}
+     
    \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have elapsed
      when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
      to control accidental skips over items when responses are not forced. Default is 1, indicating

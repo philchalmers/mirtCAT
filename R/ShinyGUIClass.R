@@ -14,6 +14,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
                                     customTypes = 'list',
+                                    choiceNames = 'list',
+                                    choiceValues = 'list',
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
@@ -38,6 +40,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       stop('customTypes list requires unique names for each function', call.=FALSE)
                               }
                               customTypes <<- CustomTypes
+                              choiceNames <<- shinyGUI$choiceNames
+                              choiceValues <<- shinyGUI$choiceValues
                               if(is.null(shinyGUI$stem_locations)){
                                   stem_locations <<- as.character(rep(NA, length(questions)))
                               } else {
@@ -94,7 +98,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                               'demographics_inputIDs', 'temp_file', 
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
                                               'begin_message', 'stopApp', 'ui', 'password', 'stem_default_format',
-                                              'stem_expressions', 'theme', 'time_before_answer')
+                                              'stem_expressions', 'theme', 'time_before_answer', 'choiceNames',
+                                              'choiceValues')
                                   if(!all(dnames %in% gnames))
                                       stop('The following inputs to shinyGUI are invalid: ',
                                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)

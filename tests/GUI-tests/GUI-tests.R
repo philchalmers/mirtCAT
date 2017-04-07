@@ -43,6 +43,22 @@ df$width <- "50%"
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 summary(results2)
 
+# choiceNames
+df2 <- df
+choiceNames <- list(
+    list(
+        icon("calendar"),
+        HTML("<p style='color:red;'>Red Text</p>"),
+        "Normal text"),
+    NA, NA
+)
+choiceValues = list(
+    list("icon", "html", "text"), NA, NA)
+results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE, 
+                                             choiceNames=choiceNames,
+                                             choiceValues=choiceValues))
+summary(results2)
+
 # mathJax test
 df3 <- df
 df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'
