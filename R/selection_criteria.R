@@ -46,7 +46,7 @@ MLWI <- function(which_not_answered, person, test, thetas, prior = FALSE){
         LL <- rowSums(ll[ ,pick2, drop=FALSE])
     } else LL <- rep(1, nrow(Theta))
     Is <- matrix(NA, nrow(Theta), length(which_not_answered))
-    for(i in 1L:nrow(Theta))
+    for(i in seq_len(nrow(Theta)))
         Is[i, ] <- .Call('ComputeCriteria', test@EIs, Theta[i, ,drop=FALSE], which_not_answered, 
                     1, 0, person$info_thetas)
     Is <- log(Is) + LL
@@ -88,7 +88,7 @@ Erule <- function(which_not_answered, person, test, thetas){
 KL <- function(which_not_answered, person, test, delta, thetas, thetas2 = NULL){
     info <- numeric(length(which_not_answered))
     if(is.null(thetas2)){
-        for(i in 1L:length(which_not_answered)){
+        for(i in seq_len(length(which_not_answered))){
             ii <- test@EIs[[which_not_answered[i]]]
             p0 <- probtrace(ii, thetas - delta)
             p1 <- probtrace(ii, thetas + delta)
@@ -96,7 +96,7 @@ KL <- function(which_not_answered, person, test, delta, thetas, thetas2 = NULL){
         }
     } else {
         info <- matrix(0, nrow(thetas2), length(which_not_answered))
-        for(i in 1L:length(which_not_answered)){
+        for(i in seq_len(length(which_not_answered))){
             ii <- test@EIs[[which_not_answered[i]]]
             p0 <- probtrace(ii, thetas2)
             p1 <- probtrace(ii, thetas)
@@ -115,7 +115,7 @@ IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, de
                                       Theta=Theta, 
                                       itemloc = test@mo@Model$itemloc,
                                       CUSTOM.IND=list()))
-    for(i in 1L:nrow(possible_patterns)){
+    for(i in seq_len(nrow(possible_patterns))){
         pick <- !is.na(possible_patterns[i,])
         tmp <- test@itemloc2[pick] + possible_patterns[i, pick]
         LL[[i]] <- exp(rowSums(ll[,tmp]))

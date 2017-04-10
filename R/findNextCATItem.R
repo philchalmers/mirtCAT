@@ -204,7 +204,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         for(ii in which(not_answered)){
             resp <- 0L:(K[ii] - 1L)
             row_loc[row:(row+length(resp)-1L)] <- ii
-            for(j in 1L:length(resp)){
+            for(j in seq_len(length(resp))){
                 possible_patterns[row, ii] <- resp[j]
                 row <- row + 1L
             }

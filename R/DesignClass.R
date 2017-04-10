@@ -206,7 +206,7 @@ setMethod("initialize", signature(.Object = "Design"),
                       nms[nms == 'unordered'] <- 'ordered'
                       names(design$constraints) <- nms
                       .Object@constraints <- design$constraints
-                      for(i in 1L:length(start_item)){
+                      for(i in seq_len(length(start_item))){
                           if(is.nan(start_item[i])) next
                           pick <- sapply(design$constraints, 
                                          function(x, si) any(x == si),

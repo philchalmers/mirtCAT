@@ -43,7 +43,7 @@ generate_pattern <- function(mo, Theta, df = NULL){
     N <- nrow(Theta)
     pattern <- matrix(0L, N, nitems)
     if(is.null(df)){
-        for(i in 1L:nitems){
+        for(i in seq_len(nitems)){
             ii <- extract.item(mo, i)
             P <- probtrace(ii, Theta)
             pattern[,i] <- mirt:::respSample(P)
@@ -69,7 +69,7 @@ generate_pattern <- function(mo, Theta, df = NULL){
     }
     ret <- character(nitems)
     has_item_answers <- length(item_answers) > 0L
-    for(i in 1L:nitems){
+    for(i in seq_len(nitems)){
         ii <- extract.item(mo, i)
         P <- probtrace(ii, Theta)
         uniq <- 1L:ncol(P) - 1L

@@ -752,7 +752,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
             local_Thetas <- attr(local_pattern, 'Theta')
             if(length(person) == 1L) 
                 local_Thetas <- matrix(as.numeric(local_Thetas), nrow=1L)
-            for(i in 1L:length(person))
+            for(i in seq_len(length(person)))
                 person[[i]]$true_thetas <- local_Thetas[i, ]
         }
         GUI <- FALSE

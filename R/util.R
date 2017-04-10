@@ -19,10 +19,10 @@ getAcovs <- function(possible_patterns, method, test, design){
 } 
 
 weighted_mat <- function(mat, row_loc, which_not_answered, P = rep(1, length(row_loc))){
-    if(is.list(P)) for(i in 1L:length(P)) mat[[i]] <- mat[[i]] * P[[i]]
-    else for(i in 1L:length(P)) mat[[i]] <- mat[[i]] * P[i]
+    if(is.list(P)) for(i in seq_len(length(P))) mat[[i]] <- mat[[i]] * P[[i]]
+    else for(i in seq_len(length(P))) mat[[i]] <- mat[[i]] * P[i]
     mat2 <- vector('list', length(unique(row_loc)))
-    for(i in 1L:length(mat2)){
+    for(i in seq_len(length(mat2))){
         pick <- which(row_loc == which_not_answered[i])
         tmp <- mat[pick]
         for(j in 2L:length(pick))
@@ -124,7 +124,7 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
     choices <- data.frame(questions[grepl('Option', names)], stringsAsFactors = FALSE)
     choices_list <- vector('list', J)
     names(choices) <- NULL
-    for(i in 1L:length(Qs)){
+    for(i in seq_len(length(Qs))){
         if(Type[i] == 'radio'){
             cNs <- cVs <- cs <- NULL 
             if(length(choiceNames[[i]]) && is.list(choiceNames[[i]])){

@@ -91,7 +91,7 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
     itemtype[itemtype %in% c('3PL', '3PLu', '4PL')] <- '2PL'
     itemtype[itemtype %in% c('3PLNRM', '3PLuNRM', '4PLNRM')] <- '2PLNRM'
     itemtype[itemtype == 'PC3PL'] <- 'PC2PL'
-    for(i in 1L:nitems){
+    for(i in seq_len(nitems)){
         pick <- parameters[i, !is.na(parameters[i,]), drop=FALSE]
         nms <- colnames(pick)
         if(itemtype[i] == 'Rasch'){
@@ -112,15 +112,15 @@ generate.mirt_object <- function(parameters, itemtype, latent_means = NULL,
     tmp[is.na(tmp)] <- 0
     parameters[, paste0('a', 1:nfact)] <- tmp
     model <- character(nfact)
-    for(i in 1L:nfact)
+    for(i in seq_len(nfact))
         model[i] <- paste0('F', i, ' = 1-', ncol(dat))
     model <- mirt.model(paste0(model, collapse = '\n'))
     sv <- mirt(dat, model, itemtype=itemtype, key=key, technical=list(customK=K), pars='values')
-    for(i in 1L:nitems){
+    for(i in seq_len(nitems)){
         pick <- parameters[i, !is.na(parameters[i,]), drop=FALSE]
         nms <- colnames(pick)
         wch <- which(sv$item == dnames[i])
-        for(j in 1L:ncol(pick)){
+        for(j in seq_len(ncol(pick))){
             wch2 <- which(sv[wch, ]$name == nms[j])
             sv[wch[wch2], ]$value <- pick[,j]
         }
