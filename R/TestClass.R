@@ -30,6 +30,9 @@ setMethod("initialize", signature(.Object = "Test"),
               mo@Data$mins <- rep(0L, length(mo@Data$min))
               .Object@mo <- mo
               .Object@item_class <- sapply(mo@ParObjects$pars, class)
+              if(!all(.Object@item_class %in% c('dich', 'graded', 'nominal', 'gpcm', 'grsm',
+                                                'rsm', 'partcomp', 'nestlogit', 'GroupPars')))
+                  stop('item class currently not supported in mirtCAT', call.=FALSE)
               if(is.null(item_answers_in))
                   item_answers_in <- as.character(rep(NA, length(.Object@itemnames)))
               item_answers_in <- as.list(item_answers_in)
