@@ -109,7 +109,8 @@ KL <- function(which_not_answered, person, test, delta, thetas, thetas2 = NULL){
 
 IKL <- function(which_not_answered, possible_patterns, person, test, row_loc, delta,
                 den=FALSE, thetas){
-    Theta <- matrix(seq(person$thetas-delta, person$thetas+delta, length.out=test@quadpts))
+    Theta <- matrix(seq(as.vector(person$thetas-delta), 
+                        as.vector(person$thetas+delta), length.out=test@quadpts))
     LL <- vector('list', nrow(possible_patterns))
     ll <- log(mirt:::computeItemtrace(pars = test@mo@ParObjects$pars,
                                       Theta=Theta, 
