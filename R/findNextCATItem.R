@@ -194,6 +194,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         if(criteria %in% c('seq', 'random'))
             stop('criteria makes no sense with values=TRUE', call.=FALSE)
         which_not_answered <- 1L:test@length
+        which_not_answered <- which_not_answered[which_not_answered %in% subset]
         not_answered <- rep(TRUE, length(not_answered))
     }
     if(criteria %in% c('MEI', 'MEPV', 'IKL', 'IKLP', 'IKLn', 'IKLPn')){

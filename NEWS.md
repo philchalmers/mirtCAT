@@ -2,6 +2,8 @@
 
 - fix selection bug when using prior covariance matrix selection rules (reported by Johan Braeken)
 
+- `computeCriteria()` now respects the `subset` argument (reported by Johan Braeken)
+
 # mirtCAT 1.5
 
 - new `choiceNames` and `choiceValues` inputs to `shinyGUI` list to allow HTML stems for radio buttons and checkboxes
