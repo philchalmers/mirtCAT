@@ -140,7 +140,8 @@ mirtCAT_preamble_internal <-
                              preCAT=preCAT, nitems=test_object@length)
         person_object <- Person$new(nfact=test_object@nfact, nitems=length(test_object@itemnames), 
                                     thetas.start_in=design$thetas.start, score=score, 
-                                    theta_SEs=sqrt(diag(test_object@gp$gcov)))
+                                    theta_SEs=sqrt(diag(test_object@gp$gcov)),
+                                    Info_thetas_cov = solve(test_object@gp$gcov))
         if(!is.null(local_pattern)){
             design_object@start_item <- rep(design_object@start_item, nrow(local_pattern))
             if(length(start_item) == 1L)

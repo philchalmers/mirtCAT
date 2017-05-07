@@ -60,29 +60,34 @@ InfoMats <- function(which_not_answered, person, test, thetas){
           person$info_thetas)
 }
 
-Drule <- function(which_not_answered, person, test, thetas){
+Drule <- function(which_not_answered, person, test, thetas, prior = FALSE){
+    prior_info <- person$info_thetas + if(prior) person$info_thetas_cov else 0
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-                              2, 0, person$info_thetas)
+                              2, 0, prior_info)
 }
 
-Trule <- function(which_not_answered, person, test, design, thetas){
+Trule <- function(which_not_answered, person, test, design, thetas, prior = FALSE){
+    prior_info <- person$info_thetas + if(prior) person$info_thetas_cov else 0
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          3, design@weights, person$info_thetas)
+          3, design@weights, prior_info)
 }
 
-Arule <- function(which_not_answered, person, test, design, thetas){
+Arule <- function(which_not_answered, person, test, design, thetas, prior = FALSE){
+    prior_info <- person$info_thetas + if(prior) person$info_thetas_cov else 0
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          4, design@weights, person$info_thetas)
+          4, design@weights, prior_info)
 }
 
-Wrule <- function(which_not_answered, person, test, design, thetas){
+Wrule <- function(which_not_answered, person, test, design, thetas, prior = FALSE){
+    prior_info <- person$info_thetas + if(prior) person$info_thetas_cov else 0
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          5, design@weights, person$info_thetas)
+          5, design@weights, prior_info)
 }
 
-Erule <- function(which_not_answered, person, test, thetas){
+Erule <- function(which_not_answered, person, test, thetas, prior = FALSE){
+    prior_info <- person$info_thetas + if(prior) person$info_thetas_cov else 0
     .Call('ComputeCriteria', test@EIs, person$thetas, which_not_answered, 
-          6, 0, person$info_thetas)
+          6, 0, prior_info)
 }
 
 KL <- function(which_not_answered, person, test, delta, thetas, thetas2 = NULL){

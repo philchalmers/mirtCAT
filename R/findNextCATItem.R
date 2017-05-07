@@ -279,18 +279,23 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
         MLWI(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas,
              prior=TRUE)
     } else if(criteria == 'Drule' || criteria == 'DPrule'){
-        Drule(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
+        Drule(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas,
+              prior = criteria == 'DPrule')
     } else if(criteria == 'Erule' || criteria == 'EPrule'){
-        Erule(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
+        Erule(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas,
+              prior = criteria == 'EPrule')
     } else if(criteria == 'Trule' || criteria == 'TPrule'){
         Trule(which_not_answered=which_not_answered, person=person, test=test,
-              design=design, thetas=thetas)
+              design=design, thetas=thetas,
+              prior = criteria == 'TPrule')
     } else if(criteria == 'Arule' || criteria == 'APrule'){
         -Arule(which_not_answered=which_not_answered,
-               person=person, test=test, design=design, thetas=thetas)
+               person=person, test=test, design=design, thetas=thetas,
+               prior = criteria == 'APrule')
     } else if(criteria == 'Wrule' || criteria == 'WPrule'){
         Wrule(which_not_answered=which_not_answered, person=person, test=test,
-              design=design, thetas=thetas)
+              design=design, thetas=thetas,
+              prior = criteria == 'WPrule')
     } else if(criteria == 'info_mats'){
         InfoMats(which_not_answered=which_not_answered, person=person, test=test, thetas=thetas)
     } else {

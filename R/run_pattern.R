@@ -3,9 +3,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
                       verbose = FALSE, cl = NULL, primeCluster = TRUE){
     
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
-                   score, verbose, design, test){
+                   score, verbose, design, test, Info_thetas_cov){
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
-                             thetas.start_in=thetas.start_in, score=score, ID=n)
+                             thetas.start_in=thetas.start_in, score=score, Info_thetas_cov=Info_thetas_cov, ID=n)
         item <- design@start_item[n]
         person$items_answered[1L] <- item
         
@@ -43,15 +43,16 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             stop('person_properties does not have the same number of rows as the local_pattern input',
                  call.=FALSE)
     }
+    Info_thetas_cov <- solve(test@gp$gcov)
     if(is.null(cl) || nrow(responses) == 1L){
         ret <- if(progress){
             pbapply::pblapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
                               nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
-                              design=design, test=test)
+                              design=design, test=test, Info_thetas_cov=Info_thetas_cov)
         } else {
             lapply(1L:nrow(responses), fn, responses=responses, nfact=nfact, start_item=start_item,
                    nitems=nitems, thetas.start_in=thetas.start_in, score=score, verbose=verbose, 
-                   design=design, test=test)
+                   design=design, test=test, Info_thetas_cov=Info_thetas_cov)
         }    
     } else {
         parallel::clusterEvalQ(cl, library("mirtCAT"))
@@ -60,12 +61,12 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             pbapply::pblapply(cl=cl, X=1L:nrow(responses), FUN=fn, responses=responses,
                               nfact=nfact, start_item=start_item, design=design, test=test,
                               nitems=nitems, thetas.start_in=thetas.start_in, score=score,
-                              verbose=verbose)
+                              verbose=verbose, Info_thetas_cov=Info_thetas_cov)
         } else {
             parallel::parLapply(cl=cl, X=1L:nrow(responses), fun=fn, responses=responses,
                                 nfact=nfact, start_item=start_item, design=design, test=test,
                                 nitems=nitems, thetas.start_in=thetas.start_in, score=score,
-                                verbose=verbose)
+                                verbose=verbose, Info_thetas_cov=Info_thetas_cov)
         }
     }
     if(verbose) cat('\n')
