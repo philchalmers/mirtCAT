@@ -67,7 +67,7 @@ test_that('multidimensional', {
     
     res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .4))
-    expect_equal(res$items_answered, c(1,20,21,37,3,5,35,24,36,16,11,30,39,14,29,7,13,23,32,19,18,17,12,22,28,10,15,27,26,38,31,6,25,9,8,34,4,33,2,40))
+    expect_equal(res$items_answered, c(1,20,21,37,3,5,35,30,24,36,16,11,39,14,29,7,13,23,32,18,17,22,12,15,28,19,10,26,27,38,31,6,25,9,8,34,4,33,2,40))
     expect_equal(as.numeric(res$thetas), c(0.6080447, 0.8036752), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
                  c(0.3960947, 0.4065036), tolerance = 1e-4)
@@ -92,15 +92,15 @@ test_that('multidimensional', {
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'EPrule')
-    expect_equal(as.numeric(res$thetas), c(0.356060, 0.982274), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.4468275, 0.9738567), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4722360, 0.4989175), tolerance = 1e-4)
+                 c(0.4933418, 0.4957023), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'APrule')
-    expect_equal(as.numeric(res$thetas), c(0.5637753, 0.8991866), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.5543021, 0.8456234), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4894507, 0.4990108), tolerance = 1e-4)
+                 c(0.4881130, 0.4933111), tolerance = 1e-4)
     
 })
 

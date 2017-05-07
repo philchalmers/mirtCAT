@@ -59,8 +59,6 @@ Person$methods(
             tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
             for(i in seq_len(length(infos)))
                 tmp <- tmp + infos[[i]]
-            if(design@criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule', 'APrule'))
-                tmp <- tmp + solve(test@gp$gcov)
             info_thetas <<- tmp
         }
     },
