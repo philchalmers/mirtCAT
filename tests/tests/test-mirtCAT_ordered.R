@@ -64,6 +64,7 @@ test_that('ordered', {
     expect_equal(findNextItem(CATdesign), 3L) 
     
     mod2 <- mirt(Science, 2, TOL=NaN)
+    mod2@Options$exploratory <- FALSE
     res <- mirtCAT(df, mod2, local_pattern = pat, criteria = 'Drule')
     so <- summary(res)
     expect_equal(as.numeric(so$raw_responses), c(3,2,2,3))
