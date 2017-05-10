@@ -117,7 +117,7 @@ mirtCAT_preamble_internal <-
             mirt_mins <- rep(0L, ncol(dat))
         } else {
             if(mo@Options$exploratory) 
-                stop('CATs are intendent for confirmatory IRT models not exploratory', call.=FALSE)
+                stop('CATs are intended for confirmatory IRT models not exploratory', call.=FALSE)
             score <- TRUE
             mirt_mins <- mo@Data$mins
         }
