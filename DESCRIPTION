@@ -30,7 +30,7 @@ Suggests:
     parallel,
     SimDesign,
     knitr
-ByteCompile: no
+ByteCompile: yes
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
