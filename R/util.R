@@ -10,7 +10,8 @@ getAcovs <- function(possible_patterns, method, test, design){
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,
                    rotate = test@fscores_args$rotate, theta_lim = test@fscores_args$theta_lim,
                    mean = test@fscores_args$mean, cov = test@fscores_args$cov, 
-                   MI = test@fscores_args$MI, quadpts = test@quadpts)
+                   MI = test@fscores_args$MI, quadpts = test@quadpts, 
+                   max_theta = test@fscores_args$max_theta)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         return(x)
@@ -244,7 +245,8 @@ possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
                                     response.pattern = possible_patterns, theta_lim = test@fscores_args$theta_lim, 
                                     MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                     mean = test@fscores_args$mean, cov = test@fscores_args$cov, 
-                                    QMC = test@fscores_args$QMC, custom_den = test@fscores_args$custom_den))
+                                    QMC = test@fscores_args$QMC, custom_den = test@fscores_args$custom_den,
+                                    max_theta = test@fscores_args$max_theta))
     tmp
 }
 
