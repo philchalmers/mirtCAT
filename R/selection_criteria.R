@@ -28,7 +28,8 @@ MEPV <- function(which_not_answered, possible_patterns, person, test, design, ro
         p <- probtrace(test@EIs[[i]], person$thetas)
         P[row_loc == i] <- p
     }
-    acovstmp <- getAcovs(possible_patterns, method = 'EAP', test=test, design=design)
+    acovstmp <- getAcovs(possible_patterns, thetas=person$thetas, 
+                         method = 'EAP', test=test, design=design)
     acovs <- weighted_mat(P=P, mat=acovstmp, row_loc=row_loc, 
                           which_not_answered=which_not_answered)
     crit <- do.call(c, acovs)

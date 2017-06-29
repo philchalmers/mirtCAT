@@ -60,7 +60,8 @@ setMethod("initialize", signature(.Object = "Design"),
                                                           MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                                           mean = test@fscores_args$mean, cov = test@fscores_args$cov,
                                                           QMC=test@fscores_args$QMC, max_theta=test@fscores_args$max_theta,
-                                                          custom_den=test@fscores_args$custom_den))
+                                                          custom_den=test@fscores_args$custom_den,
+                                                          start = person$thetas))
                           person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
                                                tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
                           } else {
@@ -300,7 +301,8 @@ setMethod("Next.stage", signature(.Object = "Design"),
                   if(item >= .Object@preCAT_min_items){
                       if(.Object@preCAT_response_var){
                           suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
-                                                              max_theta=test@fscores_args$max_theta,
+                                                              max_theta=Inf,
+                                                              start=person$thetas,
                                                               response.pattern=person$responses), 
                                                       silent=TRUE))
                           if(all(is.finite(na.omit(tmp[1L, ])))){

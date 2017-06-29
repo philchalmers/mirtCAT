@@ -5,13 +5,13 @@ FI <- function(mirt_item, Theta){
     .Call('ItemInfo', mirt_item, Theta)
 }
 
-getAcovs <- function(possible_patterns, method, test, design){
+getAcovs <- function(possible_patterns, thetas, method, test, design){
     ret <- fscores(test@mo, return.acov = TRUE, 
                    method = method, response.pattern = possible_patterns, mirtCAT=TRUE,
                    rotate = test@fscores_args$rotate, theta_lim = test@fscores_args$theta_lim,
                    mean = test@fscores_args$mean, cov = test@fscores_args$cov, 
                    MI = test@fscores_args$MI, quadpts = test@quadpts, 
-                   max_theta = test@fscores_args$max_theta)
+                   max_theta = test@fscores_args$max_theta, start = thetas)
     ret <- lapply(ret, function(x, pick){
         x <- try(x[pick, pick, drop=FALSE])
         return(x)
@@ -239,7 +239,7 @@ formatTime <- function(delta){
 
 last_item <- function(items_answered) items_answered[max(which(!is.na(items_answered)))]
 
-# TODO this can be modified to accept other info 
+# TODO this can be modified to accept other info (as well as 'start')
 possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
     suppressWarnings(tmp <- fscores(test@mo, method = method, 
                                     response.pattern = possible_patterns, theta_lim = test@fscores_args$theta_lim, 
