@@ -1,6 +1,15 @@
 #' @rdname mirtCAT
 #' @method print mirtCAT
 #' @param x object of class \code{'mirtCAT'}
+#' @references 
+#' 
+#' Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
+#' Package for the R Environment. \emph{Journal of Statistical Software, 48}(6), 1-29.
+#' \doi{10.18637/jss.v048.i06}
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. \doi{10.18637/jss.v071.i05}
 #' @export
 print.mirtCAT <- function(x, ...){
     if(!all(is.na(x$thetas))){
@@ -29,6 +38,15 @@ print.mirtCAT <- function(x, ...){
 #' @param sort logical; sort the response patterns based on the order they 
 #'   were administered? If FALSE, the raw response patterns containing NAs will be returned
 #'   for items that were not administered
+#' @references 
+#' 
+#' Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
+#' Package for the R Environment. \emph{Journal of Statistical Software, 48}(6), 1-29.
+#' \doi{10.18637/jss.v048.i06}
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. \doi{10.18637/jss.v071.i05}
 #' @export
 summary.mirtCAT <- function(object, sort = TRUE, ...){
     if(!all(is.na(object$thetas))){
@@ -81,6 +99,15 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #' @param par.strip.text plotting argument passed to \code{\link{lattice}}
 #' @param par.settings plotting argument passed to \code{\link{lattice}}
 #' @param scales plotting argument passed to \code{\link{lattice}}
+#' @references 
+#' 
+#' Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
+#' Package for the R Environment. \emph{Journal of Statistical Software, 48}(6), 1-29.
+#' \doi{10.18637/jss.v048.i06}
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. \doi{10.18637/jss.v071.i05}
 #' @export
 plot.mirtCAT <- function(x, pick_theta = NULL, true_thetas = TRUE, SE = 1, main = NULL, 
                          par.strip.text = list(cex = 0.7),

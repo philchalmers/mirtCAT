@@ -30,9 +30,13 @@ mirtCAT_preamble(df = df)
 }
 }
 \references{
+Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
+Package for the R Environment. \emph{Journal of Statistical Software, 48}(6), 1-29.
+\doi{10.18637/jss.v048.i06}
+
 Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
 Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
-1-39. doi:10.18637/jss.v071.i05
+1-39. \doi{10.18637/jss.v071.i05}
 }
 \seealso{
 \code{\link{mirtCAT}}, \code{\link{createShinyGUI}}, \code{\link{getPerson}}

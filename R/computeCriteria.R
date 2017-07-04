@@ -35,7 +35,16 @@
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}},
 #'   \code{\link{findNextItem}}
 #' @export 
-#' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}     
+#' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
+#' @references 
+#' 
+#' Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
+#' Package for the R Environment. \emph{Journal of Statistical Software, 48}(6), 1-29.
+#' \doi{10.18637/jss.v048.i06}
+#' 
+#' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
+#' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
+#' 1-39. \doi{10.18637/jss.v071.i05}     
 #' @return a vector of criteria values for each respective item
 #'   
 #' @examples
