@@ -15,7 +15,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     for studying the behavior of computerized adaptive test banks.
 Roxygen: list(wrap = FALSE)
 Depends:
-    mirt (>= 1.24.3),
+    mirt (>= 1.25),
     shiny (>= 1.0.1)
 Imports:
     lattice,
