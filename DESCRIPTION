@@ -1,7 +1,8 @@
 Package: mirtCAT
-Version: 1.6
+Version: 1.6.1
 Type: Package
-Title: Computerized Adaptive Testing with Multidimensional Item Response Theory
+Title: Computerized Adaptive Testing with Multidimensional Item
+        Response Theory
 Authors@R: c( person("Phil", family="Chalmers", email =
     "rphilip.chalmers@gmail.com", role = c("aut", "cre")))
 Description: Provides tools to generate an HTML interface for creating adaptive
@@ -14,22 +15,9 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     Finally, package contains tools useful for performing Monte Carlo simulations 
     for studying the behavior of computerized adaptive test banks.
 Roxygen: list(wrap = FALSE)
-Depends:
-    mirt (>= 1.25),
-    shiny (>= 1.0.1)
-Imports:
-    lattice,
-    stats,
-    Rcpp,
-    methods,
-    markdown,
-    pbapply,
-    lpSolve
-Suggests:
-    shinythemes,
-    parallel,
-    SimDesign,
-    knitr
+Depends: mirt (>= 1.25), shiny (>= 1.0.1)
+Imports: lattice, stats, Rcpp, methods, markdown, pbapply, lpSolve
+Suggests: shinythemes, parallel, SimDesign, knitr
 ByteCompile: yes
 LazyLoad: yes
 LazyData: yes
@@ -39,7 +27,10 @@ License: GPL (>= 3)
 Repository: CRAN
 Maintainer: Phil Chalmers <rphilip.chalmers@gmail.com>
 URL: https://github.com/philchalmers/mirtCAT,
-    https://github.com/philchalmers/mirtCAT/wiki,
-    https://groups.google.com/forum/#!forum/mirt-package
+        https://github.com/philchalmers/mirtCAT/wiki,
+        https://groups.google.com/forum/#!forum/mirt-package
 BugReports: https://github.com/philchalmers/mirtCAT/issues?state=open
 RoxygenNote: 6.0.1
+NeedsCompilation: yes
+Packaged: 2017-07-26 18:23:04 UTC; phil
+Author: Phil Chalmers [aut, cre]
