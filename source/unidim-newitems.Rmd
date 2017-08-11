@@ -1,0 +1,116 @@
+Collecting responses to new items to an existing bank
+======================================
+
+This example demonstrates how to collect response data with `mirtCAT` for new items in an item bank. The constraint is that these new items should not influence the selection process, nor should they influence the computation of the latent trait estimates. Hence, we will require setting up a customized item selection function in order to control how many/when these unscored items should be administered, and also include various flags to `mirtCAT()` to indicate that they should not be included in the scoring process.
+
+## Existing bank
+
+Say that we had the following bank of existing items.
+
+```{r}
+library('mirtCAT')
+options(stringsAsFactors = FALSE)
+
+# define population IRT parameters
+set.seed(1234)
+nitems <- 100
+itemnames <- paste0('Item.', 1:nitems)
+a <- matrix(rlnorm(nitems, .2, .3))
+d <- matrix(rnorm(nitems))
+pars <- data.frame(a1=a, d=d, g=0.2)
+mod <- generate.mirt_object(pars, '3PL')
+
+# math items definitions
+# addition for one factor and multiplication for the other
+questions <- answers <- character(nitems)
+choices <- matrix('a', nitems, 5)
+spacing <- floor(d - min(d)) + 1 #easier items have more variation
+
+for(i in 1:nitems){
+    n1 <- sample(1:100, 1)
+    n2 <- sample(101:200, 1)
+    ans <- n1 + n2
+    questions[i] <- paste0(n1, ' + ', n2, ' = ?')
+    answers[i] <- as.character(ans)
+    ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+    ch[sample(1:5, 1)] <- ans
+    choices[i,] <- as.character(ch)
+}
+
+df <- data.frame(Questions=questions, Answer=answers, Option=choices, Type='radio')
+head(df)
+```
+
+Now, we wish to collect responses for two new items.
+```{r}
+new2 <- data.frame(Questions = c('Q101', 'Q102'),
+                          Answer = c('A1', 'A1'),
+                          Option = matrix(paste0('A', 1:5), nrow=2, ncol=5),
+                          Type = 'radio')
+new2
+```
+
+The conceptual difficulty here is that there are no estimated IRT parameters available for these items yet, because we have no sample data from which to estimate them. 
+
+## Construct new model objects
+
+In order to include these two new items in the CAT we must include some provisional IRT parameters to, in essence, 'trick' `mirtCAT()` into thinking these items have valid IRT parameters. However, we'll flag which of these items contain arbitrary parameters by using the `constrain` input list, specifically the `not_scored` element.
+
+First, let's build our new objects to crate a CAT bank with 102 items (compared to the original 100 items above).
+
+```{r}
+# new stimuli information
+newdf <- rbind(df, new2)
+tail(newdf)
+
+# new parameter data.frame and model
+newpars <- rbind(pars, data.frame(a1 = c(0,0), d = c(0,0), g=0))
+tail(newpars) # parameter values for unscored items are arbitrary
+newmod <- generate.mirt_object(newpars, '3PL')
+coef(newmod, simplify=TRUE)
+```
+
+With these new objects built, we're ready to use `mirtCAT()`. However, if we are interested in how/when these new items should be administered, while also desiring that the items selection method remain adaptive (e.g., with the maximum-information criteria), then we'll need a `customNextItem()` function definition to control the item selection scheme. 
+
+In the following code, items are selected using the `MI` criteria. However, if item 101 or 102 have not yet been administered then they will be randomly selected 10% of the time until both of these items appear in the CAT session. To get a better feel for how this item selection function behaves, simply uncomment the `browser()` line and walk-through the object state using R's internal debugging functions.
+
+```{r}
+customNextItem <- function(design, person, test){
+    # browser()
+    items_answered <- na.omit(extract.mirtCAT(person, 'items_answered'))
+    new_items <- 101:102
+
+    # if there are any new items to be administered, then 10% of
+    #    the time randomly pick one to administer
+    if(!all(new_items %in% items_answered) && runif(1) < .1){
+        pick <- new_items[!(new_items %in% items_answered)]
+        if(length(pick) == 1) return(pick)
+        else return(sample(pick, 1))
+    }
+
+    # othewise, pick item with the MI criteria
+    item <- findNextItem(person=person, design=design, test=test,
+                         criteria = 'MI')
+    item
+}
+```
+
+Finally, we have all the components necessary to pass to `mirtCAT()` in order to control these new special items. Let's run a test case to see how this selection process behaves.
+
+```{r}
+# test pattern
+set.seed(1)
+pat <- generate_pattern(newmod, Theta = 0, df = newdf)
+
+result <- mirtCAT(newdf, newmod, method = 'EAP', criteria = 'MI', start_item = 'random',
+                  local_pattern = pat,
+                  design = list(min_SEM = .2,
+                                # ensure these items are not scored
+                                constraints = list(not_scored = 101:102),
+                                customNextItem=customNextItem))
+```
+
+Notice the `design` element `constraints = list(not_scored = 101:102)`. This tells `mirtCAT()` to never use item 101 or 102 in the scoring of the $\theta$ components. Hence, when you inspect the properties of the CAT session whenever item's 101 and 102 are administered the previous $\hat{\theta}$ and associated $SE$ estimates are identical to the previous response pattern state (because nothing changes in the CAT, only the responses for these items are collected). For ease of location, the `thetas_SE_history` retains the labels of these new items so that they can be easily located from the estimation history.
+```{r}
+summary(result)
+```
