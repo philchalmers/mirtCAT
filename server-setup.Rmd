@@ -6,7 +6,7 @@ and http://docs.rstudio.com/shiny-server/
 
 # Installation
 
-The following commands should be executed in the termal.
+The following commands should be executed in the terminal.
 
 ### install R + shiny + mirtCAT
 
@@ -31,18 +31,18 @@ The following commands should be executed in the termal.
 - `cd app_name/`
 - `touch app.R`
 
-### application publically available with
+### application publicly available with
 
 - `http://your_server_ip:3838/app_name/`
 
-You may want to purchase a domain name so that your IP address is not publically advertised.
+You may want to purchase a domain name so that your IP address is not publicly advertised.
 
 ### some useful commands
 
 - `sudo systemctl start shiny-server`
 - `sudo systemctl stop shiny-server`
 - `sudo systemctl restart shiny-server`
-- `status shiny-server`
+- `sudo systemctl status shiny-server`
 
 # Example application
 
@@ -70,7 +70,7 @@ final_fun <- function(person){
 	saveRDS(person, time)
 }
 
-# setup internal objects (placed in hidden mirtCAT enviroment)
+# setup internal objects (placed in hidden mirtCAT environment)
 mirtCAT_preamble(df = df, final_fun = final_fun, shinyGUI = list(stopApp=FALSE,
                                                  forced_choice=TRUE))
 

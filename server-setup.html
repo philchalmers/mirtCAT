@@ -125,7 +125,7 @@ $(document).ready(function () {
 </div>
 <div id="installation" class="section level1">
 <h1>Installation</h1>
-<p>The following commands should be executed in the termal.</p>
+<p>The following commands should be executed in the terminal.</p>
 <div id="install-r-shiny-mirtcat" class="section level3">
 <h3>install R + shiny + mirtCAT</h3>
 <ul>
@@ -157,12 +157,12 @@ $(document).ready(function () {
 <li><code>touch app.R</code></li>
 </ul>
 </div>
-<div id="application-publically-available-with" class="section level3">
-<h3>application publically available with</h3>
+<div id="application-publicly-available-with" class="section level3">
+<h3>application publicly available with</h3>
 <ul>
 <li><code>http://your_server_ip:3838/app_name/</code></li>
 </ul>
-<p>You may want to purchase a domain name so that your IP address is not publically advertised.</p>
+<p>You may want to purchase a domain name so that your IP address is not publicly advertised.</p>
 </div>
 <div id="some-useful-commands" class="section level3">
 <h3>some useful commands</h3>
@@ -170,7 +170,7 @@ $(document).ready(function () {
 <li><code>sudo systemctl start shiny-server</code></li>
 <li><code>sudo systemctl stop shiny-server</code></li>
 <li><code>sudo systemctl restart shiny-server</code></li>
-<li><code>status shiny-server</code></li>
+<li><code>sudo systemctl status shiny-server</code></li>
 </ul>
 </div>
 </div>
@@ -198,7 +198,7 @@ final_fun &lt;- function(person){
     saveRDS(person, time)
 }
 
-# setup internal objects (placed in hidden mirtCAT enviroment)
+# setup internal objects (placed in hidden mirtCAT environment)
 mirtCAT_preamble(df = df, final_fun = final_fun, shinyGUI = list(stopApp=FALSE,
                                                  forced_choice=TRUE))
 
@@ -229,7 +229,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
