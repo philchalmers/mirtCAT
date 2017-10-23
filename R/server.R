@@ -81,7 +81,8 @@ server <- function(input, output, session) {
         }
         
         # run survey
-        if(click > 2L && !.MCE$design@stop_now){
+        if(click > 2L && !.MCE$design@stop_now && !.MCE$STOP){
+            invalidateLater(5000) ### FIXME move + wrap in if()
             if(itemclick >= 1L){
                 pick <- .MCE$person$items_answered[itemclick]
                 name <- .MCE$test@itemnames[pick]
@@ -89,7 +90,7 @@ server <- function(input, output, session) {
                 if(.MCE$shinyGUI$df$Type[pick] == 'select' && .MCE$shinyGUI$forced_choice && ip == "")
                     ip <- NULL
                 if(is.null(ip)) ip <- input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name)]]
-                if(!is.null(ip)){
+                if(!is.null(ip) && .MCE$prevClick != click){
                     ip <- as.character(ip)
                     nanswers <- length(ip)
                     .MCE$person$raw_responses[pick] <- paste0(ip, collapse = '; ')
@@ -125,8 +126,10 @@ server <- function(input, output, session) {
                         tmp <- buildShinyElements(questions=tmp, customTypes=.MCE$shinyGUI$customTypes, 
                                                   itemnames=paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name),
                                                   choiceNames=.MCE$shinyGUI$choiceNames[pick],
-                                                  choiceValues=.MCE$shinyGUI$choiceValues[pick])
+                                                  choiceValues=.MCE$shinyGUI$choiceValues[pick],
+                                                  default = ip)
                         stemOutput <- stemContent(pick)
+                        .MCE$prevClick <- click
                         return(list(stemOutput, .MCE$shinyGUI$df$Rendered_Question[[pick]], 
                                     tmp$questions))
                     } else {
@@ -159,6 +162,7 @@ server <- function(input, output, session) {
                     if(.MCE$shinyGUI$temp_file != '')
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
                     stemOutput <- stemContent(item)
+                    .MCE$prevClick <- click
                     return(list(stemOutput, 
                                 .MCE$shinyGUI$df$Rendered_Question[[item]], 
                                 .MCE$shinyGUI$questions[[item]]))
