@@ -16,6 +16,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     customTypes = 'list',
                                     choiceNames = 'list',
                                     choiceValues = 'list',
+                                    timer = 'numeric',
                                     width = 'numeric',
                                     height = 'numeric',
                                     forced_choice = 'logical',
@@ -27,7 +28,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     theme = 'character'),
                       
                       methods = list(
-                          initialize = function(questions, df, shinyGUI, adaptive, CustomTypes){
+                          initialize = function(questions, df, shinyGUI, adaptive, CustomTypes, Timer){
                               'Initialize the shiny GUI given questions, df, and shinyGUI list'
                               ui <<- default_UI
                               questions <<- questions
@@ -35,6 +36,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               forced_choice <<- TRUE
                               stopApp <<- TRUE
                               theme <<- ''
+                              Timer <- as.numeric(Timer)
+                              timer <<- ifelse(is.finite(Timer), Timer, NA)
                               if(length(CustomTypes)){
                                   if(length(CustomTypes) != length(unique(names(CustomTypes))))
                                       stop('customTypes list requires unique names for each function', call.=FALSE)

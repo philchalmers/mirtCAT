@@ -63,6 +63,7 @@ mirtCAT_preamble_internal <-
             for(i in seq_len(length(K)))
                 item_options[[i]] <- 0L:(K[i]-1L)
             df <- list()
+            Timer <- rep(NA, length(K))
             item_answers <- NULL
             sapply(1L:length(K), function(i, local_pattern, item_options, mins){
                 opts <- item_options[[i]] + mins[i]
@@ -107,6 +108,8 @@ mirtCAT_preamble_internal <-
             item_options <- obj$item_options
             shinyGUI$stem_locations <- df[["Stem"]]
             shinyGUI$stem_expressions <- stem_expressions
+            Timer <- df[["Timer"]]
+            if(is.null(Timer)) Timer <- rep(NA, nitems)
         }
         if(is.null(mo)){
             dat <- matrix(c(0,1), 2L, length(questions))
@@ -136,7 +139,8 @@ mirtCAT_preamble_internal <-
         if(!is.null(df)) shinyGUI$stem_locations <- df[['Stem']]
         if(is.null(local_pattern)) 
             shinyGUI_object <- ShinyGUI$new(questions=questions, df=df, shinyGUI=shinyGUI,
-                                            adaptive=is_adaptive, CustomTypes=customTypes)
+                                            adaptive=is_adaptive, CustomTypes=customTypes,
+                                            Timer=Timer)
         test_object <- new('Test', mo=mo, item_answers_in=item_answers, AnswerFuns=AnswerFuns,
                            item_options=item_options, quadpts_in=design$quadpts,
                            theta_range_in=design$theta_range, dots=list(...))

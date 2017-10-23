@@ -82,7 +82,6 @@ server <- function(input, output, session) {
         
         # run survey
         if(click > 2L && !.MCE$design@stop_now && !.MCE$STOP){
-            invalidateLater(5000) ### FIXME move + wrap in if()
             if(itemclick >= 1L){
                 pick <- .MCE$person$items_answered[itemclick]
                 name <- .MCE$test@itemnames[pick]
@@ -152,6 +151,7 @@ server <- function(input, output, session) {
                 item <- if(all(is.na(.MCE$person$items_answered))) .MCE$design@start_item
                     else findNextCATItem(person=.MCE$person, test=.MCE$test, 
                                         design=.MCE$design, start=FALSE)
+                .MCE$item <- item
                 if(!is.null(attr(item, 'design'))) .MCE$design <- attr(item, 'design')
                 if(is.na(item)){
                     .MCE$design@stop_now <- TRUE
@@ -163,6 +163,8 @@ server <- function(input, output, session) {
                         saveRDS(.MCE$person, .MCE$shinyGUI$temp_file)
                     stemOutput <- stemContent(item)
                     .MCE$prevClick <- click
+                    if(!is.na(.MCE$shinyGUI$timer[item]))
+                        invalidateLater(.MCE$shinyGUI$timer[item] * 1000)
                     return(list(stemOutput, 
                                 .MCE$shinyGUI$df$Rendered_Question[[item]], 
                                 .MCE$shinyGUI$questions[[item]]))
