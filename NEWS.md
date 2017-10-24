@@ -1,5 +1,7 @@
 # mirtCAT 1.6
 
+- add `Timer` option to `df` intput to set time limits for select items
+
 - iterative algorithms now use the previous `theta` estimates as the starting values when locating
   the updated estimates
 

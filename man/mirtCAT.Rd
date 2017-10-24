@@ -85,6 +85,12 @@ type of response format, questions, options, answers, and stems:
   \item{\code{StemExpression}}{(Optional) a logical vector indicating which \code{Question}
     elements should be evaluated first in R. }
     
+  \item{\code{Timer}}{(Optional) a numeric vector indicating a time limit (in seconds) 
+    for each respective item. If a response is not provided before this limit then the question
+    will automatically advance to the next selected item. The values \code{NA} and \code{Inf}
+    indicate no time limit for the respective items. Note that this option can only be used 
+    when \code{shinyGUI = list(forced_choice = FALSE)}}
+    
   \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
     the \code{Question} input is required along with (at minimum) a 
     \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
