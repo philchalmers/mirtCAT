@@ -355,7 +355,11 @@
 #'     various internal elements from the required functional arguments
 #'   }
 #'   
-#'   \item{\code{constr_fun}}{a user-defined function of the form \code{function(design, person, test)} 
+#'   \item{\code{constr_fun}}{(WARNING: supplying this function will disable a number of the heuristic 
+#'     item selection constraints in the \code{constraints} list as a consequence; namely, all list options
+#'     except for \code{"not_scored"}).
+#'      
+#'     This argument contains an optional user-defined function of the form \code{function(design, person, test)} 
 #'     that returns a \code{data.frame} containing the left hand side, relationship, and right hand side
 #'     of the constraints for \code{\link{lp}}. 
 #'     Each row corresponds to a constraint, while the number of columns should be 
