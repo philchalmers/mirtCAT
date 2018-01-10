@@ -1,3 +1,7 @@
+# mirtCAT 1.7
+
+- Fix bug when using sequentially scored test without forced choice (reported by Aron Fink)
+
 # mirtCAT 1.6
 
 - add `Timer` option to `df` intput to set time limits for select items

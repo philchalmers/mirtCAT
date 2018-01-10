@@ -55,19 +55,24 @@ setMethod("initialize", signature(.Object = "Design"),
                           if(length(unique(na.omit(responses2))) < 2L) 
                               method <- 'MAP'
                       if(method != 'fixed'){
-                          suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
-                                                          theta_lim=test@fscores_args$theta_lim,
-                                                          MI = test@fscores_args$MI, quadpts = test@quadpts, 
-                                                          mean = test@fscores_args$mean, cov = test@fscores_args$cov,
-                                                          QMC=test@fscores_args$QMC, max_theta=test@fscores_args$max_theta,
-                                                          custom_den=test@fscores_args$custom_den,
-                                                          start = person$thetas))
-                          person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
-                                               tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
-                          } else {
+                          if(all(is.na(responses2))){
                               person$Update_thetas(person$thetas,
                                                    person$thetas_SE_history[nrow(person$thetas_SE_history),])
+                          } else {
+                              suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
+                                                              theta_lim=test@fscores_args$theta_lim,
+                                                              MI = test@fscores_args$MI, quadpts = test@quadpts, 
+                                                              mean = test@fscores_args$mean, cov = test@fscores_args$cov,
+                                                              QMC=test@fscores_args$QMC, max_theta=test@fscores_args$max_theta,
+                                                              custom_den=test@fscores_args$custom_den,
+                                                              start = person$thetas))
+                              person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
+                                                   tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
                           }
+                      } else {
+                          person$Update_thetas(person$thetas,
+                                               person$thetas_SE_history[nrow(person$thetas_SE_history),])
+                      }
                   }
                   invisible()
               }

@@ -1,5 +1,5 @@
 Package: mirtCAT
-Version: 1.6.2
+Version: 1.6.3
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item
         Response Theory
@@ -7,7 +7,8 @@ Authors@R: c( person("Phil", family="Chalmers", email =
     "rphilip.chalmers@gmail.com", role = c("aut", "cre")))
 Description: Provides tools to generate an HTML interface for creating adaptive
     and non-adaptive educational and psychological tests using the shiny
-    package. Suitable for applying unidimensional and multidimensional
+    package (Chalmers (2016) <doi:10.18637/jss.v071.i05>). 
+    Suitable for applying unidimensional and multidimensional
     computerized adaptive tests (CAT) using item response theory methodology and for
     creating simple questionnaires forms to collect response data directly in R.
     Additionally, optimal test designs (e.g., "shadow testing") are supported
