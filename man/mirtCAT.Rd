@@ -36,7 +36,9 @@ type of response format, questions, options, answers, and stems:
   \item{\code{Type}}{Indicates the type of response input 
     to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
     (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
-    inputs (\code{\link{selectInput}}), \code{'text'} and \code{'textArea'} for requiring 
+    inputs (\code{\link{selectInput}}), \code{'rankselect'} for a set of pull-down boxes rank-ordering
+    inputs (\code{\link{selectInput}}) associated with each option supplied, 
+    \code{'text'} and \code{'textArea'} for requiring 
     typed user input (\code{\link{textInput}} and \code{\link{textAreaInput}}), 
     \code{'checkbox'} for allowing multiple 
     responses to be checked off (\code{\link{checkboxGroupInput}}),
@@ -91,6 +93,10 @@ type of response format, questions, options, answers, and stems:
     indicate no time limit for the respective items. Note that this option can only be used 
     when \code{shinyGUI = list(forced_choice = FALSE)}}
     
+  \item{\code{Mastery}}{(Optional) a logical vector indicating whether the item must be mastered
+    prior to continuing. Naturally, this requires that one or more \code{Answers} are provided,
+    or suitable functions for scoring are supplied}
+    
   \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
     the \code{Question} input is required along with (at minimum) a 
     \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
@@ -123,7 +129,7 @@ sufficient response variability is present. Default is 'MAP'}
   \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for 
   maximum expected information, and \code{'IKLP'} as well as \code{'IKL'} for the 
   integration based Kullback-Leibler criteria with and without the prior density weight,
-  respectively, and their root-nitems administered weighted counter-parts, \code{'IKLn'} and 
+  respectively, and their root-n items administered weighted counter-parts, \code{'IKLn'} and 
   \code{'IKLPn'}.
   
   Possible inputs for multidimensional adaptive tests include: \code{'Drule'} 
@@ -192,7 +198,7 @@ guaging how long Monte Carlo simulations will take to finish}
 first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}}
 
-\item{customTypes}{an optional list input contaning functions for Designing Original Graphical Stimuli (DOGS).
+\item{customTypes}{an optional list input containing functions for Designing Original Graphical Stimuli (DOGS).
 DOGS elements in the input list must contain a unique name, and the item with which it is associated must be
 declared in the a \code{df$Type} input. The functions defined must be of the form
 

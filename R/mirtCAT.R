@@ -30,7 +30,7 @@
 #'     \item{\code{Type}}{Indicates the type of response input 
 #'       to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
 #'       (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
-#'       inputs (\code{\link{selectInput}}), \code{'rankselect'} for a set of pull-down boxs rank-ordering
+#'       inputs (\code{\link{selectInput}}), \code{'rankselect'} for a set of pull-down boxes rank-ordering
 #'       inputs (\code{\link{selectInput}}) associated with each option supplied, 
 #'       \code{'text'} and \code{'textArea'} for requiring 
 #'       typed user input (\code{\link{textInput}} and \code{\link{textAreaInput}}), 
@@ -123,7 +123,7 @@
 #'   \code{'MPWI'} for maximum posterior weighted information, \code{'MEI'} for 
 #'   maximum expected information, and \code{'IKLP'} as well as \code{'IKL'} for the 
 #'   integration based Kullback-Leibler criteria with and without the prior density weight,
-#'   respectively, and their root-nitems administered weighted counter-parts, \code{'IKLn'} and 
+#'   respectively, and their root-n items administered weighted counter-parts, \code{'IKLn'} and 
 #'   \code{'IKLPn'}.
 #'   
 #'   Possible inputs for multidimensional adaptive tests include: \code{'Drule'} 
@@ -185,7 +185,7 @@
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 #'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
 #'   
-#' @param customTypes an optional list input contaning functions for Designing Original Graphical Stimuli (DOGS).
+#' @param customTypes an optional list input containing functions for Designing Original Graphical Stimuli (DOGS).
 #'   DOGS elements in the input list must contain a unique name, and the item with which it is associated must be
 #'   declared in the a \code{df$Type} input. The functions defined must be of the form
 #'   
