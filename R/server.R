@@ -81,6 +81,7 @@ server <- function(input, output, session) {
         }
         
         # run survey
+        outmessage <- HTML("<p style='color:red;'> <em>Please provide a suitable response.</em> </p>")
         if(click > 2L && !.MCE$design@stop_now && !.MCE$STOP){
             if(itemclick >= 1L){
                 pick <- .MCE$person$items_answered[itemclick]
@@ -96,7 +97,10 @@ server <- function(input, output, session) {
                         if(.MCE$invalid_count > 0L) ip <- c(ip, input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name,"_", opt)]])
                         else ip <- c(ip, input[[paste0(name, "_", opt)]])
                     }
-                    if(length(ip) != length(unique(ip))) ip <- NULL
+                    if(length(ip) != length(unique(ip))){
+                        outmessage <- HTML("<p style='color:red;'><em>Please provide unique rankings for each response.</em></p>")
+                        ip <- NULL
+                    } 
                 }
                 if(!is.null(ip) && .MCE$prevClick != click){
                     ip <- as.character(ip)
@@ -138,7 +142,8 @@ server <- function(input, output, session) {
                                                   default = ip)
                         stemOutput <- stemContent(pick)
                         .MCE$prevClick <- click
-                        return(list(stemOutput, .MCE$shinyGUI$df$Rendered_Question[[pick]], 
+                        return(list(outmessage, stemOutput, 
+                                    .MCE$shinyGUI$df$Rendered_Question[[pick]], 
                                     tmp$questions))
                     } else {
                         .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
