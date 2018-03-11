@@ -86,9 +86,18 @@ server <- function(input, output, session) {
                 pick <- .MCE$person$items_answered[itemclick]
                 name <- .MCE$test@itemnames[pick]
                 ip <- unname(input[[name]])
-                if(.MCE$shinyGUI$df$Type[pick] == 'select' && .MCE$shinyGUI$forced_choice && ip == "")
+                if(.MCE$shinyGUI$df$Type[pick] %in% c('select', 'rankselect') && .MCE$shinyGUI$forced_choice && ip == "")
                     ip <- NULL
-                if(is.null(ip)) ip <- input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name)]]
+                if(.MCE$invalid_count > 0L)
+                    ip <- input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name)]]
+                if(!is.null(ip) && .MCE$prevClick != click && .MCE$shinyGUI$df$Type[pick] == "rankselect"){
+                    nopts <- length(.MCE$test@item_options[[pick]]) - 1L
+                    for(opt in 2L:nopts){
+                        if(.MCE$invalid_count > 0L) ip <- c(ip, input[[paste0(.MCE$invalid_count, '.TeMpInTeRnAl',name,"_", opt)]])
+                        else ip <- c(ip, input[[paste0(name, "_", opt)]])
+                    }
+                    if(length(ip) != length(unique(ip))) ip <- NULL
+                }
                 if(!is.null(ip) && .MCE$prevClick != click){
                     ip <- as.character(ip)
                     nanswers <- length(ip)
@@ -145,6 +154,7 @@ server <- function(input, output, session) {
                 }
             } 
             
+            .MCE$invalid_count <- 0
             .MCE$design <- Next.stage(.MCE$design, person=.MCE$person, test=.MCE$test, item=itemclick)
             
             if(!.MCE$design@stop_now){

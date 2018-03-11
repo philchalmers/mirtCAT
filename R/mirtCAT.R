@@ -30,7 +30,9 @@
 #'     \item{\code{Type}}{Indicates the type of response input 
 #'       to use from the shiny package. The supported types are: \code{'radio'} for radio buttons 
 #'       (\code{\link{radioButtons}}), \code{'select'} for a pull-down box for selecting 
-#'       inputs (\code{\link{selectInput}}), \code{'text'} and \code{'textArea'} for requiring 
+#'       inputs (\code{\link{selectInput}}), \code{'rankselect'} for a set of pull-down boxs rank-ordering
+#'       inputs (\code{\link{selectInput}}) associated with each option supplied, 
+#'       \code{'text'} and \code{'textArea'} for requiring 
 #'       typed user input (\code{\link{textInput}} and \code{\link{textAreaInput}}), 
 #'       \code{'checkbox'} for allowing multiple 
 #'       responses to be checked off (\code{\link{checkboxGroupInput}}),

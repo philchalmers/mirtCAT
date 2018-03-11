@@ -1,5 +1,8 @@
 # mirtCAT 1.7
 
+- added a `rankselect` GUI input to `df$Type` to create a list of rank-orded selection options corresponding to 
+  the input options
+
 - Fix bug when using sequentially scored test without forced choice (reported by Aron Fink)
 
 # mirtCAT 1.6

@@ -120,7 +120,7 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
     if(is.null(Qs_char) && !any(questions$Type == 'slider')) 
         stop('Question column not specified', call.=FALSE)
     if(is.null(Type)) stop('Type column not specified', call.=FALSE)
-    if(!all(Type %in% c('radio', 'select', 'text', 'textArea', 'slider', 'checkbox', 'none',
+    if(!all(Type %in% c('radio', 'select', 'text', 'textArea', 'slider', 'checkbox', 'rankselect', 'none',
                         names(customTypes))))
         stop('Type input in shiny_questions contains invalid arguments', call.=FALSE)
     Qs <- vector('list', J)
@@ -201,6 +201,19 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
             inline <- if(is.null(questions$inline[i])) FALSE else as.logical(questions$inline[i])
             Qs[[i]] <- checkboxGroupInput(inputId = itemnames[i], label='', choices = cs,
                                           width=width, inline=inline, choiceNames=cNs, choiceValues=cVs)
+        } else if(Type[i] == 'rankselect'){
+            opts <- as.character(choices[i, !is.na(choices[i, ])])
+            cs <- c("", as.character(1L:length(opts)))
+            choices_list[[i]] <- cs
+            width <- questions$width[i]
+            size <- questions$size[i]
+            out <- vector('list', length(choices_list[[i]]) - 1L)
+            for(j in seq_along(out))
+                out[[j]] <- selectInput(inputId = if(j>1) paste0(itemnames[i], "_", j) else itemnames[i], 
+                                        label=paste0(opts[j], ":"), 
+                                        selected = if(is.null(default)) '' else default, 
+                                        choices = cs, width=width, size=size)
+            Qs[[i]] <- out
         } else if(Type[i] %in% names(customTypes)){
             nm <- names(customTypes)[names(customTypes) == Type[i]]
             df_row <- as.data.frame(lapply(questions, function(x, ind) x[[ind]], ind=i), 
