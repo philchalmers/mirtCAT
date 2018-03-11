@@ -87,6 +87,10 @@
 #'       indicate no time limit for the respective items. Note that this option can only be used 
 #'       when \code{shinyGUI = list(forced_choice = FALSE)}}
 #'       
+#'     \item{\code{Mastery}}{(Optional) a logical vector indicating whether the item must be mastered
+#'       prior to continuing. Naturally, this requires that one or more \code{Answers} are provided,
+#'       or suitable functions for scoring are supplied}
+#'       
 #'     \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
 #'       the \code{Question} input is required along with (at minimum) a 
 #'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 

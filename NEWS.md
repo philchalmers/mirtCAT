@@ -1,7 +1,10 @@
 # mirtCAT 1.7
 
-- added a `rankselect` GUI input to `df$Type` to create a list of rank-orded selection options corresponding to 
-  the input options
+- added an optioanl `Mastery` input colum to `df` to prevent the GUI from continuing until
+  the item is answered correctly (not useful for CATs, but supported for teaching interfaces)
+
+- added a `rankselect` GUI input to `df$Type` to create a list of rank-orded selection options
+  corresponding to the input options
 
 - Fix bug when using sequentially scored test without forced choice (reported by Aron Fink)
 

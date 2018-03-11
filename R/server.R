@@ -120,6 +120,26 @@ server <- function(input, output, session) {
                             else .MCE$person$responses[pick] <- as.integer(ip %in% .MCE$test@item_answers[[pick]])
                         } 
                     }
+                    if(!is.null(.MCE$shinyGUI$df$Mastery)){
+                        mastery <- as.logical(.MCE$shinyGUI$df$Mastery[pick])
+                        if(mastery && .MCE$person$responses[pick] == 0L){
+                            outmessage <- HTML("<p style='color:red;'><em>The answer provided was incorrect. Please select an alternative.</em></p>")
+                            .MCE$shift_back <- .MCE$shift_back + 1L
+                            .MCE$invalid_count <- .MCE$invalid_count + 1L
+                            tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
+                            tmp <- buildShinyElements(questions=tmp, customTypes=.MCE$shinyGUI$customTypes, 
+                                                      itemnames=paste0(.MCE$invalid_count, '.TeMpInTeRnAl', name),
+                                                      choiceNames=.MCE$shinyGUI$choiceNames[pick],
+                                                      choiceValues=.MCE$shinyGUI$choiceValues[pick],
+                                                      default = ip)
+                            stemOutput <- stemContent(pick)
+                            .MCE$prevClick <- click
+                            return(list(outmessage, stemOutput, 
+                                        .MCE$shinyGUI$df$Rendered_Question[[pick]], 
+                                        tmp$questions))
+                        }
+                    }
+                    
                     .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
                     .MCE$start_time <- NULL
                     
