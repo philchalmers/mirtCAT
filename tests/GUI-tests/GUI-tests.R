@@ -37,6 +37,10 @@ df2 <- df
 df2$Type[1] <- 'select'
 results <- mirtCAT(df = df2)
 
+df2 <- df
+df2$Type[1] <- 'rankselect'
+results <- mirtCAT(df = df2)
+
 # width/inline change
 df$inline <- TRUE
 df$width <- "50%"
