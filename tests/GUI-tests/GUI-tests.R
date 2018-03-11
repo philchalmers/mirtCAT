@@ -11,6 +11,11 @@ questions <- c("Building CATs with mirtCAT is difficult.",
                "I would use mirtCAT in my research.")
 df <- data.frame(Question = questions, Option = options, Type = "radio")
 
+# forced
+results <- mirtCAT(df = df)
+summary(results)
+results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
+
 # correct answer scoring
 df2 <- df
 df2$Answer <- c('Agree', 'Agree', 'Agree')
@@ -18,10 +23,6 @@ df2$Mastery <- c(TRUE, FALSE, FALSE)
 results <- mirtCAT(df = df2)
 summary(results)
 
-# forced
-results <- mirtCAT(df = df)
-summary(results)
-results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
 #theme
 results <- mirtCAT(df = df, shinyGUI = list(theme = 'journal'))
