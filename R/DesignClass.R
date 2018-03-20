@@ -66,8 +66,13 @@ setMethod("initialize", signature(.Object = "Design"),
                                                               QMC=test@fscores_args$QMC, max_theta=test@fscores_args$max_theta,
                                                               custom_den=test@fscores_args$custom_den,
                                                               start = person$thetas))
-                              person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
-                                                   tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                              if(all(is.finite(tmp[,paste0('F', 1L:test@nfact), drop=FALSE]))){
+                                  person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
+                                                       tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                              } else {
+                                  person$Update_thetas(person$thetas,
+                                                       person$thetas_SE_history[nrow(person$thetas_SE_history),])
+                              }
                           }
                       } else {
                           person$Update_thetas(person$thetas,
