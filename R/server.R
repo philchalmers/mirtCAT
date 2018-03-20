@@ -134,9 +134,9 @@ server <- function(input, output, session) {
                                                       default = ip)
                             stemOutput <- stemContent(pick)
                             .MCE$prevClick <- click
-                            return(list(outmessage, stemOutput, 
+                            return(list(stemOutput, 
                                         .MCE$shinyGUI$df$Rendered_Question[[pick]], 
-                                        tmp$questions))
+                                        tmp$questions, outmessage))
                         }
                     }
                     
@@ -152,6 +152,8 @@ server <- function(input, output, session) {
                 } else {
                     if(.MCE$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE$start_time) || 
                        (.MCE$shinyGUI$forced_choice && .MCE$shinyGUI$df$Type[pick] != 'none')){
+                        if(.MCE$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE$start_time))
+                            outmessage <- NULL
                         .MCE$shift_back <- .MCE$shift_back + 1L
                         .MCE$invalid_count <- .MCE$invalid_count + 1L
                         tmp <- lapply(.MCE$shinyGUI$df, function(x, pick) x[pick], pick=pick)
@@ -162,9 +164,9 @@ server <- function(input, output, session) {
                                                   default = ip)
                         stemOutput <- stemContent(pick)
                         .MCE$prevClick <- click
-                        return(list(outmessage, stemOutput, 
+                        return(list(stemOutput, 
                                     .MCE$shinyGUI$df$Rendered_Question[[pick]], 
-                                    tmp$questions))
+                                    tmp$questions, outmessage))
                     } else {
                         .MCE$person$item_time[pick] <- proc.time()[3L] - .MCE$start_time
                         .MCE$start_time <- NULL
