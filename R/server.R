@@ -2,7 +2,7 @@ server <- function(input, output, session) {
     
     session$onSessionEnded(function() {
         if(!.MCE$design@stop_now){
-            warning('Session unexpectedly terminated early', call.=FALSE)
+            message('WARNING: mirtCAT GUI session unexpectedly terminated early')
             .MCE$person$terminated_sucessfully <- FALSE
         } else .MCE$person$terminated_sucessfully <- TRUE
         stopApp()
