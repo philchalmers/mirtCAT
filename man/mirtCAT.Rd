@@ -58,13 +58,15 @@ type of response format, questions, options, answers, and stems:
     Alternatively, when paired with the \code{StemExpression} logical value, 
     each element may represent a character vector of arbitrary R expressions
     to be evaluated as suitable item stems. These are rendered into suitable HTML code,
-    typically through shiny. This approach is much more verbose, however it provides a large variety 
-    of customization through the use of \code{div()} and other helpful tags. 
+    typically through shiny \code{\link{tags}}. This approach is much more verbose, however 
+    it provides a great deal of customization, particularly through the use of \code{div()} 
+    and other helpful tags. 
     
     E.g., the following would result in two bolded and italicized item stems: 
     \code{c("tags$b('Stem 1')", "tags$em('Stem 2')")}, along with associated \code{TRUE} values
-    in \code{StemExpression}. See 
-    \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
+    in \code{StemExpression}. The \code{\link{div}} tag allows these expressions to be 
+    stacked too; for example, \code{div(HTML("This is some HTML"), tags$br(), HTML("And in the middle a line break")}.
+    See \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
     to use tags and HTML generating functions.
     
     } 
@@ -737,6 +739,24 @@ df$Answer <- answers
 summary(res_seq)
 summary(res_random)
 summary(res_MI)
+
+#-----------------------------------------
+# HTML tags for better customization
+
+# help(tags, package='shiny')
+options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+                  nrow = 3, ncol = 5, byrow = TRUE)
+questions <- c("HTML('Building CATs with mirtCAT is difficult.')",
+               "div(HTML('mirtCAT requires a'), br(), HTML('substantial amount of coding.'))",
+               "div(strong('I would use'), HTML('mirtCAT in my research.'))")
+df <- data.frame(Question = questions, 
+                 Option = options, 
+                 Type = "radio",
+                 StemExpression = c(TRUE, TRUE, TRUE),
+                 stringsAsFactors=FALSE)
+
+res <- mirtCAT(df)
+res
 
 #-----------------------------------------
 
