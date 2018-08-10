@@ -33,11 +33,9 @@ test_that('unidimensional', {
     df2$Answer <- answers
     
     pat <- generate_pattern(mod, Theta = 0, df2)
-    expect_true(all(pat == as.character(c(67,90,109,118,111,127,118,129,112,97,93,98,77,110,98,
-                             125,112,122,148,136,100,88,83,76,90))))
+    expect_true(all(pat == as.character(c(80,102,101,98,62,102,100,68,126,62,95,111,89,102,106,113,98,82,65,97,128,79,115,86,118))))
     pat2 <- generate_pattern(mod, Theta = -1, df2)
-    expect_true(all(pat2 == as.character(c(70,90,101,139,123,107,120,139,122,100,93,97,81,110,
-                                           100,125,106,132,152,136,106,98,87,72,90))))
+    expect_true(all(pat2 == as.character(c(74,108,101,77,64,94,92,76,134,62,101,108,82,112,98,105,102,84,69,105,124,79,115,82,110))))
     
     #no scoring, just collecting
     res <- mirtCAT(df, local_pattern=pat)
@@ -87,8 +85,8 @@ test_that('unidimensional', {
     
     #sequential
     res <- mirtCAT(df2, mod, local_pattern=pat)
-    expect_equal(as.numeric(res$thetas), 0.3344562, tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[26,]), 0.3148088, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -0.1156397, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[26,]), 0.3319357, tolerance = 1e-4)
     
     oo <- plot(res)
     expect_is(oo, 'trellis')
@@ -100,10 +98,10 @@ test_that('unidimensional', {
     #adaptive
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4))
-    expect_equal(as.numeric(res$thetas), 0.4047002, tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[10L,]), 0.3889968, tolerance = 1e-4)
-    expect_true(sum(!is.na(res$raw_responses)) == 9L && sum(!is.na(res$scored_responses)) == 9L)
-    expect_true(nrow(!is.na(res$thetas_history)) == 10L && nrow(!is.na(res$thetas_SE_history)) == 10L)
+    expect_equal(as.numeric(res$thetas), -.03611283, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[10L,]), 0.4093153, tolerance = 1e-4)
+    expect_true(sum(!is.na(res$raw_responses)) == 10L && sum(!is.na(res$scored_responses)) == 10L)
+    expect_true(nrow(!is.na(res$thetas_history)) == 11L && nrow(!is.na(res$thetas_SE_history)) == 11L)
     
     res <- mirtCAT(mo = mod, local_pattern=generate_pattern(mod, matrix(c(0,1))), criteria='MI',
                    design = list(min_SEM = .4))
@@ -116,85 +114,85 @@ test_that('unidimensional', {
     
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4), method = 'EAP')
-    expect_equal(as.numeric(res$thetas), 0.3161534, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.00942354, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3947569, tolerance = 1e-4)
+                 0.3843882, tolerance = 1e-4)
     
     exposure <- rep(3L, nrow(df2))
     set.seed(1234)
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4, exposure=exposure), method = 'EAP', 
                    start_item=sample(c(1:nrow(df2)), 1))
-    expect_equal(as.numeric(res$thetas), 0.6979685, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -0.2186294, tolerance = 1e-4)
     so <- summary(res)
     expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
-                 0.3962437, tolerance = 1e-4)
+                 0.3926076, tolerance = 1e-4)
     
     set.seed(1)
     exposure <- rep(0.75, nrow(df2))
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4, exposure=exposure), method = 'EAP', 
                    start_item=sample(c(1:nrow(df2)), 1))
-    expect_equal(as.numeric(res$thetas), 0.2187247, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -.03342287, tolerance = 1e-4)
     so <- summary(res)
     expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
-                 0.3951322, tolerance = 1e-4)
+                 0.3986095, tolerance = 1e-4)
     
     set.seed(12)
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='random')
-    expect_equal(as.numeric(res$thetas), 0.02252426, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.07423068, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3938078, tolerance = 1e-4)
+                 0.3915826, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MEI')
-    expect_equal(as.numeric(res$thetas), 0.3161534, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -.114286, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3947569, tolerance = 1e-4)
+                 0.3867981, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MEPV')
-    expect_equal(as.numeric(res$thetas), 0.3425135, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.00942354, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3951722, tolerance = 1e-4)
+                 0.3843882, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MLWI')
-    expect_equal(as.numeric(res$thetas), 0.3425135, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.00942354, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3951722, tolerance = 1e-4)
+                 0.3843882, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MPWI')
-    expect_equal(as.numeric(res$thetas), 0.3161534, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.00942354, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3947569, tolerance = 1e-4)
+                 0.3843882, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='KL')
-    expect_equal(as.numeric(res$thetas), 0.3161534, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.00942354, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3947569, tolerance = 1e-4)
+                 0.3843882, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'ML', criteria='KLn',
                    preCAT = list(max_items = 5L, criteria = 'seq', method = 'fixed'))
-    expect_equal(as.numeric(res$thetas), 0.2437948, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -0.01885796, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3947168, tolerance = 1e-4)
+                 0.3995055, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='IKL',
                    design = list(min_SEM = .4), method = 'MAP')
-    expect_equal(as.numeric(res$thetas), 0.1140858, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.213972, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3913585, tolerance = 1e-4)
+                 0.394090, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='IKLPn',
                    design = list(min_SEM = .4), method = 'MAP')
-    expect_equal(as.numeric(res$thetas), 0.1140858, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.213972, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3913585, tolerance = 1e-4)
+                 0.3940905, tolerance = 1e-4)
     
     # content balancing
     set.seed(1)
@@ -205,26 +203,26 @@ test_that('unidimensional', {
                    method = 'MAP') #should crash with 'seq'
     so <- summary(res)
     expect_equal(so$items_answered[1:5], c(1,20,2,3,24))
-    expect_equal(as.numeric(table(content[so$items_answered])/10), c(.6, .3))
+    expect_equal(as.numeric(table(content[so$items_answered])/10), c(.7, .3))
     
     #pass other args through ...
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='KL', theta_lim = c(-1,1))
-    expect_equal(as.numeric(res$thetas), 0.3181472, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -0.1101559, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3975391, tolerance = 1e-4)
+                 0.3916425, tolerance = 1e-4)
     
     ## classification
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(classify = -0.5, classify_CI=.95))
     so <- summary(res)
-    expect_true(so$classification == 'above cutoff')
-    expect_equal(as.numeric(res$thetas), 0.4028854, tolerance = 1e-4)
+    expect_true(so$classification == 'no decision')
+    expect_equal(as.numeric(res$thetas), -0.11564, tolerance = 1e-4)
     
     ##fscores call
     responses <- res$scored_responses
     fs <- fscores(mod, response.pattern = responses)
-    expect_equal(unname(fs[,'F1']), .4236452, tolerance = 1e-4)
+    expect_equal(unname(fs[,'F1']), -0.1384693, tolerance = 1e-4)
     
     # excluded set
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI', 
