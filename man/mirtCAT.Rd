@@ -87,7 +87,8 @@ type of response format, questions, options, answers, and stems:
     \code{NA}s are used if the item has no corresponding file.} 
     
   \item{\code{StemExpression}}{(Optional) a logical vector indicating which \code{Question}
-    elements should be evaluated first in R. }
+    elements should be evaluated first in R. Note that any missing values 
+    are treated as \code{FALSE}}
     
   \item{\code{Timer}}{(Optional) a numeric vector indicating a time limit (in seconds) 
     for each respective item. If a response is not provided before this limit then the question

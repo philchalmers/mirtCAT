@@ -83,6 +83,7 @@ mirtCAT_preamble_internal <-
             nitems <- nrow(df)
             StemExpression <- if(is.null(df$StemExpression)) logical(length(df$Type))
             else as.logical(df$StemExpression)
+            StemExpression <- ifelse(is.na(StemExpression), FALSE, StemExpression)
             stem_expressions <- rep(NA, length(df$Type))
             stem_expressions[StemExpression] <- df$Question[StemExpression]
             df <- lapply(df, as.character)
