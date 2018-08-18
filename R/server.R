@@ -102,6 +102,8 @@ server <- function(input, output, session) {
                         ip <- NULL
                     } 
                 }
+                if(.MCE$shinyGUI$forced_choice && .MCE$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
+                    if(ip == "") ip <- NULL
                 if(!is.null(ip) && .MCE$prevClick != click){
                     ip <- as.character(ip)
                     nanswers <- length(ip)

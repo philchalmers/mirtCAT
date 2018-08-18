@@ -1,3 +1,8 @@
+# mirtCAT 1.8
+
+- When Type input is `text` or `textArea` and `forced_choice = TRUE` then blocks of text input
+  will also now be required. Otherwise, a message will be printed to the GUI
+
 # mirtCAT 1.7
 
 - message added in red whenever selection conditions not met (e.g., when using forced choice, rating
