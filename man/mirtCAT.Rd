@@ -17,10 +17,11 @@ mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
 
 \method{summary}{mirtCAT}(object, sort = TRUE, ...)
 
-\method{plot}{mirtCAT}(x, pick_theta = NULL, true_thetas = TRUE, SE = 1,
-  main = NULL, par.strip.text = list(cex = 0.7),
-  par.settings = list(strip.background = list(col = "#9ECAE1"), strip.border =
-  list(col = "black")), scales = list(x = list(rot = 90)), ...)
+\method{plot}{mirtCAT}(x, pick_theta = NULL, true_thetas = TRUE,
+  SE = 1, main = NULL, par.strip.text = list(cex = 0.7),
+  par.settings = list(strip.background = list(col = "#9ECAE1"),
+  strip.border = list(col = "black")), scales = list(x = list(rot = 90)),
+  ...)
 }
 \arguments{
 \item{df}{a \code{data.frame} containing the \code{character} vector inputs required to generate 
