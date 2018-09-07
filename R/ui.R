@@ -22,9 +22,11 @@ default_UI <- function(){
         sidebarPanel(
             if(.MCE$shinyGUI$author != '') h4("Authors:") else NULL,
             if(.MCE$shinyGUI$author != '') h5(.MCE$shinyGUI$author) else NULL,
-            if(.MCE$shinyGUI$author != '') hr() else NULL,
-            helpText("\n", .MCE$shinyGUI$instructions[1L]),            
-            actionButton("Next", .MCE$shinyGUI$instructions[2L])
+            div(
+                if(.MCE$shinyGUI$author != '') hr() else NULL,
+                helpText("\n", .MCE$shinyGUI$instructions[1L]),            
+                actionButton("Next", .MCE$shinyGUI$instructions[2L])
+            )
         ),
         
         mainPanel(

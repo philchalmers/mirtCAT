@@ -492,7 +492,7 @@
 #'   
 #'     \preformatted{function(person){ 
 #'                     return(list(h5("You have successfully completed the interface. 
-#'                                    Click the action button to terminate the application.")))
+#'                                    It is now safe to leave the application.")))
 #'                      } }
 #'    }    
 #'    
@@ -532,11 +532,6 @@
 #'          \code{password = data.frame(user = c('user1', 'user2'), password = rep('1234', 2))}}      
 #'      }
 #'    }
-#'      
-#'    \item{\code{stopApp}}{logical; use a \code{stopApp()} call after the interface has been completed?
-#'      Default is \code{TRUE}. However, when hosting an application on a remote server this should be set
-#'      to \code{FALSE} to allow a more graceful completion (in which case the last page will be displayed
-#'      until the browser tab is closed)}
 #'      
 #'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the 
 #'      default one will be used. See \code{mirtCAT:::default_UI} for the internal code definition}

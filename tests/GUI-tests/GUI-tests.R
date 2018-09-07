@@ -14,7 +14,6 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 # forced
 results <- mirtCAT(df = df)
 summary(results)
-results <- mirtCAT(df = df, shinyGUI = list(stopApp = FALSE))
 
 # correct answer scoring
 df2 <- df

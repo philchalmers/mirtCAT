@@ -221,11 +221,8 @@ server <- function(input, output, session) {
             }
             if(.MCE$shinyGUI$temp_file != '')
                 file.remove(.MCE$shinyGUI$temp_file)
+            removeUI(selector = "div:has(> #Next)", immediate = TRUE)
             return(.MCE$shinyGUI$lastpage(person=.MCE$person))
-        } else {
-            if(.MCE$shinyGUI$stopApp) stopApp()
-            else return(.MCE$shinyGUI$lastpage(person=.MCE$person))
-            return(NULL)
         }
         
     })
