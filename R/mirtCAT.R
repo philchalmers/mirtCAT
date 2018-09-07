@@ -532,6 +532,12 @@
 #'          \code{password = data.frame(user = c('user1', 'user2'), password = rep('1234', 2))}}      
 #'      }
 #'    }
+#'    
+#'    \item{\code{time_remaining}}{string to print prior to the length of time remaining in the session. 
+#'      Default is \code{"Time remaining:"}}
+#'      
+#'    \item{\code{response_msg}}{string to print when valid responses are required but the users does not provide
+#'      a valid input. Default is \code{"Please provide a suitable response"}}    
 #'      
 #'    \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the 
 #'      default one will be used. See \code{mirtCAT:::default_UI} for the internal code definition}

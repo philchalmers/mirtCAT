@@ -15,7 +15,7 @@ default_UI <- function(){
         headerPanel(.MCE$shinyGUI$title),
         
         if(is.finite(.MCE$design@max_time)){
-            h6(paste0('Time remaining: ', 
+            h6(paste0(.MCE$shinyGUI$time_remaining, 
                       formatTime(.MCE$design@max_time - sum(.MCE$person$item_time))))
         } else NULL,
         

@@ -81,7 +81,7 @@ server <- function(input, output, session) {
         }
         
         # run survey
-        outmessage <- HTML("<p style='color:red;'> <em>Please provide a suitable response.</em> </p>")
+        outmessage <- HTML(paste0("<p style='color:red;'> <em>", .MCE$shinyGUI$response_msg, "</em> </p>"))
         if(click > 2L && !.MCE$design@stop_now && !.MCE$STOP){
             if(itemclick >= 1L){
                 pick <- .MCE$person$items_answered[itemclick]
