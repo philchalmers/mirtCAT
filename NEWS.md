@@ -3,6 +3,9 @@
 - The final page splash screen now removes the `Next` button to avoid confusion (suggested by 
   Daniel Sommerhoff). Applications must be explicitly closed now by the user, and consequently
   the `stopApp` logical to the `shinyGUI` list has been deprecated
+  
+- Fixed the random item selection exposure control, which was selection suboptimal items instead
+  (reported by @machow on Github)
 
 - When Type input is `text` or `textArea` and `forced_choice = TRUE` then blocks of text input
   will also now be required. Otherwise, a message will be printed to the GUI

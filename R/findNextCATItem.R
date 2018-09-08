@@ -338,7 +338,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
             if(exposure == 1L){
                 item <- index[which.max(crit)][1L]
             } else {
-                rnk <- rank(crit, ties.method = 'random')
+                rnk <- length(crit) - rank(crit, ties.method = 'random') + 1L
                 pick <- which(rnk %in% 1L:exposure)
                 item <- index[sample(pick, 1L)]
             }

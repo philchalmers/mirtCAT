@@ -123,10 +123,11 @@ test_that('unidimensional', {
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
                    design = list(min_SEM = .4, exposure=exposure), method = 'EAP', 
                    start_item=sample(c(1:nrow(df2)), 1))
-    expect_equal(as.numeric(res$thetas), -0.2186294, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), -0.0109594, tolerance = 1e-4)
     so <- summary(res)
+    expect_equal(so$items_answered, c(3,20,15,2,5,24,14,6,21,19,22,11))
     expect_equal(as.numeric(so$thetas_SE_history[nrow(so$thetas_SE_history),]),
-                 0.3926076, tolerance = 1e-4)
+                 0.3850345, tolerance = 1e-4)
     
     set.seed(1)
     exposure <- rep(0.75, nrow(df2))

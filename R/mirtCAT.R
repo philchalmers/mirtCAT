@@ -284,8 +284,12 @@
 #'     be between 0 and 1 (e.g., 0.95 gives 95\% confidence interval)}
 #'     
 #'   \item{\code{exposure}}{a numeric vector specifying the amount of exposure control to apply for
-#'     each successive item (length must equal the number of items). 
-#'     The default uses no exposure control. If the item exposure 
+#'     each successive item (length must equal the number of items). Note that this includes the 
+#'     first item as well when a selection criteria is specified, therefore if a specific first 
+#'     item should be used then the first element to \code{exposure} should be 1.  
+#'     The default uses no exposure control. 
+#'     
+#'     If the item exposure 
 #'     is greater than 1 then the \code{n} most optimal
 #'     criteria will be randomly sampled from. For instance, if 
 #'     \code{exposure[5] == 3}, and \code{criteria = 'MI'}, then when the fifth item is to be 
@@ -295,7 +299,7 @@
 #'     
 #'     If all elements in \code{exposure} are between 0 and 1 then the Sympson-Hetter exposure 
 #'     control method will be implemented. In this method, an item is administered only if it 
-#'     passes a probability simulation experiment, otherwise it is removed from the item pool.
+#'     passes a probability simulation experiment; otherwise, it is removed from the item pool.
 #'     Values closer to 1 are more likely to appear in the test, while value closer to 0 are more
 #'     likely to be randomly discarded.}
 #'     
