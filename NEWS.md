@@ -1,5 +1,9 @@
 # mirtCAT 1.8
 
+- `shinyStems` list argument has been added `mirtCAT()` to allow for HTML-based input of 
+  the stems for ease of use. This deprecates the previousd `df$StemExpressions` format 
+  in favor of a more natural list input approach
+
 - The final page splash screen now removes the `Next` button to avoid confusion (suggested by 
   Daniel Sommerhoff). Applications must be explicitly closed now by the user, and consequently
   the `stopApp` logical to the `shinyGUI` list has been deprecated

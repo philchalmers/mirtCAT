@@ -45,7 +45,7 @@ mirtCAT_preamble_internal <-
     function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', AnswerFuns = list(),
              start_item = 1, local_pattern = NULL, design_elements=FALSE, cl=NULL,
              design = list(), shinyGUI = list(), preCAT = list(), customTypes = list(),
-             final_fun = NULL, ...)
+             final_fun = NULL, shinyStems = list(), ...)
     {
         is_adaptive <- !is.null(mo)
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
@@ -76,21 +76,24 @@ mirtCAT_preamble_internal <-
         } else {
             if(!is.data.frame(df))
                 stop('df input must be a data.frame', call.=FALSE)
+            if(any(colnames(df) == 'StemExpression'))
+                stop('StemExpression input no longer supported. Please use shinyStems list', call.=FALSE)
             if(any(sapply(df, class) == 'factor'))
                 stop('data.frame requires characters instead of factors. 
                         To avoid, use stringsAsFactors = FALSE in your data.frame',
                         call.=FALSE)
             nitems <- nrow(df)
-            StemExpression <- if(is.null(df$StemExpression)) logical(length(df$Type))
-            else as.logical(df$StemExpression)
-            StemExpression <- ifelse(is.na(StemExpression), FALSE, StemExpression)
-            stem_expressions <- rep(NA, length(df$Type))
-            stem_expressions[StemExpression] <- df$Question[StemExpression]
             df <- lapply(df, as.character)
-            for(i in seq_len(length(df$Type)))
-                if(StemExpression[i]) df$Question[i] <- ''
             df$Rendered_Question <- lapply(df$Question, function(x, fun) shiny::withMathJax(fun(x)),
                                   fun=shinyGUI$stem_default_format)
+            if(length(shinyStems)){
+                stopifnot(is.list(shinyStems))
+                stopifnot(length(shinyStems) == nitems)
+                for(i in 1L:nitems){
+                    if(!is.null(shinyStems[[i]]))
+                        df$Rendered_Question[[i]] <- shinyStems[[i]]
+                }
+            }
             if(length(customTypes)){
                 pick <- df$Type %in% names(customTypes)
                 df$Rendered_Question[pick] <- ''
@@ -108,7 +111,6 @@ mirtCAT_preamble_internal <-
             item_answers <- obj$item_answers
             item_options <- obj$item_options
             shinyGUI$stem_locations <- df[["Stem"]]
-            shinyGUI$stem_expressions <- stem_expressions
             Timer <- df[["Timer"]]
             if(is.null(Timer)) Timer <- rep(NA, nitems)
         }

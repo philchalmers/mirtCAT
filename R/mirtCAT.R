@@ -49,21 +49,8 @@
 #'       to use on an as-per-needed basis.} 
 #'     
 #'     \item{\code{Question}}{A character vector containing all the questions or stems to be generated.
-#'       Alternatively, when paired with the \code{StemExpression} logical value, 
-#'       each element may represent a character vector of arbitrary R expressions
-#'       to be evaluated as suitable item stems. These are rendered into suitable HTML code,
-#'       typically through shiny \code{\link{tags}}. This approach is much more verbose, however 
-#'       it provides a great deal of customization, particularly through the use of \code{div()} 
-#'       and other helpful tags. 
-#'       
-#'       E.g., the following would result in two bolded and italicized item stems: 
-#'       \code{c("tags$b('Stem 1')", "tags$em('Stem 2')")}, along with associated \code{TRUE} values
-#'       in \code{StemExpression}. The \code{\link{div}} tag allows these expressions to be 
-#'       stacked too; for example, \code{div(HTML("This is some HTML"), tags$br(), HTML("And in the middle a line break")}.
-#'       See \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
-#'       to use tags and HTML generating functions.
-#'       
-#'       } 
+#'       For more flexible stems that can be build based on HTML tags, see the \code{shinyStems} input
+#'       }
 #'       
 #'     \item{\code{Option.#}}{Names pertaining to the possible response
 #'       options for each item, where the # corresponds to the specific category. For
@@ -79,10 +66,6 @@
 #'     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths 
 #'       pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
 #'       \code{NA}s are used if the item has no corresponding file.} 
-#'       
-#'     \item{\code{StemExpression}}{(Optional) a logical vector indicating which \code{Question}
-#'       elements should be evaluated first in R. Note that any missing values 
-#'       are treated as \code{FALSE}}
 #'       
 #'     \item{\code{Timer}}{(Optional) a numeric vector indicating a time limit (in seconds) 
 #'       for each respective item. If a response is not provided before this limit then the question
@@ -110,6 +93,24 @@
 #'   \code{\link{generate.mirt_object}} function if population parameters are known or by
 #'   including a calibrated model estimated from the \code{\link{mirt}} function with real data.
 #'   
+#' @param shinyStems an optional list represent for the item stems based on HTML constructor
+#'    functions. This approach is much more verbose than the \code{Question} input from the 
+#'    \code{df} object, however it provides a great deal of customization, 
+#'    particularly through the use of \code{div()} and other helpful tags. When used, this list
+#'    must have the same number of elements as rows in the \code{df} object, and items that
+#'    should not use this input should be filled with \code{NULL}
+#'       
+#'    E.g., the following would result in a bolded and italicized item stems for the first two items in a 
+#'    three item test: 
+#'    
+#'    \code{shinyStems <- list(strong('Stem 1'), em('Stem 2'), NULL)}
+#'    
+#'    Note that \code{\link{div}} tags are very useful to create flexible expressions that should be 
+#'    stacked; for example, \code{div(HTML("This is some HTML"), br(), HTML("And in the middle a line break")} 
+#'    can be used as a single element in the \code{shinyStems} list.
+#'    See \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
+#'    to use tags and HTML generating functions.
+#'    
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores in the CAT 
 #'   stage, with the addition of a \code{'fixed'} input to keep the latent trait estimates
 #'   fixed at the previous values. When \code{method = 'ML'}, if there is no variability 
@@ -714,16 +715,14 @@
 #' # help(tags, package='shiny')
 #' options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
 #'                   nrow = 3, ncol = 5, byrow = TRUE)
-#' questions <- c("HTML('Building CATs with mirtCAT is difficult.')",
-#'                "div(HTML('mirtCAT requires a'), br(), HTML('substantial amount of coding.'))",
-#'                "div(strong('I would use'), HTML('mirtCAT in my research.'))")
-#' df <- data.frame(Question = questions, 
-#'                  Option = options, 
+#' shinyStems <- list(HTML('Building CATs with mirtCAT is difficult.'),
+#'                div(HTML('mirtCAT requires a'), br(), HTML('substantial amount of coding.')),
+#'                div(strong('I would use'), HTML('mirtCAT in my research.')))
+#' df <- data.frame(Option = options, 
 #'                  Type = "radio",
-#'                  StemExpression = c(TRUE, TRUE, TRUE),
 #'                  stringsAsFactors=FALSE)
 #'
-#' res <- mirtCAT(df)
+#' res <- mirtCAT(df, shinyStems=shinyStems)
 #' res
 #' 
 #' #-----------------------------------------
@@ -765,15 +764,15 @@
 #' 
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
-                    start_item = 1, local_pattern = NULL, AnswerFuns = list(), 
-                    design_elements = FALSE, cl = NULL, progress = FALSE, 
-                    primeCluster = TRUE, customTypes = list(), 
+                    start_item = 1, local_pattern = NULL, shinyStems = list(), 
+                    AnswerFuns = list(), design_elements = FALSE, cl = NULL, 
+                    progress = FALSE, primeCluster = TRUE, customTypes = list(), 
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
              .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
              .MCE$preamble_defined <- NULL})
-    mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
+    mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, shinyStems=shinyStems, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, 

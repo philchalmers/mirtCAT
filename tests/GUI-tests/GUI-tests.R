@@ -22,6 +22,15 @@ df2$Mastery <- c(TRUE, FALSE, FALSE)
 results <- mirtCAT(df = df2)
 summary(results)
 
+# shinyStems
+questions <- c(NA,
+               "mirtCAT requires a substantial amount of coding.",
+               "I would use mirtCAT in my research.")
+shinyStems <- list(div(strong('Something'),br(), strong('Something')), NULL, NULL)
+df3 <- data.frame(Question = questions, Option = options, Type = "radio")
+
+results <- mirtCAT(df = df3, shinyStems=shinyStems)
+summary(results)
 
 #theme
 results <- mirtCAT(df = df, shinyGUI = list(theme = 'journal'))
