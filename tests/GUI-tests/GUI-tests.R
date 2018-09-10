@@ -32,6 +32,10 @@ df3 <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df3, shinyStems=shinyStems)
 summary(results)
 
+# same, but with names
+shinyStems <- list("1" = div(strong('Something'),br(), strong('Something')))
+results <- mirtCAT(df = df3, shinyStems=shinyStems)
+
 #theme
 results <- mirtCAT(df = df, shinyGUI = list(theme = 'journal'))
 
@@ -72,6 +76,20 @@ choiceNames <- list(
 )
 choiceValues = list(
     list("icon", "html", "text"), NULL, NULL)
+results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE, 
+                                             choiceNames=choiceNames,
+                                             choiceValues=choiceValues))
+summary(results2)
+
+# same, but with selection
+choiceNames <- list(
+    "1" = list(
+        icon("calendar"),
+        HTML("<p style='color:red;'>Red Text</p>"),
+        "Normal text")
+)
+choiceValues = list(
+    "1"=list("icon", "html", "text"))
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE, 
                                              choiceNames=choiceNames,
                                              choiceValues=choiceValues))

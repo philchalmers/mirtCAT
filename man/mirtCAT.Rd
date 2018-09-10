@@ -161,7 +161,9 @@ functions. This approach is much more verbose than the \code{Question} input fro
 \code{df} object, however it provides a great deal of customization, 
 particularly through the use of \code{div()} and other helpful tags. When used, this list
 must have the same number of elements as rows in the \code{df} object, and items that
-should not use this input should be filled with \code{NULL}
+should not use this input should be filled with \code{NULL}. Alternatively, if specified the
+names of the elements to this list can be used to match the rownames of the \code{df} object
+to avoid the use of NULL placeholders.
    
 E.g., the following would result in a bolded and italicized item stems for the first two items in a 
 three item test: 
@@ -172,7 +174,12 @@ Note that \code{\link{div}} tags are very useful to create flexible expressions 
 stacked; for example, \code{div(HTML("This is some HTML"), br(), HTML("And in the middle a line break")} 
 can be used as a single element in the \code{shinyStems} list.
 See \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
-to use tags and HTML generating functions.}
+to use tags and HTML generating functions. Note that if names are supplied then the following is equivalent
+(i.e., the NULL elements can be dropped)
+
+\code{shinyStems <- list("1"=strong('Stem 1'), "2"=em('Stem 2'))}
+
+assuming that respective items are named "1" and "2" in the \code{df} object.}
 
 \item{AnswerFuns}{a list with the length equal to the number of items in the item bank consisting 
 of user-defined functions. These functions are used to determine whether a given
@@ -522,7 +529,10 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
      the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}). 
      This is used to modify the output of the controllers using 
      suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
-     the value \code{NA} in the associated list element will use the standard inputs instead}
+     the value \code{NULL} in the associated list element will use the standard inputs instead. 
+     Alternatively, if specified the names of the elements to this list can be used to match the 
+     rownames of the \code{df} object to avoid the use of \code{NULL} placeholders. See \code{shinyStems}
+     for an example of this behaviour.}
      
    \item{\code{choiceValues}}{associated values to be used along with \code{choiceNames} (see above)}
      

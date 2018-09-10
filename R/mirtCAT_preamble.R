@@ -83,10 +83,18 @@ mirtCAT_preamble_internal <-
                         To avoid, use stringsAsFactors = FALSE in your data.frame',
                         call.=FALSE)
             nitems <- nrow(df)
+            df_rownames <- rownames(df)
             df <- lapply(df, as.character)
             df$Rendered_Question <- lapply(df$Question, function(x, fun) shiny::withMathJax(fun(x)),
                                   fun=shinyGUI$stem_default_format)
             if(length(shinyStems)){
+                if(length(names(shinyStems)) > 0L && any(names(shinyStems) %in% df_rownames)){
+                    tmp <- vector('list', nitems)
+                    names(tmp) <- df_rownames
+                    for(nm in names(shinyStems))
+                        tmp[[nm]] <- shinyStems[[nm]]
+                    shinyStems <- tmp
+                }
                 stopifnot(is.list(shinyStems))
                 stopifnot(length(shinyStems) == nitems)
                 for(i in 1L:nitems){
@@ -97,6 +105,20 @@ mirtCAT_preamble_internal <-
             if(length(customTypes)){
                 pick <- df$Type %in% names(customTypes)
                 df$Rendered_Question[pick] <- ''
+            }
+            if(length(names(shinyGUI$choiceNames)) > 0L && any(names(shinyGUI$choiceNames) %in% df_rownames)){
+                tmp <- vector('list', nitems)
+                names(tmp) <- df_rownames
+                for(nm in names(shinyGUI$choiceNames))
+                    tmp[[nm]] <- shinyGUI$choiceNames[[nm]]
+                shinyGUI$choiceNames <- tmp
+            }
+            if(length(names(shinyGUI$choiceValues)) > 0L && any(names(shinyGUI$choiceValues) %in% df_rownames)){
+                tmp <- vector('list', nitems)
+                names(tmp) <- df_rownames
+                for(nm in names(shinyGUI$choiceValues))
+                    tmp[[nm]] <- shinyGUI$choiceValues[[nm]]
+                shinyGUI$choiceValues <- tmp
             }
             if(is.null(shinyGUI$choiceNames))
                 shinyGUI$choiceNames <- shinyGUI$choiceValues <- vector('list', nitems)

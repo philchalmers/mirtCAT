@@ -1,5 +1,8 @@
 # mirtCAT 1.8
 
+- list inputs `shinyStems`, `choiceValues`, and `choiceNames` can accept named input elements
+  that match the associated rownames in the `df` input to avoid the use of placeholders
+
 - `shinyStems` list argument has been added `mirtCAT()` to allow for HTML-based input of 
   the stems for ease of use. This deprecates the previousd `df$StemExpressions` format 
   in favor of a more natural list input approach
