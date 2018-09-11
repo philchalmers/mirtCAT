@@ -2,6 +2,16 @@
 .MCE$complete <- TRUE
 .MCE$prevClick <- as.integer(NA)
 
+#' Get the interal working enviroment state during mirtCAT session
+#' 
+#' This function is used to access the internal state of the mirtCAT GUI session. 
+#' It is only useful when designing a customized GUI using the \code{shinyGUI$ui}
+#' input to \code{\link{mirtCAT}}.
+#' 
+#' @export
+#' @return a list containing the internal enviromental components for mirtCAT
+get_mirtCAT_env <- function() return(as.list(.MCE))
+
 FI <- function(mirt_item, Theta){
     .Call('ItemInfo', mirt_item, Theta)
 }
