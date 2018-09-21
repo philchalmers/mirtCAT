@@ -56,7 +56,15 @@ type of response format, questions, options, answers, and stems:
     to use on an as-per-needed basis.} 
   
   \item{\code{Question}}{A character vector containing all the questions or stems to be generated.
-    For more flexible stems that can be build based on HTML tags, see the \code{shinyStems} input
+    By default these character vectors are passed to \code{\link{HTML}}, and therefore allow for 
+    HTML tags to be included directly. For example, the following example defines two stems, 
+    where the second uses an emphasis tag to provide italics.
+    
+    \code{Question = c('This is the first item stem.', 'This is the <em>second</em> item stem.'))}
+    
+    For an alternative and equally flexible approach to
+    defining stems that can be build based on building HTML tags using R functions
+    see the \code{shinyStems} input
     }
     
   \item{\code{Option.#}}{Names pertaining to the possible response
