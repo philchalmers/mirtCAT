@@ -13,7 +13,7 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 results <- mirtCAT(df = df)
 summary(results)
 
-# HTML tags, not forced
+# manual HTML tags, not forced
 df2 <- df
 questions <- c("Building <strong>CATs</strong> with mirtCAT is <br> <br> difficult.",
                "mirtCAT requires a substantial amount of coding.",
@@ -28,19 +28,14 @@ df2$Mastery <- c(TRUE, FALSE, FALSE)
 results <- mirtCAT(df = df2)
 summary(results)
 
-# shinyStems
-questions <- c(NA,
+# character coercion of R HTML constructors
+questions <- c(as.character(div(strong('Something'), br(), strong('Something'))),
                "mirtCAT requires a substantial amount of coding.",
                "I would use mirtCAT in my research.")
-shinyStems <- list(div(strong('Something'),br(), strong('Something')), NULL, NULL)
 df3 <- data.frame(Question = questions, Option = options, Type = "radio")
 
-results <- mirtCAT(df = df3, shinyStems=shinyStems)
+results <- mirtCAT(df = df3)
 summary(results)
-
-# same, but with names
-shinyStems <- list("1" = div(strong('Something'),br(), strong('Something')))
-results <- mirtCAT(df = df3, shinyStems=shinyStems)
 
 #theme
 results <- mirtCAT(df = df, shinyGUI = list(theme = 'journal'))
@@ -82,20 +77,6 @@ choiceNames <- list(
 )
 choiceValues = list(
     list("icon", "html", "text"), NULL, NULL)
-results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE, 
-                                             choiceNames=choiceNames,
-                                             choiceValues=choiceValues))
-summary(results2)
-
-# same, but with selection
-choiceNames <- list(
-    "1" = list(
-        icon("calendar"),
-        HTML("<p style='color:red;'>Red Text</p>"),
-        "Normal text")
-)
-choiceValues = list(
-    "1"=list("icon", "html", "text"))
 results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE, 
                                              choiceNames=choiceNames,
                                              choiceValues=choiceValues))
@@ -184,29 +165,29 @@ df <- data.frame(Question = c("", "", "Just a standard stem."), Option = options
 results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # expressions
-df <- data.frame(Question = "", 
+df <- data.frame(Question = c("", as.character(h1("My header")), 
+                              as.character(tags$b("This text is bold."))), 
                  Option = options, Type = "radio",
                  Stem = c('Math-stem.html', '', ''))
-shinyStems <- list(NULL, h1("My header"), tags$b("This text is bold."))
-results <- mirtCAT(df = df, shinyStems=shinyStems, shinyGUI = list(forced_choice = FALSE))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # divs
-df <- data.frame(Option = options, Type = "radio")
-shinyStems <- list(div(HTML("Here is <strong>one</strong> way to insert <em>arbitrary</em> HTML.")), 
-                   div(tags$style("#text { font-size: 35px; height: 200px; overflow: auto; }"), 
-                                      div(id = "text", paste(names(tags), collapse = ", "))), 
-                   div(tags$style("#text { font-size: 20px; height: 65px; overflow: auto; }"), 
-                                         div(id = "text", paste(names(tags), collapse = ", "))))
-results <- mirtCAT(df = df, shinyStems=shinyStems, shinyGUI = list(forced_choice = FALSE))
+df <- data.frame(Question = sapply(list(div(HTML("Here is <strong>one</strong> way to insert <em>arbitrary</em> HTML.")), 
+                                        div(tags$style("#text { font-size: 35px; height: 200px; overflow: auto; }"), 
+                                            div(id = "text", paste(names(tags), collapse = ", "))), 
+                                        div(tags$style("#text { font-size: 20px; height: 65px; overflow: auto; }"), 
+                                            div(id = "text", paste(names(tags), collapse = ", ")))), as.character)
+                     , 
+                 Option = options, Type = "radio")
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # table panels
-df <- data.frame(Question = c("", 'Something', ""),
+df <- data.frame(Question = c(as.character(tabsetPanel(tabPanel("Panel 1", "some text"), 
+                                                       tabPanel("Panel 2", "some more text"))),
+                              'Something', 
+                              as.character(tags$b("This text is bold."))),
                  Option = options, Type = "radio")
-shinyStems <- list(tabsetPanel(tabPanel("Panel 1", "some text"), 
-                               tabPanel("Panel 2", "some more text")), 
-                   NULL, 
-                   tags$b("This text is bold."))
-results <- mirtCAT(df = df, shinyStems=shinyStems, shinyGUI = list(forced_choice = FALSE))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # custom choices
 myfun <- function(inputId, df_row){
@@ -230,14 +211,14 @@ results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE),
 # audio/video
 dirname <- paste0(getwd(), '/www')
 shiny::addResourcePath('www', dirname)
-df <- data.frame(Option = options, Type = "radio",
+df <- data.frame(Question = c("", 
+                              as.character(tags$audio(src = "www/clip.mp3", type = "audio/mp3",
+                                                      autoplay = TRUE, controls = TRUE)),
+                              as.character(tags$video(src = "www/vid.mp4", type = "video/mp4",
+                                         controls = TRUE, height=260, width=260))),
+                              Option = options, Type = "radio",
                  Stem = c('Math-stem.html', '', ''))
-shinyStems <- list(NULL,
-                   tags$audio(src = "www/clip.mp3", type = "audio/mp3",
-                                    autoplay = TRUE, controls = TRUE), 
-                   tags$video(src = "www/vid.mp4", type = "video/mp4",
-                                    controls = TRUE, height=260, width=260))
-results <- mirtCAT(df = df, shinyStems=shinyStems, shinyGUI = list(forced_choice = FALSE))
+results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE))
 
 # checkbox input
 df <- data.frame(Question = questions, Option=options, Type = 'checkbox')

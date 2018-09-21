@@ -1,15 +1,12 @@
 # mirtCAT 1.8
 
 - default wrapper to `Questions` element in `df` input now uses `shiny::HTML` rather than the previous
-  `shiny::p`. This allows for HTML code to more naturally be included without the direct use of the
-  `shinyStems` list input
-
-- list inputs `shinyStems`, `choiceValues`, and `choiceNames` can accept named input elements
+  `shiny::p`. This allows for HTML code to more naturally be included, as well as the use of `shiny` 
+  tag constructor functions when used in concert with `as.character()`. This deprecates the previous
+  `df$StemExpressions` format 
+  
+- list inputs  for `choiceValues` and `choiceNames` can accept named input elements
   that match the associated rownames in the `df` input to avoid the use of placeholders
-
-- `shinyStems` list argument has been added `mirtCAT()` to allow for HTML-based input of 
-  the stems for ease of use. This deprecates the previousd `df$StemExpressions` format 
-  in favor of a more natural list input approach
 
 - The final page splash screen now removes the `Next` button to avoid confusion (suggested by 
   Daniel Sommerhoff). Applications must be explicitly closed now by the user, and consequently

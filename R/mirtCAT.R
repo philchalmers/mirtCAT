@@ -55,9 +55,12 @@
 #'       
 #'       \code{Question = c('This is the first item stem.', 'This is the <em>second</em> item stem.'))}
 #'       
-#'       For an alternative and equally flexible approach to
-#'       defining stems that can be build based on building HTML tags using R functions
-#'       see the \code{shinyStems} input
+#'       Alternatively, if tag constructor function are preferred these need only be wrapped within
+#'       a final call to \code{\link{as.character}} to coerce the shiny.tag expressions into suitable
+#'       character vectors of HTML code. For example, the above could be expressed as 
+#'
+#'       \code{Question = c('This is the first item stem.', 
+#'          as.character(div('This is the ', em('second'), ' item stem.')))}
 #'       }
 #'       
 #'     \item{\code{Option.#}}{Names pertaining to the possible response
@@ -100,33 +103,6 @@
 #'   questionnaires. The object can be constructed by using the 
 #'   \code{\link{generate.mirt_object}} function if population parameters are known or by
 #'   including a calibrated model estimated from the \code{\link{mirt}} function with real data.
-#'   
-#' @param shinyStems an optional list represent for the item stems based on HTML constructor
-#'    functions. This approach is much more verbose than the \code{Question} input from the 
-#'    \code{df} object, however it provides a great deal of customization, 
-#'    particularly through the use of \code{div()} and other helpful tags. When used, this list
-#'    must have the same number of elements as rows in the \code{df} object, and items that
-#'    should not use this input should be filled with \code{NULL}. Alternatively, if specified the
-#'    names of the elements to this list can be used to match the rownames of the \code{df} object
-#'    to avoid the use of NULL placeholders.
-#'       
-#'    E.g., the following would result in a bolded and italicized item stems for the first two items in a 
-#'    three item test: 
-#'    
-#'    \code{shinyStems <- list(strong('Stem 1'), em('Stem 2'), NULL)}
-#'    
-#'    Note that \code{\link{div}} tags are very useful to create flexible expressions that should be 
-#'    stacked; for example, \code{div(HTML("This is some HTML"), br(), HTML("And in the middle a line break")} 
-#'    can be used as a single element in the \code{shinyStems} list.
-#'    See \code{http://shiny.rstudio.com/articles/tag-glossary.html} for more examples of how
-#'    to use tags and HTML generating functions. Note that if names are supplied then the following is equivalent
-#'    (i.e., the NULL elements can be dropped)
-#'    
-#'    \code{shinyStems <- list("1"=strong('Stem 1'), "2"=em('Stem 2'))}
-#'    
-#'    assuming that respective items are named "1" and "2" in the \code{df} object.
-#'    
-#'    
 #'    
 #' @param method argument passed to \code{mirt::fscores()} for computing new scores in the CAT 
 #'   stage, with the addition of a \code{'fixed'} input to keep the latent trait estimates
@@ -535,8 +511,7 @@
 #'      suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
 #'      the value \code{NULL} in the associated list element will use the standard inputs instead. 
 #'      Alternatively, if specified the names of the elements to this list can be used to match the 
-#'      rownames of the \code{df} object to avoid the use of \code{NULL} placeholders. See \code{shinyStems}
-#'      for an example of this behaviour.}
+#'      rownames of the \code{df} object to avoid the use of \code{NULL} placeholders}
 #'      
 #'    \item{\code{choiceValues}}{associated values to be used along with \code{choiceNames} (see above)}
 #'      
@@ -731,7 +706,7 @@
 #' summary(res_MI)
 #' 
 #' #-----------------------------------------
-#' # HTML tags for better customization
+#' # HTML tags for better customization, coerced to characters for compatability
 #' 
 #' # help(tags, package='shiny')
 #' options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
@@ -739,11 +714,13 @@
 #' shinyStems <- list(HTML('Building CATs with mirtCAT is difficult.'),
 #'                div(HTML('mirtCAT requires a'), br(), HTML('substantial amount of coding.')),
 #'                div(strong('I would use'), HTML('mirtCAT in my research.')))
-#' df <- data.frame(Option = options, 
+#' questions <- sapply(shinyStems, as.character)
+#' df <- data.frame(Question=questions,
+#'                  Option = options, 
 #'                  Type = "radio",
 #'                  stringsAsFactors=FALSE)
 #'
-#' res <- mirtCAT(df, shinyStems=shinyStems)
+#' res <- mirtCAT(df)
 #' res
 #' 
 #' #-----------------------------------------
@@ -785,7 +762,7 @@
 #' 
 #' }
 mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq', 
-                    start_item = 1, local_pattern = NULL, shinyStems = list(), 
+                    start_item = 1, local_pattern = NULL, 
                     AnswerFuns = list(), design_elements = FALSE, cl = NULL, 
                     progress = FALSE, primeCluster = TRUE, customTypes = list(), 
                     design = list(), shinyGUI = list(), preCAT = list(), ...)
@@ -793,7 +770,7 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
     on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
              .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
              .MCE$preamble_defined <- NULL})
-    mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, shinyStems=shinyStems, 
+    mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, 
