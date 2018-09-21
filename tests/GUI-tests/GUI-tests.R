@@ -10,9 +10,15 @@ questions <- c("Building CATs with mirtCAT is difficult.",
                "mirtCAT requires a substantial amount of coding.",
                "I would use mirtCAT in my research.")
 df <- data.frame(Question = questions, Option = options, Type = "radio")
-
-# forced
 results <- mirtCAT(df = df)
+summary(results)
+
+# HTML tags, not forced
+df2 <- df
+questions <- c("Building <strong>CATs</strong> with mirtCAT is <br> <br> difficult.",
+               "mirtCAT requires a substantial amount of coding.",
+               "I would use mirtCAT in my research.")
+results <- mirtCAT(df = df2, shinyGUI=list(forced_choice = FALSE))
 summary(results)
 
 # correct answer scoring

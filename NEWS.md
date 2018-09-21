@@ -1,5 +1,9 @@
 # mirtCAT 1.8
 
+- default wrapper to `Questions` element in `df` input now uses `shiny::HTML` rather than the previous
+  `shiny::p`. This allows for HTML code to more naturally be included without the direct use of the
+  `shinyStems` list input
+
 - list inputs `shinyStems`, `choiceValues`, and `choiceNames` can accept named input elements
   that match the associated rownames in the `df` input to avoid the use of placeholders
 

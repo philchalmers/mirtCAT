@@ -50,7 +50,7 @@ mirtCAT_preamble_internal <-
         is_adaptive <- !is.null(mo)
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
         if(is.null(shinyGUI$stem_default_format)) 
-            shinyGUI$stem_default_format <- shiny::p
+            shinyGUI$stem_default_format <- shiny::HTML
         if(is.null(df)){
             if(is.null(mo)) stop('No df or mo supplied', call.=FALSE)
             if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied', 

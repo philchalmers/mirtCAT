@@ -487,7 +487,8 @@
 #'     the \code{demographics} default}
 #'     
 #'   \item{\code{stem_default_format}}{\code{shiny} function used for the stems of the items. Default uses the 
-#'     \code{\link{p}} wrapper. To change this to \code{\link{h5}}, for example, 
+#'     \code{\link{HTML}} wrapper, allowing for HTML tags to be included directly in the character vector 
+#'     definitions. To change this to something different, like \code{\link{h5}} for example, 
 #'     pass \code{stem_default_format = shiny::h5} to the \code{shinyGUI} list}
 #'     
 #'   \item{\code{temp_file}}{a character vector indicating where a temporary .rds file 
