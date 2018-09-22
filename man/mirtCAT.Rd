@@ -67,8 +67,21 @@ mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
       character vectors of HTML code. For example, the above could be expressed as 
 
       \code{Question = c('This is the first item stem.', 
-         as.character(div('This is the ', em('second'), ' item stem.')))}
-      }
+         as.character(div('This is the', em('second'), 'item stem.')))}
+      
+      Moreover, because this input must be a character vector, the use of \code{\link{sapply}} in 
+      concert with \code{\link{as.character}} can apply this conversion to all elements (often
+      redundantly). Here's an example of this format:
+
+      \preformatted{
+                    Question = sapply(list('This is the first item stem.',
+                        div('This is the', em('second'), 'item stem.'),
+                        div('This is the', strong('third'), br(), br(), 'item stem.'),
+                        div('Fourth with some code:', code('obj <- 42'))),
+                    as.character)
+       }
+     }
+    
       
     \item{\code{Option.#}}{Names pertaining to the possible response
       options for each item, where the # corresponds to the specific category. For
