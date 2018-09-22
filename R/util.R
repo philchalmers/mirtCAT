@@ -270,7 +270,13 @@ formatTime <- function(delta){
     out
 }
 
-last_item <- function(items_answered) items_answered[max(which(!is.na(items_answered)))]
+last_item <- function(items_answered){
+    not_na <- !is.na(items_answered)
+    ret <- if(any(not_na)){
+        items_answered[max(which(not_na))]
+    } else 0L
+    ret
+}
 
 # TODO this can be modified to accept other info (as well as 'start')
 possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
