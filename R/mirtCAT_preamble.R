@@ -85,7 +85,7 @@ mirtCAT_preamble_internal <-
             nitems <- nrow(df)
             df_rownames <- rownames(df)
             df <- lapply(df, as.character)
-            df$Rendered_Question <- lapply(df$Question, function(x, fun) shiny::withMathJax(fun(x)),
+            df$Rendered_Question <- lapply(df$Question, function(x, fun) if(x != "") shiny::withMathJax(fun(x)),
                                   fun=shinyGUI$stem_default_format)
             if(length(customTypes)){
                 pick <- df$Type %in% names(customTypes)

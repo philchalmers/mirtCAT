@@ -50,7 +50,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               } else {
                                   stem_locations <<- as.character(sapply(shinyGUI$stem_locations, 
                                     function(x){                                        
-                                        ret <- if(!is.na(x)){
+                                        ret <- if(!is.na(x) && x != ""){
                                             org <- x
                                             exsts <- file.exists(x)
                                             if(!exsts){
