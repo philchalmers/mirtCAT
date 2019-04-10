@@ -1,6 +1,17 @@
 .MCE <- new.env(parent=emptyenv())
-.MCE$complete <- TRUE
-.MCE$prevClick <- as.integer(NA)
+
+#' Create a unique GUI session name from a string of characters
+#' 
+#' This is used in \code{\link{mirtCAT}} to create a random session name so that
+#' \code{shiny} knows which enviroment to select objects from when multiple CAT
+#' sessions have been initialized.
+#' 
+#' @param n number of upper/lower characters to sample
+#' 
+#' @export
+#' @return a list containing the internal enviromental components for mirtCAT
+createSessionName <- function(n = 30)
+    paste0(sapply(1:n, function(x) sample(c(LETTERS, letters), 1L)), collapse='')
 
 #' Get the interal working enviroment state during mirtCAT session
 #' 
@@ -8,9 +19,11 @@
 #' It is only useful when designing a customized GUI using the \code{shinyGUI$ui}
 #' input to \code{\link{mirtCAT}}.
 #' 
+#' @param sessionName the name of the session defined in \code{\link{mirtCAT}}
+#' 
 #' @export
 #' @return a list containing the internal enviromental components for mirtCAT
-get_mirtCAT_env <- function() return(as.list(.MCE))
+get_mirtCAT_env <- function(sessionName) return(as.list(.MCE[[sessionName]]))
 
 FI <- function(mirt_item, Theta){
     .Call('ItemInfo', mirt_item, Theta)
@@ -289,17 +302,17 @@ possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
     tmp
 }
 
-stemContent <- function(pick){
-    if(!is.na(.MCE$shinyGUI$stem_expressions[pick])){
-        return(eval(parse(text=.MCE$shinyGUI$stem_expressions[pick])))
+stemContent <- function(pick, sessionName){
+    if(!is.na(.MCE[[sessionName]]$shinyGUI$stem_expressions[pick])){
+        return(eval(parse(text=.MCE[[sessionName]]$shinyGUI$stem_expressions[pick])))
     } else {
-        file <- .MCE$shinyGUI$stem_locations[pick]
+        file <- .MCE[[sessionName]]$shinyGUI$stem_locations[pick]
         empty <- is.na(file)
         if(!empty){
             if(grepl('\\.[mM][dD]$', file)){
-                suppressWarnings(markdown::markdownToHTML(file=file, output=.MCE$outfile2, 
+                suppressWarnings(markdown::markdownToHTML(file=file, output=.MCE[[sessionName]]$outfile2, 
                                                           fragment.only = TRUE))
-                contents <- readLines(.MCE$outfile2, warn = FALSE)
+                contents <- readLines(.MCE[[sessionName]]$outfile2, warn = FALSE)
                 return(HTML(contents))
             } else if(grepl('\\.[hH][tT][mM][lL]$', file)){
                 contents <- readLines(file, warn = FALSE)
@@ -316,7 +329,7 @@ verifyPassword <- function(input, password){
         input$PaSsWoRd %in% password
     } else {
         tmp <- subset(password, password[,1L] == input$UsErNaMe)
-        .MCE$person$login_name <- input$UsErNaMe
+        .MCE[[sessionName]]$person$login_name <- input$UsErNaMe
         input$PaSsWoRd %in% tmp[,-1L]
     }
     verified

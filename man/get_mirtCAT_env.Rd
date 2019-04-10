@@ -4,7 +4,10 @@
 \alias{get_mirtCAT_env}
 \title{Get the interal working enviroment state during mirtCAT session}
 \usage{
-get_mirtCAT_env()
+get_mirtCAT_env(sessionName)
+}
+\arguments{
+\item{sessionName}{the name of the session defined in \code{\link{mirtCAT}}}
 }
 \value{
 a list containing the internal enviromental components for mirtCAT

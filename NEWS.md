@@ -1,3 +1,11 @@
+# mirtCAT 1.9
+
+- Allow multiple CAT session to be run during the same R session. This is primarily an update 
+  for users interested in hosting `mirtCAT` on a single server where multiple users can be processed
+  at the same time
+  
+- Fix `design_elements` global dependency between objects (reported by Felix Fisher)
+
 # mirtCAT 1.8
 
 - default wrapper to `Questions` element in `df` input now uses `shiny::HTML` rather than the previous

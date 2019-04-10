@@ -11,7 +11,8 @@ mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
   start_item = 1, local_pattern = NULL, AnswerFuns = list(),
   design_elements = FALSE, cl = NULL, progress = FALSE,
   primeCluster = TRUE, customTypes = list(), design = list(),
-  shinyGUI = list(), preCAT = list(), ...)
+  shinyGUI = list(), preCAT = list(),
+  sessionName = createSessionName(), ...)
 
 \method{print}{mirtCAT}(x, ...)
 
@@ -587,6 +588,9 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
       response pattern (i.e., when maximum-likelihood estimation contains a potential optimum)?
       Default is FALSE}
 }}
+
+\item{sessionName}{a unique name used to track the internal CAT objects through \code{shiny}. 
+By default the function \code{\link{createSessionName}} is called to create a unique name}
 
 \item{...}{additional arguments to be passed to \code{\link{mirt}}, \code{\link{fscores}}, 
 \code{\link{runApp}}, or \code{lattice}}

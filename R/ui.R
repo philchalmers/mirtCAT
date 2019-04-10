@@ -1,31 +1,32 @@
-default_UI <- function(){
+default_UI <- function(sessionName){
     
-    fluidPage(theme = if(.MCE$shinyGUI$theme != '') 
+    fluidPage(theme = if(.MCE[[sessionName]]$shinyGUI$theme != '') 
         if(requireNamespace("shinythemes", quietly = TRUE)){
-            shinythemes::shinytheme(.MCE$shinyGUI$theme)
+            shinythemes::shinytheme(.MCE[[sessionName]]$shinyGUI$theme)
         } else NULL, 
         
         shiny::withMathJax(),
         
         tags$head(
-            tags$style(HTML(.MCE$shinyGUI$css))
+            tags$style(HTML(.MCE[[sessionName]]$shinyGUI$css))
         ),
         
         #  Application title
-        headerPanel(.MCE$shinyGUI$title),
+        headerPanel(.MCE[[sessionName]]$shinyGUI$title),
         
-        if(is.finite(.MCE$design@max_time)){
-            h6(paste0(.MCE$shinyGUI$time_remaining, 
-                      formatTime(.MCE$design@max_time - sum(.MCE$person$item_time))))
+        if(is.finite(.MCE[[sessionName]]$design@max_time)){
+            h6(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining, 
+                      formatTime(.MCE[[sessionName]]$design@max_time - 
+                                     sum(.MCE[[sessionName]]$person$item_time))))
         } else NULL,
         
         sidebarPanel(
-            if(.MCE$shinyGUI$author != '') h4("Authors:") else NULL,
-            if(.MCE$shinyGUI$author != '') h5(.MCE$shinyGUI$author) else NULL,
+            if(.MCE[[sessionName]]$shinyGUI$author != '') h4("Authors:") else NULL,
+            if(.MCE[[sessionName]]$shinyGUI$author != '') h5(.MCE[[sessionName]]$shinyGUI$author) else NULL,
             div(
-                if(.MCE$shinyGUI$author != '') hr() else NULL,
-                helpText("\n", .MCE$shinyGUI$instructions[1L]),            
-                actionButton("Next", .MCE$shinyGUI$instructions[2L])
+                if(.MCE[[sessionName]]$shinyGUI$author != '') hr() else NULL,
+                helpText("\n", .MCE[[sessionName]]$shinyGUI$instructions[1L]),            
+                actionButton("Next", .MCE[[sessionName]]$shinyGUI$instructions[2L])
             )
         ),
         

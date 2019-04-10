@@ -195,6 +195,9 @@
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 #'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
 #'   
+#' @param sessionName a unique name used to track the internal CAT objects through \code{shiny}. 
+#'   By default the function \code{\link{createSessionName}} is called to create a unique name
+#'   
 #' @param customTypes an optional list input containing functions for Designing Original Graphical Stimuli (DOGS).
 #'   DOGS elements in the input list must contain a unique name, and the item with which it is associated must be
 #'   declared in the a \code{df$Type} input. The functions defined must be of the form
@@ -778,32 +781,44 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                     start_item = 1, local_pattern = NULL, 
                     AnswerFuns = list(), design_elements = FALSE, cl = NULL, 
                     progress = FALSE, primeCluster = TRUE, customTypes = list(), 
-                    design = list(), shinyGUI = list(), preCAT = list(), ...)
+                    design = list(), shinyGUI = list(), preCAT = list(), 
+                    sessionName = createSessionName(), ...)
 {   
-    on.exit({.MCE$person <- .MCE$test <- .MCE$design <- .MCE$shinyGUI <- .MCE$start_time <- 
-             .MCE$STOP <- .MCE$outfile <- .MCE$outfile2 <- .MCE$last_demographics <- 
-             .MCE$preamble_defined <- NULL})
+    .MCE[[sessionName]]$complete <- TRUE
+    .MCE[[sessionName]]$prevClick <- as.integer(NA)
+    on.exit({.MCE[[sessionName]]$person <- .MCE[[sessionName]]$test <- 
+        .MCE[[sessionName]]$design <- .MCE[[sessionName]]$shinyGUI <- 
+        .MCE[[sessionName]]$start_time <- .MCE[[sessionName]]$STOP <- 
+        .MCE[[sessionName]]$outfile <- .MCE[[sessionName]]$outfile2 <- 
+        .MCE[[sessionName]]$last_demographics <- 
+        .MCE[[sessionName]]$preamble_defined <- NULL})
+    GUI <- is.null(local_pattern)
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, 
-                     customTypes=customTypes, ...)
+                     customTypes=customTypes, sessionName=sessionName, ...)
     if(design_elements){
-        ret <- list(person=.MCE$person, test=.MCE$test, design=.MCE$design)
+        ret <- list(person=.MCE[[sessionName]]$person, 
+                    test=.MCE[[sessionName]]$test, 
+                    design=.MCE[[sessionName]]$design)
         class(ret) <- "mirtCAT_design"
         return(ret)
     }
-    if(is.null(local_pattern)){
-        runApp(createShinyGUI(ui=.MCE$shinyGUI$ui), launch.browser=TRUE, ...)
-        person <- .MCE$person
-        GUI <- TRUE
+    if(GUI){
+        runApp(createShinyGUI(sessionName=sessionName, 
+                              ui=.MCE[[sessionName]]$shinyGUI$ui), launch.browser=TRUE, ...)
+        person <- .MCE[[sessionName]]$person
     } else {
         if(length(AnswerFuns)) 
             stop('AnswerFuns cannot be used for off-line runs', call.=FALSE)
-        person <- run_local(.MCE$local_pattern, nfact=.MCE$test@nfact, start_item=start_item,
-                            nitems=length(.MCE$test@itemnames), cl=cl, primeCluster=primeCluster,
-                            thetas.start_in=design$thetas.start, score=.MCE$score, 
-                            design=.MCE$design, test=.MCE$test, progress=progress)
+        person <- run_local(.MCE[[sessionName]]$local_pattern, 
+                            nfact=.MCE[[sessionName]]$test@nfact, start_item=start_item,
+                            nitems=length(.MCE[[sessionName]]$test@itemnames), 
+                            cl=cl, primeCluster=primeCluster,
+                            thetas.start_in=design$thetas.start, score=.MCE[[sessionName]]$score, 
+                            design=.MCE[[sessionName]]$design, test=.MCE[[sessionName]]$test, 
+                            progress=progress)
         if(!is.null(attr(local_pattern, 'Theta'))){
             local_Thetas <- attr(local_pattern, 'Theta')
             if(length(person) == 1L) 
@@ -811,9 +826,9 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
             for(i in seq_len(length(person)))
                 person[[i]]$true_thetas <- local_Thetas[i, ]
         }
-        GUI <- FALSE
     }
-    ret <- mirtCAT_post_internal(person=person, design=.MCE$design, 
-                                 has_answers=.MCE$test@has_answers, GUI=GUI)
+    ret <- mirtCAT_post_internal(person=person, design=.MCE[[sessionName]]$design, 
+                                 has_answers=.MCE[[sessionName]]$test@has_answers, GUI=GUI,
+                                 sessionName=sessionName)
     return(ret)
 }
