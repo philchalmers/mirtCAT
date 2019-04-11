@@ -39,6 +39,7 @@
 #' 
 #' }
 mirtCAT_preamble <- function(sessionName, ..., final_fun = NULL){
+    if(missing(sessionName)) stop('Must specify sessionName')
     return(mirtCAT_preamble_internal(sessionName = sessionName, 
                                      final_fun = final_fun, ...))
 }

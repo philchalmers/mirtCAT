@@ -29,14 +29,16 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' mirtCAT_preamble(df = df)
+#' sessionName <- 'My session'
+#' mirtCAT_preamble(sessionName=sessionName, df=df)
 #' runApp(createShinyGUI(), port = 8000)
 #' 
-#' person <- getPerson()
+#' person <- getPerson(sessionName)
 #' summary(person)
 #' 
 #' } 
 createShinyGUI <- function(sessionName, ui = NULL){
+    if(missing(sessionName)) stop('Must specify sessionName')
     on.exit(.MCE[[sessionName]]$preamble_defined <- .MCE[[sessionName]]$start_time <- NULL)
     if(is.null(.MCE[[sessionName]]$preamble_defined))
         stop('Please use a fresh mirtCAT_preamble() call prior to calling createShinyGUI().')

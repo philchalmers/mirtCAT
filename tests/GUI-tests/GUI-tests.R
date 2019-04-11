@@ -106,14 +106,15 @@ results <- mirtCAT(df = df, shinyGUI = list(temp_file = 'thisfile.rds')) #this r
 summary(results)
 
 ## two step hosting
+sessionName <- 'My session'
 my_fun <- function(person) cat('Hello world\n')
-mirtCAT_preamble(df, final_fun = my_fun)
-runApp(createShinyGUI(), port = 8000)
-person <- getPerson()
+mirtCAT_preamble(sessionName=sessionName, df=df, final_fun = my_fun)
+runApp(createShinyGUI(sessionName=sessionName), port = 8000)
+person <- getPerson(sessionName=sessionName)
 summary(person)
 
 # custom UI
-myUI <- function(){
+myUI <- function(sessionName){
     fluidPage(
         
         shiny::withMathJax(), 
@@ -129,8 +130,8 @@ myUI <- function(){
     ) #end bootstrapPage
 }
 
-mirtCAT_preamble(df)
-runApp(createShinyGUI(ui=myUI), port = 8000)
+mirtCAT_preamble(sessionName=sessionName, df=df)
+runApp(createShinyGUI(sessionName=sessionName, ui=myUI), port = 8000)
 person2 <- mirtCAT(df=df, shinyGUI=list(ui=myUI))
 summary(person2)
 

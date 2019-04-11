@@ -21,10 +21,11 @@ run \emph{before} this function is called. The object is executed by calling \co
 \examples{
 \dontrun{
 
-mirtCAT_preamble(df = df)
+sessionName <- 'My session'
+mirtCAT_preamble(sessionName=sessionName, df=df)
 runApp(createShinyGUI(), port = 8000)
 
-person <- getPerson()
+person <- getPerson(sessionName)
 summary(person)
 
 } 

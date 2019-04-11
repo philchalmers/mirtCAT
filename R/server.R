@@ -72,7 +72,7 @@ server <- function(input, output, session) {
         if(.MCE[[sessionName]]$resume_file){
             .MCE[[sessionName]]$resume_file <- FALSE
             item <- max(which(!is.na(.MCE[[sessionName]]$person$items_answered)))
-            stemOutput <- stemContent(item)
+            stemOutput <- stemContent(item, sessionName=sessionName)
             return(list(stemOutput,.MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[item]], 
                         .MCE[[sessionName]]$shinyGUI$questions[[item]]))
         }
@@ -138,7 +138,7 @@ server <- function(input, output, session) {
                                                       choiceNames=.MCE[[sessionName]]$shinyGUI$choiceNames[pick],
                                                       choiceValues=.MCE[[sessionName]]$shinyGUI$choiceValues[pick],
                                                       default = ip)
-                            stemOutput <- stemContent(pick)
+                            stemOutput <- stemContent(pick, sessionName=sessionName)
                             .MCE[[sessionName]]$prevClick <- click
                             return(list(stemOutput, 
                                         .MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[pick]], 
@@ -168,7 +168,7 @@ server <- function(input, output, session) {
                                                   choiceNames=.MCE[[sessionName]]$shinyGUI$choiceNames[pick],
                                                   choiceValues=.MCE[[sessionName]]$shinyGUI$choiceValues[pick],
                                                   default = ip)
-                        stemOutput <- stemContent(pick)
+                        stemOutput <- stemContent(pick, sessionName=sessionName)
                         .MCE[[sessionName]]$prevClick <- click
                         return(list(stemOutput, 
                                     .MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[pick]], 

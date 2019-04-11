@@ -3,6 +3,8 @@
 #' This function returns a suitable person object identical to the result returned by \code{\link{mirtCAT}},
 #' and is only required when the GUI is launched by the \code{\link{createShinyGUI}} method.
 #' 
+#' @param sessionName the unique name of the session (see \code{\link{mirtCAT}} for details)
+#' 
 #' @export getPerson
 #' 
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
@@ -21,14 +23,19 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' mirtCAT_preamble(df = df)
+#' sessionName <- 'My session'
+#' mirtCAT_preamble(sessionName=sessionName, df=df)
 #' runApp(createShinyGUI(), port = 8000)
 #' 
-#' person <- getPerson()
+#' person <- getPerson(sessionName)
 #' summary(person)
 #' } 
-getPerson <- function(){
-    ret <- mirtCAT_post_internal(person=.MCE$person, design=.MCE$design,
-                                 has_answers=.MCE$test@has_answers, GUI=TRUE)
+getPerson <- function(sessionName){
+    if(missing(sessionName)) stop('Must specify sessionName')
+    ret <- mirtCAT_post_internal(person=.MCE[[sessionName]]$person, 
+                                 design=.MCE[[sessionName]]$design,
+                                 has_answers=.MCE[[sessionName]]$test@has_answers, 
+                                 GUI=TRUE,
+                                 sessionName=sessionName)
     ret
 }
