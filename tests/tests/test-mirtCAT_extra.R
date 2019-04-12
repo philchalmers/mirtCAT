@@ -81,7 +81,7 @@ test_that('extra', {
     res <- mirtCAT(mo = mod2, criteria = 'MI', start_item = 1, 
                    local_pattern = matrix(sample(c(0,1), 50, TRUE), 1), 
                    design = list(customNextItem=customNextItem, constr_fun=constr_fun))
-    expect_equal(res$items_answered, c(1,20,41,15,27,2,5,6,21,14,24,29,39,23,22,32,34,8,40,17))
+    expect_equal(res$items_answered, c(1,20,41,15,5,2,27,14,21,6,24,29,39,23,32,34,22,8,11,13))
     
     design <- list(min_items = 10, max_items = 45,
                    constraints = list(
@@ -94,7 +94,7 @@ test_that('extra', {
     set.seed(1)
     res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = 1,
                    local_pattern = matrix(rep(0, 50), 1))
-    expect_equal(res$items_answered, c(1,18,19,20,24,15,16,17,50,7,25,9,43,10,12,11,44,49,48,35,36,37,46,42,6,29,13,26,34,32,30,38,39,21,45,23,22,28,5,8,4,14,47,40,31))
+    expect_equal(res$items_answered, c(1,18,19,20,24,15,16,17,50,7,25,9,43,11,12,10,44,49,48,35,36,37,46,42,6,29,13,26,34,32,30,38,39,21,45,23,22,28,5,8,4,14,47,40,31))
     
     res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = c(1, 3),
                    local_pattern = matrix(rep(c(0,1), 50), 2))
@@ -104,12 +104,12 @@ test_that('extra', {
     set.seed(1)
     res <- mirtCAT(mo = mod2, criteria = 'MI', design = design, start_item = 'random',
                    local_pattern = matrix(rep(c(0,1), 50), 2))
-    expect_equal(res[[1]]$items_answered[1], 46)
-    expect_equal(res[[2]]$items_answered[1], 11)
+    expect_equal(res[[1]]$items_answered[1], 10)
+    expect_equal(res[[2]]$items_answered[1], 42)
     
     res <- mirtCAT(mo = mod2, criteria = 'MI', start_item = c('MI', 'random'),
                    local_pattern = matrix(rep(c(0,1), 50), 2))
     expect_equal(res[[1]]$items_answered[1], 20)
-    expect_equal(res[[2]]$items_answered[1], 45)
+    expect_equal(res[[2]]$items_answered[1], 13)
     
 })

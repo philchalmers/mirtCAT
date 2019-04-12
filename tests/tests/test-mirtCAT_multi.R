@@ -18,6 +18,7 @@ test_that('multidimensional', {
     sv$value[sv$name == 'd'] <- d[,1]
     sv$value[sv$name == 'COV_21'] <- 0.5
     mod2 <- mirt(dat, 2, pars = sv, TOL = NaN)
+    mod2@Options$exploratory <- FALSE
     
     # simple math items
     questions <- answers <- character(nitems)
