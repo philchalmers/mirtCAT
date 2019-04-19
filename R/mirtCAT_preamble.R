@@ -236,7 +236,8 @@ mirtCAT_post_internal <- function(person, design, has_answers = FALSE, GUI = FAL
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics,
                     terminated_sucessfully=person[[i]]$terminated_sucessfully,
-                    GUI=GUI)
+                    GUI=GUI,
+                    clientData = if(GUI) person[[i]]$clientData)
         if(length(person[[i]]$true_thetas))
             ret$true_thetas <- person[[i]]$true_thetas
         if(!is.nan(design@classify[1L])){

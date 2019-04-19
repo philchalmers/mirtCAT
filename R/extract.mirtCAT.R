@@ -25,6 +25,7 @@
 #'     previously administered items}
 #'   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
 #'     participant to response to the item}
+#'   \item{\code{clientData}}{a list of useful information from shiny's \code{session$clientData}}
 #' }
 #' 
 #' @section The 'design' argument:
@@ -171,7 +172,8 @@ extract.mirtCAT <- function(x, what){
                items_in_bank = which(is.na(x$responses)[x$valid_item]),
                thetas = x$thetas,
                thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
-               item_time = x$item_time)
+               item_time = x$item_time,
+               clientData = x$clientData)
     } else if(cls == 'Test'){
         switch(what, mo = x@mo)
     } else if(cls == 'Design'){

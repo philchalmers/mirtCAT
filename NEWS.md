@@ -1,5 +1,9 @@
 # mirtCAT 1.9
 
+- Added a element to `person` objects and results return from GUI version of `mirtCAT()` called
+  `clientData`, which pertains to the character vector information from shiny's `session$clientData`
+  component (requested by Felix Fischer and Daniel Sommerhoff)
+
 - Allow multiple CAT session to be run during the same R session. This is primarily an update 
   for users interested in hosting `mirtCAT` on a single server where multiple users can be processed
   at the same time

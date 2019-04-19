@@ -20,6 +20,17 @@ server <- function(input, output, session) {
         
         click <- input$Next
         
+        if(!length(.MCE[[sessionName]]$person$clientData)){
+            .MCE[[sessionName]]$person$clientData <- 
+                list(url_hostname = session$clientData$url_hostname, 
+                     url_port = session$clientData$url_port, 
+                     url_pathname = session$clientData$url_pathname, 
+                     url_search = session$clientData$url_search, 
+                     url_hash_initial = session$clientData$url_hash_initial,
+                     url_hash = session$clientData$url_hash 
+                )
+        }
+        
         if(length(.MCE[[sessionName]]$shinyGUI$password)){
             if(click == 0L){
                 if(nrow(.MCE[[sessionName]]$shinyGUI$password) > 1L)

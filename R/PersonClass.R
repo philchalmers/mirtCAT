@@ -16,6 +16,7 @@ Person <- setRefClass("Person",
                                     score = 'logical',
                                     true_thetas = 'numeric',
                                     info_thetas_cov = 'matrix',
+                                    clientData = 'list',
                                     terminated_sucessfully = 'logical'),
                       
                       methods = list(
