@@ -44,6 +44,8 @@ setMethod("initialize", signature(.Object = "Test"),
               .Object@AnswerFuns <- AnswerFuns
               .Object@item_options <- item_options
               .Object@length <- length(.Object@item_answers)
+              if(.Object@length != mirt::extract.mirt(mo, 'nitems'))
+                  stop('Rows of df object not equal to number of items in mirt object', call.=FALSE)
               .Object@nfact <- mo@Model$nfact
               if(is.null(quadpts_in)) 
                   .Object@quadpts <- switch(as.character(.Object@nfact), 

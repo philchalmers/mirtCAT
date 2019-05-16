@@ -40,6 +40,7 @@ Depending on which object is supplied, the following elements can be extracted.
     previously administered items}
   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
     participant to response to the item}
+  \item{\code{clientData}}{a list of useful information from shiny's \code{session$clientData}}
 }
 }
 
