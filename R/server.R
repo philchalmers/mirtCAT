@@ -38,7 +38,9 @@ server <- function(input, output, session) {
                                 passwordInput('PaSsWoRd', 'Password:')))
                 else return(passwordInput('PaSsWoRd', 'Password:'))
             } else if(click == 1L){
-                .MCE[[sessionName]]$verified <- verifyPassword(input, .MCE[[sessionName]]$shinyGUI$password)
+                .MCE[[sessionName]]$verified <- verifyPassword(input, 
+                                                               .MCE[[sessionName]]$shinyGUI$password,
+                                                               sessionName)
             }
             click <- click - 1L
         }

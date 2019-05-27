@@ -323,7 +323,7 @@ stemContent <- function(pick, sessionName){
     NULL
 }
 
-verifyPassword <- function(input, password){
+verifyPassword <- function(input, password, sessionName){
     nr <- nrow(password)
     verified <- if(nr == 1L){
         input$PaSsWoRd %in% password
