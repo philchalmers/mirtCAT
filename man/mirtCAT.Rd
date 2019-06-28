@@ -858,8 +858,10 @@ Multidimensional Item Response Theory Applications. \emph{Journal of Statistical
 \author{
 Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
-\keyword{CAT,}
-\keyword{MCAT,}
 \keyword{adaptive}
 \keyword{computerized}
-\keyword{testing}
+\keyword{item}
+\keyword{multidimensional}
+\keyword{response}
+\keyword{testing,}
+\keyword{theory}

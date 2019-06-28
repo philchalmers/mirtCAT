@@ -1,4 +1,4 @@
-# mirtCAT 1.9
+# mirtCAT 1.9.2
 
 - Added a element to `person` objects and results return from GUI version of `mirtCAT()` called
   `clientData`, which pertains to the character vector information from shiny's `session$clientData`
