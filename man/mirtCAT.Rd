@@ -860,8 +860,4 @@ Phil Chalmers \email{rphilip.chalmers@gmail.com}
 }
 \keyword{adaptive}
 \keyword{computerized}
-\keyword{item}
-\keyword{multidimensional}
-\keyword{response}
-\keyword{testing,}
-\keyword{theory}
+\keyword{testing}
