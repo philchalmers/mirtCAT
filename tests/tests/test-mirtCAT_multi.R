@@ -40,7 +40,7 @@ test_that('multidimensional', {
                      Type = 'radio', stringsAsFactors = FALSE)
     
     pat <- generate_pattern(mod2, Theta = c(0, 1), df)
-    expect_true(all(pat == as.character(c(74,96,107,118,102,88,114,96,101,93,80,100,92,52,105,98,120,120,81,114,87,102,68,96,111,100,106,107,108,139,90,124,58,122,114,98,56,114,98,66))))
+    expect_true(all(pat == as.character(c(120,102,155,122,99,70,79,95,69,119,71,87,86,86,152,78,119,98,59,111,115,89,119,110,83,133,102,106,81,108,77,114,77,99,80,95,99,104,108,113))))
     
     set.seed(1234)
     pat2 <- generate_pattern(mod2, Theta = c(0, 1))
@@ -48,12 +48,12 @@ test_that('multidimensional', {
     
     ## test numeric input
     res <- mirtCAT(mo=mod2, local_pattern=pat2)
-    expect_equal(as.numeric(res$thetas), c(0.1445553, 0.5474594), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(0.1445555, 0.5474600), tolerance = 1e-4)
     
     #sequential
     res <- mirtCAT(df, mod2, local_pattern=pat)
-    expect_equal(as.numeric(res$thetas), c(-0.2624228, 0.4408263), tolerance = 1e-4)
-    expect_equal(as.numeric(res$thetas_SE_history[41,]), c(0.3690100, 0.3812945), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.8075782,  0.7005797), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas_SE_history[41,]), c(0.3948417, 0.3981225), tolerance = 1e-4)
     
     oo <- plot(res)
     expect_is(oo, 'trellis')
@@ -68,40 +68,40 @@ test_that('multidimensional', {
     
     res <- mirtCAT(df, mod2, local_pattern=pat, criteria='DPrule',
                    design = list(min_SEM = .4))
-    expect_equal(res$items_answered, c(1,20,21,39,3,37,5,36,14,15,35,24,11,16,29,30,32,6,13,19,22,10,28,23,7,27,12,9,8,26,38,18,2,25,31))
-    expect_equal(as.numeric(res$thetas), c(-0.2061207, 0.5225479), tolerance = 1e-4)
+    expect_equal(res$items_answered, c(1,20,21,37,3,39,5,36,14,15,6,35,24,11,16,29,30,9,2,8,32,10,19,22,23,27,28,13,38,12,31,26,34,7,25,18,17,4))
+    expect_equal(as.numeric(res$thetas), c(-0.8116076,0.6794745), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.3723255, 0.3933855), tolerance = 1e-4)
+                 c(0.3950384,0.3999207), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, criteria='Drule',
                    design = list(min_SEM = .5))
-    expect_equal(as.numeric(res$thetas), c(-0.06375424, 0.55081663), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.3512403,0.581766), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4796803, 0.4957047), tolerance = 1e-4)
+                 c(0.4805048,0.498071), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'TPrule')
-    expect_equal(as.numeric(res$thetas), c(-0.08072858,0.51927881), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.4911178,0.5707988), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4483342,0.4926736), tolerance = 1e-4)
+                 c(0.4710924,0.4971046), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'WPrule')
-    expect_equal(as.numeric(res$thetas), c(0.008799144,0.593384091), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.2761875,0.3295394), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4758097,0.4978876), tolerance = 1e-4)
+                 c(0.4974878,0.4971879), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'EPrule')
-    expect_equal(as.numeric(res$thetas), c(0.008799144,0.593384091), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.2761875,0.3295394), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.4758097,0.4978876), tolerance = 1e-4)
+                 c(0.4974878,0.4971879), tolerance = 1e-4)
     
     res <- mirtCAT(df, mod2, local_pattern=pat, 
                    design = list(min_SEM = .5), criteria = 'APrule')
-    expect_equal(as.numeric(res$thetas), c(0.0004752878, 0.6161572073), tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), c(-0.2761875,0.3295394), tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]), 
-                 c(0.477021,0.498364), tolerance = 1e-4)
+                 c(0.4974878,0.4971879), tolerance = 1e-4)
     
 })
 

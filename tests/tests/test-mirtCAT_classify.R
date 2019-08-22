@@ -46,10 +46,10 @@ test_that('classify', {
     preCAT <- list(response_variance = TRUE, min_items = 1, max_items = 20, method = 'fixed')    
     res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
                    design = list(classify=0, classify_CI=.95), preCAT=preCAT)
-    expect_equal(summary(res[[1]])$thetas_history[1:6,1], c(0,0,0,-0.4247103,-0.6844948,-0.9367723), tolerance = 1e-4)
-    expect_equal(summary(res[[2]])$thetas_history[1:6,1], c(0,0,0,-0.2900639,-0.08420129,-0.215558), tolerance = 1e-4)
+    expect_equal(summary(res[[1]])$thetas_history[7:9,1], c(-0.5583525, -0.7584544, -0.9718470), tolerance = 1e-4)
+    expect_equal(summary(res[[2]])$thetas_history[7:9,1], c(-0.7051373, -0.4468777, -0.2054334), tolerance = 1e-4)
     scored <- summary(res[[3]], sort=FALSE)$scored_responses
     out <- fscores(mod, response.pattern = scored)
-    expect_equal(as.numeric(out[,'F1']), 0.8954967, tolerance = 1e-4)
+    expect_equal(as.numeric(out[,'F1']), 0.9073094, tolerance = 1e-4)
     
 })
