@@ -34,7 +34,7 @@ Person <- setRefClass("Person",
                              score <<- score
                              item_time <<- numeric(nitems)
                              login_name <<- character(0L)
-                             if(!is.null(thetas.start_in))
+                             if(!is.null(thetas.start_in) && !is.matrix(thetas.start_in))
                                 thetas <<- matrix(thetas.start_in, nrow=1L)
                              thetas_history <<- matrix(thetas, 1L, nfact)
                              info_thetas <<- matrix(0, nfact, nfact)

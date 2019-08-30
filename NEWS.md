@@ -1,3 +1,7 @@
+# mirtCAT 1.10
+
+- `thetas.start` now accepts a matrix input for simulations with different latent trait starting values
+
 # mirtCAT 1.9.3
 
 - Added a element to `person` objects and results return from GUI version of `mirtCAT()` called

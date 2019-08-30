@@ -243,12 +243,13 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
     multidimensional, either a single value or a vector of values may be supplied to provide
     SEM criteria values for each dimension}
     
-  \item{delta_thetas}{Default is \code{rep(0, nfact)}; stopping criteria based on the change in latent
+  \item{\code{delta_thetas}}{Default is \code{rep(0, nfact)}; stopping criteria based on the change in latent
     trait values (e.g., a change from \code{theta = 1.5} to \code{theta = 1.54} would 
     stop the CAT if \code{delta_thetas = 0.05}). The default disables this stopping criteria}
     
-  \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters.
-    Default is \code{rep(0, nfact)}}
+  \item{\code{thetas.start}}{a numeric vector of starting values for the theta parameters 
+     (default is \code{rep(0, nfact)}) or an \code{matrix} with N rows and nfact columns, where N
+     is equal to \code{nrow(local_pattern)}}
   
   \item{\code{min_items}}{minimum number of items that must be answered 
     before the test is stopped. Default is \code{1}}

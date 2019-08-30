@@ -5,7 +5,9 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
     fn <- function(n, responses, nfact, start_item, nitems, thetas.start_in, 
                    score, verbose, design, test, Info_thetas_cov){
         person <- Person$new(nfact=nfact, nitems=nitems, theta_SEs=sqrt(diag(test@gp$gcov)),
-                             thetas.start_in=thetas.start_in, score=score, Info_thetas_cov=Info_thetas_cov, ID=n)
+                             thetas.start_in=if(is.matrix(thetas.start_in)) thetas.start_in[n, ] 
+                                             else thetas.start_in, 
+                             score=score, Info_thetas_cov=Info_thetas_cov, ID=n)
         item <- design@start_item[n]
         person$items_answered[1L] <- item
         
