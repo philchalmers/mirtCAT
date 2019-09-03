@@ -1,6 +1,8 @@
 # mirtCAT 1.10
 
-- `thetas.start` now accepts a matrix input for simulations with different latent trait starting values
+- `thetas.start` now accepts a matrix input for simulations with different latent trait starting values.
+  Note that this also will affect the `start_item` criteria as well since the optimal first item
+  will incorporate the new starting trait location (requested by Niek Frans)
 
 # mirtCAT 1.9.3
 

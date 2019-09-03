@@ -247,7 +247,7 @@ test_that('unidimensional', {
     design <- list(thetas.start=Theta)
     res <- mirtCAT(mo = mod, local_pattern=pats, criteria='MI', start_item = 'MI', design=design)
     sos <- lapply(res, summary)
-    expect_equal(as.numeric(sos[[1]]$thetas_history[1:3,]), c(-1, -0.39569397, -0.08585648), tolerance = 1e-4)
-    expect_equal(as.numeric(sos[[3]]$thetas_history[1:3,]), c(1, 0.6723840, 0.9369358), tolerance = 1e-4)
+    expect_equal(as.numeric(sos[[1]]$thetas_history[1:3,]), c(-1, -0.6333807, -0.2148489), tolerance = 1e-4)
+    expect_equal(as.numeric(sos[[3]]$thetas_history[1:3,]), c(1, 0.6685077, 0.8582069), tolerance = 1e-4)
 })
 

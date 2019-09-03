@@ -177,6 +177,8 @@ mirtCAT_preamble_internal <-
             tmp2 <- integer(length(design_object@start_item))
             for(i in seq_len(length(design_object@start_item))){
                 design_object@criteria <- start_item[i]
+                if(!is.null(design$thetas.start) && is.matrix(design$thetas.start))
+                    person_object$thetas <- matrix(design$thetas.start[i,], 1L)
                 tmp2[i] <- findNextCATItem(person=person_object, test=test_object, 
                                           design=design_object, start=FALSE) 
             }
