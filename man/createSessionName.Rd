@@ -4,10 +4,14 @@
 \alias{createSessionName}
 \title{Create a unique GUI session name from a string of characters}
 \usage{
-createSessionName(n = 30)
+createSessionName(n = 30, datetime = TRUE)
 }
 \arguments{
 \item{n}{number of upper/lower characters to sample}
+
+\item{datetime}{logical; include the current date/time the function was called
+in the string as well? This further helps with the uniqueness of the generated
+string}
 }
 \value{
 a list containing the internal enviromental components for mirtCAT

@@ -8,10 +8,18 @@
 #' 
 #' @param n number of upper/lower characters to sample
 #' 
+#' @param datetime logical; include the current date/time the function was called
+#'   in the string as well? This further helps with the uniqueness of the generated
+#'   string
+#' 
 #' @export
 #' @return a list containing the internal enviromental components for mirtCAT
-createSessionName <- function(n = 30)
-    paste0(sapply(1:n, function(x) sample(c(LETTERS, letters), 1L)), collapse='')
+createSessionName <- function(n = 30, datetime = TRUE){
+    ret <- paste0(sapply(1:n, function(x) sample(c(LETTERS, letters), 1L)), collapse='')
+    if(datetime) ret <- paste0(ret, "_", Sys.time())
+    ret
+}
+
 
 #' Get the interal working enviroment state during mirtCAT session
 #' 
