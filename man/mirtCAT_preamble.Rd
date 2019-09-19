@@ -4,11 +4,9 @@
 \alias{mirtCAT_preamble}
 \title{Preamble function called by mirtCAT}
 \usage{
-mirtCAT_preamble(sessionName, ..., final_fun = NULL)
+mirtCAT_preamble(..., final_fun = NULL)
 }
 \arguments{
-\item{sessionName}{the unique name of the session (see \code{\link{mirtCAT}} for details)}
-
 \item{...}{arguments passed to \code{\link{mirtCAT}}}
 
 \item{final_fun}{a function called just before the shiny GUI has been terminated, primarily for

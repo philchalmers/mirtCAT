@@ -1,14 +1,18 @@
 server <- function(input, output, session) {    
     
-    getSessionName <- function() 42
+    sessionName <- createSessionName()
     
-    sessionName <- getSessionName()
+    .MCE[[sessionName]] <- as.environment(as.list(.MCE[['MASTER']], all.names=TRUE))
+    .MCE[[sessionName]]$person <- deepCopyPerson(.MCE[['MASTER']]$person)
     
     session$onSessionEnded(function() {
-        if(!.MCE[[getSessionName()]]$design@stop_now){
+        if(!.MCE[[sessionName]]$design@stop_now){
             message('WARNING: mirtCAT GUI session unexpectedly terminated early')
-            .MCE[[getSessionName()]]$person$terminated_sucessfully <- FALSE
-        } else .MCE[[getSessionName()]]$person$terminated_sucessfully <- TRUE
+            .MCE[[sessionName]]$person$terminated_sucessfully <- FALSE
+        } else .MCE[[sessionName]]$person$terminated_sucessfully <- TRUE
+        .MCE[['COMPLETED']] <- .MCE[[sessionName]]
+        .MCE[['COMPLETED']]$person <- deepCopyPerson(.MCE[[sessionName]]$person) 
+        .MCE[[sessionName]] <- NULL
         stopApp()
     })
     
@@ -233,8 +237,7 @@ server <- function(input, output, session) {
             .MCE[[sessionName]]$STOP <- TRUE
             if(!is.null(.MCE[[sessionName]]$final_fun)){
                 ret <- mirtCAT_post_internal(person=.MCE[[sessionName]]$person, design=.MCE[[sessionName]]$design,
-                                             has_answers=.MCE[[sessionName]]$test@has_answers, GUI=TRUE, 
-                                             sessionName=sessionName)
+                                             has_answers=.MCE[[sessionName]]$test@has_answers, GUI=TRUE)
                 .MCE[[sessionName]]$final_fun(person = ret)
             }
             if(.MCE[[sessionName]]$shinyGUI$temp_file != '')

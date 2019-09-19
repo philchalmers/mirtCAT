@@ -342,3 +342,8 @@ verifyPassword <- function(input, password, sessionName){
     }
     verified
 }
+
+deepCopyPerson <- function(ref){
+    copy <- ref$copy()
+    copy
+}

@@ -4,11 +4,9 @@
 \alias{createShinyGUI}
 \title{Function returning an object used by shiny}
 \usage{
-createShinyGUI(sessionName, ui = NULL)
+createShinyGUI(ui = NULL)
 }
 \arguments{
-\item{sessionName}{the unique name of the session (see \code{\link{mirtCAT}} for details)}
-
 \item{ui}{a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
 See \code{mirtCAT:::default_UI} for the internal code}
 }
@@ -21,11 +19,10 @@ run \emph{before} this function is called. The object is executed by calling \co
 \examples{
 \dontrun{
 
-sessionName <- 'My session'
-mirtCAT_preamble(sessionName=sessionName, df=df)
+mirtCAT_preamble(df=df)
 runApp(createShinyGUI(), port = 8000)
 
-person <- getPerson(sessionName)
+person <- getPerson()
 summary(person)
 
 } 

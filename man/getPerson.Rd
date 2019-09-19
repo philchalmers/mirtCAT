@@ -4,10 +4,7 @@
 \alias{getPerson}
 \title{Retrieve person object after running createShinyGUI}
 \usage{
-getPerson(sessionName)
-}
-\arguments{
-\item{sessionName}{the unique name of the session (see \code{\link{mirtCAT}} for details)}
+getPerson()
 }
 \description{
 This function returns a suitable person object identical to the result returned by \code{\link{mirtCAT}},
@@ -16,11 +13,10 @@ and is only required when the GUI is launched by the \code{\link{createShinyGUI}
 \examples{
 \dontrun{
 
-sessionName <- 'My session'
-mirtCAT_preamble(sessionName=sessionName, df=df)
+mirtCAT_preamble(df=df)
 runApp(createShinyGUI(), port = 8000)
 
-person <- getPerson(sessionName)
+person <- getPerson()
 summary(person)
 } 
 }

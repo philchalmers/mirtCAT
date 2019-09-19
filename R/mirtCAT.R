@@ -195,8 +195,8 @@
 #'   first before running the simulations in parallel? Setting to \code{TRUE} will ensure that 
 #'   using the cluster will be optimal every time a new \code{cl} is defined. Default is \code{TRUE}
 #'   
-#' @param sessionName a unique name used to track the internal CAT objects through \code{shiny}. 
-#'   By default the function \code{\link{createSessionName}} is called to create a unique name
+# @param sessionName a unique name used to track the internal CAT objects through \code{shiny}. 
+#   By default the function \code{\link{createSessionName}} is called to create a unique name
 #'   
 #' @param customTypes an optional list input containing functions for Designing Original Graphical Stimuli (DOGS).
 #'   DOGS elements in the input list must contain a unique name, and the item with which it is associated must be
@@ -551,8 +551,8 @@
 #'      }
 #'    }
 #'    
-#'    \item{\code{time_remaining}}{string to print prior to the length of time remaining in the session. 
-#'      Default is \code{"Time remaining:"}}
+#    \item{\code{time_remaining}}{string to print prior to the length of time remaining in the session. 
+#      Default is \code{"Time remaining:"}}
 #'      
 #'    \item{\code{response_msg}}{string to print when valid responses are required but the users does not provide
 #'      a valid input. Default is \code{"Please provide a suitable response"}}    
@@ -782,23 +782,18 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
                     start_item = 1, local_pattern = NULL, 
                     AnswerFuns = list(), design_elements = FALSE, cl = NULL, 
                     progress = FALSE, primeCluster = TRUE, customTypes = list(), 
-                    design = list(), shinyGUI = list(), preCAT = list(), 
-                    sessionName = createSessionName(), ...)
+                    design = list(), shinyGUI = list(), preCAT = list(), ...)
 {   
+    sessionName <- 'MASTER' 
     .MCE[[sessionName]]$complete <- TRUE
     .MCE[[sessionName]]$prevClick <- as.integer(NA)
-    on.exit({.MCE[[sessionName]]$person <- .MCE[[sessionName]]$test <- 
-        .MCE[[sessionName]]$design <- .MCE[[sessionName]]$shinyGUI <- 
-        .MCE[[sessionName]]$start_time <- .MCE[[sessionName]]$STOP <- 
-        .MCE[[sessionName]]$outfile <- .MCE[[sessionName]]$outfile2 <- 
-        .MCE[[sessionName]]$last_demographics <- 
-        .MCE[[sessionName]]$preamble_defined <- NULL})
+    on.exit({.MCE[['MASTER']] <- .MCE[['COMPLETED']] <- NULL})
     GUI <- is.null(local_pattern)
     mirtCAT_preamble(df=df, mo=mo, method=method, criteria=criteria, 
                      start_item=start_item, local_pattern=local_pattern, 
                      design_elements=design_elements, cl=cl, AnswerFuns=AnswerFuns, 
                      design=design, shinyGUI=shinyGUI, preCAT=preCAT, 
-                     customTypes=customTypes, sessionName=sessionName, ...)
+                     customTypes=customTypes, ...)
     if(design_elements){
         ret <- list(person=.MCE[[sessionName]]$person, 
                     test=.MCE[[sessionName]]$test, 
@@ -807,9 +802,9 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(GUI){
-        runApp(createShinyGUI(sessionName=sessionName, 
-                              ui=.MCE[[sessionName]]$shinyGUI$ui), launch.browser=TRUE, ...)
-        person <- .MCE[[sessionName]]$person
+        runApp(createShinyGUI(ui=.MCE[[sessionName]]$shinyGUI$ui), launch.browser=TRUE, ...)
+        person <- .MCE[['COMPLETED']]$person
+        force(.MCE[['COMPLETED']] <- NULL) # as early as possible
     } else {
         if(length(AnswerFuns)) 
             stop('AnswerFuns cannot be used for off-line runs', call.=FALSE)
@@ -829,7 +824,6 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         }
     }
     ret <- mirtCAT_post_internal(person=person, design=.MCE[[sessionName]]$design, 
-                                 has_answers=.MCE[[sessionName]]$test@has_answers, GUI=GUI,
-                                 sessionName=sessionName)
+                                 has_answers=.MCE[[sessionName]]$test@has_answers, GUI=GUI)
     return(ret)
 }

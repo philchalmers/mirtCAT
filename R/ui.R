@@ -1,4 +1,6 @@
-default_UI <- function(sessionName){
+default_UI <- function(){
+    
+    sessionName <- 'MASTER'
     
     fluidPage(theme = if(.MCE[[sessionName]]$shinyGUI$theme != '') 
         if(requireNamespace("shinythemes", quietly = TRUE)){
@@ -14,11 +16,12 @@ default_UI <- function(sessionName){
         #  Application title
         headerPanel(.MCE[[sessionName]]$shinyGUI$title),
         
-        if(is.finite(.MCE[[sessionName]]$design@max_time)){
-            h6(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining, 
-                      formatTime(.MCE[[sessionName]]$design@max_time - 
-                                     sum(.MCE[[sessionName]]$person$item_time))))
-        } else NULL,
+        # FIXME can't access person properties if using MASTER enviroment
+        # if(is.finite(.MCE[[sessionName]]$design@max_time)){
+        #     h6(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining, 
+        #               formatTime(.MCE[[sessionName]]$design@max_time - 
+        #                              sum(.MCE[[sessionName]]$person$item_time))))
+        # } else NULL,
         
         sidebarPanel(
             if(.MCE[[sessionName]]$shinyGUI$author != '') h4("Authors:") else NULL,

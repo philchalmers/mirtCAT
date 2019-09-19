@@ -1,5 +1,9 @@
 # mirtCAT 1.10
 
+- previously provided `sessionName` argument now removed in favour of handling this feature 
+  in the back-end. This helped patch a bug related to multiple instances of the GUI on 
+  a single server (reported by Daniel Sommerhoff)
+
 - `thetas.start` now accepts a matrix input for simulations with different latent trait starting values.
   Note that this also will affect the `start_item` criteria as well since the optimal first item
   will incorporate the new starting trait location (requested by Niek Frans)

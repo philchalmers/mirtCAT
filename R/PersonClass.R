@@ -23,23 +23,27 @@ Person <- setRefClass("Person",
                          initialize = function(nfact, nitems, thetas.start_in, score,
                                                theta_SEs, CustomUpdateThetas, Info_thetas_cov, ID = 0L){
                              'Initialize the person object given background information'
-                             ID <<- ID
-                             true_thetas <<- numeric(0L)
-                             raw_responses <<- as.character(rep(NA, nitems))
-                             responses <<- as.integer(rep(NA, nitems))
-                             valid_item <<- rep(TRUE, nitems)
-                             items_answered <<- as.integer(rep(NA, nitems))
-                             thetas <<- matrix(numeric(nfact), nrow=1L)
-                             thetas_SE_history <<- matrix(theta_SEs, 1L)
-                             score <<- score
-                             item_time <<- numeric(nitems)
-                             login_name <<- character(0L)
-                             if(!is.null(thetas.start_in) && !is.matrix(thetas.start_in))
-                                thetas <<- matrix(thetas.start_in, nrow=1L)
-                             thetas_history <<- matrix(thetas, 1L, nfact)
-                             info_thetas <<- matrix(0, nfact, nfact)
-                             info_thetas_cov <<- Info_thetas_cov 
-                             terminated_sucessfully <<- FALSE
+                             if(missing(nfact)){
+                                 # included for deepCopy()
+                             } else {
+                                 ID <<- ID
+                                 true_thetas <<- numeric(0L)
+                                 raw_responses <<- as.character(rep(NA, nitems))
+                                 responses <<- as.integer(rep(NA, nitems))
+                                 valid_item <<- rep(TRUE, nitems)
+                                 items_answered <<- as.integer(rep(NA, nitems))
+                                 thetas <<- matrix(numeric(nfact), nrow=1L)
+                                 thetas_SE_history <<- matrix(theta_SEs, 1L)
+                                 score <<- score
+                                 item_time <<- numeric(nitems)
+                                 login_name <<- character(0L)
+                                 if(!is.null(thetas.start_in) && !is.matrix(thetas.start_in))
+                                    thetas <<- matrix(thetas.start_in, nrow=1L)
+                                 thetas_history <<- matrix(thetas, 1L, nfact)
+                                 info_thetas <<- matrix(0, nfact, nfact)
+                                 info_thetas_cov <<- Info_thetas_cov 
+                                 terminated_sucessfully <<- FALSE
+                             }
                          })
                       
 )
