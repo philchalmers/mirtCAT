@@ -9,6 +9,10 @@
 #' 
 #' @param ui a shiny UI function used to define the interface. If \code{NULL}, the default one will be used. 
 #'   See \code{mirtCAT:::default_UI} for the internal code
+#'   
+#' @param host_server logical; is \code{createShinyGUI()} being used on a remote server or executed locally?
+#'   When \code{TRUE} any calls to \code{\link{stopApp}} are suppressed to allow for multiple sessions to
+#'   be executed. Note that \code{FALSE} gives the same behaviour as the GUI in \code{\link{mirtCAT}}
 #' 
 #' @export createShinyGUI
 #' 
@@ -30,18 +34,21 @@
 #' \dontrun{
 #' 
 #' mirtCAT_preamble(df=df)
-#' runApp(createShinyGUI(), port = 8000)
+#' runApp(createShinyGUI(host_server = FALSE), port = 8000) # run locally
 #' 
 #' person <- getPerson()
 #' summary(person)
 #' 
+#' runApp(createShinyGUI(), port = 8000) # for remote server hosting
+#' 
 #' } 
-createShinyGUI <- function(ui = NULL){
+createShinyGUI <- function(ui = NULL, host_server = TRUE){
     sessionName <- 'MASTER'
     on.exit(.MCE[[sessionName]]$preamble_defined <- .MCE[[sessionName]]$start_time <- NULL)
     if(is.null(.MCE[[sessionName]]$preamble_defined))
         stop('Please use a fresh mirtCAT_preamble() call prior to calling createShinyGUI().')
     if(is.null(ui)) ui <- default_UI
+    .MCE[[sessionName]]$host_server <- host_server
     # server2 <- server
     # txt <- parse(text=sprintf("getSessionName <- function() \'%s\'", sessionName))
     # body(server2)[[2]] <- substitute(eval(txt))

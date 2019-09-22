@@ -1,5 +1,10 @@
 # mirtCAT 1.10
 
+- `createShinyGUI()` now contains a `host_server` logical argument to indicate whether the GUI
+  is hosted on a remote server or locally. This triggers whether `shiny::stopApp()` should be
+  executed upon completion (on servers this should be executed to avoid stopping the app
+  when multiple users are active)
+
 - previously provided `sessionName` argument now removed in favour of handling this feature 
   in the back-end. This helped patch a bug related to multiple instances of the GUI on 
   a single server (reported by Daniel Sommerhoff)

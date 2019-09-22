@@ -802,7 +802,8 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(GUI){
-        runApp(createShinyGUI(ui=.MCE[[sessionName]]$shinyGUI$ui), launch.browser=TRUE, ...)
+        runApp(createShinyGUI(ui=.MCE[[sessionName]]$shinyGUI$ui, host_server = FALSE),  
+               launch.browser=TRUE, ...)
         person <- .MCE[['COMPLETED']]$person
         force(.MCE[['COMPLETED']] <- NULL) # as early as possible
     } else {

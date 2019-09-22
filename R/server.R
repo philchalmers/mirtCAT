@@ -13,7 +13,8 @@ server <- function(input, output, session) {
         .MCE[['COMPLETED']] <- .MCE[[sessionName]]
         .MCE[['COMPLETED']]$person <- deepCopyPerson(.MCE[[sessionName]]$person) 
         .MCE[[sessionName]] <- NULL
-        stopApp()
+        if(!.MCE[['MASTER']]$host_server) stopApp()
+        invisible()
     })
     
     output$Main <- renderUI({
