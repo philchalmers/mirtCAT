@@ -17,16 +17,18 @@ Person <- setRefClass("Person",
                                     true_thetas = 'numeric',
                                     info_thetas_cov = 'matrix',
                                     clientData = 'list',
-                                    terminated_sucessfully = 'logical'),
+                                    terminated_sucessfully = 'logical',
+                                    password_attempts = 'integer'),
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
                                                theta_SEs, CustomUpdateThetas, Info_thetas_cov, ID = 0L){
                              'Initialize the person object given background information'
                              if(missing(nfact)){
-                                 # included for deepCopy()
+                                 # included for deepCopyPerson()
                              } else {
                                  ID <<- ID
+                                 password_attempts <<- 0L
                                  true_thetas <<- numeric(0L)
                                  raw_responses <<- as.character(rep(NA, nitems))
                                  responses <<- as.integer(rep(NA, nitems))

@@ -333,12 +333,15 @@ stemContent <- function(pick, sessionName){
 
 verifyPassword <- function(input, password, sessionName){
     nr <- nrow(password)
+    pswd <- if(!is.null(input$PaSsWoRd_3)) isolate(input$PaSsWoRd_3) else
+        if(!is.null(input$PaSsWoRd_2)) isolate(input$PaSsWoRd_2) else
+        if(!is.null(input$PaSsWoRd_1)) isolate(input$PaSsWoRd_1) else isolate(input$PaSsWoRd)
     verified <- if(nr == 1L){
-        input$PaSsWoRd %in% password
+        pswd %in% password
     } else {
         tmp <- subset(password, password[,1L] == input$UsErNaMe)
         .MCE[[sessionName]]$person$login_name <- input$UsErNaMe
-        input$PaSsWoRd %in% tmp[,-1L]
+        pswd %in% tmp[,-1L]
     }
     verified
 }

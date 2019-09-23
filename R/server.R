@@ -38,20 +38,40 @@ server <- function(input, output, session) {
         
         if(length(.MCE[[sessionName]]$shinyGUI$password)){
             if(click == 0L){
+                .MCE[[sessionName]]$verified <- FALSE
                 if(nrow(.MCE[[sessionName]]$shinyGUI$password) > 1L)
                     return(list(textInput('UsErNaMe', label = "Login Name:"),
                                 passwordInput('PaSsWoRd', 'Password:')))
                 else return(passwordInput('PaSsWoRd', 'Password:'))
-            } else if(click == 1L){
+            } else if(!.MCE[[sessionName]]$verified){
+                .MCE[[sessionName]]$person$password_attempts <- 
+                    .MCE[[sessionName]]$person$password_attempts + 1L
                 .MCE[[sessionName]]$verified <- verifyPassword(input, 
                                                                .MCE[[sessionName]]$shinyGUI$password,
                                                                sessionName)
+                if(!.MCE[[sessionName]]$verified && .MCE[[sessionName]]$person$password_attempts < 
+                   .MCE[[sessionName]]$shinyGUI$max_password_attempts){
+                    attempts_remaining <- .MCE[[sessionName]]$shinyGUI$max_password_attempts - 
+                        .MCE[[sessionName]]$person$password_attempts
+                    if(nrow(.MCE[[sessionName]]$shinyGUI$password) > 1L)
+                        return(list(textInput("UsErNaMe", label = "Login Name:"),
+                                    passwordInput("PaSsWoRd", 'Password:'),
+                                    HTML(paste0("<p style='color:red;'> <em>", 
+                                                sprintf('Incorrect Login Name/Password. Please try again (you have %s attempts remaining).',
+                                                        attempts_remaining)), "</em> </p>")))
+                    else {
+                        return(list(passwordInput("PaSsWoRd", 'Password:'),
+                                    HTML(paste0("<p style='color:red;'> <em>", 
+                                                sprintf('Incorrect Login Password. Please try again (you have %s attempts remaining).',
+                                                        attempts_remaining)), "</em> </p>")))
+                    }
+                }
             }
-            click <- click - 1L
+            click <- click - .MCE[[sessionName]]$person$password_attempts
         }
         
         if(!.MCE[[sessionName]]$verified)
-            return(h3('Incorrect Login Name/Password. Please restart the application and try again.'))
+            return(h3('Login Name/Password were incorrect. Please restart the application and try again.'))
         
         if(.MCE[[sessionName]]$resume_file && click < 1L){
             return(list(h5("Click the action button to continue with your session.")))

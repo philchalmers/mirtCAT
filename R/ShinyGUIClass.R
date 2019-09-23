@@ -15,6 +15,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     response_msg = 'character',
                                     demographic_inputIDs = 'character',
                                     temp_file = 'character',
+                                    max_password_attempts = 'integer',
                                     customTypes = 'list',
                                     choiceNames = 'list',
                                     choiceValues = 'list',
@@ -78,6 +79,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               time_remaining <<- "Time remaining: "
                               response_msg <<- "Please provide a suitable response"
                               demographic_inputIDs <<- character(0)
+                              max_password_attempts <<- 3L
                               if(adaptive){
                                 begin_message <<- "Click the action button to begin."
                               } else begin_message <<- ""
@@ -138,6 +140,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       password <<- shinyGUI$password
                                   if(!is.null(shinyGUI$time_before_answer))
                                       time_before_answer <<- shinyGUI$time_before_answer
+                                  if(!is.null(shinyGUI$max_password_attempts))
+                                      max_password_attempts <<- shinyGUI$max_password_attempts
                               }
                               if(any(!is.na(timer)) && forced_choice) 
                                   stop('Timer inputs cannot be combined with shinyGUI$forced_choice = TRUE', 

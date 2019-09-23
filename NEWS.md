@@ -1,5 +1,7 @@
 # mirtCAT 1.10
 
+- Up to three attempts are allowed when users are required to provide a password (requested by Aron Fi)
+
 - `createShinyGUI()` now contains a `host_server` logical argument to indicate whether the GUI
   is hosted on a remote server or locally. This triggers whether `shiny::stopApp()` should be
   executed upon completion (on servers this should be executed to avoid stopping the app
