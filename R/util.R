@@ -339,9 +339,16 @@ verifyPassword <- function(input, password, sessionName){
     verified <- if(nr == 1L){
         pswd %in% password
     } else {
-        tmp <- subset(password, password[,1L] == input$UsErNaMe)
-        .MCE[[sessionName]]$person$login_name <- input$UsErNaMe
-        pswd %in% tmp[,-1L]
+        user <- if(!is.null(input$UsErNaMe_3)) isolate(input$UsErNaMe_3) else
+            if(!is.null(input$UsErNaMe_2)) isolate(input$UsErNaMe_2) else
+                if(!is.null(input$UsErNaMe_1)) isolate(input$UsErNaMe_1) else isolate(input$UsErNaMe)
+        tmp <- subset(password, password[,1L] == user)
+        if(!length(tmp)){
+            FALSE
+        } else {
+            .MCE[[sessionName]]$person$login_name <- user
+            pswd %in% tmp[,-1L]
+        }
     }
     verified
 }
