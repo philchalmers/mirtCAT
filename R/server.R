@@ -108,6 +108,7 @@ server <- function(input, output, session) {
             .MCE[[sessionName]]$start_time <- proc.time()[3L]
         
         if(.MCE[[sessionName]]$resume_file){
+            .MCE[[sessionName]]$prevClick <- -999L
             .MCE[[sessionName]]$resume_file <- FALSE
             item <- max(which(!is.na(.MCE[[sessionName]]$person$items_answered)))
             stemOutput <- stemContent(item, sessionName=sessionName)
