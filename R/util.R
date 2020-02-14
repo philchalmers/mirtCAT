@@ -162,8 +162,8 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
         if(Type[i] == 'radio'){
             cNs <- cVs <- cs <- NULL 
             if(length(choiceNames[[i]]) && is.list(choiceNames[[i]])){
-                cNs <- choiceNames[[i]]
-                cVs <- choiceValues[[i]]
+                cNs <- unname(choiceNames[[i]])
+                cVs <- unname(choiceValues[[i]])
                 choices_list[[i]] <- as.character(cVs)
             } else {
                 cs <- choices[i, !is.na(choices[i, ])]
@@ -221,8 +221,8 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
         } else if(Type[i] == 'checkbox'){
             cNs <- cVs <- cs <- NULL 
             if(length(choiceNames[[i]]) && is.list(choiceNames[[i]])){
-                cNs <- choiceNames[[i]]
-                cVs <- choiceValues[[i]]
+                cNs <- unname(choiceNames[[i]])
+                cVs <- unname(choiceValues[[i]])
                 choices_list[[i]] <- as.character(cVs)
             } else {
                 cs <- choices[i, !is.na(choices[i, ])]

@@ -1,5 +1,7 @@
 # mirtCAT 1.10
 
+- `choiceNames` and `choiceValues` inputs required additional unnaming (reported by Ryan Kelley)
+
 - Up to three attempts are allowed when users are required to provide a password (requested by Aron Fi)
 
 - `createShinyGUI()` now contains a `host_server` logical argument to indicate whether the GUI
