@@ -1,5 +1,8 @@
 # mirtCAT 1.10
 
+- `ordered` and `unordered` constraints no longer stop in the middle of testlet set, 
+  thereby ignoring other stoping criteria (suggested by Christoph König)
+
 - `choiceNames` and `choiceValues` inputs required additional unnaming (reported by Ryan Kelley)
 
 - Up to three attempts are allowed when users are required to provide a password (requested by Aron Fi)

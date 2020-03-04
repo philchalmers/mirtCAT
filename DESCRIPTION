@@ -1,5 +1,5 @@
 Package: mirtCAT
-Version: 1.9.8
+Version: 1.9.9
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item
         Response Theory
@@ -32,5 +32,5 @@ URL: https://github.com/philchalmers/mirtCAT,
         https://github.com/philchalmers/mirtCAT/wiki,
         https://groups.google.com/forum/#!forum/mirt-package
 BugReports: https://github.com/philchalmers/mirtCAT/issues?state=open
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 NeedsCompilation: yes

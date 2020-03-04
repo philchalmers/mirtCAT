@@ -299,6 +299,18 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
               if(.Object@stage > 1L && nanswered == .Object@max_items) 
                   .Object@stop_now <- TRUE
               if(.Object@max_time <= sum(person$item_time)) .Object@stop_now <- TRUE
+              # don't stop if in the middle of an (un)order constraint
+              last_item_loc <- max(which(!is.na(person$items_answered)))
+              last_item <- person$items_answered[last_item_loc]
+              insset <- if(length(.Object@constraints))
+                  any(sapply(.Object@constraints, function(x) any(x %in% last_item))) 
+                  else FALSE
+              if(insset && any(names(.Object@constraints) == 'ordered')){ # works for unordered too
+                  initem <- which(sapply(.Object@constraints, function(x) any(x %in% last_item)))
+                  len <- length(.Object@constraints[[initem]])
+                  if(.Object@constraints[[initem]][len] != last_item)
+                      .Object@stop_now <- FALSE
+              }
               .Object
           }
 )
