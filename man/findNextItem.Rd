@@ -4,9 +4,17 @@
 \alias{findNextItem}
 \title{Find next CAT item}
 \usage{
-findNextItem(x, person = NULL, test = NULL, design = NULL,
-  criteria = NULL, objective = NULL, subset = NULL,
-  all_index = FALSE, ...)
+findNextItem(
+  x,
+  person = NULL,
+  test = NULL,
+  design = NULL,
+  criteria = NULL,
+  objective = NULL,
+  subset = NULL,
+  all_index = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function

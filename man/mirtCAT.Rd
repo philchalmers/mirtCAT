@@ -7,21 +7,41 @@
 \alias{plot.mirtCAT}
 \title{Generate an adaptive or non-adaptive test HTML interface}
 \usage{
-mirtCAT(df = NULL, mo = NULL, method = "MAP", criteria = "seq",
-  start_item = 1, local_pattern = NULL, AnswerFuns = list(),
-  design_elements = FALSE, cl = NULL, progress = FALSE,
-  primeCluster = TRUE, customTypes = list(), design = list(),
-  shinyGUI = list(), preCAT = list(), ...)
+mirtCAT(
+  df = NULL,
+  mo = NULL,
+  method = "MAP",
+  criteria = "seq",
+  start_item = 1,
+  local_pattern = NULL,
+  AnswerFuns = list(),
+  design_elements = FALSE,
+  cl = NULL,
+  progress = FALSE,
+  primeCluster = TRUE,
+  customTypes = list(),
+  design = list(),
+  shinyGUI = list(),
+  preCAT = list(),
+  ...
+)
 
 \method{print}{mirtCAT}(x, ...)
 
 \method{summary}{mirtCAT}(object, sort = TRUE, ...)
 
-\method{plot}{mirtCAT}(x, pick_theta = NULL, true_thetas = TRUE,
-  SE = 1, main = NULL, par.strip.text = list(cex = 0.7),
-  par.settings = list(strip.background = list(col = "#9ECAE1"),
-  strip.border = list(col = "black")), scales = list(x = list(rot = 90)),
-  ...)
+\method{plot}{mirtCAT}(
+  x,
+  pick_theta = NULL,
+  true_thetas = TRUE,
+  SE = 1,
+  main = NULL,
+  par.strip.text = list(cex = 0.7),
+  par.settings = list(strip.background = list(col = "#9ECAE1"), strip.border = list(col
+    = "black")),
+  scales = list(x = list(rot = 90)),
+  ...
+)
 }
 \arguments{
 \item{df}{a \code{data.frame} containing the \code{character} vector inputs required to generate 
@@ -266,6 +286,10 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
   \item{\code{theta_range}}{upper and lower range for the theta 
     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
     quadrature grid. Default is \code{c(-6,6)}}
+    
+  \item{\code{allow_constrain_breaks}}{logical; should the test be allowed to terminate in 
+    the middle of administering the items in an (un)ordered testlet set specified in 
+    \code{constraints}? Default is \code{FALSE}} 
 
   \item{\code{weights}}{weights used when \code{criteria == 'Wrule'}, but also 
     will be applied for weighted trace functions in the T- and A-rules. The default 

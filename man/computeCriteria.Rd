@@ -4,8 +4,15 @@
 \alias{computeCriteria}
 \title{Compute the values given the criteria and internal objects}
 \usage{
-computeCriteria(x, criteria, person = NULL, test = NULL,
-  design = NULL, subset = NULL, info_mats = FALSE)
+computeCriteria(
+  x,
+  criteria,
+  person = NULL,
+  test = NULL,
+  design = NULL,
+  subset = NULL,
+  info_mats = FALSE
+)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function

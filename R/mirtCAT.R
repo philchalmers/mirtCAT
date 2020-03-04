@@ -262,6 +262,10 @@
 #'   \item{\code{theta_range}}{upper and lower range for the theta 
 #'     integration grid. Used in conjunction with \code{quadpts} to generate an equally spaced 
 #'     quadrature grid. Default is \code{c(-6,6)}}
+#'     
+#'   \item{\code{allow_constrain_breaks}}{logical; should the test be allowed to terminate in 
+#'     the middle of administering the items in an (un)ordered testlet set specified in 
+#'     \code{constraints}? Default is \code{FALSE}} 
 #' 
 #'   \item{\code{weights}}{weights used when \code{criteria == 'Wrule'}, but also 
 #'     will be applied for weighted trace functions in the T- and A-rules. The default 

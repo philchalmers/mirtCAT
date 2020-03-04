@@ -4,9 +4,14 @@
 \alias{generate.mirt_object}
 \title{Generate a mirt object from population parameters}
 \usage{
-generate.mirt_object(parameters, itemtype, latent_means = NULL,
-  latent_covariance = NULL, key = NULL, min_category = rep(0L,
-  length(itemtype)))
+generate.mirt_object(
+  parameters,
+  itemtype,
+  latent_means = NULL,
+  latent_covariance = NULL,
+  key = NULL,
+  min_category = rep(0L, length(itemtype))
+)
 }
 \arguments{
 \item{parameters}{a matrix or data.frame of parameters corresponding to the model definitions
