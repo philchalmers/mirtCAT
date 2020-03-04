@@ -283,6 +283,7 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
               if(person$score){
                   if(nanswered >= .Object@min_items){
                       diff <- person$thetas_SE_history[nrow(person$thetas_SE_history), ]
+                      diff[is.na(diff)] <- Inf
                       if(!is.nan(.Object@classify[1L])){
                           z <- -abs(person$thetas - .Object@classify) / diff
                           .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
