@@ -51,7 +51,7 @@ you can save your token to a file and read this in later once it has been upload
 
 ```{r eval=FALSE}
 token <- drop_auth()
-saveRDS(token, "droptoken.rds") # Upload this saved droptoken to the server
+saveRDS(token, "dropbox_token.rds") # Upload this saved droptoken to the server
 ```
 
 Example
@@ -60,7 +60,8 @@ Example
 The following defines a simple survey and stores the results to a local Dropbox folder with the 
 `save_fun()` definition which is passed to the `final_fun` argument. 
 This function is the last function called before the interface is terminated,
-and therefore will save the results when `shinyApps.io` is finalized.
+and therefore will save the results when `shinyApps.io` is finalized. The following saves 
+the `person` objects to a suitable Dropbox directory called `responses/`.
 
 ```{r eval=FALSE}
 #######################################
@@ -71,17 +72,34 @@ and therefore will save the results when `shinyApps.io` is finalized.
 library(rdrop2)
 library(mirtCAT)
 
+drop_auth(rdstoken = "dropbox_token.rds") # authenticate the token
+token <- readRDS("dropbox_token.rds") #read in dropbox token
+drop_acc(dtoken = token) #load token globally
+
+# create 'responses' directy to store objects to (can be done manually)
+# drop_create("responses", dtoken = token)
+
+# function to upload object with corresponding filename 
+#    (.. args passed to rdrop2::drop_upload)
+drop_person_upload <- function(obj, file = "person.rds", ...){
+    saveRDS(obj, file = file)
+    drop_upload(file, ...)
+    file.remove(file)
+    invisible()
+}
+
 #-----------------------------------------
 ## mirtCAT definitions
 
-## Potential options for each item
+options(stringsAsFactors = FALSE)
+
+# simple interface, no stems
 options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),
                   nrow = 3, ncol = 5, byrow = TRUE)
+questions <- c("Building CATs with mirtCAT is difficult.",
+               "mirtCAT requires a substantial amount of coding.",
+               "I would use mirtCAT in my research.")
 
-# read questions in from a csv file
-questions <- read.csv('questions.csv', header = FALSE, stringsAsFactors = FALSE)[,1]
-
-# create df object for mirtCAT.preamble()
 df <- data.frame(Question = questions, Option = options, Type = "radio")
 
 #-----------------------------------------
@@ -89,12 +107,7 @@ df <- data.frame(Question = questions, Option = options, Type = "radio")
 
 # function to save to my authenticated dropbox folder
 final_fun <- function(person){
-    token <- readRDS("droptoken.rds") #read in dropbox token
-    drop_acc(dtoken = token) #load token
-
-    # save final result to dropbox
-    drop_upload(person, file = Sys.time()) #filename is just the date and time
-
+    drop_person_upload(person, path = 'responses')
     invisible()
 }
 
@@ -106,14 +119,12 @@ mirtCAT_preamble(df = df, shinyGUI = list(forced_choice = FALSE),
 createShinyGUI()
 ```
 
-In the example above, three files were uploaded to `shinyApps.io`:
+In the example above, two files are inintially uploaded to `shinyApps.io`:
 
-- The `app.R` file, containing the above instructions,
-- A `questions.csv` containing text-based questions, and
-- An R binary file called `'droptoken.rds'`, containing the object 
+- The `app.R` file, containing the above instructions, and
+- An R binary file called `'dropbox_token.rds'`, containing the object 
   Dropbox credentials for authenticating the personal Dropbox folder
-  
 
-Modifying the arguments in `mirtCAT_preamble()` will change how the session is organized, 
-perhaps changed to an adaptive session if a `mo` object is included, and the 
-GUI can be tested locally by using a call to `runApp(createShinyGUI())`.
+After running the shiny session an object called `'person.rds'` is stored
+to the Dropbox folder `responses/` containing all the person information, which 
+can later be read back into R via `person <- readRDS('person.rds')`. Modifying the arguments in `mirtCAT_preamble()` will change how the session is organized,  perhaps changed to an adaptive session if a `mo` object is included, and the  GUI can be tested locally by using a call to `runApp(createShinyGUI())`.
