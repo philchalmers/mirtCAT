@@ -7,6 +7,8 @@
 #'   when passing \code{design_elements = TRUE}
 #' @param new_item a numeric vector indicating which items to select
 #' @param new_response a numeric vector indicating the responses the the selected items
+#' @param updateTheta logical; update the internal ability terms after the new item response has been
+#'  added to the internal objects? 
 #' 
 #' @seealso \code{\link{mirtCAT}}, \code{\link{findNextItem}}
 #' @export updateDesign
@@ -47,27 +49,17 @@
 #' CATdesign <- updateDesign(CATdesign, new_item = 2, new_response = 1)
 #' CATdesign$person$items_answered  # item 2 answered first
 #' CATdesign$person$responses       # in item 2 element response was = 1 
-#' 
-#' # update internal Theta estimate using Update.thetas definition
-#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
-#' CATdesign$person$thetas
-#' findNextItem(CATdesign) # find next item
+#' CATdesign$person$thetas # current estimate
+#' findNextItem(CATdesign) 
 #' 
 #' # determine next item if item 70 were also answered correctly next
 #' CATdesign <- updateDesign(CATdesign, new_item = 70, new_response = 1)
 #' CATdesign$person$items_answered  
 #' CATdesign$person$responses       
-#' 
-#' # update the Theta using the Update.thetas definition in design
-#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
-#' CATdesign$person$thetas # current estimate
-#' CATdesign$person$thetas_history
-#' CATdesign$person$thetas_SE_history
-#' findNextItem(CATdesign) # find next item
+#' findNextItem(CATdesign) 
 #' 
 #' # continue on, now with item 95 added next (answered incorrectly)
 #' CATdesign <- updateDesign(CATdesign, new_item = 95, new_response = 0)
-#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
 #' CATdesign$person$thetas
 #' CATdesign$person$thetas_history
 #' CATdesign$person$thetas_SE_history
@@ -75,7 +67,7 @@
 #' 
 #' }
 #' 
-updateDesign <- function(x, new_item, new_response){
+updateDesign <- function(x, new_item, new_response, updateTheta = TRUE){
     if(missing(x) || missing(new_item) || missing(new_response))
         stop('require inputs have not been supplied', call.=FALSE)
     if(length(new_item) > 1L || length(new_response) > 1L)
@@ -88,5 +80,7 @@ updateDesign <- function(x, new_item, new_response){
     x$person$raw_responses[new_item] <- as.character(x$person$responses[new_item] + 1L)
     pick <- min(which(is.na(x$person$items_answered)))
     x$person$items_answered[pick] <- as.integer(new_item)
+    if(updateTheta)
+        x$design@Update.thetas(x$design, x$person, x$test) 
     return(x)
 }

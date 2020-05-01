@@ -4,7 +4,7 @@
 \alias{updateDesign}
 \title{Update design elements}
 \usage{
-updateDesign(x, new_item, new_response)
+updateDesign(x, new_item, new_response, updateTheta = TRUE)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -13,6 +13,9 @@ when passing \code{design_elements = TRUE}}
 \item{new_item}{a numeric vector indicating which items to select}
 
 \item{new_response}{a numeric vector indicating the responses the the selected items}
+
+\item{updateTheta}{logical; update the internal ability terms after the new item response has been
+added to the internal objects?}
 }
 \value{
 returns an object of class 'mirtCAT_design' with updated elements.
@@ -47,27 +50,17 @@ CATdesign$person$items_answered
 CATdesign <- updateDesign(CATdesign, new_item = 2, new_response = 1)
 CATdesign$person$items_answered  # item 2 answered first
 CATdesign$person$responses       # in item 2 element response was = 1 
-
-# update internal Theta estimate using Update.thetas definition
-CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
-CATdesign$person$thetas
-findNextItem(CATdesign) # find next item
+CATdesign$person$thetas # current estimate
+findNextItem(CATdesign) 
 
 # determine next item if item 70 were also answered correctly next
 CATdesign <- updateDesign(CATdesign, new_item = 70, new_response = 1)
 CATdesign$person$items_answered  
 CATdesign$person$responses       
-
-# update the Theta using the Update.thetas definition in design
-CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
-CATdesign$person$thetas # current estimate
-CATdesign$person$thetas_history
-CATdesign$person$thetas_SE_history
-findNextItem(CATdesign) # find next item
+findNextItem(CATdesign) 
 
 # continue on, now with item 95 added next (answered incorrectly)
 CATdesign <- updateDesign(CATdesign, new_item = 95, new_response = 0)
-CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
 CATdesign$person$thetas
 CATdesign$person$thetas_history
 CATdesign$person$thetas_SE_history
