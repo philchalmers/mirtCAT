@@ -4,39 +4,75 @@
 \alias{updateDesign}
 \title{Update design elements}
 \usage{
-updateDesign(x, items, responses, Theta = NULL)
+updateDesign(x, new_item, new_response)
 }
 \arguments{
 \item{x}{an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
 when passing \code{design_elements = TRUE}}
 
-\item{items}{a numeric vector indicating which items to select}
+\item{new_item}{a numeric vector indicating which items to select}
 
-\item{responses}{a numeric vector indicating the responses the the selected items}
-
-\item{Theta}{(optional) vector indicating the value of Theta/latent traits to be set}
+\item{new_response}{a numeric vector indicating the responses the the selected items}
 }
 \value{
 returns an object of class 'mirtCAT_design' with updated elements.
 }
 \description{
-A function that will update the object returned from \code{\link{findNextItem}}.
+A function that will update the object returned from \code{\link{findNextItem}}. This can 
+be used to run the CAT session manually in a set-by-step manner.
 }
 \examples{
 \dontrun{
+
+set.seed(1)
+nitems <- 100
+itemnames <- paste0('Item.', 1:nitems)
+a <- matrix(rlnorm(nitems, .2, .3))
+d <- matrix(rnorm(nitems))
+dat <- simdata(a, d, 500, itemtype = 'dich')
+colnames(dat) <- itemnames
+mod <- mirt(dat, 1, verbose = FALSE)
+
 # test defined in mirtCAT help file, first example
-CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
+CATdesign <- mirtCAT(mo = mod, criteria = 'MI', design_elements = TRUE,
+  start_item = 2)
 
-# returns number 1 in this case, since that's the starting item
+# returns 2 in this case, since that was the starting item
 findNextItem(CATdesign) 
 
-# determine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
-CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
-findNextItem(CATdesign) 
+# first iteration, no answered items
+CATdesign$person$items_answered
 
-# alternatively, update the Theta using the Update.thetas definition in design
+# update when next item is item 2 and answered correctly
+CATdesign <- updateDesign(CATdesign, new_item = 2, new_response = 1)
+CATdesign$person$items_answered  # item 2 answered first
+CATdesign$person$responses       # in item 2 element response was = 1 
+
+# update internal Theta estimate using Update.thetas definition
 CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
+CATdesign$person$thetas
+findNextItem(CATdesign) # find next item
+
+# determine next item if item 70 were also answered correctly next
+CATdesign <- updateDesign(CATdesign, new_item = 70, new_response = 1)
+CATdesign$person$items_answered  
+CATdesign$person$responses       
+
+# update the Theta using the Update.thetas definition in design
+CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
+CATdesign$person$thetas # current estimate
+CATdesign$person$thetas_history
+CATdesign$person$thetas_SE_history
+findNextItem(CATdesign) # find next item
+
+# continue on, now with item 95 added next (answered incorrectly)
+CATdesign <- updateDesign(CATdesign, new_item = 95, new_response = 0)
+CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test) 
+CATdesign$person$thetas
+CATdesign$person$thetas_history
+CATdesign$person$thetas_SE_history
 findNextItem(CATdesign)
+
 }
 
 }

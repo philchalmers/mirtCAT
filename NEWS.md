@@ -1,5 +1,9 @@
 # mirtCAT 1.10
 
+- Re-work the `updateDesign()` function to more naturally move through the CAT session manually.
+  Previous response and selected item arguments now replaced with `new_response` and `new_item`, 
+  respectively, and example documentation updated to reflect this change
+
 - `ordered` and `unordered` constraints no longer stop in the middle of testlet set, 
   thereby ignoring other stoping criteria (suggested by Christoph König)
 

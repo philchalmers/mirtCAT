@@ -38,12 +38,15 @@ test_that('extra', {
                                   Type = 'radio', stringsAsFactors = FALSE)
     CATdesign <- mirtCAT(df, mod2, criteria = 'MI', design_elements = TRUE)
     expect_equal(1, findNextItem(CATdesign))
-    CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
-    expect_equal(20, findNextItem(CATdesign))
+    CATdesign <- updateDesign(CATdesign, new_item = 1, new_response = 1)
     CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test)
+    CATdesign <- updateDesign(CATdesign, new_item = 10, new_response = 1)
     expect_equal(3, findNextItem(CATdesign))
+    CATdesign <- updateDesign(CATdesign, new_item = 3, new_response = 0)
+    CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test)
+    expect_equal(20, findNextItem(CATdesign))
     vals <- computeCriteria(CATdesign, criteria = 'MI')
-    expect_equal(unname(vals[1:4]), c(0.15030639, 0.36584452, 0.62360073, 0.08852707), tolerance = 1e-4)
+    expect_equal(unname(vals[1:4]), c(0.11804853, 0.43875746, 0.70730264, 0.08116204), tolerance = 1e-4)
     
     # shadow test (less than 20 items, items 31+41 not in same test, item 3 not answered)
     constr_fun <- function(design, person, test){
@@ -68,7 +71,7 @@ test_that('extra', {
     CATdesign <- mirtCAT(df, mod2, design_elements = TRUE,
                          design = list(constr_fun=constr_fun))
     item <- findNextItem(CATdesign, objective=vals)
-    expect_equal(item, 27)
+    expect_equal(item, 20)
     
     customNextItem <- function(person, design, test){
         objective <- computeCriteria(person=person, design=design, test=test, 

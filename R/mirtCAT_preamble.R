@@ -56,6 +56,7 @@ mirtCAT_preamble_internal <-
             shinyGUI$stem_default_format <- shiny::HTML
         if(is.null(df)){
             if(is.null(mo)) stop('No df or mo supplied', call.=FALSE)
+            if(design_elements) local_pattern <- rep(NA, extract.mirt(mo, 'nitems'))
             if(is.null(local_pattern)) stop('is.null df input, and no local_pattern supplied', 
                                             call.=FALSE)
             if(is.vector(local_pattern)) local_pattern <- matrix(local_pattern, 1L)
@@ -68,14 +69,16 @@ mirtCAT_preamble_internal <-
             df <- list()
             Timer <- rep(NA, length(K))
             item_answers <- NULL
-            sapply(1L:length(K), function(i, local_pattern, item_options, mins){
-                opts <- item_options[[i]] + mins[i]
-                if(!all(local_pattern[,i] %in% opts)){
-                    outs <- as.character(c(i, min(opts), max(opts)))
-                    stop(sprintf('For item %s, responses must be between %s and %s. Please fix.',
-                                 outs[1L], outs[2L], outs[3L]), call.=FALSE)
-                }
-            }, local_pattern=local_pattern, item_options=item_options, mins=mo@Data$mins)
+            if(!design_elements){
+                sapply(1L:length(K), function(i, local_pattern, item_options, mins){
+                    opts <- item_options[[i]] + mins[i]
+                    if(!all(local_pattern[,i] %in% opts)){
+                        outs <- as.character(c(i, min(opts), max(opts)))
+                        stop(sprintf('For item %s, responses must be between %s and %s. Please fix.',
+                                     outs[1L], outs[2L], outs[3L]), call.=FALSE)
+                    }
+                }, local_pattern=local_pattern, item_options=item_options, mins=mo@Data$mins)
+            }
         } else {
             if(!is.data.frame(df))
                 stop('df input must be a data.frame', call.=FALSE)
