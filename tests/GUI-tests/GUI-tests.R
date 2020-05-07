@@ -10,7 +10,12 @@ questions <- c("Building CATs with mirtCAT is difficult.",
                "mirtCAT requires a substantial amount of coding.",
                "I would use mirtCAT in my research.")
 df <- data.frame(Question = questions, Option = options, Type = "radio")
+
 results <- mirtCAT(df = df)
+summary(results)
+
+# max_time
+results <- mirtCAT(df = df, design = list(max_time = 600))
 summary(results)
 
 # manual HTML tags, not forced

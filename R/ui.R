@@ -16,14 +16,8 @@ default_UI <- function(){
         #  Application title
         headerPanel(.MCE[[sessionName]]$shinyGUI$title),
         
-        # FIXME can't access person properties if using MASTER enviroment
-        # if(is.finite(.MCE[[sessionName]]$design@max_time)){
-        #     h6(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining, 
-        #               formatTime(.MCE[[sessionName]]$design@max_time - 
-        #                              sum(.MCE[[sessionName]]$person$item_time))))
-        # } else NULL,
-        
         sidebarPanel(
+            h4(textOutput("currentTime")),
             if(.MCE[[sessionName]]$shinyGUI$author != '') h4("Authors:") else NULL,
             if(.MCE[[sessionName]]$shinyGUI$author != '') h5(.MCE[[sessionName]]$shinyGUI$author) else NULL,
             div(

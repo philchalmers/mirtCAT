@@ -4,6 +4,7 @@ server <- function(input, output, session) {
     
     .MCE[[sessionName]] <- as.environment(as.list(.MCE[['MASTER']], all.names=TRUE))
     .MCE[[sessionName]]$person <- deepCopyPerson(.MCE[['MASTER']]$person)
+    .MCE[[sessionName]]$initial_start_time <- Sys.time()
     
     session$onSessionEnded(function() {
         if(!.MCE[[sessionName]]$design@stop_now){
@@ -19,6 +20,16 @@ server <- function(input, output, session) {
     
     output$Main <- renderUI({
         dynamicUi()
+    })
+    
+    output$currentTime <- renderText({
+        invalidateLater(1000, session)
+        delta_time <- try(as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time))
+        if(is(delta_time, 'try-error')) browser()
+        if(is.finite(.MCE[[sessionName]]$design@max_time)){
+            return(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining,
+                      formatTime(.MCE[[sessionName]]$design@max_time - delta_time)))
+        } else return(NULL)
     })
     
     dynamicUi <- reactive({

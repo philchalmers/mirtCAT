@@ -1,5 +1,8 @@
 # mirtCAT 1.10
 
+- Time remaining now reported in real-time, where now the last ten minutes of a GUI session prints
+  the minutes and seconds reminaing 
+
 - Re-work the `updateDesign()` function to more naturally move through the CAT session manually.
   Previous response and selected item arguments now replaced with `new_response` and `new_item`, 
   respectively, and example documentation updated to reflect this change
