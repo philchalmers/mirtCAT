@@ -11,11 +11,11 @@ notifications:
     on_success: change
     on_failure: change
 
-r_binary_packages:
-  - devtools
+r_packages:
   - Rcpp
   - RcppArmadillo
   - testthat
+  - devtools
   - mirt
 
 r_build_args: "--no-build-vignettes"
