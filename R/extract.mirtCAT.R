@@ -25,6 +25,7 @@
 #'     previously administered items}
 #'   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
 #'     participant to response to the item}
+#'   \item{\code{demographics}}{a data.frame containing the (optional) prior survey information from the GUI interface}
 #'   \item{\code{clientData}}{a list of useful information from shiny's \code{session$clientData}}
 #' }
 #' 
@@ -173,6 +174,7 @@ extract.mirtCAT <- function(x, what){
                thetas = x$thetas,
                thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
                item_time = x$item_time,
+               demographics = x$demographics,
                clientData = x$clientData)
     } else if(cls == 'Test'){
         switch(what, mo = x@mo)
