@@ -88,7 +88,7 @@ setMethod("initialize", signature(.Object = "Test"),
               } 
               .Object@fscores_args <- tmp
               .Object@EIs <- lapply(1L:.Object@length, 
-                                    function(x, test) extract.item(test, x), test=.Object@mo)
+                                    function(x, test) mirt::extract.item(test, x), test=.Object@mo)
               .Object
           }
 )

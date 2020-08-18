@@ -60,16 +60,17 @@ setMethod("initialize", signature(.Object = "Design"),
                               person$Update_thetas(person$thetas,
                                                    person$thetas_SE_history[nrow(person$thetas_SE_history),])
                           } else {
-                              suppressWarnings(tmp <- fscores(test@mo, method=method, response.pattern=responses2,
+                              suppressWarnings(tmp <- mirt::fscores(test@mo, method=method, response.pattern=responses2,
                                                               theta_lim=test@fscores_args$theta_lim,
                                                               MI = test@fscores_args$MI, quadpts = test@quadpts, 
                                                               mean = test@fscores_args$mean, cov = test@fscores_args$cov,
                                                               QMC=test@fscores_args$QMC, max_theta=test@fscores_args$max_theta,
                                                               custom_den=test@fscores_args$custom_den,
                                                               start = person$thetas))
-                              if(all(is.finite(tmp[,paste0('F', 1L:test@nfact), drop=FALSE]))){
-                                  person$Update_thetas(tmp[,paste0('F', 1L:test@nfact), drop=FALSE],
-                                                       tmp[,paste0('SE_F', 1L:test@nfact), drop=FALSE])
+                              fact_names <- mirt::extract.mirt(test@mo, 'factorNames')
+                              if(all(is.finite(tmp[,fact_names, drop=FALSE]))){
+                                  person$Update_thetas(tmp[,fact_names, drop=FALSE],
+                                                       tmp[,paste0('SE_', fact_names), drop=FALSE])
                               } else {
                                   person$Update_thetas(person$thetas,
                                                        person$thetas_SE_history[nrow(person$thetas_SE_history),])
@@ -329,7 +330,7 @@ setMethod("Next.stage", signature(.Object = "Design"),
               if(.Object@stage < 2L){
                   if(item >= .Object@preCAT_min_items){
                       if(.Object@preCAT_response_var){
-                          suppressWarnings(tmp <- try(fscores(test@mo, method='ML', 
+                          suppressWarnings(tmp <- try(mirt::fscores(test@mo, method='ML', 
                                                               max_theta=Inf,
                                                               start=person$thetas,
                                                               response.pattern=person$responses), 

@@ -62,7 +62,7 @@ Person$methods(
             responses2[design@items_not_scored] <- NA
             pick <- which(!is.na(responses2))
             infos <- lapply(pick, function(x, thetas)
-                FI(extract.item(test@mo, x), Theta=thetas), thetas=thetas)
+                FI(mirt::extract.item(test@mo, x), Theta=thetas), thetas=thetas)
             tmp <- matrix(0, nrow(infos[[1L]]), ncol(infos[[1L]]))
             for(i in seq_len(length(infos)))
                 tmp <- tmp + infos[[i]]
