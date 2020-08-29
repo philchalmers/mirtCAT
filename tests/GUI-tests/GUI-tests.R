@@ -25,6 +25,9 @@ results <- mirtCAT(df = dftime, design = list(max_time = 600),
                    shinyGUI = list(forced_choice=FALSE))
 results <- mirtCAT(df = dftime,
                    shinyGUI = list(forced_choice=FALSE))
+dftime$Answer <- df$Option.1
+results <- mirtCAT(df = dftime,
+                   shinyGUI = list(forced_choice=FALSE))
 summary(results)
 
 # manual HTML tags, not forced

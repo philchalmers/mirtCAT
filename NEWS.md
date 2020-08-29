@@ -1,3 +1,9 @@
+# mirtCAT 1.11
+
+- `df$Timer` is now printer for each respective item in the GUI, and if time runs out then the item 
+  is either replaced with an NA response or marked as "incorrect" if one or more `Answer` elements
+  were present (requested by Morten Nordmo)
+
 # mirtCAT 1.10
 
 - Time remaining now reported in real-time, where now the last ten minutes of a GUI session prints

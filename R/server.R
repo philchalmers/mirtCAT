@@ -24,22 +24,30 @@ server <- function(input, output, session) {
     
     output$currentTime <- renderText({
         invalidateLater(1000, session)
-        delta_time <- try(as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time))
+        if(.MCE[[sessionName]]$person$terminated_sucessfully)
+            return(NULL)
+        delta_time <- as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time)
         if(is.finite(.MCE[[sessionName]]$design@max_time)){
+            diff <- .MCE[[sessionName]]$design@max_time - delta_time
+            if(diff < 0) diff <- 0
             return(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining,
-                      formatTime(.MCE[[sessionName]]$design@max_time - delta_time)))
+                      formatTime(diff)))
         } else return(NULL)
     })
     
     output$itemTime <- renderText({
-        invalidateLater(1000, session)
+        invalidateLater(200, session)
+        if(.MCE[[sessionName]]$person$terminated_sucessfully)
+            return(NULL)
         item <- .MCE[[sessionName]]$item
         if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
-            delta_time <- try(.MCE[[sessionName]]$shinyGUI$timer[item] - 
-                                  as.integer(Sys.time() - .MCE[[sessionName]]$item_start_time))
+            delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
+                                  as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time)
+            if(delta_time < .3 && !is.na(.MCE[[sessionName]]$test@item_answers[[item]]))
+                .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
             return(paste0("Item timer: ",
-                          formatTime(delta_time)))
+                          formatTime(as.integer(delta_time))))
         } else return(NULL)
     })
     
