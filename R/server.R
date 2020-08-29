@@ -25,10 +25,21 @@ server <- function(input, output, session) {
     output$currentTime <- renderText({
         invalidateLater(1000, session)
         delta_time <- try(as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time))
-        if(is(delta_time, 'try-error')) browser()
         if(is.finite(.MCE[[sessionName]]$design@max_time)){
             return(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining,
                       formatTime(.MCE[[sessionName]]$design@max_time - delta_time)))
+        } else return(NULL)
+    })
+    
+    output$itemTime <- renderText({
+        invalidateLater(1000, session)
+        item <- .MCE[[sessionName]]$item
+        if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
+            delta_time <- try(.MCE[[sessionName]]$shinyGUI$timer[item] - 
+                                  as.integer(Sys.time() - .MCE[[sessionName]]$item_start_time))
+            if(delta_time < 0) delta_time <- 0
+            return(paste0("Item timer: ",
+                          formatTime(delta_time)))
         } else return(NULL)
     })
     
@@ -245,6 +256,7 @@ server <- function(input, output, session) {
                     else findNextCATItem(person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test, 
                                         design=.MCE[[sessionName]]$design, start=FALSE)
                 .MCE[[sessionName]]$item <- item
+                .MCE[[sessionName]]$item_start_time <- Sys.time()
                 if(!is.null(attr(item, 'design'))) .MCE[[sessionName]]$design <- attr(item, 'design')
                 if(is.na(item)){
                     .MCE[[sessionName]]$design@stop_now <- TRUE

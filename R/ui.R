@@ -17,7 +17,8 @@ default_UI <- function(){
         headerPanel(.MCE[[sessionName]]$shinyGUI$title),
         
         sidebarPanel(
-            h4(textOutput("currentTime")),
+            h5(textOutput("currentTime")),
+            h5(em(textOutput("itemTime"))),
             if(.MCE[[sessionName]]$shinyGUI$author != '') h4("Authors:") else NULL,
             if(.MCE[[sessionName]]$shinyGUI$author != '') h5(.MCE[[sessionName]]$shinyGUI$author) else NULL,
             div(

@@ -18,6 +18,15 @@ summary(results)
 results <- mirtCAT(df = df, design = list(max_time = 600))
 summary(results)
 
+# item timer
+dftime <- df
+dftime$Timer <- 60*3
+results <- mirtCAT(df = dftime, design = list(max_time = 600), 
+                   shinyGUI = list(forced_choice=FALSE))
+results <- mirtCAT(df = dftime,
+                   shinyGUI = list(forced_choice=FALSE))
+summary(results)
+
 # manual HTML tags, not forced
 df2 <- df
 questions <- c("Building <strong>CATs</strong> with mirtCAT is <br> <br> difficult.",
