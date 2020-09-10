@@ -38,7 +38,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               forced_choice <<- TRUE
                               theme <<- ''
                               Timer <- as.numeric(Timer)
-                              timer <<- ifelse(is.finite(Timer), Timer, as.numeric(NA))
+                              timer <<- ifelse(is.finite(Timer), Timer, as.numeric(0))
                               if(length(CustomTypes)){
                                   if(length(CustomTypes) != length(unique(names(CustomTypes))))
                                       stop('customTypes list requires unique names for each function', call.=FALSE)
