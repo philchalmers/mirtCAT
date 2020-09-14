@@ -806,7 +806,11 @@ mirtCAT <- function(df = NULL, mo = NULL, method = 'MAP', criteria = 'seq',
         return(ret)
     }
     if(GUI){
-        runApp(createShinyGUI(ui=.MCE[[sessionName]]$shinyGUI$ui, host_server = FALSE),  
+        if(any(dir() == 'www')){
+            dirname <- paste0(getwd(), '/www')
+            shiny::addResourcePath('www', dirname)
+        }
+        shiny::runApp(createShinyGUI(ui=.MCE[[sessionName]]$shinyGUI$ui, host_server = FALSE),  
                launch.browser=TRUE, ...)
         person <- .MCE[['COMPLETED']]$person
         force(.MCE[['COMPLETED']] <- NULL) # as early as possible

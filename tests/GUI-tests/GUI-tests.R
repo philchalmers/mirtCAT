@@ -227,8 +227,6 @@ results <- mirtCAT(df = df, shinyGUI = list(forced_choice = FALSE),
                    customTypes=list(myQ=myfun))
 
 # audio/video
-dirname <- paste0(getwd(), '/www')
-shiny::addResourcePath('www', dirname)
 df <- data.frame(Question = c("", 
                               as.character(tags$audio(src = "www/clip.mp3", type = "audio/mp3",
                                                       autoplay = TRUE, controls = TRUE)),
