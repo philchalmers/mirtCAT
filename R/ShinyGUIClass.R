@@ -38,7 +38,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               forced_choice <<- TRUE
                               theme <<- ''
                               Timer <- as.numeric(Timer)
-                              timer <<- ifelse(is.finite(Timer), Timer, as.numeric(0))
+                              timer <<- ifelse(is.finite(Timer), Timer, 0)
                               if(length(CustomTypes)){
                                   if(length(CustomTypes) != length(unique(names(CustomTypes))))
                                       stop('customTypes list requires unique names for each function', call.=FALSE)
@@ -143,7 +143,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   if(!is.null(shinyGUI$max_password_attempts))
                                       max_password_attempts <<- shinyGUI$max_password_attempts
                               }
-                              if(any(!is.na(timer)) && forced_choice) 
+                              if(any(timer > 0) && forced_choice) 
                                   stop('Timer inputs cannot be combined with shinyGUI$forced_choice = TRUE', 
                                        call.=FALSE)
                           })
