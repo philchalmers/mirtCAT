@@ -46,7 +46,7 @@ server <- function(input, output, session) {
             if(delta_time < .3 && !is.na(.MCE[[sessionName]]$test@item_answers[[item]]))
                 .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
-            return(paste0("Item timer: ",
+            return(paste0(.MCE[[sessionName]]$shinyGUI$itemtimer,
                           formatTime(as.integer(delta_time))))
         } else return(NULL)
     })
