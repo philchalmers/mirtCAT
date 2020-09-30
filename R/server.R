@@ -198,7 +198,7 @@ server <- function(input, output, session) {
                     if(!is.null(.MCE[[sessionName]]$shinyGUI$df$Mastery)){
                         mastery <- as.logical(.MCE[[sessionName]]$shinyGUI$df$Mastery[pick])
                         if(isTRUE(mastery) && .MCE[[sessionName]]$person$responses[pick] == 0L){
-                            outmessage <- HTML("<p style='color:red;'><em>The answer provided was incorrect. Please select an alternative.</em></p>")
+                            outmessage <- HTML(paste0("<p style='color:red;'><em>",.MCE[[sessionName]]$shinyGUI$incorrect,"</em></p>"))
                             .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
                             .MCE[[sessionName]]$invalid_count <- .MCE[[sessionName]]$invalid_count + 1L
                             tmp <- lapply(.MCE[[sessionName]]$shinyGUI$df, function(x, pick) x[pick], pick=pick)

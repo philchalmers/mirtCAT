@@ -9,6 +9,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     lastpage = 'function',
                                     instructions = 'character',
                                     itemtimer = 'character',
+                                    incorrect = 'character',
                                     begin_message = 'character',
                                     stem_locations = 'character',
                                     stem_expressions = 'character',
@@ -78,6 +79,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               instructions <<- c("To progress through the interface, click on the action button below.",
                                                  "Next")
                               itemtimer <<- 'Item timer:'
+                              incorrect <<- 'The answer provided was incorrect. Please select an alternative.'
                               time_remaining <<- "Time remaining: "
                               response_msg <<- "Please provide a suitable response"
                               demographic_inputIDs <<- character(0)
@@ -99,7 +101,7 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                                  
                               if(length(shinyGUI)){
                                   dnames <- names(shinyGUI)
-                                  gnames <- c('title', 'authors', 'instructions', 'itemtimer', 'firstpage', 'demographics',
+                                  gnames <- c('title', 'authors', 'instructions', 'itemtimer', 'incorrect', 'firstpage', 'demographics',
                                               'demographics_inputIDs', 'temp_file', "time_remaining", "response_msg",
                                               'lastpage', 'css', 'stem_dims', 'forced_choice', 'stem_locations',
                                               'begin_message', 'ui', 'password', 'stem_default_format',
@@ -116,6 +118,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       instructions <<- shinyGUI$instructions
                                   if(!is.null(shinyGUI$itemtimer))
                                       itemtimer <<- shinyGUI$itemtimer
+                                  if(!is.null(shinyGUI$incorrect))
+                                      incorrect <<- shinyGUI$incorrect
                                   if(!is.null(shinyGUI$begin_message))
                                       begin_message <<- shinyGUI$begin_message
                                   if(!is.null(shinyGUI$title))
