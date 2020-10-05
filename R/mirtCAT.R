@@ -455,6 +455,18 @@
 #'     The second part of the character vector provides the name for the action button.
 #'   }
 #'
+#'   \item{\code{itemtimer}}{A character string to display the item-timer clock. Default is 
+#'     \code{'Item timer: '}}
+#'
+#'   \item{\code{incorrect}}{A character string to display in case of a failed response. Default is 
+#'     \code{'The answer provided was incorrect. Please select an alternative.'}}
+#'     
+#'   \item{\code{failpass}}{A character string to display in case of a failed password input. Default is 
+#'     \code{'Incorrect Login Name/Password. Please try again (you have %s attempts remaining).'}}
+#'     
+#'   \item{\code{timemsg}}{A three part character vector indicating words for hour, minute, second & and. Default is 
+#'     \code{c('hour ','minutes ','seconds ', 'and ')}}
+#'
 #'   \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
 #'     and information message. 
 #'     
@@ -551,7 +563,7 @@
 #'          represents the user name and all other columns as the same as the first option. 
 #'          E.g., if two users ('name1' and 'name2') 
 #'          are given the same password '1234' then 
-#'          \code{password = data.frame(user = c('user1', 'user2'), password = rep('1234', 2))}}      
+#'          \code{password = data.frame(User = c('user1', 'user2'), Password = rep('1234', 2))}}      
 #'      }
 #'    }
 #'    
