@@ -43,7 +43,7 @@ server <- function(input, output, session) {
         delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
         if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
             delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
-                                  as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time)
+                                  as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time,units = 'secs')
             if(delta_time < .3 && !is.na(.MCE[[sessionName]]$test@item_answers[[item]]))
                 .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
