@@ -272,16 +272,16 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
     return(ret)
 }
 
-formatTime <- function(delta){
+formatTime <- function(delta,delta_msg){
     hours <- delta %/% 3600
     mins <- delta %/% 60 - hours * 60
     secs <- ceiling(delta - hours * 60 - mins * 60)
     if(hours >= 1){
-        out <- sprintf('%s hour and %s minutes.', hours, mins)
+        out <- sprintf('%s %s %s %s.', hours,delta_msg[1],delta_msg[4],mins,delta_msg[2])
     } else if(mins >= 10){
-        out <- sprintf('%s minutes.', mins)
+        out <- sprintf('%s %s.', mins,delta_msg[2])
     } else {
-        out <- sprintf('%s minutes and %s seconds.', mins, secs)
+        out <- sprintf('%s %s %s %s %s', mins,delta_msg[2],delta_msg[4],secs,delta_msg[3])
     }
     out
 }

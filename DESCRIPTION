@@ -3,9 +3,12 @@ Version: 1.10.2
 Type: Package
 Title: Computerized Adaptive Testing with Multidimensional Item
         Response Theory
-Authors@R: c( person("Phil", family="Chalmers", email =
+Authors@R: c(person("Phil", family="Chalmers", email =
                      "rphilip.chalmers@gmail.com", role = c("aut", "cre"),
-                     comment = c(ORCID="0000-0001-5332-2810")))
+                     comment = c(ORCID="0000-0001-5332-2810")),
+            person("Magnus",family="Nordmo",email = 
+                    "magnus.nordmo@psykologi.uio.no", role = "ctb"),
+                    comment = c(ORCID="0000-0002-1977-1038"))
 Description: Provides tools to generate an HTML interface for creating adaptive
     and non-adaptive educational and psychological tests using the shiny
     package (Chalmers (2016) <doi:10.18637/jss.v071.i05>). 

@@ -40,14 +40,15 @@ server <- function(input, output, session) {
         if(.MCE[[sessionName]]$person$terminated_sucessfully)
             return(NULL)
         item <- .MCE[[sessionName]]$item
+        delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
         if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
             delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
-                                  as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time)
+                                  as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time,units = 'secs')
             if(delta_time < .3 && !is.na(.MCE[[sessionName]]$test@item_answers[[item]]))
                 .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
-            return(paste0("Item timer: ",
-                          formatTime(as.integer(delta_time))))
+            return(paste0(.MCE[[sessionName]]$shinyGUI$itemtimer,
+                          formatTime(as.integer(delta_time),delta_msg)))
         } else return(NULL)
     })
     
@@ -87,12 +88,12 @@ server <- function(input, output, session) {
                         return(list(textInput("UsErNaMe", label = "Login Name:"),
                                     passwordInput("PaSsWoRd", 'Password:'),
                                     HTML(paste0("<p style='color:red;'> <em>", 
-                                                sprintf('Incorrect Login Name/Password. Please try again (you have %s attempts remaining).',
+                                                sprintf(.MCE[[sessionName]]$shinyGUI$failpass,
                                                         attempts_remaining)), "</em> </p>")))
                     else {
                         return(list(passwordInput("PaSsWoRd", 'Password:'),
                                     HTML(paste0("<p style='color:red;'> <em>", 
-                                                sprintf('Incorrect Login Password. Please try again (you have %s attempts remaining).',
+                                                sprintf(.MCE[[sessionName]]$shinyGUI$failpass,
                                                         attempts_remaining)), "</em> </p>")))
                     }
                 }
@@ -198,7 +199,7 @@ server <- function(input, output, session) {
                     if(!is.null(.MCE[[sessionName]]$shinyGUI$df$Mastery)){
                         mastery <- as.logical(.MCE[[sessionName]]$shinyGUI$df$Mastery[pick])
                         if(isTRUE(mastery) && .MCE[[sessionName]]$person$responses[pick] == 0L){
-                            outmessage <- HTML("<p style='color:red;'><em>The answer provided was incorrect. Please select an alternative.</em></p>")
+                            outmessage <- HTML(paste0("<p style='color:red;'><em>",.MCE[[sessionName]]$shinyGUI$incorrect,"</em></p>"))
                             .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
                             .MCE[[sessionName]]$invalid_count <- .MCE[[sessionName]]$invalid_count + 1L
                             tmp <- lapply(.MCE[[sessionName]]$shinyGUI$df, function(x, pick) x[pick], pick=pick)
