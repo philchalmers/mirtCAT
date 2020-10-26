@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{get_mirtCAT_env}
 \alias{get_mirtCAT_env}
-\title{Get the interal working enviroment state during mirtCAT session}
+\title{Get the internal working environment state during mirtCAT session}
 \usage{
 get_mirtCAT_env(sessionName)
 }
@@ -10,7 +10,7 @@ get_mirtCAT_env(sessionName)
 \item{sessionName}{the name of the session defined in \code{\link{mirtCAT}}}
 }
 \value{
-a list containing the internal enviromental components for mirtCAT
+a list containing the internal environmental components for mirtCAT
 }
 \description{
 This function is used to access the internal state of the mirtCAT GUI session. 

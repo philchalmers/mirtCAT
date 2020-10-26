@@ -54,7 +54,7 @@ Person$methods(
     
     # Update thetas
     Update.info_mats = function(design, test){
-        'Update the information matricies for previous answered multidimensional IRT models'
+        'Update the information matrices for previous answered multidimensional IRT models'
         set <- c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule', 'APrule',
                  'DPrule', 'TPrule', 'EPrule', 'WPrule', 'custom')
         if(test@nfact > 1L && design@criteria %in% set){

@@ -90,6 +90,18 @@ mirtCAT_preamble_internal <-
                         call.=FALSE)
             nitems <- nrow(df)
             df_rownames <- rownames(df)
+            if(is.null(shinyGUI$choiceNames))
+                shinyGUI$choiceNames <- shinyGUI$choiceValues <- vector('list', nitems)
+            if(!is.null(df$HTMLOptions)){
+                Options <- df[grepl('Option.', colnames(df))]
+                for(pick in which(df$HTMLOptions)){
+                    tmpopts <- lapply(as.character(Options[pick, ]), HTML)
+                    names(tmpopts) <- NULL
+                    shinyGUI$choiceNames[[pick]] <- tmpopts
+                    shinyGUI$choiceValues[[pick]] <- as.list(colnames(Options)[1L:length(tmpopts)])
+                }
+                df$HTMLOptions <- NULL
+            }
             df <- lapply(df, as.character)
             df$Rendered_Question <- lapply(df$Question, function(x, fun) if(x != "") shiny::withMathJax(fun(x)),
                                   fun=shinyGUI$stem_default_format)
@@ -111,8 +123,6 @@ mirtCAT_preamble_internal <-
                     tmp[[nm]] <- shinyGUI$choiceValues[[nm]]
                 shinyGUI$choiceValues <- tmp
             }
-            if(is.null(shinyGUI$choiceNames))
-                shinyGUI$choiceNames <- shinyGUI$choiceValues <- vector('list', nitems)
             if(length(shinyGUI$choiceNames) != nitems)
                 stop('choiceNames input is not the correct length', call.=FALSE)
             if(length(shinyGUI$choiceValues) != nitems)

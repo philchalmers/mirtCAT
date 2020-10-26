@@ -61,7 +61,7 @@ typically returns an integer value indicating the index of the next item to be s
 }
 \description{
 A function that returns the next item in the computerized adaptive, optimal assembly, or shadow test.
-For direction manupulation of the internal objects this function should be used in conjunction
+For direction manipulation of the internal objects this function should be used in conjunction
 with the \code{\link{updateDesign}} and \code{customNextItem}.
 Finally, the raw input forms can be used when a \code{customNextItem} function has been
 defined in \code{\link{mirtCAT}}.
@@ -92,7 +92,7 @@ result <- mirtCAT(mo=mod, local_pattern = response,
                   design = list(customNextItem=customNextItem))
                 
 -----------------------------------------------------------
-# direct manupulation of internal objects
+# direct manipulation of internal objects
 CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
 
 # returns number 1 in this case, since that's the starting item

@@ -14,10 +14,10 @@ in the string as well? This further helps with the uniqueness of the generated
 string}
 }
 \value{
-a list containing the internal enviromental components for mirtCAT
+a list containing the internal environmental components for mirtCAT
 }
 \description{
 This is used in \code{\link{mirtCAT}} to create a random session name so that
-\code{shiny} knows which enviroment to select objects from when multiple CAT
+\code{shiny} knows which environment to select objects from when multiple CAT
 sessions have been initialized.
 }

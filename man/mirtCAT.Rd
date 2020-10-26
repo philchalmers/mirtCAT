@@ -128,6 +128,12 @@ mirtCAT(
       prior to continuing. Naturally, this requires that one or more \code{Answers} are provided,
       or suitable functions for scoring are supplied}
       
+    \item{\code{HTMLOptions}}{(Optional) a logical vector indicating whether the respective
+      \code{Option.#} terms should be wrapped within an \code{\link{HTML}} function and rendered
+       for suitable shiny inputs (e.g., radio buttons). This is a short-hand wrapper to the more
+       flexible \code{choiceNames} approach, which can be used to wrap option inputs with alternative 
+       functions.}
+      
     \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
       the \code{Question} input is required along with (at minimum) a 
       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
@@ -460,134 +466,6 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
   
 }}
 
-\item{shinyGUI}{a list of GUI based parameters to be over-written. These can be
-
-\describe{
-  \item{\code{title}}{A character string for the test title. Default is 
-    \code{'mirtCAT'}}
-  
-  \item{\code{authors}}{A character string for the author names. Default is 
-    \code{'Author of survey'}. If the input is an empty string (\code{''}) then the author 
-    information will be omitted in the GUI}
-    
-  \item{\code{instructions}}{A two part character vector indicating how to use the GUI. 
-    Default is: 
-  
-    \preformatted{c("To progress through the interface, click on the action button below.",
-       "Next")}
-       
-    The second part of the character vector provides the name for the action button.
-  }
-
-  \item{\code{firstpage}}{The first page of the shiny GUI. Default prints the title
-    and information message. 
-    
-    \preformatted{ 
-         list(h1('Welcome to the mirtCAT interface'),
-              sprintf('The following interface was created using the mirtCAT package v%s. 
-              To cite the package use citation(\\'mirtCAT\\') in R.', 
-                 packageVersion("mirtCAT")))
-         }
-         
-     If an empty list is passed, this page will be skipped.
-   }
-   
-   \item{\code{begin_message}}{Text to display on the page prior to beginning the CAT. Default is 
-     \code{"Click the action button to begin."} for scored tests whereby a \code{mo} object has been include,
-     while the default is \code{""} for non-scored tests (which disables the page).}
-
-  \item{\code{demographics}}{A person information page used in the GUI for collecting 
-    demographic information, generated using tools from the shiny package. For example,
-    the following code asks the participants about their Gender: 
- 
-    \preformatted{ 
-         list(selectInput(inputId = 'gender',
-                  label = 'Please select your gender.',
-                  choices = c('', 'Male', 'Female', 'Other'),
-                  selected = ''))
-        }
-        
-     By default, the demographics page is not included. 
-        
-     }
-     
-  \item{\code{demographics_inputIDs}}{a character vector required if a custom demographics
-    input is used. Default is \code{demographics_inputIDs = 'gender'}, corresponding to
-    the \code{demographics} default}
-    
-  \item{\code{stem_default_format}}{\code{shiny} function used for the stems of the items. Default uses the 
-    \code{\link{HTML}} wrapper, allowing for HTML tags to be included directly in the character vector 
-    definitions. To change this to something different, like \code{\link{h5}} for example, 
-    pass \code{stem_default_format = shiny::h5} to the \code{shinyGUI} list}
-    
-  \item{\code{temp_file}}{a character vector indicating where a temporary .rds file 
-    containing the response information should be saved while the GUI is running. 
-    The object will be saved after each item is successfully completed. This is used to 
-    save response information to the hard drive in case there are power outages or 
-    unexpected computer restarts.      
-    
-    If \code{NULL}, no temp file will be created. Upon completion of the test, the 
-    temp file will be deleted. If a file already exists, however, then this will be used to 
-    resume the GUI at the last location where the session was interrupted}
-    
-  \item{\code{lastpage}}{A function printing the last message, indicating that the test has been completed 
-    (i.e., criteria has been met). The function requires exactly one argument (called \code{person}), where 
-    the input argument is the person object that has been updated throughout the test. The default function is 
-  
-    \preformatted{function(person){ 
-                    return(list(h5("You have successfully completed the interface. 
-                                   It is now safe to leave the application.")))
-                     } }
-   }    
-   
-   \item{\code{css}}{a character string defining CSS elements to modify the GUI presentation 
-     elements. The input string is passed to the argument \code{tags$style(HTML(shinyGUI$css))}
-     prior to constructing the user interface}
- 
-   \item{\code{theme}}{a character definition for the \code{shinytheme} package to globally change 
-     the GUI theme}
-     
-   \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
-     This should only be set to \code{FALSE} for surveys (not CATs)}
-     
-   \item{\code{choiceNames}}{a list containing the \code{choiceNames} input for each respective item when
-     the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}). 
-     This is used to modify the output of the controllers using 
-     suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
-     the value \code{NULL} in the associated list element will use the standard inputs instead. 
-     Alternatively, if specified the names of the elements to this list can be used to match the 
-     rownames of the \code{df} object to avoid the use of \code{NULL} placeholders}
-     
-   \item{\code{choiceValues}}{associated values to be used along with \code{choiceNames} (see above)}
-     
-   \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have elapsed
-     when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
-     to control accidental skips over items when responses are not forced. Default is 1, indicating
-     one full second}
-     
-   \item{\code{password}}{a \code{data.frame} object indicating the user name (optional) and password
-     required prior to beginning the CAT. Possible options are
-     \describe{
-       \item{No User Information}{a single row \code{data.frame}. Each column supplied in this case will be associated
-         with a suitable password for all individuals. Naturally, if only 1 column is defined then
-         there is only 1 global password for all users}
-       \item{User Information Pairing}{a multi-row \code{data.frame} where the first column 
-         represents the user name and all other columns as the same as the first option. 
-         E.g., if two users ('name1' and 'name2') 
-         are given the same password '1234' then 
-         \code{password = data.frame(user = c('user1', 'user2'), password = rep('1234', 2))}}      
-     }
-   }
-   
-     
-   \item{\code{response_msg}}{string to print when valid responses are required but the users does not provide
-     a valid input. Default is \code{"Please provide a suitable response"}}    
-     
-   \item{\code{ui}}{a shiny UI function used to define the interface. If \code{NULL}, the 
-     default one will be used. See \code{mirtCAT:::default_UI} for the internal code definition}
-  
-}}
-
 \item{preCAT}{a list object which can be used to specify a pre-CAT block in which 
   different test properties may be applied prior to beginning the CAT session. If the
   list is empty, no preCAT block will be used. All of the following elements are required 
@@ -781,7 +659,7 @@ summary(res_random)
 summary(res_MI)
 
 #-----------------------------------------
-# HTML tags for better customization, coerced to characters for compatability
+# HTML tags for better customization, coerced to characters for compatibility
 
 # help(tags, package='shiny')
 options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),

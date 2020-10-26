@@ -1,5 +1,8 @@
 # mirtCAT 1.11
 
+- New argument `df$HTMLOptions` added to indicate whether the `Options.#` inputs should be evaluated
+  using `HTML()` first and passed to the suitable constructor functions (requested by John Manacup)
+
 - `df$Timer` is now printer for each respective item in the GUI, and if time runs out then the item 
   is either replaced with an NA response or marked as "incorrect" if one or more `Answer` elements
   were present (requested by Morten Nordmo)

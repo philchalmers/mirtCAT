@@ -99,6 +99,13 @@ results2 <- mirtCAT(df = df, shinyGUI = list(forced_choice = TRUE,
                                              choiceValues=choiceValues))
 summary(results2)
 
+# in-line HTML construction for Options
+options <- matrix(c("<b>Strongly Disagree</b>", "Disagree", "Neutral", "Agree", "Strongly Agree"),
+                  nrow = 3, ncol = 5, byrow = TRUE)
+df <- data.frame(Question = questions, Option = options, Type = "radio", 
+                 HTMLOptions = c(TRUE, FALSE, TRUE))
+results <- mirtCAT(df = df)
+
 # mathJax test
 df3 <- df
 df3$Question[1] <- 'Something something \\(\\sqrt{2}\\)? Why yes, $$e = mc^2$$'

@@ -3,7 +3,7 @@
 #' Create a unique GUI session name from a string of characters
 #' 
 #' This is used in \code{\link{mirtCAT}} to create a random session name so that
-#' \code{shiny} knows which enviroment to select objects from when multiple CAT
+#' \code{shiny} knows which environment to select objects from when multiple CAT
 #' sessions have been initialized.
 #' 
 #' @param n number of upper/lower characters to sample
@@ -13,7 +13,7 @@
 #'   string
 #' 
 #' @export
-#' @return a list containing the internal enviromental components for mirtCAT
+#' @return a list containing the internal environmental components for mirtCAT
 createSessionName <- function(n = 30, datetime = TRUE){
     ret <- paste0(sapply(1:n, function(x) sample(c(LETTERS, letters), 1L)), collapse='')
     if(datetime) ret <- paste0(ret, "_", Sys.time())
@@ -21,7 +21,7 @@ createSessionName <- function(n = 30, datetime = TRUE){
 }
 
 
-#' Get the interal working enviroment state during mirtCAT session
+#' Get the internal working environment state during mirtCAT session
 #' 
 #' This function is used to access the internal state of the mirtCAT GUI session. 
 #' It is only useful when designing a customized GUI using the \code{shinyGUI$ui}
@@ -30,7 +30,7 @@ createSessionName <- function(n = 30, datetime = TRUE){
 #' @param sessionName the name of the session defined in \code{\link{mirtCAT}}
 #' 
 #' @export
-#' @return a list containing the internal enviromental components for mirtCAT
+#' @return a list containing the internal environmental components for mirtCAT
 get_mirtCAT_env <- function(sessionName) return(as.list(.MCE[[sessionName]]))
 
 FI <- function(mirt_item, Theta){

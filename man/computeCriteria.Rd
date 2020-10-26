@@ -36,7 +36,7 @@ a multi-unidimensional CAT session where unidimensional blocks should be cluster
 for smoother presentation. Useful when using the \code{customNextItem} function in 
 \code{\link{mirtCAT}}}
 
-\item{info_mats}{logical; if more than one trait is present in the test, should the repective information
+\item{info_mats}{logical; if more than one trait is present in the test, should the respective information
 matricies be returned instead of the scalar summary statistics (e.g., D-rule). When TRUE will 
 return a list of matricies associated with each respective item}
 }

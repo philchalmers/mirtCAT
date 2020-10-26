@@ -101,6 +101,12 @@
 #'       prior to continuing. Naturally, this requires that one or more \code{Answers} are provided,
 #'       or suitable functions for scoring are supplied}
 #'       
+#'     \item{\code{HTMLOptions}}{(Optional) a logical vector indicating whether the respective
+#'       \code{Option.#} terms should be wrapped within an \code{\link{HTML}} function and rendered
+#'        for suitable shiny inputs (e.g., radio buttons). This is a short-hand wrapper to the more
+#'        flexible \code{choiceNames} approach, which can be used to wrap option inputs with alternative 
+#'        functions.}
+#'       
 #'     \item{\code{...}}{In cases where \code{'slider'} inputs are used instead only 
 #'       the \code{Question} input is required along with (at minimum) a 
 #'       \code{min}, \code{max}, and \code{step} column. In rows where the \code{Type == 'slider'} the 
@@ -739,7 +745,7 @@
 #' summary(res_MI)
 #' 
 #' #-----------------------------------------
-#' # HTML tags for better customization, coerced to characters for compatability
+#' # HTML tags for better customization, coerced to characters for compatibility
 #' 
 #' # help(tags, package='shiny')
 #' options <- matrix(c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"),

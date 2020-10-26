@@ -204,7 +204,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   if(!is.null(design$constraints))
                       if(!all(names(design$constraints) %in% 
                               c("independent", "unordered", "ordered", "not_scored", "excluded")))
-                          stop('Named element in constraints list not suppored', call.=FALSE)
+                          stop('Named element in constraints list not supported', call.=FALSE)
                   if(!is.null(design$constraints$excluded)){
                       .Object@excluded <- design$constraints$excluded
                       design$constraints$excluded <- NULL
