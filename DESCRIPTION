@@ -19,10 +19,10 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     for tests which contain a large number of item selection constraints.
     Finally, package contains tools useful for performing Monte Carlo simulations 
     for studying the behavior of computerized adaptive test banks.
-Roxygen: list(wrap = FALSE)
 Depends: mirt (>= 1.25), shiny (>= 1.0.1)
 Imports: lattice, stats, Rcpp, methods, markdown, pbapply, lpSolve
 Suggests: shinythemes, parallel, SimDesign, knitr
+Encoding: UTF-8
 ByteCompile: yes
 LazyLoad: yes
 LazyData: yes

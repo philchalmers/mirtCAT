@@ -233,7 +233,7 @@
 #'   
 #' @param progress logical; print a progress bar to the console 
 #'   with the \code{pbapply} package for given response patterns? Useful for 
-#'   guaging how long Monte Carlo simulations will take to finish
+#'   gauging how long Monte Carlo simulations will take to finish
 #'   
 #' @param design a list of design based control parameters for adaptive and non-adaptive tests. 
 #'   These can be
@@ -468,7 +468,7 @@
 #'     \code{'The answer provided was incorrect. Please select an alternative.'}}
 #'     
 #'   \item{\code{failpass}}{A character string to display in case of a failed password input. Default is 
-#'     \code{'Incorrect Login Name/Password. Please try again (you have %s attempts remaining).'}}
+#'     \code{'Incorrect Login Name/Password. Please try again (you have \%s attempts remaining).'}}
 #'     
 #'   \item{\code{timemsg}}{A three part character vector indicating words for hour, minute, second & and. Default is 
 #'     \code{c('hour ','minutes ','seconds ', 'and ')}}
