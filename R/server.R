@@ -178,7 +178,8 @@ server <- function(input, output, session) {
                 }
                 if(.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
                     if(ip == "") ip <- NULL
-                if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click){
+                item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer < (proc.time()[3L] - .MCE[[sessionName]]$start_time)
+                if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click && item_time_valid){
                     ip <- as.character(ip)
                     nanswers <- length(ip)
                     .MCE[[sessionName]]$person$raw_responses[pick] <- paste0(ip, collapse = '; ')
@@ -226,10 +227,8 @@ server <- function(input, output, session) {
                         saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
                     .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person)
                 } else {
-                    if(.MCE[[sessionName]]$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE[[sessionName]]$start_time) || 
-                       (.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
-                        if(.MCE[[sessionName]]$shinyGUI$time_before_answer >= (proc.time()[3L] - .MCE[[sessionName]]$start_time))
-                            outmessage <- NULL
+                    if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
+                        if(!item_time_valid) outmessage <- NULL
                         .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
                         .MCE[[sessionName]]$invalid_count <- .MCE[[sessionName]]$invalid_count + 1L
                         tmp <- lapply(.MCE[[sessionName]]$shinyGUI$df, function(x, pick) x[pick], pick=pick)
