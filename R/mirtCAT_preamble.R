@@ -50,6 +50,7 @@ mirtCAT_preamble_internal <-
              final_fun = NULL, ...)
     {
         sessionName <- 'MASTER'
+        if(!is.null(.MCE$currentSessionName)) .MCE$currentSessionName <- NULL
         is_adaptive <- !is.null(mo)
         Names <- if(!is.null(mo)) colnames(mo@Data$data) else NULL
         if(is.null(shinyGUI$stem_default_format)) 
