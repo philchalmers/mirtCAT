@@ -2,6 +2,9 @@ server <- function(input, output, session) {
     
     sessionName <- createSessionName()
     
+    # for local use
+    .MCE$currentSessionName <- sessionName
+    
     .MCE[[sessionName]] <- as.environment(as.list(.MCE[['MASTER']], all.names=TRUE))
     .MCE[[sessionName]]$person <- deepCopyPerson(.MCE[['MASTER']]$person)
     .MCE[[sessionName]]$initial_start_time <- Sys.time()

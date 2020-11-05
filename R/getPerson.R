@@ -30,7 +30,7 @@
 #' summary(person)
 #' } 
 getPerson <- function(){
-    sessionName <- 'COMPLETE'
+    sessionName <- .MCE$currentSessionName
     ret <- mirtCAT_post_internal(person=.MCE[[sessionName]]$person, 
                                  design=.MCE[[sessionName]]$design,
                                  has_answers=.MCE[[sessionName]]$test@has_answers, 
