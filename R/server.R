@@ -235,11 +235,12 @@ server <- function(input, output, session) {
                         .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
                         .MCE[[sessionName]]$invalid_count <- .MCE[[sessionName]]$invalid_count + 1L
                         tmp <- lapply(.MCE[[sessionName]]$shinyGUI$df, function(x, pick) x[pick], pick=pick)
+                        default <- if(tmp$Type %in% nativeTypes()) ip else NULL
                         tmp <- buildShinyElements(questions=tmp, customTypes=.MCE[[sessionName]]$shinyGUI$customTypes, 
                                                   itemnames=paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl', name),
                                                   choiceNames=.MCE[[sessionName]]$shinyGUI$choiceNames[pick],
                                                   choiceValues=.MCE[[sessionName]]$shinyGUI$choiceValues[pick],
-                                                  default = ip)
+                                                  default = default)
                         stemOutput <- stemContent(pick, sessionName=sessionName)
                         .MCE[[sessionName]]$prevClick <- click
                         return(list(stemOutput, 

@@ -142,7 +142,7 @@ integrate.xy <- function(x,fx, a,b, use.spline = TRUE, xtol = 2e-8)
 buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, choiceValues,
                                default = NULL){
     J <- length(questions$Type)
-    if(!all(sapply(questions[names(questions) != 'Rendered_Question'], is.character))) 
+    if(!all(sapply(questions[names(questions) != 'Rendered_Question'], is.character)))
         stop('Only character classes are supported in questions input', call.=FALSE)
     if(is.null(itemnames)) itemnames <- paste0('Item.', 1L:J)
     names <- names(questions)
@@ -251,7 +251,7 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
                                     stringsAsFactors = FALSE)
             df_row$Rendered_Question <- NULL
             # TODO default is a problem if the timer re-evaluates the expression
-            if(!is.null(default)) 
+            if(!is.null(default))
                 stop('Internal error throw for customTypes with timer', call. = FALSE)
             Qs[[i]] <- customTypes[[nm]](inputId = itemnames[i], df_row=df_row)
         } else if(Type[i] == 'none'){
@@ -304,6 +304,9 @@ possible_pattern_thetas <- function(possible_patterns, test, method = 'EAP'){
                                     max_theta = test@fscores_args$max_theta))
     tmp
 }
+
+nativeTypes <- function() 
+    c('radio', 'select', 'text', 'testArea', 'slider', 'checkbox', 'rankselect')
 
 stemContent <- function(pick, sessionName){
     if(!is.na(.MCE[[sessionName]]$shinyGUI$stem_expressions[pick])){
