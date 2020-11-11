@@ -96,7 +96,7 @@ mirtCAT_preamble_internal <-
             if(!is.null(df$HTMLOptions)){
                 Options <- df[grepl('Option\\.', colnames(df))]
                 for(pick in which(df$HTMLOptions)){
-                    tmpopts <- lapply(as.character(Options[pick, ]), HTML)
+                    tmpopts <- lapply(na.omit(as.character(Options[pick, ])), HTML)
                     names(tmpopts) <- NULL
                     shinyGUI$choiceNames[[pick]] <- tmpopts
                     shinyGUI$choiceValues[[pick]] <- as.list(colnames(Options)[1L:length(tmpopts)])
