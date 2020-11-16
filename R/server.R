@@ -195,7 +195,8 @@ server <- function(input, output, session) {
                     if(ip == "") ip <- NULL
                 diff_item_time <- (proc.time()[3L] - .MCE[[sessionName]]$start_time)
                 item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer < diff_item_time
-                if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click && item_time_valid){
+                # clickedNext <- .MCE[[sessionName]]$prevClick != click
+                if(!is.null(ip) && item_time_valid){
                     printDebug("Observed response collected")
                     ip <- as.character(ip)
                     nanswers <- length(ip)
@@ -234,7 +235,8 @@ server <- function(input, output, session) {
                         }
                     }
                     
-                    .MCE[[sessionName]]$person$item_time[pick] <- diff_item_time
+                    .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
+                                                                      .MCE[[sessionName]]$shinyGUI$timer[pick])
                     .MCE[[sessionName]]$start_time <- NULL
                     
                     #update Thetas
@@ -259,7 +261,7 @@ server <- function(input, output, session) {
                                                   default = default)
                         stemOutput <- stemContent(pick, sessionName=sessionName)
                         .MCE[[sessionName]]$prevClick <- click
-                        if(!item_time_valid)
+                        if(!item_time_valid && .MCE[[sessionName]]$shinyGUI$timer[pick] > 0)
                             invalidateLater((.MCE[[sessionName]]$shinyGUI$timer[pick] - diff_item_time)*1000)
                         return(list(stemOutput, 
                                     .MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[pick]], 
