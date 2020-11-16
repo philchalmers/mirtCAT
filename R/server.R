@@ -22,7 +22,7 @@ server <- function(input, output, session) {
         .MCE[['COMPLETED']]$person <- deepCopyPerson(.MCE[[sessionName]]$person) 
         .MCE[[sessionName]] <- NULL
         if(!.MCE[['MASTER']]$host_server) stopApp()
-        invisible()
+        invisible(NULL)
     })
     
     output$Main <- renderUI({
@@ -54,7 +54,7 @@ server <- function(input, output, session) {
         if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
             delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
                                   as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time,units = 'secs')
-            if(delta_time < .3 && !is.na(.MCE[[sessionName]]$test@item_answers[[item]]))
+            if(delta_time < .3 && is.na(.MCE[[sessionName]]$person$raw_responses[item]))
                 .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
             return(paste0(.MCE[[sessionName]]$shinyGUI$itemtimer,
@@ -170,21 +170,25 @@ server <- function(input, output, session) {
         
         # run survey
         printDebug("Response block")
-        outmessage <- HTML(paste0("<p style='color:red;'> <em>", .MCE[[sessionName]]$shinyGUI$response_msg, "</em> </p>"))
+        outmessage <- HTML(paste0("<p style='color:red;'> <em>", 
+                                  .MCE[[sessionName]]$shinyGUI$response_msg, "</em> </p>"))
         if(click > 2L && !.MCE[[sessionName]]$design@stop_now && !.MCE[[sessionName]]$STOP){
             if(itemclick >= 1L){
                 printDebug("Collect response")
                 pick <- .MCE[[sessionName]]$person$items_answered[itemclick]
                 name <- .MCE[[sessionName]]$test@itemnames[pick]
                 ip <- unname(input[[name]])
-                if(.MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('select', 'rankselect') && .MCE[[sessionName]]$shinyGUI$forced_choice && ip == "")
+                if(.MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('select', 'rankselect') && 
+                   .MCE[[sessionName]]$shinyGUI$forced_choice && ip == "")
                     ip <- NULL
                 if(.MCE[[sessionName]]$invalid_count > 0L)
                     ip <- input[[paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl',name)]]
-                if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click && .MCE[[sessionName]]$shinyGUI$df$Type[pick] == "rankselect"){
+                if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click && 
+                   .MCE[[sessionName]]$shinyGUI$df$Type[pick] == "rankselect"){
                     nopts <- length(.MCE[[sessionName]]$test@item_options[[pick]]) - 1L
                     for(opt in 2L:nopts){
-                        if(.MCE[[sessionName]]$invalid_count > 0L) ip <- c(ip, input[[paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl',name,"_", opt)]])
+                        if(.MCE[[sessionName]]$invalid_count > 0L) ip <- 
+                                c(ip, input[[paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl',name,"_", opt)]])
                         else ip <- c(ip, input[[paste0(name, "_", opt)]])
                     }
                     if(length(ip) != length(unique(ip))){
@@ -195,7 +199,7 @@ server <- function(input, output, session) {
                 if(.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
                     if(ip == "") ip <- NULL
                 diff_item_time <- (proc.time()[3L] - .MCE[[sessionName]]$start_time)
-                item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer < diff_item_time
+                item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer <= diff_item_time
                 # clickedNext <- .MCE[[sessionName]]$prevClick != click
                 if(!is.null(ip) && item_time_valid){
                     printDebug("Observed response collected")
@@ -209,7 +213,7 @@ server <- function(input, output, session) {
                     }
                     if(.MCE[[sessionName]]$test@item_class[pick] != 'nestlogit'){
                         if(is.function(.MCE[[sessionName]]$test@AnswerFuns[[pick]])){
-                            .MCE[[sessionName]]$person$responses[pick] <- as.integer(.MCE[[sessionName]]$test@AnswerFuns[[pick]](ip))
+                            force(.MCE[[sessionName]]$person$responses[pick] <- as.integer(.MCE[[sessionName]]$test@AnswerFuns[[pick]](ip)))
                         } else if(!is.na(.MCE[[sessionName]]$test@item_answers[[pick]])){
                             if(nanswers > 1L)
                                 .MCE[[sessionName]]$person$responses[pick] <- as.integer(sum(ip %in% .MCE[[sessionName]]$test@item_answers[[pick]]))
