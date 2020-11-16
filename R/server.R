@@ -35,11 +35,12 @@ server <- function(input, output, session) {
         if(.MCE[[sessionName]]$person$terminated_sucessfully)
             return(NULL)
         delta_time <- as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time)
+        delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
         if(is.finite(.MCE[[sessionName]]$design@max_time)){
             diff <- .MCE[[sessionName]]$design@max_time - delta_time
             if(diff < 0) diff <- 0
             return(paste0(.MCE[[sessionName]]$shinyGUI$time_remaining,
-                      formatTime(diff)))
+                      formatTime(diff, delta_msg)))
         } else return(NULL)
     })
     

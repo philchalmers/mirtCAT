@@ -272,7 +272,7 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
     return(ret)
 }
 
-formatTime <- function(delta,delta_msg){
+formatTime <- function(delta, delta_msg){
     hours <- delta %/% 3600
     mins <- delta %/% 60 - hours * 60
     secs <- ceiling(delta - hours * 60 - mins * 60)
