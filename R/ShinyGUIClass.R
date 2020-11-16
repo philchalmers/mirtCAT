@@ -159,9 +159,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   if(!is.null(shinyGUI$max_password_attempts))
                                       max_password_attempts <<- shinyGUI$max_password_attempts
                               }
-                              if(any(timer > 0) && forced_choice) 
-                                  stop('Timer inputs cannot be combined with shinyGUI$forced_choice = TRUE', 
-                                       call.=FALSE)
+                              if(any(timer > 0)) 
+                                  forced_choice <<- FALSE
                           })
                       
 )

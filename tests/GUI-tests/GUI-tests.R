@@ -38,7 +38,14 @@ questions <- c("Building <strong>CATs</strong> with mirtCAT is <br> <br> difficu
 results <- mirtCAT(df = df2, shinyGUI=list(forced_choice = FALSE))
 summary(results)
 
-# correct answer scoring
+# correct answer scoring with timer
+df2 <- df
+df2$Answer <- c('Strongly Disagree', 'Neutral', 'Strongly Agree')
+df2$Timer <- 10
+results <- mirtCAT(df = df2)
+summary(results)
+
+# correct answer scoring (mastery)
 df2 <- df
 df2$Answer <- c('Agree', 'Agree', 'Agree')
 df2$Mastery <- c(TRUE, FALSE, FALSE)
