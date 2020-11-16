@@ -1,5 +1,8 @@
 server <- function(input, output, session) {    
     
+    setDebug(level = 0)
+    printDebug("Top of server")
+    
     sessionName <- createSessionName()
     
     # for local use
@@ -10,6 +13,7 @@ server <- function(input, output, session) {
     .MCE[[sessionName]]$initial_start_time <- Sys.time()
     
     session$onSessionEnded(function() {
+        printDebug("onSessionEnded")
         if(!.MCE[[sessionName]]$design@stop_now){
             message('WARNING: mirtCAT GUI session unexpectedly terminated early')
             .MCE[[sessionName]]$person$terminated_sucessfully <- FALSE
@@ -26,6 +30,7 @@ server <- function(input, output, session) {
     })
     
     output$currentTime <- renderText({
+        printDebug("currentTime", 3)
         invalidateLater(1000, session)
         if(.MCE[[sessionName]]$person$terminated_sucessfully)
             return(NULL)
@@ -39,6 +44,7 @@ server <- function(input, output, session) {
     })
     
     output$itemTime <- renderText({
+        printDebug("itemTime", 3)
         invalidateLater(200, session)
         if(.MCE[[sessionName]]$person$terminated_sucessfully)
             return(NULL)
@@ -57,6 +63,8 @@ server <- function(input, output, session) {
     
     dynamicUi <- reactive({
         
+        printDebug("Top of dynamicUI")
+        
         click <- input$Next
         
         if(!length(.MCE[[sessionName]]$person$clientData)){
@@ -71,6 +79,7 @@ server <- function(input, output, session) {
         }
         
         if(length(.MCE[[sessionName]]$shinyGUI$password)){
+            printDebug("Password block")
             if(click == 0L){
                 .MCE[[sessionName]]$verified <- FALSE
                 if(nrow(.MCE[[sessionName]]$shinyGUI$password) > 1L)
@@ -110,6 +119,7 @@ server <- function(input, output, session) {
         if(.MCE[[sessionName]]$resume_file && click < 1L){
             return(list(h5("Click the action button to continue with your session.")))
         } else {
+            printDebug("Demographics")
             #skip first page? Demographics, etc
             if(!length(.MCE[[sessionName]]$shinyGUI$firstpage)) click <- click + 1L
             if(click == 0L)
@@ -158,9 +168,11 @@ server <- function(input, output, session) {
         }
         
         # run survey
+        printDebug("Response block")
         outmessage <- HTML(paste0("<p style='color:red;'> <em>", .MCE[[sessionName]]$shinyGUI$response_msg, "</em> </p>"))
         if(click > 2L && !.MCE[[sessionName]]$design@stop_now && !.MCE[[sessionName]]$STOP){
             if(itemclick >= 1L){
+                printDebug("Collect response")
                 pick <- .MCE[[sessionName]]$person$items_answered[itemclick]
                 name <- .MCE[[sessionName]]$test@itemnames[pick]
                 ip <- unname(input[[name]])
@@ -181,8 +193,10 @@ server <- function(input, output, session) {
                 }
                 if(.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
                     if(ip == "") ip <- NULL
-                item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer < (proc.time()[3L] - .MCE[[sessionName]]$start_time)
+                diff_item_time <- (proc.time()[3L] - .MCE[[sessionName]]$start_time)
+                item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer < diff_item_time
                 if(!is.null(ip) && .MCE[[sessionName]]$prevClick != click && item_time_valid){
+                    printDebug("Observed response collected")
                     ip <- as.character(ip)
                     nanswers <- length(ip)
                     .MCE[[sessionName]]$person$raw_responses[pick] <- paste0(ip, collapse = '; ')
@@ -220,7 +234,7 @@ server <- function(input, output, session) {
                         }
                     }
                     
-                    .MCE[[sessionName]]$person$item_time[pick] <- proc.time()[3L] - .MCE[[sessionName]]$start_time
+                    .MCE[[sessionName]]$person$item_time[pick] <- diff_item_time
                     .MCE[[sessionName]]$start_time <- NULL
                     
                     #update Thetas
@@ -230,7 +244,9 @@ server <- function(input, output, session) {
                         saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
                     .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person)
                 } else {
+                    printDebug("No observed response")
                     if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
+                        printDebug("Invalid time/none type/forced", level = 2)
                         if(!item_time_valid) outmessage <- NULL
                         .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
                         .MCE[[sessionName]]$invalid_count <- .MCE[[sessionName]]$invalid_count + 1L
@@ -243,11 +259,15 @@ server <- function(input, output, session) {
                                                   default = default)
                         stemOutput <- stemContent(pick, sessionName=sessionName)
                         .MCE[[sessionName]]$prevClick <- click
+                        if(!item_time_valid)
+                            invalidateLater((.MCE[[sessionName]]$shinyGUI$timer[pick] - diff_item_time)*1000)
                         return(list(stemOutput, 
                                     .MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[pick]], 
                                     tmp$questions, outmessage))
                     } else {
-                        .MCE[[sessionName]]$person$item_time[pick] <- proc.time()[3L] - .MCE[[sessionName]]$start_time
+                        printDebug("No response, updating", level = 2)
+                        .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
+                                                                          .MCE[[sessionName]]$shinyGUI$timer[pick])
                         .MCE[[sessionName]]$start_time <- NULL
                         #update Thetas (same as above)
                         .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
@@ -260,10 +280,12 @@ server <- function(input, output, session) {
                 }
             } 
             
+            printDebug("Reset item")
             .MCE[[sessionName]]$invalid_count <- 0
             .MCE[[sessionName]]$design <- Next.stage(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test, item=itemclick)
             
             if(!.MCE[[sessionName]]$design@stop_now){
+                printDebug("Find next item", level = 2)
                 item <- if(all(is.na(.MCE[[sessionName]]$person$items_answered))) .MCE[[sessionName]]$design@start_item
                     else findNextCATItem(person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test, 
                                         design=.MCE[[sessionName]]$design, start=FALSE)
@@ -291,6 +313,7 @@ server <- function(input, output, session) {
         
         #last page
         if(!.MCE[[sessionName]]$STOP){
+            printDebug("Last page")
             .MCE[[sessionName]]$STOP <- TRUE
             if(!is.null(.MCE[[sessionName]]$final_fun)){
                 ret <- mirtCAT_post_internal(person=.MCE[[sessionName]]$person, design=.MCE[[sessionName]]$design,

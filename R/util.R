@@ -355,3 +355,22 @@ deepCopyPerson <- function(ref){
     copy <- ref$copy()
     copy
 }
+
+
+
+setDebug <- function(level=1){
+    if(level > 1){
+        .MCE$DEBUG <- TRUE
+        .MCE$debug_level <- level
+    } else .MCE$DEBUG <- NULL
+    invisible(NULL)
+}
+
+printDebug <- function(msg, level = 1){
+    if(!is.null(.MCE$DEBUG)){
+        if(.MCE$debug_level >= 1 && level == 1) cat('L1: Printed from', msg, "\n\n")
+        if(.MCE$debug_level >= 2 && level == 2) cat('.. L2: Printed from', msg, "\n")
+        if(.MCE$debug_level >= 3 && level == 3) cat('... L3: Printed from', msg, "\n")
+    }
+    invisible(NULL)
+}
