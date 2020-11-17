@@ -183,7 +183,7 @@ server <- function(input, output, session) {
                 name <- .MCE[[sessionName]]$test@itemnames[pick]
                 ip <- unname(input[[name]])
                 if(.MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('select', 'rankselect') && 
-                   .MCE[[sessionName]]$shinyGUI$forced_choice && ip == "")
+                   .MCE[[sessionName]]$shinyGUI$forced_choice && !is.null(ip) && ip == "")
                     ip <- NULL
                 if(.MCE[[sessionName]]$invalid_count > 0L)
                     ip <- input[[paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl',name)]]
@@ -256,7 +256,8 @@ server <- function(input, output, session) {
                     .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person)
                 } else {
                     printDebug("No observed response")
-                    if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
+                    if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && 
+                                            .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
                         printDebug("Invalid time/none type/forced", level = 2)
                         if(!item_time_valid) outmessage <- NULL
                         .MCE[[sessionName]]$shift_back <- .MCE[[sessionName]]$shift_back + 1L
@@ -313,7 +314,7 @@ server <- function(input, output, session) {
                         saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
                     stemOutput <- stemContent(pick=item, sessionName=sessionName)
                     .MCE[[sessionName]]$prevClick <- click
-                    if(!is.na(.MCE[[sessionName]]$shinyGUI$timer[item]))
+                    if(.MCE[[sessionName]]$shinyGUI$timer[item] > 0)
                         invalidateLater(.MCE[[sessionName]]$shinyGUI$timer[item] * 1000)
                     return(list(stemOutput, 
                                 .MCE[[sessionName]]$shinyGUI$df$Rendered_Question[[item]], 
