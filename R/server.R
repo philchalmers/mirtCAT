@@ -54,11 +54,12 @@ server <- function(input, output, session) {
         if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
             delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
                                   as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time,units = 'secs')
-            if(delta_time < .3 && is.na(.MCE[[sessionName]]$person$raw_responses[item]))
+            if(delta_time < .3 && is.na(.MCE[[sessionName]]$person$raw_responses[item]) && 
+               .MCE[[sessionName]]$test@has_answers[item])
                 .MCE[[sessionName]]$person$responses[item] <- 0L
             if(delta_time < 0) delta_time <- 0
             return(paste0(.MCE[[sessionName]]$shinyGUI$itemtimer,
-                          formatTime(as.integer(delta_time),delta_msg)))
+                          formatTime(as.integer(delta_time), delta_msg)))
         } else return(NULL)
     })
     
@@ -213,7 +214,7 @@ server <- function(input, output, session) {
                     }
                     if(.MCE[[sessionName]]$test@item_class[pick] != 'nestlogit'){
                         if(is.function(.MCE[[sessionName]]$test@AnswerFuns[[pick]])){
-                            force(.MCE[[sessionName]]$person$responses[pick] <- as.integer(.MCE[[sessionName]]$test@AnswerFuns[[pick]](ip)))
+                            .MCE[[sessionName]]$person$responses[pick] <- as.integer(.MCE[[sessionName]]$test@AnswerFuns[[pick]](ip))
                         } else if(!is.na(.MCE[[sessionName]]$test@item_answers[[pick]])){
                             if(nanswers > 1L)
                                 .MCE[[sessionName]]$person$responses[pick] <- as.integer(sum(ip %in% .MCE[[sessionName]]$test@item_answers[[pick]]))

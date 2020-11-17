@@ -23,11 +23,19 @@ Test <- setClass(Class = "Test",
 setMethod("initialize", signature(.Object = "Test"),
           function(.Object, mo, item_answers_in, AnswerFuns, item_options,
                    quadpts_in, theta_range_in, dots){
-              .Object@has_answers <- ifelse(is.null(item_answers_in) && length(AnswerFuns) == 0L,
-                                            FALSE, TRUE)
               mo@Options$exploratory <- FALSE
               .Object@itemnames <- colnames(mo@Data$data)
-              mo@Data$mins <- rep(0L, length(mo@Data$min))
+              nitems <- length(.Object@itemnames)
+              if(!is.null(item_answers_in) || length(AnswerFuns) != 0L){
+                  logi1 <- if(!is.null(item_answers_in)){
+                      !sapply(item_answers_in, is.null)
+                  } else rep(FALSE, nitems)
+                  logi2 <- if(length(AnswerFuns)){
+                      sapply(AnswerFuns, is.function)
+                  } else rep(FALSE, nitems)
+                  .Object@has_answers <- logi1 | logi2
+              } else .Object@has_answers <- rep(FALSE, nitems)
+              mo@Data$mins <- rep(0L, nitems)
               .Object@mo <- mo
               .Object@item_class <- sapply(mo@ParObjects$pars, class)
               if(!all(.Object@item_class %in% c('dich', 'graded', 'nominal', 'gpcm', 'grsm',
