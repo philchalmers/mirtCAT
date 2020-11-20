@@ -54,7 +54,7 @@ server <- function(input, output, session) {
             return(NULL)
         item <- .MCE[[sessionName]]$item
         delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
-        if(!is.null(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
+        if(!is.null(item) && !is.na(item) && .MCE[[sessionName]]$shinyGUI$timer[item] > 0){
             delta_time <- .MCE[[sessionName]]$shinyGUI$timer[item] - 
                                   as.numeric(Sys.time() - .MCE[[sessionName]]$item_start_time,units = 'secs')
             if(delta_time < .3 && is.na(.MCE[[sessionName]]$person$raw_responses[item]) && 
@@ -249,7 +249,8 @@ server <- function(input, output, session) {
                     .MCE[[sessionName]]$start_time <- NULL
                     
                     #update Thetas
-                    .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
+                    .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, 
+                                                             person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
                     .MCE[[sessionName]]$person$Update.info_mats(design=.MCE[[sessionName]]$design, test=.MCE[[sessionName]]$test)
                     if(.MCE[[sessionName]]$shinyGUI$temp_file != '')
                         saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
@@ -282,7 +283,8 @@ server <- function(input, output, session) {
                                                                           .MCE[[sessionName]]$shinyGUI$timer[pick])
                         .MCE[[sessionName]]$start_time <- NULL
                         #update Thetas (same as above)
-                        .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
+                        .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, 
+                                                                 person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
                         .MCE[[sessionName]]$person$Update.info_mats(design=.MCE[[sessionName]]$design, test=.MCE[[sessionName]]$test)
                         if(.MCE[[sessionName]]$shinyGUI$temp_file != '')
                             saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
@@ -294,7 +296,8 @@ server <- function(input, output, session) {
             
             printDebug("Reset item")
             .MCE[[sessionName]]$invalid_count <- 0
-            .MCE[[sessionName]]$design <- Next.stage(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test, item=itemclick)
+            .MCE[[sessionName]]$design <- Next.stage(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person, 
+                                                     test=.MCE[[sessionName]]$test, item=itemclick)
             
             if(!.MCE[[sessionName]]$design@stop_now){
                 printDebug("Find next item", level = 2)
