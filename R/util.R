@@ -255,6 +255,8 @@ buildShinyElements <- function(questions, itemnames, customTypes, choiceNames, c
                 stop('Internal error throw for customTypes with timer', call. = FALSE)
             Qs[[i]] <- customTypes[[nm]](inputId = itemnames[i], df_row=df_row)
         } else if(Type[i] == 'none'){
+            cs <- choices[i, !is.na(choices[i, ])]
+            choices_list[[i]] <- cs
             next
         }
     }
