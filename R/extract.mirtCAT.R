@@ -23,6 +23,8 @@
 #'   \item{\code{thetas}}{the current ability/latent trait estimates given the previously administered items}
 #'   \item{\code{thetas_SE}}{the current ability/latent trait standard error estimates given the 
 #'     previously administered items}
+#'   \item{\code{thetas_history}}{history of the  ability/latent trait estimates}
+#'   \item{\code{thetas_SE_history}}{history of the latent trait standard error estimates}
 #'   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
 #'     participant to response to the item}
 #'   \item{\code{demographics}}{a data.frame containing the (optional) prior survey information from the GUI interface}
@@ -172,7 +174,9 @@ extract.mirtCAT <- function(x, what){
                items_answered = x$items_answered,
                items_in_bank = which(is.na(x$responses)[x$valid_item]),
                thetas = x$thetas,
+               thetas_history = x$thetas_history[1L:nrow(x$thetas_history), , drop=FALSE],
                thetas_SE = x$thetas_SE_history[nrow(x$thetas_SE_history), , drop=FALSE],
+               thetas_SE_history = x$thetas_SE_history[1L:nrow(x$thetas_SE_history), , drop=FALSE],
                item_time = x$item_time,
                demographics = x$demographics,
                clientData = x$clientData)

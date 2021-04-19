@@ -38,6 +38,8 @@ Depending on which object is supplied, the following elements can be extracted.
   \item{\code{thetas}}{the current ability/latent trait estimates given the previously administered items}
   \item{\code{thetas_SE}}{the current ability/latent trait standard error estimates given the 
     previously administered items}
+  \item{\code{thetas_history}}{history of the  ability/latent trait estimates}
+  \item{\code{thetas_SE_history}}{history of the latent trait standard error estimates}
   \item{\code{item_time}}{of the same form as \code{items_answered}, pertaining to the amount of time it took the 
     participant to response to the item}
   \item{\code{demographics}}{a data.frame containing the (optional) prior survey information from the GUI interface}
