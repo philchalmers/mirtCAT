@@ -81,6 +81,34 @@
 #'                         criteria = 'MI')
 #'    item
 #'  }
+#'  
+#' set.seed(1)
+#' nitems <- 100
+#' itemnames <- paste0('Item.', 1:nitems)
+#' a <- matrix(rlnorm(nitems, .2, .3))
+#' d <- matrix(rnorm(nitems))
+#' dat <- simdata(a, d, 500, itemtype = 'dich')
+#' colnames(dat) <- itemnames
+#' mod <- mirt(dat, 1, verbose = FALSE)
+#' 
+#' # simple math items
+#' questions <- answers <- character(nitems)
+#' choices <- matrix(NA, nitems, 5)
+#' spacing <- floor(d - min(d)) + 1 #easier items have more variation in the options
+#' 
+#' for(i in 1:nitems){
+#'  n1 <- sample(1:50, 1)
+#'  n2 <- sample(51:100, 1)
+#'  ans <- n1 + n2
+#'  questions[i] <- paste0(n1, ' + ', n2, ' = ?')
+#'  answers[i] <- as.character(ans)
+#'  ch <- ans + sample(c(-5:-1, 1:5) * spacing[i,], 5)
+#'  ch[sample(1:5, 1)] <- ans
+#'  choices[i, ] <- as.character(ch)
+#' }
+#' 
+#' df <- data.frame(Question=questions, Option=choices, 
+#'               Type = 'radio', stringsAsFactors = FALSE)
 #'    
 #' response <- generate_pattern(mod, 1)
 #' result <- mirtCAT(mo=mod, local_pattern = response, 
@@ -88,20 +116,18 @@
 #'                 
 #' -----------------------------------------------------------
 #' # direct manipulation of internal objects
-#' CATdesign <- mirtCAT(df, mod, criteria = 'MI', design_elements = TRUE)
+#' CATdesign <- mirtCAT(df=df, mo=mod, criteria = 'MI', design_elements = TRUE)
 #'
 #' # returns number 1 in this case, since that's the starting item
 #' findNextItem(CATdesign)
 #'
-#' # determine next item if item 1 and item 10 were answered correctly, and Theta = 0.5
-#' CATdesign <- updateDesign(CATdesign, items = c(1, 10), responses = c(1, 1), Theta = 0.5)
+#' # determine next item if item 1 and item 10 were answered correctly
+#' CATdesign <- updateDesign(CATdesign, new_item = 1, new_response = 1)
+#' extract.mirtCAT(CATdesign$person, 'thetas') # updated thetas
+#' CATdesign <- updateDesign(CATdesign, new_item = 10, new_response = 1)
+#' extract.mirtCAT(CATdesign$person, 'thetas') # updated thetas again
 #' findNextItem(CATdesign)
 #' findNextItem(CATdesign, all_index = TRUE) # all items rank in terms of most optimal
-#'
-#' # alternatively, update the Theta using the Update.thetas definition in design
-#' CATdesign$design@Update.thetas(CATdesign$design, CATdesign$person, CATdesign$test)
-#' findNextItem(CATdesign)
-#'
 #'
 #' #-------------------------------------------------------------
 #' ## Integer programming example (e.g., shadow testing)
@@ -136,10 +162,10 @@
 #'   constraints
 #' }
 #'
-#' #### CATdesign <- mirtCAT(..., design_elements = TRUE,
-#' ###                       design = list(constr_fun=constr_fun))
+#' CATdesign <- mirtCAT(df=df, mo=mod, design_elements = TRUE,
+#'                      design = list(constr_fun=constr_fun))
 #'
-#' #' # MI criteria value associated with each respective item
+#' # MI criteria value associated with each respective item
 #' objective <- computeCriteria(CATdesign, criteria = 'MI')
 #'
 #' # most optimal item, given constraints
@@ -173,7 +199,7 @@ findNextItem <- function(x, person = NULL, test = NULL, design = NULL, criteria 
         stop('Please specify a valid selection criteria in findNextItem()', call.=FALSE)
     ret <- if(!is.null(objective)){
         findNextItem.lp(objective, person=person, design=design,
-                        test=test, ...)
+                        test=test, all_index=all_index, ...)
     } else {
        findNextCATItem(person=person, test=test, design=design,
                        subset=subset, all_index=all_index)
