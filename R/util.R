@@ -347,7 +347,7 @@ verifyPassword <- function(input, password, sessionName){
             FALSE
         } else {
             .MCE[[sessionName]]$person$login_name <- user
-            pswd %in% tmp[,-1L]
+            pswd %in% tmp[,2L]
         }
     }
     verified
