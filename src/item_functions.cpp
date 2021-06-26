@@ -276,27 +276,27 @@ void I_graded(arma::mat &info_mat, const S4 &item,
 	const vector<double> &par, const vector<double> &Theta, const int &nfact)
 {
     vector<double> P = ProbTrace(item, Theta);
-    const int P_size = P.size();
-    vector<double> Pstar(P_size-1);
-    double accum = P[P_size-1];
-    Pstar[P_size-2] = accum;
-    if(P_size > 2){
-        for(int i = P_size - 2; i > 0; --i){
-            accum += P[i];
-            Pstar[i-1] = accum;
-        }
+    const int ncat = P.size();
+    vector<double> Pstar(ncat+1);
+    double accum = 0.0;
+    for(int c = ncat-1; c >= 0; --c){
+        accum += P[c];
+        Pstar[c] = accum;
     }
-    double PQ = 0.0;
-    for(int i = 0; i < P_size - 1; ++i)
-        PQ += Pstar[i] * (1.0 - Pstar[i]);
+    
     for(int i = 0; i < nfact; ++i){
-        for(int j = 0; j < nfact; ++j){
-            if(i <= j)
-                info_mat(i,j) = par[i] * par[j] * PQ;
-            if(i != j)
-                info_mat(j,i) = info_mat(i,j);
-        }
-    } 
+        for(int j = i; j < nfact; ++j){
+            double info = 0.0;
+            for(int c = ncat-1; c >= 0; --c){
+                double dP = (Pstar[c]*(1 - Pstar[c]) - Pstar[c+1]*(1 - Pstar[c+1]));
+                info += par[i] * par[j] * dP * dP / P[c];
+           }
+           if(i <= j)
+               info_mat(i,j) = info;
+           if(i != j)
+              info_mat(j,i) = info_mat(i,j);
+        }      
+    }
 }
 
 void I_nominal(arma::mat &info_mat, const S4 &item, 

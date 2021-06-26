@@ -86,13 +86,13 @@ test_that('ordered', {
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule')
     so <- summary(res)
     expect_equal(nrow(so$thetas_history), 22)
-    expect_equal((so$items_answered), c(1,61,4,70,11,56,31,95,15,19,68,39,55,18,92,83,21,48,93,40,8))
+    expect_equal((so$items_answered), c(1,61,4,70,11,56,31,95,15,39,68,18,55,21,92,19,83,48,93,40,8))
     
     res <- mirtCAT(mo = mod, local_pattern = pat, criteria = 'Drule', start_item = 10,
                    preCAT = list(method = 'fixed', max_items = 5, criteria = 'KL'), 
                    design = list(thetas.start = c(-0.5, 0.5)))
     so <- summary(res)
-    expect_equal((so$items_answered), c(10,61,70,56,1,4,31,11,95,15,68,19,39,55,18,92,83,21,48,93,40))
+    expect_equal((so$items_answered), c(10,61,70,56,1,4,11,31,95,15,68,39,55,18,21,92,83,19,93,48,40))
     expect_equal(head(so$thetas_history[,1]), c(-0.5,-0.5,-0.5,-0.5,-0.5,-0.2594009),
                  tolerance = 1e-4)
 
