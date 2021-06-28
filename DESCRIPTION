@@ -25,7 +25,6 @@ Suggests: shinythemes, parallel, SimDesign, knitr
 Encoding: UTF-8
 ByteCompile: yes
 LazyLoad: yes
-LazyData: yes
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 License: GPL (>= 3)
