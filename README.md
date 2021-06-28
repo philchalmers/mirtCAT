@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](http://www.r-pkg.org/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](https://CRAN.R-project.org/package=mirtCAT)
+[![Travis-CI Build Status](https://travis-ci.org/philchalmers/mirtCAT.svg?branch=master)](https://travis-ci.org/philchalmers/mirtCAT) [![](http://www.r-pkg.org/badges/version/mirtCAT)](https://www.r-pkg.org:443/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](https://CRAN.R-project.org/package=mirtCAT)
 
 # mirtCAT
 

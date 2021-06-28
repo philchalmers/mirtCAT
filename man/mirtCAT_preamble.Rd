@@ -18,8 +18,8 @@ standard output returned from \code{\link{mirtCAT}}}
 }
 \description{
 This is largely an internal function called by \code{\link{mirtCAT}}, however it is made 
-public for better use with external web-hosting interfaces (like \url{http://www.shinyapps.io/}).
-For more information see \url{http://shiny.rstudio.com/articles/persistent-data-storage.html} for 
+public for better use with external web-hosting interfaces (like \url{https://www.shinyapps.io/)}).
+For more information see \url{https://shiny.rstudio.com/articles/persistent-data-storage.html} for 
 further information about saving output remotely when using \code{shiny}.
 }
 \examples{

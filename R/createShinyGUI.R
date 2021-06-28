@@ -2,7 +2,7 @@
 #' 
 #' This function returns the GUI setup results by calling \code{\link{shinyApp}}. 
 #' Primarily, this is only useful when hosting the application publicly, such as 
-#' through \url{http://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
+#' through \url{https://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
 #' run \emph{before} this function is called. The object is executed by calling \code{\link{runApp}}.
 #' 
 # @param sessionName the unique name of the session (see \code{\link{mirtCAT}} for details)

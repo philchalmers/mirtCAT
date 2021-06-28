@@ -17,7 +17,7 @@ be executed. Note that \code{FALSE} gives the same behaviour as the GUI in \code
 \description{
 This function returns the GUI setup results by calling \code{\link{shinyApp}}. 
 Primarily, this is only useful when hosting the application publicly, such as 
-through \url{http://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
+through \url{https://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
 run \emph{before} this function is called. The object is executed by calling \code{\link{runApp}}.
 }
 \examples{
