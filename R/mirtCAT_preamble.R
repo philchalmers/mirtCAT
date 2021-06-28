@@ -1,7 +1,7 @@
 #' Preamble function called by mirtCAT
 #' 
 #' This is largely an internal function called by \code{\link{mirtCAT}}, however it is made 
-#' public for better use with external web-hosting interfaces (like \url{https://www.shinyapps.io/)}).
+#' public for better use with external web-hosting interfaces (like shinyapps.io).
 #' For more information see \url{https://shiny.rstudio.com/articles/persistent-data-storage.html} for 
 #' further information about saving output remotely when using \code{shiny}.
 #' 
