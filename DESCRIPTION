@@ -21,7 +21,7 @@ Description: Provides tools to generate an HTML interface for creating adaptive
     for studying the behavior of computerized adaptive test banks.
 Depends: mirt (>= 1.25), shiny (>= 1.0.1)
 Imports: lattice, stats, Rcpp, methods, markdown, pbapply, lpSolve
-Suggests: shinythemes, parallel, SimDesign, knitr
+Suggests: shinythemes, parallel, knitr
 Encoding: UTF-8
 ByteCompile: yes
 LazyLoad: yes
