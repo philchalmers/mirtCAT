@@ -25,7 +25,7 @@ run_local <- function(responses, nfact, start_item, nitems, thetas.start_in,
             #update Thetas
             design@Update.thetas(design=design, person=person, test=test)
             person$Update.info_mats(design=design, test=test)
-            design <- Update.stop_now(design, person=person)
+            design <- Update.stop_now(design, person=person, test=test)
             if(design@stop_now) break
             
             design <- Next.stage(design, person=person, test=test, item=i)

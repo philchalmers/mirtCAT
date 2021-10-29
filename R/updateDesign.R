@@ -83,6 +83,6 @@ updateDesign <- function(x, new_item, new_response, updateTheta = TRUE){
     if(updateTheta)
         x$design@Update.thetas(x$design, x$person, x$test) 
     x$person$Update.info_mats(design=x$design, test=x$test)
-    x$design <- Update.stop_now(x$design, x$person)
+    x$design <- Update.stop_now(x$design, person=x$person, test=x$test)
     return(x)
 }

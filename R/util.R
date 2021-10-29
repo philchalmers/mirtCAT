@@ -376,3 +376,14 @@ printDebug <- function(msg, level = 1){
     }
     invisible(NULL)
 }
+
+personLogLik <- function(person, test, Theta){
+    Theta <- as.matrix(Theta)
+    pick1 <- na.omit(person$items_answered)
+    pars <- test@mo@ParObjects$pars[c(pick1, test@length + 1)]
+    itemloc <- c(0, cumsum(test@mo@Data$K[pick1])) + 1L
+    ll <- log(mirt:::computeItemtrace(pars=pars, Theta=Theta, itemloc = itemloc, CUSTOM.IND=list()))
+    pick2 <- itemloc[-length(itemloc)] + person$responses[pick1]
+    LL <- rowSums(ll[ ,pick2, drop=FALSE])
+    LL
+}

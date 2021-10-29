@@ -2,8 +2,14 @@ Design <- setClass(Class = "Design",
                    slots = c(method = 'character',
                              criteria = 'character',
                              criteria_estimator = 'character',
+                             classify_type = 'character',
                              classify = 'numeric',
                              classify_alpha = 'numeric',
+                             sprt_alpha = 'numeric',
+                             sprt_beta = 'numeric',
+                             sprt_lower = 'numeric',
+                             sprt_upper = 'numeric',
+                             sprt_ab = 'numeric',
                              delta_thetas = 'numeric',
                              min_SEM = 'numeric',
                              met_SEM = 'logical',
@@ -87,6 +93,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@method <- method
               .Object@criteria <- criteria
               .Object@criteria_estimator <- 'MAP'
+              .Object@classify_type <- 'none'
               if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule')){
                   .Object@criteria_estimator <- 'ML'
               } else if(criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule',
@@ -131,13 +138,15 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@Update.thetas <- Update_thetas
               .Object@stage <- 2L
               .Object@allow_constrain_breaks <- FALSE
+              .Object@sprt_alpha <- .05
+              .Object@sprt_beta <- .05
               if(length(design)){
                   dnames <- names(design)
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
                               'customNextItem', 'test_properties', 'person_properties', 'constr_fun',
-                              'customUpdateThetas', "allow_constrain_breaks")
+                              'customUpdateThetas', "allow_constrain_breaks", "sprt_lower", "sprt_upper")
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
                            paste0(dnames[!(dnames %in% gnames)], ' '), call.=FALSE)
@@ -164,8 +173,19 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@min_items <- as.integer(design$min_items)
                   if(!is.null(design$max_items))
                       .Object@max_items <- as.integer(design$max_items)
-                  if(!is.null(design$classify))
+                  if(!is.null(design$classify)){
+                      .Object@classify_type <- 'CI'
                       .Object@classify <- design$classify
+                  }
+                  if(!is.null(design$sprt_lower)){
+                      .Object@classify_type <- 'SPRT'
+                      .Object@sprt_lower <- design$sprt_lower
+                      .Object@sprt_upper <- design$sprt_upper
+                  }
+                  if(!is.null(design$sprt_alpha))
+                      .Object@sprt_alpha <- design$sprt_alpha
+                  if(!is.null(design$sprt_beta))
+                      .Object@sprt_beta <- design$sprt_beta
                   if(!is.null(design$constr_fun))
                       .Object@constr_fun <- design$constr_fun
                   if(!is.null(design$max_time))
@@ -239,6 +259,8 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@criteria <- 'custom'
                   }
               }
+              .Object@sprt_ab <- c(log(.Object@sprt_beta/(1 - .Object@sprt_alpha)), 
+                                   log((1 - .Object@sprt_beta)/.Object@sprt_alpha))
               if(.Object@use_content && criteria == 'seq')
                   stop('content designs are not supported for seq criteria', call.=FALSE)
               if(length(.Object@min_SEM) != 1L && length(.Object@min_SEM) != nfact)
@@ -279,17 +301,25 @@ setMethod("initialize", signature(.Object = "Design"),
 setGeneric('Update.stop_now', function(.Object, ...) standardGeneric("Update.stop_now"))
 
 setMethod("Update.stop_now", signature(.Object = "Design"),
-          function(.Object, person){
+          function(.Object, person, test){
               nanswered <- sum(!is.na(person$items_answered))
               if(person$score){
                   if(nanswered >= .Object@min_items){
                       diff <- person$thetas_SE_history[nrow(person$thetas_SE_history), ]
                       diff[is.na(diff)] <- Inf
-                      if(!is.nan(.Object@classify[1L])){
-                          z <- -abs(person$thetas - .Object@classify) / diff
-                          .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
-                          if(.Object@stage > 1L && all(.Object@met_classify)) 
-                              .Object@stop_now <- TRUE
+                      if(.Object@classify_type != 'none'){
+                          if(.Object@classify_type == 'SPRT'){
+                              LL0 <- personLogLik(person=person, test=test, Theta=.Object@sprt_lower)
+                              LL1 <- personLogLik(person=person, test=test, Theta=.Object@sprt_upper)
+                              LL_diff <- LL1 - LL0
+                              if(LL_diff < .Object@sprt_ab[1L] || LL_diff > .Object@sprt_ab[2L])
+                                  .Object@stop_now <- TRUE
+                          } else {
+                              z <- -abs(person$thetas - .Object@classify) / diff
+                              .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
+                              if(.Object@stage > 1L && all(.Object@met_classify)) 
+                                  .Object@stop_now <- TRUE
+                          }
                       } else {
                           .Object@met_SEM <- diff < .Object@min_SEM
                           if(.Object@stage > 1L && !any(is.nan(diff)) && all(.Object@met_SEM)) 

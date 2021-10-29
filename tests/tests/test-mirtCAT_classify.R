@@ -52,4 +52,23 @@ test_that('classify', {
     out <- fscores(mod, response.pattern = scored)
     expect_equal(as.numeric(out[,'F1']), 1.04979, tolerance = 1e-4)
     
+    # SPRT
+    set.seed(1234)
+    nitems <- 250
+    a1 <- rlnorm(nitems, .2,.2)
+    d <- rnorm(nitems, 0 ,2)
+    pars <- data.frame(a1=a1, d=d)
+    mod <- generate.mirt_object(pars, '2PL')
+    
+    
+    Theta <- matrix(c(-1.5, 0, 1.5))
+    pats <- generate_pattern(mod, Theta = Theta)
+    res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
+                   design = list(sprt_lower = .9, sprt_upper=1.1))
+    out <- sapply(res, function(x) x$classification)
+    expect_true(all(out == c("below cutoff", "no decision", "above cutoff")))
+    out <- sapply(res, function(x) x$thetas)
+    expect_equal(out, c(-0.9336809, -0.5006111, 1.2879748), tolerance = 1e-4)
+    
+    
 })

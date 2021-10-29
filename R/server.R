@@ -254,7 +254,9 @@ server <- function(input, output, session) {
                     .MCE[[sessionName]]$person$Update.info_mats(design=.MCE[[sessionName]]$design, test=.MCE[[sessionName]]$test)
                     if(.MCE[[sessionName]]$shinyGUI$temp_file != '')
                         saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
-                    .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person)
+                    .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, 
+                                                                  person=.MCE[[sessionName]]$person,
+                                                                  test=.MCE[[sessionName]]$test)
                 } else {
                     printDebug("No observed response")
                     if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && 
@@ -288,7 +290,9 @@ server <- function(input, output, session) {
                         .MCE[[sessionName]]$person$Update.info_mats(design=.MCE[[sessionName]]$design, test=.MCE[[sessionName]]$test)
                         if(.MCE[[sessionName]]$shinyGUI$temp_file != '')
                             saveRDS(.MCE[[sessionName]]$person, .MCE[[sessionName]]$shinyGUI$temp_file)
-                        .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, person=.MCE[[sessionName]]$person)
+                        .MCE[[sessionName]]$design <- Update.stop_now(.MCE[[sessionName]]$design, 
+                                                                      person=.MCE[[sessionName]]$person,
+                                                                      test=.MCE[[sessionName]]$test)
                         .MCE[[sessionName]]$person$valid_item[pick] <- FALSE
                     }
                 }
