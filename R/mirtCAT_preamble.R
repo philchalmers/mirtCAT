@@ -254,13 +254,12 @@ mirtCAT_post_internal <- function(person, design, has_answers = FALSE, GUI = FAL
                     clientData = if(GUI) person[[i]]$clientData)
         if(length(person[[i]]$true_thetas))
             ret$true_thetas <- person[[i]]$true_thetas
-        if(!is.nan(design@classify[1L])){
-            z <- -abs(ret$thetas - design@classify) / ret$SE_thetas
-            sig <- z < qnorm(design@classify_alpha)
-            direction <- ifelse((ret$thetas - design@classify) > 0, 'above cutoff', 'below cutoff')
-            direction[!sig] <- 'no decision'
-            ret$classification <- direction
+        if(design@classify_type == 'CI'){
+            ret$classification <- person[[i]]$classify_decision
             ret$classify_values <- design@classify
+        } else if(design@classify_type == 'SPRT'){
+            ret$classification <- person[[i]]$classify_decision
+            ret$classify_values <- c(design@sprt_lower, design@sprt_upper)
         }
         colnames(ret$thetas) <- colnames(ret$SE_thetas) <- colnames(ret$thetas_history) <-
             colnames(ret$thetas_SE_history) <- paste0('Theta_', 1L:.MCE[['MASTER']]$test@nfact)

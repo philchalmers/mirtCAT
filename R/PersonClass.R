@@ -18,6 +18,7 @@ Person <- setRefClass("Person",
                                     info_thetas_cov = 'matrix',
                                     clientData = 'list',
                                     terminated_sucessfully = 'logical',
+                                    classify_decision='character',
                                     password_attempts = 'integer'),
                       
                       methods = list(
@@ -45,6 +46,7 @@ Person <- setRefClass("Person",
                                  info_thetas <<- matrix(0, nfact, nfact)
                                  info_thetas_cov <<- Info_thetas_cov 
                                  terminated_sucessfully <<- FALSE
+                                 classify_decision <<- rep('no decision', nfact)
                              }
                          })
                       

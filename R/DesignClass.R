@@ -5,6 +5,7 @@ Design <- setClass(Class = "Design",
                              classify_type = 'character',
                              classify = 'numeric',
                              classify_alpha = 'numeric',
+                             classify_decision = 'character',
                              sprt_alpha = 'numeric',
                              sprt_beta = 'numeric',
                              sprt_lower = 'numeric',
@@ -94,6 +95,7 @@ setMethod("initialize", signature(.Object = "Design"),
               .Object@criteria <- criteria
               .Object@criteria_estimator <- 'MAP'
               .Object@classify_type <- 'none'
+              .Object@classify_decision <- 'no decision'
               if(criteria %in% c('Drule', 'Trule', 'Erule', 'Wrule', 'Arule')){
                   .Object@criteria_estimator <- 'ML'
               } else if(criteria %in% c('DPrule', 'TPrule', 'EPrule', 'WPrule',
@@ -312,13 +314,24 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                               LL0 <- personLogLik(person=person, test=test, Theta=.Object@sprt_lower)
                               LL1 <- personLogLik(person=person, test=test, Theta=.Object@sprt_upper)
                               LL_diff <- LL1 - LL0
-                              if(LL_diff < .Object@sprt_ab[1L] || LL_diff > .Object@sprt_ab[2L])
+                              if(LL_diff < .Object@sprt_ab[1L] || LL_diff > .Object@sprt_ab[2L]){
                                   .Object@stop_now <- TRUE
-                          } else {
+                                  .Object@met_classify <- TRUE
+                                  decision <- ifelse(LL_diff < .Object@sprt_ab[1L], 'below cutoff', 'no decision')
+                                  decision <- ifelse(LL_diff > .Object@sprt_ab[2L], 'above cutoff', decision)
+                                  person$classify_decision <- decision
+                              }
+                          } else if(.Object@classify_type == 'CI'){
                               z <- -abs(person$thetas - .Object@classify) / diff
                               .Object@met_classify <- as.vector(z < qnorm(.Object@classify_alpha))
-                              if(.Object@stage > 1L && all(.Object@met_classify)) 
+                              if(.Object@stage > 1L && all(.Object@met_classify)){
+                                  sig <- z < qnorm(.Object@classify_alpha)
+                                  direction <- ifelse((person$thetas - .Object@classify) > 0, 
+                                                      'above cutoff', 'below cutoff')
+                                  direction[!sig] <- 'no decision'
                                   .Object@stop_now <- TRUE
+                                  person$classify_decision <- as.character(direction)
+                              }
                           }
                       } else {
                           .Object@met_SEM <- diff < .Object@min_SEM

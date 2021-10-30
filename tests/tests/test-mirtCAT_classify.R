@@ -60,15 +60,14 @@ test_that('classify', {
     pars <- data.frame(a1=a1, d=d)
     mod <- generate.mirt_object(pars, '2PL')
     
-    
     Theta <- matrix(c(-1.5, 0, 1.5))
     pats <- generate_pattern(mod, Theta = Theta)
     res <- mirtCAT(mo=mod, criteria = 'KL', start_item = 'MI', local_pattern = pats,
                    design = list(sprt_lower = .9, sprt_upper=1.1))
     out <- sapply(res, function(x) x$classification)
-    expect_true(all(out == c("below cutoff", "no decision", "above cutoff")))
+    expect_true(all(out == c("below cutoff", "below cutoff", "above cutoff")))
     out <- sapply(res, function(x) x$thetas)
-    expect_equal(out, c(-0.9336809, -0.5006111, 1.2879748), tolerance = 1e-4)
+    expect_equal(out, c(-1.0129913, -0.3861295, 1.5380451), tolerance = 1e-4)
     
     
 })
