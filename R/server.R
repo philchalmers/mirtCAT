@@ -60,7 +60,12 @@ server <- function(input, output, session) {
             if(delta_time < .3 && is.na(.MCE[[sessionName]]$person$raw_responses[item]) && 
                .MCE[[sessionName]]$test@has_answers[item])
                 .MCE[[sessionName]]$person$responses[item] <- 0L
-            if(delta_time < 0) delta_time <- 0
+            if(delta_time < 0){
+                delta_time <- 0
+                if(is.na(.MCE[[sessionName]]$person$raw_responses[item]) && 
+                   .MCE[[sessionName]]$test@has_answers[item])
+                    .MCE[[sessionName]]$person$responses[item] <- 0L
+            }
             return(paste0(.MCE[[sessionName]]$shinyGUI$itemtimer,
                           formatTime(as.integer(delta_time), delta_msg)))
         } else return(NULL)
@@ -284,6 +289,8 @@ server <- function(input, output, session) {
                         .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
                                                                           .MCE[[sessionName]]$shinyGUI$timer[pick])
                         .MCE[[sessionName]]$start_time <- NULL
+                        if(.MCE[[sessionName]]$test@has_answers[pick])
+                            .MCE[[sessionName]]$person$responses[pick] <- 0L
                         #update Thetas (same as above)
                         .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, 
                                                                  person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
