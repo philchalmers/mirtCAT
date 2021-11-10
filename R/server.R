@@ -50,7 +50,7 @@ server <- function(input, output, session) {
     output$itemTime <- renderText({
         printDebug("itemTime", 3)
         invalidateLater(200, session)
-        if(.MCE[[sessionName]]$person$terminated_sucessfully)
+        if(.MCE[[sessionName]]$person$terminated_sucessfully || .MCE[[sessionName]]$STOP)
             return(NULL)
         item <- .MCE[[sessionName]]$item
         delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
