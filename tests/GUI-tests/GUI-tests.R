@@ -310,7 +310,7 @@ for (i in 1:nitems) {
         # multiplication
         m1 <- sample(1:50, 1)
         m2 <- sample(1:50, 1)
-        ans <- n1 + n2 + m1 * m2
+        ans <- m1 * m2
         questions[i] <- paste0(m1, " * ", m2, " = ?")
     }
     answers[i] <- as.character(ans)
