@@ -250,7 +250,8 @@ server <- function(input, output, session) {
                     }
                     
                     .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
-                                                                      .MCE[[sessionName]]$shinyGUI$timer[pick])
+                                ifelse(.MCE[[sessionName]]$shinyGUI$timer[pick] > 0,
+                                       .MCE[[sessionName]]$shinyGUI$timer[pick], Inf))
                     .MCE[[sessionName]]$start_time <- NULL
                     
                     #update Thetas
