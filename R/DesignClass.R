@@ -212,7 +212,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   if(!is.null(design$exposure)){
                       if(length(design$exposure) != nitems)
                           stop('exposure vector length not equal to number of items', call.=FALSE)
-                      exposure_type <- ifelse(all(design$exposure <= 1 && design$exposure >= 0), 
+                      exposure_type <- ifelse(all(design$exposure <= 1 & design$exposure >= 0), 
                                               'SH', 'sample')
                       exposure <- if(exposure_type == 'SH') design$exposure 
                       else as.integer(design$exposure)
