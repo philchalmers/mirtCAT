@@ -1,4 +1,4 @@
-[![](http://www.r-pkg.org/badges/version/mirtCAT)](https://www.r-pkg.org:443/pkg/mirtCAT) [![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](https://CRAN.R-project.org/package=mirtCAT)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/mirtCAT)](https://CRAN.R-project.org/package=mirtCAT)
 
 # mirtCAT
 
