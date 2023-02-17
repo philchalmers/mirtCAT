@@ -73,7 +73,7 @@ setMethod("initialize", signature(.Object = "Test"),
               .Object@gp <- gp
               tmp <- mo@Model$itemloc
               .Object@itemloc2 <- as.integer(tmp[-length(tmp)])
-              tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmean,
+              tmp <- list(rotate = 'none', theta_lim = c(-6,6), mean = gp$gmeans,
                           cov=gp$gcov, MI = 0, QMC=FALSE, custom_den=NULL, max_theta=20)
               if(length(dots)){
                   if(!is.null(dots$rotate))
