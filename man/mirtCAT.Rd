@@ -37,8 +37,8 @@ mirtCAT(
   SE = 1,
   main = NULL,
   par.strip.text = list(cex = 0.7),
-  par.settings = list(strip.background = list(col = "#9ECAE1"), strip.border = list(col
-    = "black")),
+  par.settings = list(strip.background = list(col = "#9ECAE1"), strip.border = list(col =
+    "black")),
   scales = list(x = list(rot = 90)),
   ...
 )
@@ -321,12 +321,26 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
     proportions.
     }
     
-  \item{\code{classify}}{a numeric vector indicating cut-off values for classification
+  \item{\code{classify}}{a numeric vector indicating cut-off value(s) for classification
     above or below some prior threshold. Default does not use the classification scheme}
   
   \item{\code{classify_CI}}{a numeric vector indicating the confident intervals used to 
     classify individuals being above or below values in \code{classify}. Values must 
     be between 0 and 1 (e.g., 0.95 gives 95\% confidence interval)}
+    
+  \item{\code{sprt_lower}}{a numeric vector indicating lower cut-off value(s) for classification
+    above or below some prior threshold using the sequential probability ratio test.
+    Default does not use the classification scheme}
+    
+  \item{\code{sprt_upper}}{a numeric vector indicating upper cut-off value(s) for classification
+    above or below some prior threshold using the sequential probability ratio test.
+    Default does not use the classification scheme}
+  
+  \item{\code{sprt_alpha}}{a numeric vector indicating the lower-bound error rate 
+    to use for SPRT. Default is .05}
+    
+  \item{\code{sprt_beta}}{a numeric vector indicating the upper-bound error rate 
+    to use for SPRT. Default is .05}
     
   \item{\code{exposure}}{a numeric vector specifying the amount of exposure control to apply for
     each successive item (length must equal the number of items). Note that this includes the 
