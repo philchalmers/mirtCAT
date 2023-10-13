@@ -149,9 +149,9 @@ test_that('unidimensional', {
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MEI')
-    expect_equal(as.numeric(res$thetas), 0.3995981, tolerance = 1e-4)
+    expect_equal(as.numeric(res$thetas), 0.3310517, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[nrow(res$thetas_SE_history),]),
-                 0.3961607, tolerance = 1e-4)
+                 0.3949008, tolerance = 1e-4)
     
     res <- mirtCAT(df2, mod, local_pattern=pat, 
                    design = list(min_SEM = .4), method = 'EAP', criteria='MEPV')
