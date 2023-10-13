@@ -178,6 +178,14 @@ mirtCAT_preamble_internal <-
                                     thetas.start_in=design$thetas.start, score=score, 
                                     theta_SEs=sqrt(diag(test_object@gp$gcov)),
                                     Info_thetas_cov = solve(test_object@gp$gcov))
+        if(extract.mirt(mo, 'nfact') > 4L){
+            preCAT_method <- ifelse(is.null(preCAT$method), "", preCAT$method)
+            if('EAP' %in% c(preCAT_method, method) && !test_object@fscores_args$QMC){
+                warning(c('\'EAP\' methods, particularly without quasi-Monte Carlo integration,', 
+                        ' are not recommended for higher-dimensional models. Consider using \'MAP\' instead'),
+                        call.=FALSE)
+            }
+        }
         if(!is.null(local_pattern)){
             design_object@start_item <- rep(design_object@start_item, nrow(local_pattern))
             if(length(start_item) == 1L)
