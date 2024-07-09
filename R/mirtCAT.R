@@ -559,7 +559,9 @@
 #'      This should only be set to \code{FALSE} for surveys (not CATs)}
 #'      
 #'    \item{\code{choiceNames}}{a list containing the \code{choiceNames} input for each respective item when
-#'      the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}). 
+#'      the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}), where each
+#'      element is itself a list of instructions. 
+#'      
 #'      This is used to modify the output of the controllers using 
 #'      suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
 #'      the value \code{NULL} in the associated list element will use the standard inputs instead. 
