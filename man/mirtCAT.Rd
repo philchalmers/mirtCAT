@@ -112,7 +112,15 @@ mirtCAT(
       
     \item{\code{Answer} or \code{Answer.#}}{(Optional) A character vector (or multiple character
       vectors) indicating the scoring key for items that have correct answer(s). If there
-      is no correct answer for a question then a value of \code{NA} must be declared.}
+      is no correct answer for a question then a value of \code{NA} must be declared.
+      
+      Note that 'scoring' some item response data can be ambiguous depending on the stimuli provided, which 
+      requires greater attention. For example, when using \code{'rankselect'}: should partial scoring 
+      be used if the ranks are mostly correct; should partial scoring be used if the response are 
+      only off by a ranking constant (e.g., correct rank is 1-2-3-4-5, but the respondent ranks 2-3-4-5-1, in which
+      case four relative rankings are correct but 1 is incorrect); should a 0-1 scoring be used to indicate none-all correct?. 
+      When this type of ambiguity exists in the multiple-answers cases it is strongly recommended 
+      to use the \code{AnswerFuns} argument instead for better functional control}
       
     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths 
       pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
@@ -583,7 +591,9 @@ results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
      This should only be set to \code{FALSE} for surveys (not CATs)}
      
    \item{\code{choiceNames}}{a list containing the \code{choiceNames} input for each respective item when
-     the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}). 
+     the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}), where each
+     element is itself a list of instructions. 
+     
      This is used to modify the output of the controllers using 
      suitable HTML code. If a row in \code{df} should not have a customized names then supplying 
      the value \code{NULL} in the associated list element will use the standard inputs instead. 

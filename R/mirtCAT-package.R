@@ -24,7 +24,6 @@
 #' 1-39. \doi{10.18637/jss.v071.i05}
 #'
 #' @name mirtCAT-package
-#' @docType package
 #' @title Computerized Adaptive Testing with Multidimensional Item Response Theory
 #' @author Phil Chalmers \email{rphilip.chalmers@@gmail.com}
 #' @useDynLib mirtCAT
