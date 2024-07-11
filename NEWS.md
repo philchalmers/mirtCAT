@@ -1,3 +1,10 @@
+# mirtCAT 1.14
+
+- The `shinyGUI` list's `forced_choice` global specification in `mirtCAT()`
+  has now been deprecated in favor of including this information
+  in the `df` object. This allows explicit selection of which items should be 
+  presented in a forced choice format (requested by Levent on the mirt-package forum)
+
 # mirtCAT 1.12
 
 - Added `design` information to include the sequential probability ratio test for 

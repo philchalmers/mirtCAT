@@ -95,6 +95,12 @@
 #'       When this type of ambiguity exists in the multiple-answers cases it is strongly recommended 
 #'       to use the \code{AnswerFuns} argument instead for better functional control}
 #'       
+#'    \item{\code{Forced}}{(Optional) logical vector indicating whether the respondent is 
+#'      forced (\code{TRUE}) or not (\code{FALSE}) to include a response for the respective item.
+#'      If omitted from the \code{df} definition this will be automatically set to \code{TRUE}
+#'      for each item. For surveys, it is generally recommended to set this to \code{FALSE} to
+#'      allow respondents the ability to not answer questions they may be uncomfortable answering} 
+#'       
 #'     \item{\code{Stem}}{(Optional) a character vector of absolute or relative paths 
 #'       pointing external markdown (.md) or HTML (.html) files to be used as item stems. 
 #'       \code{NA}s are used if the item has no corresponding file.} 
@@ -103,7 +109,7 @@
 #'       for each respective item. If a response is not provided before this limit then the question
 #'       will automatically advance to the next selected item. The values \code{NA} and \code{Inf}
 #'       indicate no time limit for the respective items. Note that this option can only be used 
-#'       when \code{shinyGUI = list(forced_choice = FALSE)}}
+#'       when \code{df$Forced = TRUE}}
 #'       
 #'     \item{\code{Mastery}}{(Optional) a logical vector indicating whether the item must be mastered
 #'       prior to continuing. Naturally, this requires that one or more \code{Answers} are provided,
@@ -563,9 +569,6 @@
 #'    \item{\code{theme}}{a character definition for the \code{shinytheme} package to globally change 
 #'      the GUI theme}
 #'      
-#'    \item{\code{forced_choice}}{logical; require a response to each item? Default is \code{TRUE}.
-#'      This should only be set to \code{FALSE} for surveys (not CATs)}
-#'      
 #'    \item{\code{choiceNames}}{a list containing the \code{choiceNames} input for each respective item when
 #'      the input is 'radio' or 'checkbox' (see \code{\link{radioButtons}}), where each
 #'      element is itself a list of instructions. 
@@ -579,7 +582,7 @@
 #'    \item{\code{choiceValues}}{associated values to be used along with \code{choiceNames} (see above)}
 #'      
 #'    \item{\code{time_before_answer}}{a numeric value representing the number of seconds that must have elapsed
-#'      when \code{forced_choice = FALSE} before a response can be provided or skipped. This is used 
+#'      when \code{df$Forced = FALSE} before a response can be provided or skipped. This is used 
 #'      to control accidental skips over items when responses are not forced. Default is 1, indicating
 #'      one full second}
 #'      

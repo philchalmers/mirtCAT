@@ -26,7 +26,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                     timer = 'numeric',
                                     width = 'numeric',
                                     height = 'numeric',
-                                    forced_choice = 'logical',
                                     time_before_answer = 'numeric',
                                     password='data.frame',
                                     css = 'character',
@@ -39,7 +38,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                               ui <<- default_UI
                               questions <<- questions
                               df <<- df
-                              forced_choice <<- TRUE
                               theme <<- ''
                               Timer <- as.numeric(Timer)
                               timer <<- ifelse(is.finite(Timer), Timer, 0)
@@ -145,7 +143,8 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                       demographic_inputIDs <<- shinyGUI$demographics_inputIDs
                                   }
                                   if(!is.null(shinyGUI$forced_choice))
-                                      forced_choice <<- shinyGUI$forced_choice
+                                      warning('forced_choice global option has been deprecated. 
+                                           Please use the \"Forced\" column in df argument instead')
                                   if(!is.null(shinyGUI$lastpage)) 
                                       lastpage <<- shinyGUI$lastpage
                                   if(!is.null(shinyGUI$temp_file))
@@ -159,8 +158,6 @@ ShinyGUI <- setRefClass("ShinyGUI",
                                   if(!is.null(shinyGUI$max_password_attempts))
                                       max_password_attempts <<- shinyGUI$max_password_attempts
                               }
-                              if(any(timer > 0)) 
-                                  forced_choice <<- FALSE
                           })
                       
 )

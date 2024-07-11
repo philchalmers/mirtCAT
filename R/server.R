@@ -188,7 +188,7 @@ server <- function(input, output, session) {
                 name <- .MCE[[sessionName]]$test@itemnames[pick]
                 ip <- unname(input[[name]])
                 if(.MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('select', 'rankselect') && 
-                   .MCE[[sessionName]]$shinyGUI$forced_choice && !is.null(ip) && ip == "")
+                   .MCE[[sessionName]]$shinyGUI$df$Forced[pick] == "TRUE" && !is.null(ip) && ip == "")
                     ip <- NULL
                 if(.MCE[[sessionName]]$invalid_count > 0L)
                     ip <- input[[paste0(.MCE[[sessionName]]$invalid_count, '.TeMpInTeRnAl',name)]]
@@ -205,7 +205,8 @@ server <- function(input, output, session) {
                         ip <- NULL
                     } 
                 }
-                if(.MCE[[sessionName]]$shinyGUI$forced_choice && .MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
+                if(.MCE[[sessionName]]$shinyGUI$df$Forced[pick]  == "TRUE" && 
+                   .MCE[[sessionName]]$shinyGUI$df$Type[pick] %in% c('text', 'textArea'))
                     if(ip == "") ip <- NULL
                 diff_item_time <- (proc.time()[3L] - .MCE[[sessionName]]$start_time)
                 item_time_valid <- .MCE[[sessionName]]$shinyGUI$time_before_answer <= diff_item_time
@@ -265,7 +266,7 @@ server <- function(input, output, session) {
                                                                   test=.MCE[[sessionName]]$test)
                 } else {
                     printDebug("No observed response")
-                    if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$forced_choice && 
+                    if(!item_time_valid || (.MCE[[sessionName]]$shinyGUI$df$Forced[pick]  == "TRUE" && 
                                             .MCE[[sessionName]]$shinyGUI$df$Type[pick] != 'none')){
                         printDebug("Invalid time/none type/forced", level = 2)
                         if(!item_time_valid) outmessage <- NULL

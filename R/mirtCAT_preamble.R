@@ -89,6 +89,9 @@ mirtCAT_preamble_internal <-
                 stop('data.frame requires characters instead of factors. 
                         To avoid, use stringsAsFactors = FALSE in your data.frame',
                         call.=FALSE)
+            if(is.null(df$Forced)) df$Forced <- TRUE
+            if(!is.null(df$Timer))
+                df$Forced[is.finite(df$Timer) & !is.na(df$Timer)] <- FALSE
             nitems <- nrow(df)
             df_rownames <- rownames(df)
             if(is.null(shinyGUI$choiceNames))
