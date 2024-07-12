@@ -53,7 +53,7 @@
 #' 
 #' \describe{
 #'    \item{\code{mo}}{extract the defined model from the \code{mirt} package. Afterward, users can use the 
-#'      \code{\link{extract.mirt}} function to pull out a large number of internal elements for easy use}
+#'      \code{\link[mirt]{extract.mirt}} function to pull out a large number of internal elements for easy use}
 #' }
 #' 
 #' @param x either the \code{person}, \code{design}, or \code{test} object defined through a 
@@ -72,7 +72,7 @@
 #' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
 #' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
 #' 1-39. \doi{10.18637/jss.v071.i05}
-#' @seealso \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{extract.mirt}}, 
+#' @seealso \code{\link[mirt]{mirt}}, \code{\link{mirtCAT}}, \code{\link[mirt]{extract.mirt}}, 
 #'   \code{\link{findNextItem}}
 #'   
 #' 

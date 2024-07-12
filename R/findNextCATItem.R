@@ -12,7 +12,7 @@
 #' the definition of a \code{constr_fun} (see the associated element in \code{\link{mirtCAT}} for details,
 #' as well as the examples below). Can be used to for 'Optimal Test Assembly',
 #' as well as 'Shadow Testing' designs (van der Linden, 2005),
-#' by using the \code{\link{lp}} function. When \code{objective} is not supplied the result follows the
+#' by using the \code{\link[lpSolve]{lp}} function. When \code{objective} is not supplied the result follows the
 #' typical maximum criteria of more standard adaptive tests.
 #'
 #' @param x an object of class 'mirtCAT_design' returned from the \code{\link{mirtCAT}} function
@@ -50,7 +50,7 @@
 #'   most optimal, and so on). Note that this does not work for some selection criteria (e.g.,
 #'   'seq' or 'random')
 #'
-#' @param ... additional arguments to be passed to \code{\link{lp}}
+#' @param ... additional arguments to be passed to \code{\link[lpSolve]{lp}}
 #'
 #' @seealso \code{\link{mirtCAT}}, \code{\link{updateDesign}}, \code{\link{extract.mirtCAT}}
 #' @export

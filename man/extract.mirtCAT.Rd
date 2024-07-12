@@ -72,7 +72,7 @@ Depending on which object is supplied, the following elements can be extracted.
 
 \describe{
    \item{\code{mo}}{extract the defined model from the \code{mirt} package. Afterward, users can use the 
-     \code{\link{extract.mirt}} function to pull out a large number of internal elements for easy use}
+     \code{\link[mirt]{extract.mirt}} function to pull out a large number of internal elements for easy use}
 }
 }
 
@@ -171,7 +171,7 @@ Multidimensional Item Response Theory Applications. \emph{Journal of Statistical
 1-39. \doi{10.18637/jss.v071.i05}
 }
 \seealso{
-\code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{extract.mirt}}, 
+\code{\link[mirt]{mirt}}, \code{\link{mirtCAT}}, \code{\link[mirt]{extract.mirt}}, 
   \code{\link{findNextItem}}
 }
 \author{

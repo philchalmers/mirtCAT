@@ -1,9 +1,9 @@
 #' Function returning an object used by shiny
 #' 
-#' This function returns the GUI setup results by calling \code{\link{shinyApp}}. 
+#' This function returns the GUI setup results by calling \code{\link[shiny]{shinyApp}}. 
 #' Primarily, this is only useful when hosting the application publicly, such as 
 #' through \url{https://www.shinyapps.io/}. The function \code{\link{mirtCAT_preamble}} must be 
-#' run \emph{before} this function is called. The object is executed by calling \code{\link{runApp}}.
+#' run \emph{before} this function is called. The object is executed by calling \code{\link[shiny]{runApp}}.
 #' 
 # @param sessionName the unique name of the session (see \code{\link{mirtCAT}} for details)
 #' 
@@ -11,7 +11,7 @@
 #'   See \code{mirtCAT:::default_UI} for the internal code
 #'   
 #' @param host_server logical; is \code{createShinyGUI()} being used on a remote server or executed locally?
-#'   When \code{TRUE} any calls to \code{\link{stopApp}} are suppressed to allow for multiple sessions to
+#'   When \code{TRUE} any calls to \code{\link[shiny]{stopApp}} are suppressed to allow for multiple sessions to
 #'   be executed. Note that \code{FALSE} gives the same behaviour as the GUI in \code{\link{mirtCAT}}
 #' 
 #' @export createShinyGUI

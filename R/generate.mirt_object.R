@@ -4,12 +4,12 @@
 #' then passed to \code{\link{mirtCAT}} for running CAT applications.
 #' 
 #' @param parameters a matrix or data.frame of parameters corresponding to the model definitions
-#'   listed in \code{\link{mirt}}. Each row represents a unique item, while the 
+#'   listed in \code{\link[mirt]{mirt}}. Each row represents a unique item, while the 
 #'   column names correspond to the respective parameter names. If a parameter is not relevant
 #'   for a particular item/row then use \code{NA}'s as placeholders
 #'   
 #' @param itemtype a character vector indicating the type of item with which the parameters 
-#'   refer. See the \code{itemtype} argument in \code{\link{mirt}}. Note that this input 
+#'   refer. See the \code{itemtype} argument in \code{\link[mirt]{mirt}}. Note that this input 
 #'   is only used to determine the relevant item class for the rows in \code{parameters}, 
 #'   therefore many inputs are interchangeable (e.g., '2PL' generates the same internal model object as '3PL').
 #'   If only a single value is provided then all items types will be assumed identical
@@ -21,7 +21,7 @@
 #'   variance-covariance structure between the latent traits. By default the relationship is 
 #'   assumed to be orthogonal standard normal (i.e., an identity matrix)
 #'   
-#' @param key scoring key required for nested-logit models. See \code{\link{mirt}} for details
+#' @param key scoring key required for nested-logit models. See \code{\link[mirt]{mirt}} for details
 #' 
 #' @param min_category the value representing the lowest category index. By default this is 0,
 #'   therefore the response suitable for the first category is 0, second is 1, and so on up to 
@@ -38,7 +38,7 @@
 #' Chalmers, R. P. (2016). Generating Adaptive and Non-Adaptive Test Interfaces for 
 #' Multidimensional Item Response Theory Applications. \emph{Journal of Statistical Software, 71}(5), 
 #' 1-39. \doi{10.18637/jss.v071.i05}
-#' @seealso \code{\link{mirt}}, \code{\link{mirtCAT}}, \code{\link{generate_pattern}}
+#' @seealso \code{\link[mirt]{mirt}}, \code{\link{mirtCAT}}, \code{\link{generate_pattern}}
 #' 
 #' @examples
 #' \dontrun{
