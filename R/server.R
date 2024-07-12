@@ -250,11 +250,6 @@ server <- function(input, output, session) {
                         }
                     }
                     
-                    .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
-                                ifelse(.MCE[[sessionName]]$shinyGUI$timer[pick] > 0,
-                                       .MCE[[sessionName]]$shinyGUI$timer[pick], Inf))
-                    .MCE[[sessionName]]$start_time <- NULL
-                    
                     #update Thetas
                     .MCE[[sessionName]]$design@Update.thetas(design=.MCE[[sessionName]]$design, 
                                                              person=.MCE[[sessionName]]$person, test=.MCE[[sessionName]]$test)
@@ -305,6 +300,13 @@ server <- function(input, output, session) {
                         .MCE[[sessionName]]$person$valid_item[pick] <- FALSE
                     }
                 }
+                
+                # always record
+                .MCE[[sessionName]]$person$item_time[pick] <- min(diff_item_time, 
+                                                                  ifelse(.MCE[[sessionName]]$shinyGUI$timer[pick] > 0,
+                                                                         .MCE[[sessionName]]$shinyGUI$timer[pick], Inf))
+                .MCE[[sessionName]]$start_time <- NULL
+                
             } 
             
             printDebug("Reset item")
