@@ -681,11 +681,11 @@ standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-dis
 \item{main}{title of the plot. Will default to \code{'CAT Standard Errors'} or 
 \code{'CAT ##\% Confidence Intervals'} depending on the SE input}
 
-\item{par.strip.text}{plotting argument passed to \code{\link{lattice}}}
+\item{par.strip.text}{plotting argument passed to \code{\link[lattice]{lattice}}}
 
-\item{par.settings}{plotting argument passed to \code{\link{lattice}}}
+\item{par.settings}{plotting argument passed to \code{\link[lattice]{lattice}}}
 
-\item{scales}{plotting argument passed to \code{\link{lattice}}}
+\item{scales}{plotting argument passed to \code{\link[lattice]{lattice}}}
 }
 \value{
 Returns a list object of class \code{'Person'} containing the following elements:

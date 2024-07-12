@@ -96,9 +96,9 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
 #'   \code{'CAT ##\% Confidence Intervals'} depending on the SE input
 #' @param SE size of the standard errors to plot. The default is 1, and therefore plots the
 #'   standard error. To obtain the 95\% interval use \code{SE = 1.96} (from the z-distribution)
-#' @param par.strip.text plotting argument passed to \code{\link{lattice}}
-#' @param par.settings plotting argument passed to \code{\link{lattice}}
-#' @param scales plotting argument passed to \code{\link{lattice}}
+#' @param par.strip.text plotting argument passed to \code{\link[lattice]{lattice}}
+#' @param par.settings plotting argument passed to \code{\link[lattice]{lattice}}
+#' @param scales plotting argument passed to \code{\link[lattice]{lattice}}
 #' @references 
 #' 
 #' Chalmers, R., P. (2012). mirt: A Multidimensional Item Response Theory
