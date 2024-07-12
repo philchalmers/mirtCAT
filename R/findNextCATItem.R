@@ -214,7 +214,7 @@ findNextCATItem <- function(person, test, design, subset = NULL, start = TRUE,
     if(all(is.na(person$responses)) && start)
         return(design@start_item)
     lastitem <- sum(!is.na(person$items_answered))
-    not_answered <- is.na(person$responses)
+    not_answered <- is.na(person$raw_responses)
     not_answered[!person$valid_item] <- FALSE
     not_answered[design@excluded] <- FALSE
     which_not_answered <- which(not_answered)
