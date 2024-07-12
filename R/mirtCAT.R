@@ -242,6 +242,12 @@
 #'   results <- mirtCAT(df=df, customTypes = list(Doug = good_dogs))
 #'   }
 #'   
+#'   \emph{IMPORTANT}: When using the custom inputs the select defined \code{Type} must be unique,
+#'   even when the function defined (e.g., \code{good_dog} above) is recycled. Hence, if two items
+#'   were to use the \code{good_dog} function then \code{df} should be defined as something like
+#'   \code{df$Type <- c('Doug1', 'Doug2')} with the associated 
+#'   \code{customTypes = list(Doug1=good_dog, Doug2=good_dog)}
+#'   
 #' @param design_elements logical; return an object containing the test, person, and design 
 #'   elements? Primarily this is to be used with the \code{\link{findNextItem}} function
 #'   
