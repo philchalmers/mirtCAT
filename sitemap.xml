@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://philchalmers.github.io/mirtCAT/404.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/articles/index.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/articles/mirtCAT-vignettes.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/authors.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/index.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/news/index.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/computeCriteria.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/createSessionName.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/createShinyGUI.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/extract.mirtCAT.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/findNextItem.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/generate.mirt_object.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/generate_pattern.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/getPerson.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/get_mirtCAT_env.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/index.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/mirtCAT-package.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/mirtCAT.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/mirtCAT_preamble.html</loc></url>
+<url><loc>http://philchalmers.github.io/mirtCAT/reference/updateDesign.html</loc></url>
+</urlset>
+
