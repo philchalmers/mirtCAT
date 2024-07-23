@@ -8,3 +8,7 @@ mirt.Rproj
 ^Makefile$
 .travis.yml
 extras/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
