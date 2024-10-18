@@ -16,8 +16,8 @@ server <- function(input, output, session) {
         printDebug("onSessionEnded")
         if(!.MCE[[sessionName]]$design@stop_now){
             message('WARNING: mirtCAT GUI session unexpectedly terminated early')
-            .MCE[[sessionName]]$person$terminated_sucessfully <- FALSE
-        } else .MCE[[sessionName]]$person$terminated_sucessfully <- TRUE
+            .MCE[[sessionName]]$person$GUI_terminated_sucessfully <- FALSE
+        } else .MCE[[sessionName]]$person$GUI_terminated_sucessfully <- TRUE
         .MCE[['COMPLETED']] <- .MCE[[sessionName]]
         .MCE[['COMPLETED']]$person <- deepCopyPerson(.MCE[[sessionName]]$person) 
         .MCE[[sessionName]] <- NULL
@@ -32,7 +32,7 @@ server <- function(input, output, session) {
     output$currentTime <- renderText({
         printDebug("currentTime", 3)
         invalidateLater(1000, session)
-        if(.MCE[[sessionName]]$person$terminated_sucessfully)
+        if(.MCE[[sessionName]]$person$GUI_terminated_sucessfully)
             return(NULL)
         delta_time <- as.integer(Sys.time() - .MCE[[sessionName]]$initial_start_time)
         delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg
@@ -50,7 +50,7 @@ server <- function(input, output, session) {
     output$itemTime <- renderText({
         printDebug("itemTime", 3)
         invalidateLater(200, session)
-        if(.MCE[[sessionName]]$person$terminated_sucessfully || .MCE[[sessionName]]$STOP)
+        if(.MCE[[sessionName]]$person$GUI_terminated_sucessfully || .MCE[[sessionName]]$STOP)
             return(NULL)
         item <- .MCE[[sessionName]]$item
         delta_msg <- .MCE[[sessionName]]$shinyGUI$timemsg

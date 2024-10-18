@@ -260,7 +260,7 @@ mirtCAT_post_internal <- function(person, design, has_answers = FALSE, GUI = FAL
                     thetas_SE_history=person[[i]]$thetas_SE_history,
                     item_time=person[[i]]$item_time,
                     demographics=person[[i]]$demographics,
-                    terminated_sucessfully=person[[i]]$terminated_sucessfully,
+                    GUI_terminated_sucessfully=person[[i]]$GUI_terminated_sucessfully,
                     GUI=GUI,
                     clientData = if(GUI) person[[i]]$clientData)
         if(length(person[[i]]$true_thetas))

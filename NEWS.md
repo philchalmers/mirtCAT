@@ -1,3 +1,8 @@
+# mirtCAT 1.15
+
+- Changed `$terminated_sucessfully` to `$GUI_terminated_sucessfully` to avoid
+  confusion
+
 # mirtCAT 1.14
 
 - The `shinyGUI` list's `forced_choice` global specification in `mirtCAT()`
