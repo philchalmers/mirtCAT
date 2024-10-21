@@ -253,6 +253,7 @@ mirtCAT_post_internal <- function(person, design, has_answers = FALSE, GUI = FAL
                         as.integer(person[[i]]$responses + .MCE[['MASTER']]$mirt_mins) 
                     else rep(NA, length(person[[i]]$raw_responses)),
                     items_answered=person[[i]]$items_answered,
+                    terminated_early=person[[i]]$terminated_early,
                     thetas=person[[i]]$thetas,
                     SE_thetas=person[[i]]$thetas_SE_history[nrow(person[[i]]$thetas_SE_history), 
                                                             ,drop=FALSE],

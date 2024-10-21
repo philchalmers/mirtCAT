@@ -320,6 +320,7 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                                   decision <- ifelse(LL_diff < .Object@sprt_ab[1L], 'below cutoff', 'no decision')
                                   decision <- ifelse(LL_diff > .Object@sprt_ab[2L], 'above cutoff', decision)
                                   person$classify_decision <- decision
+                                  person$terminated_early <- TRUE
                               }
                           } else if(.Object@classify_type == 'CI'){
                               z <- -abs(person$thetas - .Object@classify) / diff
@@ -331,18 +332,23 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                                   direction[!sig] <- 'no decision'
                                   .Object@stop_now <- TRUE
                                   person$classify_decision <- as.character(direction)
+                                  person$terminated_early <- TRUE
                               }
                           }
                       } else {
                           .Object@met_SEM <- diff < .Object@min_SEM
-                          if(.Object@stage > 1L && !any(is.nan(diff)) && all(.Object@met_SEM)) 
+                          if(.Object@stage > 1L && !any(is.nan(diff)) && all(.Object@met_SEM)){ 
                               .Object@stop_now <- TRUE
+                              person$terminated_early <- TRUE
+                          }
                       }
                       diff2 <- abs(person$thetas_history[nrow(person$thetas_history),] - 
                                        person$thetas_history[nrow(person$thetas_history)-1L,])
                       .Object@met_delta_thetas <- as.vector(diff2 < .Object@delta_thetas)
-                      if(.Object@stage > 1L && all(.Object@met_delta_thetas)) 
+                      if(.Object@stage > 1L && all(.Object@met_delta_thetas)){
                           .Object@stop_now <- TRUE
+                          person$terminated_early <- TRUE
+                      }
                   }
               }
               if(.Object@stage > 1L && nanswered == .Object@max_items) 

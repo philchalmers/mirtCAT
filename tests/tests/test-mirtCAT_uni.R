@@ -87,6 +87,7 @@ test_that('unidimensional', {
     res <- mirtCAT(df2, mod, local_pattern=pat)
     expect_equal(as.numeric(res$thetas), 0.3428296, tolerance = 1e-4)
     expect_equal(as.numeric(res$thetas_SE_history[23,]), 0.2982295, tolerance = 1e-4)
+    expect_true(res$terminated_early)
     
     oo <- plot(res)
     expect_is(oo, 'trellis')
@@ -94,6 +95,7 @@ test_that('unidimensional', {
     res <- mirtCAT(df2, mod, local_pattern=pat, design = list(max_items = 5))
     expect_true(sum(!is.na(res$raw_responses)) == 5L && sum(!is.na(res$scored_responses)) == 5L)
     expect_true(nrow(!is.na(res$thetas_history)) == 6L && nrow(!is.na(res$thetas_SE_history)) == 6L)
+    expect_false(res$terminated_early)
     
     #adaptive
     res <- mirtCAT(df2, mod, local_pattern=pat, criteria='MI',
@@ -102,6 +104,7 @@ test_that('unidimensional', {
     expect_equal(as.numeric(res$thetas_SE_history[5L,]), 0.4950726, tolerance = 1e-4)
     expect_true(sum(!is.na(res$raw_responses)) == 8L && sum(!is.na(res$scored_responses)) == 8L)
     expect_true(nrow(!is.na(res$thetas_history)) == 9L && nrow(!is.na(res$thetas_SE_history)) == 9L)
+    expect_true(res$terminated_early)
     
     res <- mirtCAT(mo = mod, local_pattern=generate_pattern(mod, matrix(c(0,1))), criteria='MI',
                    design = list(min_SEM = .4))

@@ -60,6 +60,7 @@ summary.mirtCAT <- function(object, sort = TRUE, ...){
     scored_responses <- object$scored_responses[pick]
     ret <- list(login_name=object$login_name,
                 final_estimates=person,
+                terminated_early=object$terminated_early,
                 raw_responses=raw_responses,
                 scored_responses=scored_responses,
                 items_answered=object$items_answered,

@@ -19,7 +19,8 @@ Person <- setRefClass("Person",
                                     clientData = 'list',
                                     GUI_terminated_sucessfully = 'logical',
                                     classify_decision='character',
-                                    password_attempts = 'integer'),
+                                    password_attempts = 'integer',
+                                    terminated_early = 'logical'),
                       
                       methods = list(
                          initialize = function(nfact, nitems, thetas.start_in, score,
@@ -31,6 +32,7 @@ Person <- setRefClass("Person",
                                  ID <<- ID
                                  password_attempts <<- 0L
                                  true_thetas <<- numeric(0L)
+                                 terminated_early <<- FALSE
                                  raw_responses <<- as.character(rep(NA, nitems))
                                  responses <<- as.integer(rep(NA, nitems))
                                  valid_item <<- rep(TRUE, nitems)
