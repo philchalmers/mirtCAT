@@ -1,5 +1,9 @@
 # mirtCAT 1.15
 
+- Added a `customStop` function support to `design` input to allow custom termination
+  of the CAT session. This can be used instead of returning NA in the `customNextItem` approach
+  (requested by @jian-an-chen and Johan Braeken)
+
 - Changed `$terminated_sucessfully` to `$GUI_terminated_sucessfully` to avoid
   confusion, and added `terminated_early` element to `person` objects to indicate
   whether the CAT termination criteria resulted in an early termination

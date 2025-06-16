@@ -83,6 +83,16 @@ test_that('unidimensional', {
     res <- mirtCAT(df, local_pattern=pat, design = list(customNextItem=customNextItem))
     expect_equal(length(res$items_answered), 5L)
     
+    # custom stop
+    customStop <- function(person, test, design){
+        ret <- FALSE
+        if(sum(!is.na(person$items_answered)) == 5)  # if 5 items answered stop
+            ret <- TRUE
+        ret
+    }
+    res <- mirtCAT(df, local_pattern=pat, design = list(customStop=customStop))
+    expect_true(sum(!is.na(res$raw_responses)) == 5)
+    
     #sequential
     res <- mirtCAT(df2, mod, local_pattern=pat)
     expect_equal(as.numeric(res$thetas), 0.3428296, tolerance = 1e-4)

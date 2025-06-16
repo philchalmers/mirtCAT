@@ -40,6 +40,8 @@ Design <- setClass(Class = "Design",
                              constraints = 'list',
                              excluded = 'integer',
                              customNextItem = 'function',
+                             has.customStop = 'logical',
+                             customStop = 'function',
                              test_properties = 'data.frame',
                              person_properties = 'data.frame',
                              Update.thetas = 'function',
@@ -147,7 +149,7 @@ setMethod("initialize", signature(.Object = "Design"),
                   gnames <- c('min_SEM', 'thetas.start', 'min_items', 'max_items', 'quadpts', 'max_time',
                               'theta_range', 'weights', 'KL_delta', 'content', 'content_prop',
                               'classify', 'classify_CI', 'exposure', 'delta_thetas', 'constraints',
-                              'customNextItem', 'test_properties', 'person_properties', 'constr_fun',
+                              'customNextItem', 'customStop', 'test_properties', 'person_properties', 'constr_fun',
                               'customUpdateThetas', "allow_constrain_breaks", "sprt_lower", "sprt_upper")
                   if(!all(dnames %in% gnames))
                       stop('The following inputs to design are invalid: ',
@@ -260,6 +262,11 @@ setMethod("initialize", signature(.Object = "Design"),
                       .Object@CAT_criteria <- 'custom'
                       .Object@criteria <- 'custom'
                   }
+                  .Object@has.customStop <- FALSE
+                  if(!is.null(design$customStop)){
+                      .Object@has.customStop <- TRUE
+                      .Object@customStop <- design$customStop
+                  }
               }
               .Object@sprt_ab <- c(log(.Object@sprt_beta/(1 - .Object@sprt_alpha)), 
                                    log((1 - .Object@sprt_beta)/.Object@sprt_alpha))
@@ -368,6 +375,8 @@ setMethod("Update.stop_now", signature(.Object = "Design"),
                           .Object@stop_now <- FALSE
                   }
               }
+              if(.Object@has.customStop)
+                  .Object@stop_now <- .Object@customStop(person=person, design=.Object, test=test)
               .Object
           }
 )

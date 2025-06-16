@@ -423,6 +423,11 @@
 #'     various internal elements from the required functional arguments
 #'   }
 #'   
+#'   \item{\code{customStop}}{an optional user defined function used to stop the CAT session. Must return
+#'     a single logical value (\code{TRUE/FALSE}) to indicate whether the CAT session should be terminated 
+#'     (\code{TRUE}). This function must be defined with the structure 
+#'     \code{customStop <- function(design, person, test) ...}}
+#'   
 #'   \item{\code{constr_fun}}{(WARNING: supplying this function will disable a number of the heuristic 
 #'     item selection constraints in the \code{constraints} list as a consequence; namely, all list options
 #'     except for \code{"not_scored"}).
