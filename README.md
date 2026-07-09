@@ -45,3 +45,7 @@ the Github 'issues'. Feel free to submit issues or feature requests on the site,
 address them ASAP. Also, if you have any questions about the package, or IRT in general, then
 feel free to create a 'New Topic' in the
 [mirt-package](https://groups.google.com/forum/#!forum/mirt-package) Google group. Cheers!
+
+# Applied CAT example
+
+For a live adaptive reasoning gym with distinction-style items, see [IntelligenceMax](https://intelligencemax.ai) ([science](https://intelligencemax.ai/science)).
